@@ -1,0 +1,84 @@
+// Export pages
+export '/auth_flow/on_bording_flow/on_boarding_page/on_boarding_page_widget.dart'
+    show OnBoardingPageWidget;
+export '/auth_flow/phone_number_page/phone_number_page_widget.dart'
+    show PhoneNumberPageWidget;
+export '/auth_flow/otp_verify_page/otp_verify_page_widget.dart'
+    show OtpVerifyPageWidget;
+export '/auth_flow/create_password_page/create_password_page_widget.dart'
+    show CreatePasswordPageWidget;
+export '/auth_flow/secure_page/secure_page_widget.dart' show SecurePageWidget;
+export '/auth_flow/pass_code_page/pass_code_page_widget.dart'
+    show PassCodePageWidget;
+export '/auth_flow/biomatric_page/biomatric_page_widget.dart'
+    show BiomatricPageWidget;
+export '/auth_flow/verify/verify_page/verify_page_widget.dart'
+    show VerifyPageWidget;
+export '/auth_flow/verify/choose_document_page/choose_document_page_widget.dart'
+    show ChooseDocumentPageWidget;
+export '/auth_flow/verify/id_card_scan_page/id_card_scan_page_widget.dart'
+    show IdCardScanPageWidget;
+export '/auth_flow/verify/face_scan_page/face_scan_page_widget.dart'
+    show FaceScanPageWidget;
+export '/auth_flow/verify/selfi_info/selfi_info_widget.dart'
+    show SelfiInfoWidget;
+export '/auth_flow/business_setup/business_info/business_info_widget.dart'
+    show BusinessInfoWidget;
+export '/auth_flow/business_setup/like_bus_page/like_bus_page_widget.dart'
+    show LikeBusPageWidget;
+export '/auth_flow/business_setup/business_catagerious/business_catagerious_widget.dart'
+    show BusinessCatageriousWidget;
+export '/auth_flow/business_setup/setup_bisiness_location_page/setup_bisiness_location_page_widget.dart'
+    show SetupBisinessLocationPageWidget;
+export '/auth_flow/business_setup/business_locate_page/business_locate_page_widget.dart'
+    show BusinessLocatePageWidget;
+export '/auth_flow/welcom_screens/username_page/username_page_widget.dart'
+    show UsernamePageWidget;
+export '/auth_flow/welcom_screens/congrats_page/congrats_page_widget.dart'
+    show CongratsPageWidget;
+export '/auth_flow/welcom_screens/docunment_info/docunment_info_widget.dart'
+    show DocunmentInfoWidget;
+export '/auth_flow/welcom_screens/upload_doc/upload_doc_widget.dart'
+    show UploadDocWidget;
+export '/home_screens/new_order_flow/add_amount_page/add_amount_page_widget.dart'
+    show AddAmountPageWidget;
+export '/home_screens/new_order_flow/tap_pay_out/tap_pay_out_widget.dart'
+    show TapPayOutWidget;
+export '/home_screens/new_order_flow/q_rpay_out_page/q_rpay_out_page_widget.dart'
+    show QRpayOutPageWidget;
+export '/home_screens/new_order_flow/link_pay_out_page/link_pay_out_page_widget.dart'
+    show LinkPayOutPageWidget;
+export '/home_screens/bottom_bar_pages/bottom_bar_pages_widget.dart'
+    show BottomBarPagesWidget;
+export '/home_screens/request_stand/delivery_location/delivery_location_widget.dart'
+    show DeliveryLocationWidget;
+export '/home_screens/request_stand/request_success/request_success_widget.dart'
+    show RequestSuccessWidget;
+export '/home_screens/add_user/add_employees/add_employees_widget.dart'
+    show AddEmployeesWidget;
+export '/home_screens/add_user/add_empoley_name/add_empoley_name_widget.dart'
+    show AddEmpoleyNameWidget;
+export '/home_screens/add_user/select_branch/select_branch_widget.dart'
+    show SelectBranchWidget;
+export '/home_screens/add_user/empoley_role/empoley_role_widget.dart'
+    show EmpoleyRoleWidget;
+export '/home_screens/add_user/review_details/review_details_widget.dart'
+    show ReviewDetailsWidget;
+export '/home_screens/add_user/creating_profile/creating_profile_widget.dart'
+    show CreatingProfileWidget;
+export '/home_screens/add_user/employe_details/employe_details_widget.dart'
+    show EmployeDetailsWidget;
+export '/home_screens/add_transfer_funds/add_fund/add_fund_widget.dart'
+    show AddFundWidget;
+export '/home_screens/add_transfer_funds/bank_o_t_p_verification/bank_o_t_p_verification_widget.dart'
+    show BankOTPVerificationWidget;
+export '/home_screens/add_transfer_funds/other_banks/other_banks_widget.dart'
+    show OtherBanksWidget;
+export '/home_screens/add_transfer_funds/bank_detials/bank_detials_widget.dart'
+    show BankDetialsWidget;
+export '/home_screens/add_transfer_funds/payment_status/payment_status_widget.dart'
+    show PaymentStatusWidget;
+export '/home_screens/add_transfer_funds/transfermethod/transfermethod_widget.dart'
+    show TransfermethodWidget;
+export '/home_screens/add_transfer_funds/payment_review/payment_review_widget.dart'
+    show PaymentReviewWidget;
