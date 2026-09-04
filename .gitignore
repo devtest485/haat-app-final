@@ -36,7 +36,10 @@
 .firebase/
 
 # Web related
-lib/generated_plugin_registrant.dart
+
+# Flutter's own generated iOS tooling — regenerated on every build.
+/ios/Flutter/ephemeral/
+/macos/Flutter/ephemeral/
 
 # Symbolication related
 app.*.symbols
