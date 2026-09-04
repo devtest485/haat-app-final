@@ -15,6 +15,17 @@ class UsernamePageModel extends FlutterFlowModel<UsernamePageWidget> {
 
   bool isValidUser = false;
 
+  /// True while the handle is being checked or claimed.
+  bool isChecking = false;
+  bool isSubmitting = false;
+
+  /// What the backend said about the handle last typed.
+  ///
+  /// Null until a check has come back. Kept so the field can say "already taken" or
+  /// name the rule that was broken, rather than just refusing to enable the button.
+  bool? isAvailable;
+  String? unavailableReason;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for Username widget.

@@ -8,6 +8,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '/backend/auth/auth_session.dart';
+import '/backend/ui/api_feedback.dart';
 import 'create_password_page_model.dart';
 export 'create_password_page_model.dart';
 
@@ -430,7 +432,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                               _model.newPasswardVisibility = !_model.newPasswardVisibility);
                                                                         },
                                                                         focusNode:
-                                                                            FocusNode(skipTraversal: true),
+                                                                            _model.newPasswardVisibilityFocusNode,
                                                                         child:
                                                                             Icon(
                                                                           _model.newPasswardVisibility
@@ -693,7 +695,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                               _model.confirmPasswardVisibility = !_model.confirmPasswardVisibility);
                                                                         },
                                                                         focusNode:
-                                                                            FocusNode(skipTraversal: true),
+                                                                            _model.confirmPasswardVisibilityFocusNode,
                                                                         child:
                                                                             Icon(
                                                                           _model.confirmPasswardVisibility
@@ -1162,16 +1164,36 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            if ((functions.validatePassword(_model
-                                        .newPasswardTextController.text) ==
-                                    true) &&
-                                (_model.newPasswardTextController.text ==
-                                    _model
-                                        .confirmPasswardTextController.text)) {
-                              context.pushNamed(SecurePageWidget.routeName);
-                            } else {
+                            // The local rules mirror the backend's exactly, so this
+                            // check saves a round trip rather than being the guard.
+                            // The backend re-checks: a client is not where a password
+                            // policy lives.
+                            final password =
+                                _model.newPasswardTextController.text;
+                            final matches = password ==
+                                _model.confirmPasswardTextController.text;
+
+                            if (!functions.validatePassword(password) ||
+                                !matches ||
+                                _model.isSubmitting) {
                               return;
                             }
+
+                            final feedback = ApiFeedback.of(context);
+                            safeSetState(() => _model.isSubmitting = true);
+
+                            final result = await AuthSession.instance
+                                .setPassword(password);
+
+                            if (!context.mounted) return;
+                            safeSetState(() => _model.isSubmitting = false);
+
+                            if (!result.isSuccess) {
+                              feedback.show(result);
+                              return;
+                            }
+
+                            context.pushNamed(SecurePageWidget.routeName);
                           },
                           child: Container(
                             width: double.infinity,

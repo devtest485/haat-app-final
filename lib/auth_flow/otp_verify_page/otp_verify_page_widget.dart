@@ -11,6 +11,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
+import '/backend/api/api_result.dart';
+import '/backend/api/auth_api.dart';
+import '/backend/auth/auth_session.dart';
+import '/backend/ui/api_feedback.dart';
 import 'otp_verify_page_model.dart';
 export 'otp_verify_page_model.dart';
 
@@ -39,7 +44,89 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
     super.initState();
     _model = createModel(context, () => OtpVerifyPageModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // The screen says "Resend code in 00:30", so something has to be counting. The
+      // designer's timer was never started, which left the label frozen and resending
+      // unreachable.
+      _model.timerController.onStartTimer();
+      safeSetState(() {});
+    });
+  }
+
+  /// The one-time code, when a development backend handed it back.
+  ///
+  /// Null in a release build whatever the server sends, and null against production
+  /// whatever the build — so this is two independent conditions, not one.
+  ///
+  /// It saves typing during development and bypasses nothing: the digits still go to
+  /// `POST /auth/verify-otp` and are still verified there. See
+  /// `docs/BEFORE-GOING-LIVE.md`.
+  String? get _devCode => kDebugMode ? AuthSession.instance.devOtpCode : null;
+
+  /// Verifies the code and moves on to setting a password.
+  ///
+  /// Shared by the automatic submit when the sixth digit lands and by the Continue
+  /// button, so both behave identically.
+  Future<void> _submitCode() async {
+    if (_model.isSubmitting || _model.otpCode.length < 6) return;
+
+    final feedback = ApiFeedback.of(context);
+    safeSetState(() => _model.isSubmitting = true);
+
+    final result = await AuthSession.instance.verifyOtp(
+      code: _model.otpCode,
+      mobile: widget.phoneNum,
+    );
+
+    if (!mounted) return;
+    safeSetState(() => _model.isSubmitting = false);
+
+    if (!result.isSuccess) {
+      feedback.show(result);
+      return;
+    }
+
+    context.pushNamed(CreatePasswordPageWidget.routeName);
+  }
+
+  /// Asks for another code and restarts the countdown.
+  Future<void> _resend() async {
+    if (_model.isResending) return;
+
+    final feedback = ApiFeedback.of(context);
+    safeSetState(() => _model.isResending = true);
+
+    final result =
+        await AuthSession.instance.resendOtp(mobile: widget.phoneNum);
+
+    if (!mounted) return;
+    safeSetState(() {
+      _model.isResending = false;
+      if (result.isSuccess) {
+        _model.canResend = false;
+        _model.timerController.onResetTimer();
+        _model.timerController.onStartTimer();
+      }
+    });
+
+    // Shown on success too: "we have sent another code" is the confirmation the user
+    // is waiting for, and silence looks like the tap did nothing.
+    feedback.show(result, onlyOnFailure: false);
+
+    if (result case ApiSuccess<RegistrationStarted>(:final value)) {
+      _showDevCode(feedback, value.devOtpCode);
+    }
+  }
+
+  /// In a debug build against a non-production backend, puts the code on screen.
+  ///
+  /// The backend returns it precisely so the flow can be walked through without an SMS
+  /// gateway, which there is not one of yet. Guarded by [kDebugMode] so a release build
+  /// cannot show it even if a server were misconfigured to send it.
+  void _showDevCode(ApiFeedback feedback, String? code) {
+    if (!kDebugMode || code == null || code.isEmpty) return;
+
+    feedback.notice('Development code: $code');
   }
 
   @override
@@ -319,32 +406,108 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                 width: double.infinity,
                                                 height: 62.0,
                                                 autoFocus: true,
+                                                initialValue: _devCode,
                                                 onChanged: (otpValue) async {
-                                                  _model.otpCompleted = true;
+                                                  _model.otpCode = otpValue;
+                                                  _model.otpCompleted =
+                                                      otpValue.length == 6;
                                                   safeSetState(() {});
                                                 },
                                                 onCompleted:
                                                     (isComplete) async {
                                                   if (isComplete == true) {
-                                                    context.pushNamed(
-                                                        CreatePasswordPageWidget
-                                                            .routeName);
+                                                    await _submitCode();
                                                   }
                                                 },
                                               ),
                                             ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  'Resend code in',
+                                            // Says out loud that the code was
+                                            // filled in for you. A shortcut nobody
+                                            // can see is one somebody will mistake
+                                            // for the real thing working.
+                                            if (_devCode != null)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                        .fromSTEB(0, 4, 0, 0),
+                                                child: Text(
+                                                  'Development build: code filled in automatically.',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodySmall
+                                                      .override(
+                                                        font:
+                                                            GoogleFonts.inter(),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .warning,
+                                                        fontSize: 11.0,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
+                                              ),
+                                            if (_model.canResend)
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async =>
+                                                    await _resend(),
+                                                child: Text(
+                                                  _model.isResending
+                                                      ? 'Sending…'
+                                                      : 'Resend code',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
                                                       .override(
                                                         font: GoogleFonts.inter(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                ),
+                                              ),
+                                            if (!_model.canResend)
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    'Resend code in',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font:
+                                                              GoogleFonts.inter(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -355,57 +518,60 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                                       context)
                                                                   .bodyMedium
                                                                   .fontStyle,
+                                                          lineHeight: 1.4,
                                                         ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 13.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                        lineHeight: 1.4,
-                                                      ),
-                                                ),
-                                                FlutterFlowTimer(
-                                                  initialTime:
-                                                      _model.timerInitialTimeMs,
-                                                  getDisplayTime: (value) =>
-                                                      StopWatchTimer
-                                                          .getDisplayTime(
-                                                    value,
-                                                    hours: false,
-                                                    milliSecond: false,
                                                   ),
-                                                  controller:
-                                                      _model.timerController,
-                                                  updateStateInterval: Duration(
-                                                      milliseconds: 1000),
-                                                  onChanged: (value,
-                                                      displayTime,
-                                                      shouldUpdate) {
-                                                    _model.timerMilliseconds =
-                                                        value;
-                                                    _model.timerValue =
-                                                        displayTime;
-                                                    if (shouldUpdate)
-                                                      safeSetState(() {});
-                                                  },
-                                                  textAlign: TextAlign.start,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineSmall
-                                                      .override(
-                                                        font: GoogleFonts
-                                                            .interTight(
+                                                  FlutterFlowTimer(
+                                                    initialTime: _model
+                                                        .timerInitialTimeMs,
+                                                    getDisplayTime: (value) =>
+                                                        StopWatchTimer
+                                                            .getDisplayTime(
+                                                      value,
+                                                      hours: false,
+                                                      milliSecond: false,
+                                                    ),
+                                                    controller:
+                                                        _model.timerController,
+                                                    updateStateInterval:
+                                                        Duration(
+                                                            milliseconds: 1000),
+                                                    onChanged: (value,
+                                                        displayTime,
+                                                        shouldUpdate) {
+                                                      _model.timerMilliseconds =
+                                                          value;
+                                                      _model.timerValue =
+                                                          displayTime;
+                                                      // Counting down, so zero is the
+                                                      // end. That is when the backend
+                                                      // will accept another request.
+                                                      if (value <= 0 &&
+                                                          !_model.canResend) {
+                                                        _model.canResend = true;
+                                                        safeSetState(() {});
+                                                        return;
+                                                      }
+                                                      if (shouldUpdate)
+                                                        safeSetState(() {});
+                                                    },
+                                                    textAlign: TextAlign.start,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .headlineSmall
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .interTight(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .headlineSmall
+                                                                    .fontStyle,
+                                                          ),
+                                                          fontSize: 12.0,
+                                                          letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontStyle:
@@ -414,19 +580,9 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                                   .headlineSmall
                                                                   .fontStyle,
                                                         ),
-                                                        fontSize: 12.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .headlineSmall
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ].divide(SizedBox(width: 5.0)),
-                                            ),
+                                                  ),
+                                                ].divide(SizedBox(width: 5.0)),
+                                              ),
                                           ].divide(SizedBox(height: 7.0)),
                                         ),
                                       ),
@@ -447,10 +603,7 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            if (_model.otpCompleted == true) {
-                              context.pushNamed(
-                                  CreatePasswordPageWidget.routeName);
-                            }
+                            await _submitCode();
                           },
                           child: Container(
                             width: double.infinity,

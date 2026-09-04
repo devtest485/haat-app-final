@@ -6,6 +6,9 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '/backend/auth/auth_session.dart';
+import '/backend/auth/biometric_key_store.dart';
+import '/backend/ui/api_feedback.dart';
 import 'biomatric_page_model.dart';
 export 'biomatric_page_model.dart';
 
@@ -28,6 +31,47 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => BiomatricPageModel());
+  }
+
+  final _biometrics = BiometricKeyStore();
+
+  /// Enables biometric sign-in on this handset, or explains why it cannot.
+  ///
+  /// The flow continues either way. Biometrics are a convenience on top of the passcode
+  /// that was set on the previous screen, so failing to enable them is not a reason to
+  /// strand somebody mid-onboarding — the screen offers Skip for the same reason.
+  Future<void> _enableBiometrics() async {
+    final feedback = ApiFeedback.of(context);
+    final enrolment = await _biometrics.enrol();
+
+    if (!mounted) return;
+
+    switch (enrolment) {
+      case BiometricEnrolled(:final publicKey):
+        final session = AuthSession.instance;
+        final deviceId = await session.device.fingerprint();
+        final result = await session.api.registerBiometric(
+          deviceId: deviceId,
+          publicKey: publicKey,
+        );
+
+        if (!mounted) return;
+
+        if (!result.isSuccess) {
+          feedback.show(result);
+        } else {
+          feedback.notice('Biometric sign-in is on for this device.');
+        }
+
+      case BiometricRefused(:final reason):
+        // Said plainly rather than silently swallowed: somebody who taps Enable and
+        // sees nothing happen will tap it again.
+        feedback.notice(BiometricKeyStore.describe(reason), isError: true);
+    }
+
+    if (!mounted) return;
+
+    context.pushNamed(VerifyPageWidget.routeName);
   }
 
   @override
@@ -190,7 +234,7 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(VerifyPageWidget.routeName);
+                                await _enableBiometrics();
                               },
                               child: Container(
                                 width: double.infinity,

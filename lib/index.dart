@@ -3,6 +3,7 @@ export '/auth_flow/on_bording_flow/on_boarding_page/on_boarding_page_widget.dart
     show OnBoardingPageWidget;
 export '/auth_flow/phone_number_page/phone_number_page_widget.dart'
     show PhoneNumberPageWidget;
+export '/auth_flow/sign_in_page/sign_in_page_widget.dart' show SignInPageWidget;
 export '/auth_flow/otp_verify_page/otp_verify_page_widget.dart'
     show OtpVerifyPageWidget;
 export '/auth_flow/create_password_page/create_password_page_widget.dart'

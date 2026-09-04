@@ -58,6 +58,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => PhoneNumberPageWidget(),
         ),
         FFRoute(
+          name: SignInPageWidget.routeName,
+          path: SignInPageWidget.routePath,
+          builder: (context, params) => const SignInPageWidget(),
+        ),
+        FFRoute(
           name: OtpVerifyPageWidget.routeName,
           path: OtpVerifyPageWidget.routePath,
           builder: (context, params) => OtpVerifyPageWidget(

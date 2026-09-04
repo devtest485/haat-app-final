@@ -6,7 +6,8 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/nav/nav.dart';
-import 'index.dart';
+import 'backend/api/api_config.dart';
+import 'backend/auth/auth_session.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,13 @@ void main() async {
   await environmentValues.initialize();
 
   await FlutterFlowTheme.initialize();
+
+  // Both before the first frame, and in this order: the session restores tokens from
+  // the keystore, and it cannot build its HTTP client until it knows where the backend
+  // is. Doing this here rather than lazily means the router never has to render a
+  // screen while the answer to "is anybody signed in" is still unknown.
+  await ApiConfig.load();
+  await AuthSession.initialize();
 
   runApp(MyApp());
 }

@@ -18,6 +18,18 @@ class OtpVerifyPageModel extends FlutterFlowModel<OtpVerifyPageWidget> {
 
   bool otpCompleted = false;
 
+  /// The digits typed so far. The OTP widget reports the whole value on every change,
+  /// so this is the code to send — not something reassembled from the boxes.
+  String otpCode = '';
+
+  bool isSubmitting = false;
+  bool isResending = false;
+
+  /// True once the countdown has finished, which is when resending is offered. Before
+  /// that the backend would refuse anyway, and a button that is certain to fail is
+  /// worse than no button.
+  bool canResend = false;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for Timer widget.

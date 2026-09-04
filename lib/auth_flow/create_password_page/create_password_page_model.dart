@@ -16,6 +16,17 @@ class CreatePasswordPageModel
 
   bool isSame = true;
 
+  /// True while the password is being sent, so the button cannot be tapped twice.
+  bool isSubmitting = false;
+
+  /// Focus nodes for the two show/hide password toggles.
+  ///
+  /// Held here rather than built inline. A FocusNode owns platform focus state, and
+  /// this page rebuilds on every keystroke — so constructing them in build made two
+  /// new nodes per character typed, none of them ever disposed.
+  final newPasswardVisibilityFocusNode = FocusNode(skipTraversal: true);
+  final confirmPasswardVisibilityFocusNode = FocusNode(skipTraversal: true);
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for newPassward widget.
@@ -43,5 +54,8 @@ class CreatePasswordPageModel
 
     confirmPasswardFocusNode?.dispose();
     confirmPasswardTextController?.dispose();
+
+    newPasswardVisibilityFocusNode.dispose();
+    confirmPasswardVisibilityFocusNode.dispose();
   }
 }
