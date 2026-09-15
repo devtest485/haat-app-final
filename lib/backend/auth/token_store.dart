@@ -11,7 +11,12 @@ class TokenStore {
   TokenStore({FlutterSecureStorage? storage})
       : _storage = storage ??
             const FlutterSecureStorage(
-              aOptions: AndroidOptions(encryptedSharedPreferences: true),
+              // From flutter_secure_storage 10 the plain-preferences backend is gone
+              // and the default is what `encryptedSharedPreferences: true` used to
+              // ask for: an AES-GCM body under an RSA-OAEP wrapped key, in the
+              // Keystore. Stated rather than omitted, because it is the property this
+              // class exists for.
+              aOptions: AndroidOptions(),
               iOptions: IOSOptions(
                 // Not synced to iCloud, and unreadable until the device has been
                 // unlocked once since boot: a token is worth nothing on a locked phone
@@ -26,10 +31,12 @@ class TokenStore {
   static const _refreshKey = 'haat.refreshToken';
   static const _userIdKey = 'haat.userId';
   static const _deviceKey = 'haat.deviceFingerprint';
+  static const _deviceIdKey = 'haat.deviceId';
 
   String? _access;
   String? _refresh;
   String? _userId;
+  String? _deviceId;
   String? _fingerprint;
 
   /// The current access token, or null when signed out.
@@ -42,6 +49,14 @@ class TokenStore {
 
   String? get userId => _userId;
 
+  /// The server's own id for this handset, from the last sign-in.
+  ///
+  /// Not the same value as [deviceFingerprint]: the fingerprint is what this install
+  /// generated and is recognised by, and this is the row the backend keeps about it.
+  /// `POST /auth/biometric` names a device by this id, so enrolling biometrics needs it —
+  /// and a sign-in response is the only place it is ever handed out.
+  String? get deviceId => _deviceId;
+
   bool get hasSession => _refresh != null;
 
   /// Loads whatever the last run left behind. Call once, at startup.
@@ -49,6 +64,7 @@ class TokenStore {
     _access = await _read(_accessKey);
     _refresh = await _read(_refreshKey);
     _userId = await _read(_userIdKey);
+    _deviceId = await _read(_deviceIdKey);
     _fingerprint = await _read(_deviceKey);
   }
 
@@ -56,6 +72,7 @@ class TokenStore {
     required String accessToken,
     required String refreshToken,
     required String userId,
+    String? deviceId,
   }) async {
     _access = accessToken;
     _refresh = refreshToken;
@@ -64,6 +81,13 @@ class TokenStore {
     await _write(_accessKey, accessToken);
     await _write(_refreshKey, refreshToken);
     await _write(_userIdKey, userId);
+
+    // Only when the sign-in named one. A route that does not return a device id must not
+    // blank out the value an earlier sign-in already established.
+    if (deviceId != null && deviceId.isNotEmpty) {
+      _deviceId = deviceId;
+      await _write(_deviceIdKey, deviceId);
+    }
   }
 
   /// Replaces the pair after a refresh.
@@ -85,10 +109,12 @@ class TokenStore {
     _access = null;
     _refresh = null;
     _userId = null;
+    _deviceId = null;
 
     await _delete(_accessKey);
     await _delete(_refreshKey);
     await _delete(_userIdKey);
+    await _delete(_deviceIdKey);
   }
 
   /// A stable identifier for this installation, created once and kept.

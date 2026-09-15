@@ -1,19 +1,24 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:local_auth/local_auth.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/services.dart';
 
-/// Why enabling biometrics did not happen.
+/// Why enabling or using biometrics did not happen.
 enum BiometricUnavailable {
-  /// The handset has no fingerprint reader or face sensor.
+  /// The handset has no fingerprint reader or face sensor the platform rates strong
+  /// enough to gate a key with.
   noHardware,
 
   /// It has the hardware, but the owner has not enrolled a fingerprint or face.
   notEnrolled,
 
-  /// The user dismissed the prompt.
+  /// The user dismissed the prompt, or chose the negative button.
   cancelled,
 
-  /// The device key could not be created — see [BiometricKeyStore] for why this is
-  /// currently the usual answer.
+  /// The device key was destroyed because the biometrics on the phone changed. Nothing
+  /// is broken — the owner enrols again — but the old key will never sign anything.
+  keyInvalidated,
+
+  /// This platform has no key store implementation behind the channel. Android does;
+  /// iOS is not written yet. See [BiometricKeyStore].
   keyUnsupported,
 
   /// The platform refused for a reason worth logging rather than guessing at.
@@ -41,120 +46,175 @@ final class BiometricRefused extends BiometricEnrolment {
   final String? detail;
 }
 
-/// Biometric sign-in, as far as the platform lets us take it.
+/// The outcome of asking the device key to sign a challenge.
+sealed class BiometricSignature {
+  const BiometricSignature();
+}
+
+/// The owner passed the prompt and the hardware signed.
+final class BiometricSigned extends BiometricSignature {
+  const BiometricSigned(this.signature);
+
+  /// The ECDSA signature, DER, base64 — what `POST /auth/biometric/verify` checks.
+  final String signature;
+}
+
+/// No signature, and [reason] says why. [BiometricUnavailable.cancelled] is the ordinary
+/// case and means the person chose something else, not that anything went wrong.
+final class BiometricSignRefused extends BiometricSignature {
+  const BiometricSignRefused(this.reason, {this.detail});
+
+  final BiometricUnavailable reason;
+  final String? detail;
+}
+
+/// Biometric sign-in, over a key that lives in the phone's secure hardware.
 ///
-/// ## What the backend expects, and why this is not finished
+/// ## What the backend expects
 ///
 /// `POST /auth/biometric` takes the public half of a **P-256 key pair generated inside
 /// the phone's secure hardware** — the Android Keystore's TEE or StrongBox, or the iOS
 /// Secure Enclave — and `/auth/biometric/verify` takes an ES256 signature over a
-/// single-use challenge the server issued. The security property is that the private
-/// key physically cannot leave that hardware, so a signature proves the request came
-/// from this handset with its owner's fingerprint on the sensor.
+/// single-use challenge the server issued. The security property is that the private key
+/// cannot leave that hardware, so a signature proves the request came from this handset
+/// with its owner's fingerprint on the sensor.
 ///
-/// `local_auth`, the Flutter plugin used here, does not do that. It shows the system
-/// prompt and reports a boolean. A boolean crossing a platform channel proves nothing
-/// to a server: anything that can call the plugin can also just return true.
+/// **No key is ever generated in Dart.** A private key sitting in the app's own storage
+/// can be copied off a rooted device, which removes the entire reason the endpoint is
+/// designed this way — and it would look finished while being worth less than no
+/// biometrics at all.
 ///
-/// So the honest position is:
+/// ## Where the work actually happens
 ///
-/// - [availability] and [authenticate] work now, and are enough for the screen to behave
-///   sensibly — not offering "Enable" on a handset with no sensor, and confirming the
-///   owner is present.
-/// - [enrol] returns [BiometricRefused] with [BiometricUnavailable.keyUnsupported],
-///   because the keystore work is Kotlin and Swift that has not been written.
+/// Behind a method channel, in [_channel]:
 ///
-/// **It deliberately does not generate a key in Dart and send that.** A private key
-/// sitting in the app's own storage is a key that can be copied off a rooted device,
-/// which removes the entire reason the endpoint is designed this way — and it would
-/// look finished while being worth less than no biometrics at all.
+/// - **Android** — `BiometricKeyBridge.kt`. `KeyPairGenerator` on `AndroidKeyStore` with
+///   `setUserAuthenticationRequired(true)`, then `BiometricPrompt` holding the
+///   `Signature` as its crypto object. Written and working.
+/// - **iOS** — not written. `SecKeyCreateRandomKey` with `kSecAttrTokenIDSecureEnclave`
+///   and an access control of `biometryCurrentSet`, then `SecKeyCreateSignature` with
+///   `ecdsaSignatureMessageX962SHA256`, would be the shape of it.
 ///
-/// ## What finishing it needs
-///
-/// A platform channel with two implementations:
-///
-/// - **Android** — `KeyPairGenerator.getInstance("EC", "AndroidKeyStore")` with a
-///   `KeyGenParameterSpec` that sets `setUserAuthenticationRequired(true)`,
-///   `setDigests(DIGEST_SHA256)` and P-256, then `Signature.getInstance("SHA256withECDSA")`
-///   to sign the challenge.
-/// - **iOS** — `SecKeyCreateRandomKey` with `kSecAttrTokenIDSecureEnclave` and an access
-///   control of `biometryCurrentSet`, then `SecKeyCreateSignature` with
-///   `ecdsaSignatureMessageX962SHA256`.
-///
-/// Both return the SPKI public key on enrolment and a base64 signature on each sign-in,
-/// which is exactly what the two endpoints already accept.
+/// A platform with nothing behind the channel raises `MissingPluginException`, which
+/// becomes [BiometricUnavailable.keyUnsupported] — so iOS says biometrics are not ready
+/// and offers the passcode, rather than failing in a way nobody can read.
 class BiometricKeyStore {
-  BiometricKeyStore({LocalAuthentication? auth})
-      : _auth = auth ?? LocalAuthentication();
+  BiometricKeyStore({MethodChannel? channel})
+      : _channel = channel ?? const MethodChannel(_channelName);
 
-  final LocalAuthentication _auth;
+  static const _channelName = 'com.mycompany.haat/biometric_key';
 
-  /// Whether this handset can do biometrics at all, and has something enrolled.
+  final MethodChannel _channel;
+
+  /// Whether a strong biometric is usable on this handset, or the reason it is not.
+  ///
+  /// "Strong" is the platform's own rating, and it is the one that matters: a weak face
+  /// unlock passes a general "has biometrics" check and then cannot gate a hardware key,
+  /// so asking the general question only moves the failure somewhere less explicable.
   Future<BiometricUnavailable?> availability() async {
-    // The plugin has no web implementation, so asking would raise
-    // MissingPluginException rather than answering.
-    if (kIsWeb) return BiometricUnavailable.noHardware;
-
     try {
-      if (!await _auth.isDeviceSupported()) return BiometricUnavailable.noHardware;
-      if (!await _auth.canCheckBiometrics) return BiometricUnavailable.noHardware;
-
-      final enrolled = await _auth.getAvailableBiometrics();
-      if (enrolled.isEmpty) return BiometricUnavailable.notEnrolled;
-
-      return null;
-    } catch (_) {
-      // Caught broadly on purpose. Besides PlatformException this can raise
-      // MissingPluginException, which is not one — and a handset that cannot answer
-      // the question is indistinguishable, from here, from one that says no.
-      return BiometricUnavailable.platformError;
+      return _reason(await _channel.invokeMethod<String>('availability'));
+    } on PlatformException catch (error) {
+      return _reason(error.code) ?? BiometricUnavailable.platformError;
+    } on MissingPluginException {
+      return BiometricUnavailable.keyUnsupported;
     }
   }
 
-  /// Shows the system prompt and reports whether the owner passed it.
+  /// Whether this device already holds a key.
   ///
-  /// Useful as a local gate — confirming the person holding the phone before revealing
-  /// something — and not useful as proof to the server. See the class comment.
-  Future<bool> authenticate({required String reason}) async {
-    if (kIsWeb) return false;
-
+  /// The ground truth for whether to offer biometric sign-in on the login screen. The
+  /// server's opinion is asked next, when the challenge is requested — but there is no
+  /// point asking it on a handset that could not answer a challenge anyway.
+  Future<bool> hasKey() async {
     try {
-      return await _auth.authenticate(
-        localizedReason: reason,
-        options: const AuthenticationOptions(
-          biometricOnly: true,
-          // Keeps the prompt up when the app briefly loses focus, which some handsets
-          // do while the sensor reads.
-          stickyAuth: true,
-        ),
-      );
-    } catch (_) {
-      // A dismissed prompt, a missing plugin and a locked-out sensor all mean the same
-      // thing to the caller: the owner was not confirmed.
+      return await _channel.invokeMethod<bool>('hasKey') ?? false;
+    } catch (error) {
+      // Broad on purpose: MissingPluginException and PlatformException both mean the
+      // same thing to a caller deciding whether to offer the option. Logged rather than
+      // swallowed, because "the button silently did not appear" is otherwise a fault
+      // with nothing at all to go on.
+      debugPrint('Biometric key check failed: $error');
+
       return false;
     }
   }
 
   /// Creates a device-bound key pair and returns its public half.
   ///
-  /// Always [BiometricRefused] for now — the keystore implementation described in the
-  /// class comment does not exist yet, and inventing a key in Dart would defeat the
-  /// design rather than complete it.
+  /// Replaces any key already on the device — one enrolment per handset, so that
+  /// removing biometrics and setting them up again cannot leave an older key behind that
+  /// still signs.
   Future<BiometricEnrolment> enrol() async {
-    final unavailable = await availability();
-    if (unavailable != null) return BiometricRefused(unavailable);
+    try {
+      final publicKey = await _channel.invokeMethod<String>('enrol');
 
-    return const BiometricRefused(
-      BiometricUnavailable.keyUnsupported,
-      detail: 'Device key generation is not implemented on this platform yet.',
-    );
+      if (publicKey == null || publicKey.isEmpty) {
+        return const BiometricRefused(BiometricUnavailable.platformError);
+      }
+
+      return BiometricEnrolled(publicKey);
+    } on PlatformException catch (error) {
+      return BiometricRefused(
+        _reason(error.code) ?? BiometricUnavailable.platformError,
+        detail: error.message,
+      );
+    } on MissingPluginException {
+      return const BiometricRefused(
+        BiometricUnavailable.keyUnsupported,
+        detail: 'No device key implementation on this platform yet.',
+      );
+    }
   }
 
-  /// Signs a server challenge with the device key.
+  /// Shows the system prompt and signs [challenge] with the device key.
   ///
-  /// Unreachable while [enrol] never succeeds, and present so the calling code is
-  /// written against the finished shape.
-  Future<String?> sign(String challenge) async => null;
+  /// The prompt is the gate: the key was created with `setUserAuthenticationRequired`,
+  /// so the hardware itself refuses to sign until the sensor has confirmed the owner.
+  /// Nothing here can skip that, which is the point — a boolean crossing this channel
+  /// would prove nothing to a server.
+  Future<BiometricSignature> sign(
+    String challenge, {
+    String title = 'Confirm it is you',
+    String reason = 'Sign in to HAAT',
+    String negative = 'Use another method',
+  }) async {
+    try {
+      final signature = await _channel.invokeMethod<String>('sign', {
+        'challenge': challenge,
+        'title': title,
+        'reason': reason,
+        'negative': negative,
+      });
+
+      if (signature == null || signature.isEmpty) {
+        return const BiometricSignRefused(BiometricUnavailable.platformError);
+      }
+
+      return BiometricSigned(signature);
+    } on PlatformException catch (error) {
+      return BiometricSignRefused(
+        _reason(error.code) ?? BiometricUnavailable.platformError,
+        detail: error.message,
+      );
+    } on MissingPluginException {
+      return const BiometricSignRefused(BiometricUnavailable.keyUnsupported);
+    }
+  }
+
+  /// Destroys the device key.
+  ///
+  /// The local half of turning biometrics off. The server enrolment is removed
+  /// separately — both have to go, and this one is the half that stops working
+  /// immediately.
+  Future<void> remove() async {
+    try {
+      await _channel.invokeMethod<bool>('remove');
+    } catch (_) {
+      // Nothing to do and nothing to report. A key that could not be deleted is still
+      // useless once the server forgets its public half.
+    }
+  }
 
   /// What to tell the user, for each reason it did not work.
   static String describe(BiometricUnavailable reason) => switch (reason) {
@@ -162,10 +222,24 @@ class BiometricKeyStore {
           'This device does not support biometric sign-in.',
         BiometricUnavailable.notEnrolled =>
           'Add a fingerprint or face in your device settings first.',
-        BiometricUnavailable.cancelled => 'Biometric setup was cancelled.',
+        BiometricUnavailable.cancelled => 'Biometric sign-in was cancelled.',
+        BiometricUnavailable.keyInvalidated =>
+          'Your fingerprint or face has changed, so biometric sign-in was turned off. '
+              'You can set it up again from settings.',
         BiometricUnavailable.keyUnsupported =>
           'Biometric sign-in is not ready yet. You can use your passcode for now.',
         BiometricUnavailable.platformError =>
           'We could not set up biometrics on this device.',
+      };
+
+  /// The native side's code, as the reason it stands for. Null means success.
+  static BiometricUnavailable? _reason(String? code) => switch (code) {
+        null => null,
+        'no_hardware' => BiometricUnavailable.noHardware,
+        'not_enrolled' => BiometricUnavailable.notEnrolled,
+        'cancelled' => BiometricUnavailable.cancelled,
+        'key_invalidated' => BiometricUnavailable.keyInvalidated,
+        'key_unsupported' => BiometricUnavailable.keyUnsupported,
+        _ => BiometricUnavailable.platformError,
       };
 }

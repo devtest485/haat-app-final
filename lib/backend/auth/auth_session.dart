@@ -2,10 +2,59 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../api/api_client.dart';
+import '../api/kyc_api.dart';
 import '../api/api_result.dart';
 import '../api/auth_api.dart';
+import 'biometric_key_store.dart';
 import 'device_identity.dart';
 import 'token_store.dart';
+
+/// What a biometric sign-in attempt came to.
+///
+/// Three outcomes rather than a boolean, because the two failures are not alike: a
+/// dismissed prompt means offer the passcode, and a server refusal means show what the
+/// server said.
+sealed class BiometricSignIn {
+  const BiometricSignIn();
+}
+
+/// Signed in. The session has already been adopted.
+final class BiometricSignedIn extends BiometricSignIn {
+  const BiometricSignedIn(this.tokens);
+
+  final AuthTokens tokens;
+}
+
+/// No signature came back. [BiometricUnavailable.cancelled] is the ordinary case.
+final class BiometricPromptRefused extends BiometricSignIn {
+  const BiometricPromptRefused(this.reason);
+
+  final BiometricUnavailable reason;
+}
+
+/// The server has no usable enrolment for this handset, so there was nothing to sign.
+///
+/// Separate from [BiometricSignatureRefused] because the two need opposite handling: this
+/// one means the option should stop being offered, and it happens before the owner has
+/// been asked for anything — so on a prompt the screen raised by itself, there is nothing
+/// worth interrupting them about.
+final class BiometricNotEnrolled extends BiometricSignIn {
+  const BiometricNotEnrolled(this.result);
+
+  final ApiResult<AuthTokens> result;
+}
+
+/// The owner authenticated, and the server would not accept the signature anyway.
+///
+/// Always worth saying out loud, however the prompt was raised. Somebody who has just put
+/// their finger on the sensor and watched nothing happen has no way to tell a refused
+/// signature from a broken reader — and the usual cause is a stale challenge, which
+/// trying again fixes.
+final class BiometricSignatureRefused extends BiometricSignIn {
+  const BiometricSignatureRefused(this.result);
+
+  final ApiResult<AuthTokens> result;
+}
 
 /// Where the app is with respect to being signed in.
 enum AuthStatus {
@@ -82,6 +131,13 @@ class AuthSession extends ChangeNotifier {
 
   /// The typed endpoints. Public because screens outside authentication need them too.
   final AuthApi api;
+
+  /// Identity verification. Shares the client, so it shares the session and its refresh.
+  late final KycApi kyc = KycApi(_client);
+
+  /// The device key behind biometric sign-in. Held here so the screens that offer it and
+  /// the screen that enrols it are talking to the same thing.
+  final BiometricKeyStore biometrics = BiometricKeyStore();
 
   AuthStatus _status = AuthStatus.unknown;
   CredentialStatus? _credentials;
@@ -235,6 +291,111 @@ class AuthSession extends ChangeNotifier {
     return result;
   }
 
+  /// Whether this handset holds a device key, so biometric sign-in is worth offering.
+  ///
+  /// Asked of the phone rather than remembered in a flag: the key can be destroyed
+  /// without the app being told — the owner adds a fingerprint, or clears the app's
+  /// data — and a remembered "yes" would then offer an option that cannot work.
+  Future<bool> hasBiometricKey() => biometrics.hasKey();
+
+  /// Signs in by having the device key sign a challenge the server issued.
+  ///
+  /// Three steps, and none of them can be skipped from the app: the server picks the
+  /// challenge, the phone's secure hardware refuses to sign until the sensor confirms
+  /// the owner, and the server checks the signature against the public half it stored
+  /// at enrolment. What the app does is carry values between them.
+  ///
+  /// A refused prompt and a refused signature are separate outcomes, because they need
+  /// opposite responses: somebody who dismissed the sheet wants the passcode, and only a
+  /// server refusal has a message worth putting on screen.
+  Future<BiometricSignIn> signInWithBiometrics() async {
+    final challenge = await api.biometricChallenge();
+
+    // A 404 here is the ordinary answer on a device the server has no key for. The app
+    // asked because this handset held one locally, and the two can drift apart — after a
+    // reinstall, or once the device has been revoked from another phone.
+    if (challenge is! ApiSuccess<String>) {
+      return BiometricNotEnrolled(_recast(challenge));
+    }
+
+    final signed = await biometrics.sign(challenge.value);
+
+    if (signed is! BiometricSigned) {
+      return BiometricPromptRefused(
+        signed is BiometricSignRefused
+            ? signed.reason
+            : BiometricUnavailable.platformError,
+      );
+    }
+
+    final result = await api.biometricVerify(signature: signed.signature);
+
+    if (result case ApiSuccess<AuthTokens>(:final value)) {
+      await _adopt(value);
+
+      return BiometricSignedIn(value);
+    }
+
+    return BiometricSignatureRefused(result);
+  }
+
+  /// Re-types a failed challenge as a failed sign-in.
+  ///
+  /// The two calls carry different payloads and the same failure shapes, and the screen
+  /// only ever wants the message — so the envelope is moved across rather than the
+  /// caller being made to handle two result types for one attempt.
+  static ApiResult<AuthTokens> _recast(ApiResult<String> failure) => switch (failure) {
+        ApiFailure<String>(:final envelope) => ApiFailure<AuthTokens>(envelope),
+        ApiUnreachable<String>(:final cause, :final message, :final messageAr) =>
+          ApiUnreachable<AuthTokens>(
+            cause,
+            message: message,
+            messageAr: messageAr,
+          ),
+        // Unreachable: only failures are passed here, and a success carries a value
+        // that has nowhere to go in an AuthTokens result.
+        ApiSuccess<String>() =>
+          throw StateError('A successful challenge is not a failed sign-in'),
+      };
+
+  /// Enrols this device's key and registers its public half.
+  ///
+  /// Both halves or neither: a key the server never accepted is not biometric sign-in,
+  /// so a rejected registration destroys the key it just made rather than leaving one
+  /// behind that will only ever produce rejected signatures.
+  Future<BiometricEnrolment> enableBiometrics() async {
+    final unavailable = await biometrics.availability();
+    if (unavailable != null) return BiometricRefused(unavailable);
+
+    // The server names a device by the id it issued at sign-in, not by the fingerprint
+    // this install generated. A session restored from before that id was stored has no
+    // way to name itself, and signing in again is the only thing that fixes it.
+    final deviceId = _tokens.deviceId;
+
+    if (deviceId == null || deviceId.isEmpty) {
+      return const BiometricRefused(
+        BiometricUnavailable.platformError,
+        detail: 'This session predates device identification; sign in again.',
+      );
+    }
+
+    final enrolment = await biometrics.enrol();
+    if (enrolment is! BiometricEnrolled) return enrolment;
+
+    final registered = await api.registerBiometric(
+      deviceId: deviceId,
+      publicKey: enrolment.publicKey,
+    );
+
+    if (!registered.isSuccess) {
+      await biometrics.remove();
+
+      return const BiometricRefused(BiometricUnavailable.platformError);
+    }
+
+    return enrolment;
+  }
+
   // ── Onboarding steps ────────────────────────────────────────────────────────
 
   Future<ApiResult<DateTime?>> setPassword(String password) async {
@@ -298,6 +459,7 @@ class AuthSession extends ChangeNotifier {
       accessToken: issued.accessToken,
       refreshToken: issued.refreshToken,
       userId: issued.userId,
+      deviceId: issued.deviceId,
     );
 
     // Optimistic, so the router can move immediately; refreshCredentials then settles

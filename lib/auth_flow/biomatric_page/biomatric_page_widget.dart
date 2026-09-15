@@ -1,3 +1,6 @@
+import '/backend/auth/auth_session.dart';
+import '/backend/auth/biometric_key_store.dart';
+import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -6,9 +9,6 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '/backend/auth/auth_session.dart';
-import '/backend/auth/biometric_key_store.dart';
-import '/backend/ui/api_feedback.dart';
 import 'biomatric_page_model.dart';
 export 'biomatric_page_model.dart';
 
@@ -33,52 +33,43 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
     _model = createModel(context, () => BiomatricPageModel());
   }
 
-  final _biometrics = BiometricKeyStore();
-
-  /// Enables biometric sign-in on this handset, or explains why it cannot.
-  ///
-  /// The flow continues either way. Biometrics are a convenience on top of the passcode
-  /// that was set on the previous screen, so failing to enable them is not a reason to
-  /// strand somebody mid-onboarding — the screen offers Skip for the same reason.
-  Future<void> _enableBiometrics() async {
-    final feedback = ApiFeedback.of(context);
-    final enrolment = await _biometrics.enrol();
-
-    if (!mounted) return;
-
-    switch (enrolment) {
-      case BiometricEnrolled(:final publicKey):
-        final session = AuthSession.instance;
-        final deviceId = await session.device.fingerprint();
-        final result = await session.api.registerBiometric(
-          deviceId: deviceId,
-          publicKey: publicKey,
-        );
-
-        if (!mounted) return;
-
-        if (!result.isSuccess) {
-          feedback.show(result);
-        } else {
-          feedback.notice('Biometric sign-in is on for this device.');
-        }
-
-      case BiometricRefused(:final reason):
-        // Said plainly rather than silently swallowed: somebody who taps Enable and
-        // sees nothing happen will tap it again.
-        feedback.notice(BiometricKeyStore.describe(reason), isError: true);
-    }
-
-    if (!mounted) return;
-
-    context.pushNamed(VerifyPageWidget.routeName);
-  }
-
   @override
   void dispose() {
     _model.dispose();
 
     super.dispose();
+  }
+
+  // ── Actions ───────────────────────────────────────────────────────────────────
+
+  /// Creates a device key and registers its public half, then moves on.
+  ///
+  /// Enrolment can refuse for reasons that are nobody's fault — no sensor, nothing
+  /// enrolled, or the device key not being available yet — and none of them should trap
+  /// a merchant on this screen. So a refusal is explained and the flow continues: the
+  /// passcode set a moment ago is already a working way back in.
+  Future<void> _enable() async {
+    if (_model.isSubmitting) return;
+
+    final feedback = ApiFeedback.of(context);
+
+    safeSetState(() => _model.isSubmitting = true);
+
+    final enrolment = await AuthSession.instance.enableBiometrics();
+
+    if (!mounted) return;
+    safeSetState(() => _model.isSubmitting = false);
+
+    // Awaited, not fired and forgotten: moving on while the sheet is up takes the sheet
+    // with it, and the explanation for why biometrics did not turn on is never read.
+    await switch (enrolment) {
+      BiometricRefused(:final reason) =>
+        feedback.notice(BiometricKeyStore.describe(reason), isError: true),
+      BiometricEnrolled() => feedback.notice('Biometric sign-in is on.'),
+    };
+
+    if (!mounted) return;
+    context.pushNamed(VerifyPageWidget.routeName);
   }
 
   @override
@@ -233,9 +224,7 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
-                              onTap: () async {
-                                await _enableBiometrics();
-                              },
+                              onTap: _enable,
                               child: Container(
                                 width: double.infinity,
                                 height: 50.0,
