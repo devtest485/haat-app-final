@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/home_screen/home_screen_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'bottom_bar_pages_model.dart';
@@ -28,6 +29,12 @@ class _BottomBarPagesWidgetState extends State<BottomBarPagesWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => BottomBarPagesModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      FFAppState().hasLoggedInBefore = true;
+      safeSetState(() {});
+    });
   }
 
   @override
@@ -39,6 +46,8 @@ class _BottomBarPagesWidgetState extends State<BottomBarPagesWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

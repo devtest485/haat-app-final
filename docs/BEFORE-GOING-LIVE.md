@@ -177,3 +177,42 @@ inferring it from whether calls succeeded.
 
 Not a launch blocker — production is PostgreSQL — but worth knowing before believing a
 local failure.
+
+---
+
+## 7. There is a sign-out button that only exists in debug builds
+
+**Status:** development convenience, on now. Added because the app has no sign-out of
+its own.
+
+Nothing under `lib/` calls [`AuthSession.signOut`](../lib/backend/auth/auth_session.dart)
+— the method is written and works, and `POST /auth/logout` works, but no screen reaches
+either. So once a session is stored the app cannot be got out of it from inside, and
+testing a second account means clearing the app's data from outside. On a handset that
+refuses `adb shell pm clear` for a third-party package that comes down to deleting
+`shared_prefs/FlutterSecureStorage.xml` through `run-as`, which is not a thing anyone
+should need to do to sign out.
+
+[`DebugSignOutButton`](../lib/components/debug_sign_out_button.dart) is the stop-gap. It
+sits in the home header beside the chat and notification icons, signs out, and returns
+to the onboarding screen.
+
+Two things keep it out of a release build:
+
+| Condition | Where |
+| --- | --- |
+| The build is a debug build | `kDebugMode` guard returning `SizedBox.shrink()` in `DebugSignOutButton.build` |
+| It is one widget, not markup | One line in the header's `Row` in [`home_screen_widget.dart`](../lib/home_screens/home_screen/home_screen_widget.dart) |
+
+It has no confirmation step, deliberately — its whole purpose is getting back to a clean
+state quickly, and re-signing in costs one screen.
+
+**Before going live**
+
+- [ ] Build the real control: sign-out on a profile or settings screen, with the
+      confirmation a destructive action deserves. `AuthSession.signOut` already clears
+      the local tokens whatever the server answers, which is the behaviour a user on a
+      borrowed phone needs, so the screen only has to call it and navigate.
+- [ ] Delete `DebugSignOutButton` and its line in the header once that exists. Leaving
+      both means two sign-out paths, one of which nobody tests.
+- [ ] Build a release APK and confirm no logout icon appears in the home header.

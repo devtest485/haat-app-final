@@ -18,7 +18,6 @@ class OtpVerify extends StatefulWidget {
     this.height,
     this.otpLength,
     this.autoFocus,
-    this.initialValue,
     this.useLightStyle, // NEW PARAMETER
     this.onChanged,
     this.onCompleted,
@@ -29,13 +28,6 @@ class OtpVerify extends StatefulWidget {
 
   /// Kitne digits ka OTP hai — default: 6
   final int? otpLength;
-
-  /// Digits to start with, filled into the boxes on first build.
-  ///
-  /// Used in development to save typing a code the backend already handed back. It
-  /// does **not** submit: `onCompleted` is left for the user to trigger, so the screen
-  /// behaves the same as if the digits had been typed.
-  final String? initialValue;
 
   /// Page open hote hi pehla box focus ho jaye — default: true
   final bool? autoFocus;
@@ -58,15 +50,6 @@ class _OtpVerifyState extends State<OtpVerify> {
   late int _length;
   late List<TextEditingController> _controllers;
   late List<FocusNode> _focusNodes;
-
-  /// One per box, for the KeyboardListener that catches backspace.
-  ///
-  /// Held here rather than created in build. A FocusNode is a listenable that owns
-  /// platform focus state, and this widget rebuilds on every keystroke — so building
-  /// them inline created six new nodes per digit typed, none of them ever disposed,
-  /// and replaced the node under a field that was mid-layout. That is what showed up
-  /// as "RenderEditable NEEDS-LAYOUT DETACHED" while typing a code.
-  late List<FocusNode> _keyListenerNodes;
 
   // Existing/current style
   static const _darkFilledBg = Color(0x24CBCBCB);
@@ -99,13 +82,6 @@ class _OtpVerifyState extends State<OtpVerify> {
       (_) => FocusNode(),
     );
 
-    _keyListenerNodes = List.generate(
-      _length,
-      (_) => FocusNode(skipTraversal: true),
-    );
-
-    _applyInitialValue();
-
     if (widget.autoFocus ?? true) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _focusNodes.isNotEmpty) {
@@ -115,43 +91,6 @@ class _OtpVerifyState extends State<OtpVerify> {
     }
   }
 
-  /// Fills the boxes from [OtpVerify.initialValue], if it is the right length.
-  ///
-  /// Setting a controller's text does not fire the field's `onChanged`, so the parent
-  /// is told separately — otherwise the page would hold an empty code while the boxes
-  /// showed a full one, and its Continue button would stay disabled.
-  ///
-  /// `onCompleted` is deliberately not called. Submitting on the user's behalf would
-  /// skip the screen entirely, and the screen is one of the things worth testing.
-  void _applyInitialValue() {
-    final initial = widget.initialValue;
-    if (initial == null || initial.length != _length) return;
-
-    const zero = 0x30;
-    const nine = 0x39;
-    final digitsOnly =
-        initial.codeUnits.every((unit) => unit >= zero && unit <= nine);
-    if (!digitsOnly) return;
-
-    for (var index = 0; index < _length; index += 1) {
-      _controllers[index].text = initial[index];
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) widget.onChanged?.call(initial);
-    });
-  }
-
-  @override
-  void didUpdateWidget(OtpVerify oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    // A resend issues a new code, so the boxes have to follow. Without this they keep
-    // showing the previous one, which then fails verification — and the reason is not
-    // visible on screen.
-    if (widget.initialValue != oldWidget.initialValue) _applyInitialValue();
-  }
-
   @override
   void dispose() {
     for (final controller in _controllers) {
@@ -159,10 +98,6 @@ class _OtpVerifyState extends State<OtpVerify> {
     }
 
     for (final focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
-
-    for (final focusNode in _keyListenerNodes) {
       focusNode.dispose();
     }
 
@@ -203,12 +138,6 @@ class _OtpVerifyState extends State<OtpVerify> {
     );
 
     if (isComplete) {
-      // `onChanged` above was awaited, and the handler behind it can navigate — the
-      // verification page submits the code as soon as the sixth digit lands. So by
-      // here this widget may already be gone, and reading FocusScope from a defunct
-      // context is what surfaced as "RenderEditable NEEDS-LAYOUT DETACHED".
-      if (!mounted) return;
-
       FocusScope.of(context).unfocus();
 
       await widget.onCompleted?.call(true);
@@ -288,7 +217,9 @@ class _OtpVerifyState extends State<OtpVerify> {
               ),
               child: Center(
                 child: KeyboardListener(
-                  focusNode: _keyListenerNodes[index],
+                  focusNode: FocusNode(
+                    skipTraversal: true,
+                  ),
                   onKeyEvent: (event) {
                     if (event is KeyDownEvent &&
                         event.logicalKey == LogicalKeyboardKey.backspace &&

@@ -1,3 +1,4 @@
+import '/components/sign_out_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -249,6 +250,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                     ),
                                                   ),
                                                 ),
+                                                SignOutButton(size: 24.0),
                                               ].divide(SizedBox(width: 8.0)),
                                             ),
                                           ),

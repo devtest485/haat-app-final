@@ -18,6 +18,7 @@ import 'lat_lng.dart';
 export 'lat_lng.dart';
 export 'place.dart';
 export 'uploaded_file.dart';
+export '../app_state.dart';
 export '../environment_values.dart';
 export 'flutter_flow_model.dart';
 export 'dart:math' show min, max;

@@ -3,7 +3,6 @@ export '/auth_flow/on_bording_flow/on_boarding_page/on_boarding_page_widget.dart
     show OnBoardingPageWidget;
 export '/auth_flow/phone_number_page/phone_number_page_widget.dart'
     show PhoneNumberPageWidget;
-export '/auth_flow/sign_in_page/sign_in_page_widget.dart' show SignInPageWidget;
 export '/auth_flow/otp_verify_page/otp_verify_page_widget.dart'
     show OtpVerifyPageWidget;
 export '/auth_flow/create_password_page/create_password_page_widget.dart'
@@ -83,3 +82,11 @@ export '/home_screens/add_transfer_funds/transfermethod/transfermethod_widget.da
     show TransfermethodWidget;
 export '/home_screens/add_transfer_funds/payment_review/payment_review_widget.dart'
     show PaymentReviewWidget;
+export '/auth_flow/login/on_bording_screen/on_bording_screen_widget.dart'
+    show OnBordingScreenWidget;
+export '/auth_flow/login/passward_login/passward_login_widget.dart'
+    show PasswardLoginWidget;
+export '/auth_flow/login/pass_code_login/pass_code_login_widget.dart'
+    show PassCodeLoginWidget;
+export '/auth_flow/login/login_screen/login_screen_widget.dart'
+    show LoginScreenWidget;

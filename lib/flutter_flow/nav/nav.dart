@@ -58,11 +58,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => PhoneNumberPageWidget(),
         ),
         FFRoute(
-          name: SignInPageWidget.routeName,
-          path: SignInPageWidget.routePath,
-          builder: (context, params) => const SignInPageWidget(),
-        ),
-        FFRoute(
           name: OtpVerifyPageWidget.routeName,
           path: OtpVerifyPageWidget.routePath,
           builder: (context, params) => OtpVerifyPageWidget(
@@ -286,6 +281,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: PaymentReviewWidget.routeName,
           path: PaymentReviewWidget.routePath,
           builder: (context, params) => PaymentReviewWidget(),
+        ),
+        FFRoute(
+          name: OnBordingScreenWidget.routeName,
+          path: OnBordingScreenWidget.routePath,
+          builder: (context, params) => OnBordingScreenWidget(),
+        ),
+        FFRoute(
+          name: PasswardLoginWidget.routeName,
+          path: PasswardLoginWidget.routePath,
+          builder: (context, params) => PasswardLoginWidget(),
+        ),
+        FFRoute(
+          name: PassCodeLoginWidget.routeName,
+          path: PassCodeLoginWidget.routePath,
+          builder: (context, params) => PassCodeLoginWidget(),
+        ),
+        FFRoute(
+          name: LoginScreenWidget.routeName,
+          path: LoginScreenWidget.routePath,
+          builder: (context, params) => LoginScreenWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

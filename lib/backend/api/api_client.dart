@@ -115,6 +115,10 @@ class ApiClient {
     String? idempotencyKey,
     bool isRetry = false,
   }) async {
+    // Cheap after the first call, and it is what guarantees the configured base URL is
+    // in hand before a URL is built from it.
+    await ApiConfig.load();
+
     final uri = Uri.parse('$_base$path').replace(
       queryParameters: (query == null || query.isEmpty) ? null : query,
     );

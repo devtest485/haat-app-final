@@ -16,21 +16,20 @@ class PhoneNumberPageModel extends FlutterFlowModel<PhoneNumberPageWidget> {
 
   bool isPhoneValid = false;
 
-  /// True while registration is in flight, so a second tap is ignored rather than
-  /// sending a second code.
+  /// True while registration is in flight, so a second tap cannot start a second one.
   bool isSubmitting = false;
 
-  /// One key for one attempt at this number.
-  ///
-  /// Reused if the request has to be retried, so a tap that timed out after the server
-  /// had already acted does not send a second SMS. Cleared once the number changes,
-  /// because that is a different attempt.
   String? _attemptKey;
-  String? _attemptFor;
+  String? _attemptNumber;
 
+  /// The idempotency key for registering [mobile].
+  ///
+  /// Held across retries of the same number, so tapping Continue again on a bad
+  /// connection returns the first result rather than sending a second code. Typing a
+  /// different number is a different attempt and gets its own key.
   String idempotencyKeyFor(String mobile) {
-    if (_attemptFor != mobile) {
-      _attemptFor = mobile;
+    if (_attemptNumber != mobile) {
+      _attemptNumber = mobile;
       _attemptKey = const Uuid().v4();
     }
 

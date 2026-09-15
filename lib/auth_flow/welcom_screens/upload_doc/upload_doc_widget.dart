@@ -265,7 +265,6 @@ class _UploadDocWidgetState extends State<UploadDocWidget> {
                                   0.0, 30.0, 0.0, 0.0),
                               child: Container(
                                 width: double.infinity,
-                                height: 230.0,
                                 decoration: BoxDecoration(
                                   color: Color(0xFF222222),
                                   borderRadius: BorderRadius.circular(12.0),
@@ -275,52 +274,58 @@ class _UploadDocWidgetState extends State<UploadDocWidget> {
                                   ),
                                 ),
                                 alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Container(
-                                  width: 190.0,
-                                  height: 44.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0x0DFFFFFF),
-                                    borderRadius: BorderRadius.circular(60.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(0.0),
-                                        child: SvgPicture.asset(
-                                          'assets/images/attach_file.svg',
-                                          width: 20.0,
-                                          height: 20.0,
-                                          fit: BoxFit.cover,
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 50.0, 0.0, 50.0),
+                                  child: Container(
+                                    width: 190.0,
+                                    height: 44.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0x0DFFFFFF),
+                                      borderRadius: BorderRadius.circular(60.0),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(0.0),
+                                          child: SvgPicture.asset(
+                                            'assets/images/attach_file.svg',
+                                            width: 20.0,
+                                            height: 20.0,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        'Upload Documents',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
+                                        Text(
+                                          'Upload Documents',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontSize: 15.0,
+                                                letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w500,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              fontSize: 15.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                      ),
-                                    ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

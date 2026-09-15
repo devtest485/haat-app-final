@@ -1,3 +1,5 @@
+import '/backend/auth/auth_session.dart';
+import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -8,8 +10,6 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
 import 'create_password_page_model.dart';
 export 'create_password_page_model.dart';
 
@@ -46,6 +46,42 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  /// Whether the two fields agree and the password meets the app's own rules.
+  ///
+  /// The backend checks this again and answers with every unmet rule at once, so this
+  /// is only about not sending a request that is certain to be refused.
+  bool get _passwordsReady =>
+      functions.validatePassword(_model.newPasswardTextController.text) ==
+          true &&
+      _model.newPasswardTextController.text ==
+          _model.confirmPasswardTextController.text;
+
+  bool get _canSubmit => _passwordsReady && !_model.isSubmitting;
+
+  // ── Actions ───────────────────────────────────────────────────────────────────
+
+  /// Sets the account password, then moves on to the passcode.
+  Future<void> _submit() async {
+    if (!_canSubmit) return;
+
+    final feedback = ApiFeedback.of(context);
+
+    safeSetState(() => _model.isSubmitting = true);
+
+    final result = await AuthSession.instance
+        .setPassword(_model.newPasswardTextController.text);
+
+    if (!mounted) return;
+    safeSetState(() => _model.isSubmitting = false);
+
+    if (!result.isSuccess) {
+      feedback.show(result);
+      return;
+    }
+
+    context.pushNamed(SecurePageWidget.routeName);
   }
 
   @override
@@ -171,11 +207,20 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Icon(
-                                    Icons.arrow_back,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 24.0,
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.safePop();
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 24.0,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -354,7 +399,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                                 FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                           ),
                                                                       hintText:
-                                                                          'Repeat your entered password',
+                                                                          'Enter a password',
                                                                       hintStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -432,7 +477,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                               _model.newPasswardVisibility = !_model.newPasswardVisibility);
                                                                         },
                                                                         focusNode:
-                                                                            _model.newPasswardVisibilityFocusNode,
+                                                                            FocusNode(skipTraversal: true),
                                                                         child:
                                                                             Icon(
                                                                           _model.newPasswardVisibility
@@ -695,7 +740,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                               _model.confirmPasswardVisibility = !_model.confirmPasswardVisibility);
                                                                         },
                                                                         focusNode:
-                                                                            _model.confirmPasswardVisibilityFocusNode,
+                                                                            FocusNode(skipTraversal: true),
                                                                         child:
                                                                             Icon(
                                                                           _model.confirmPasswardVisibility
@@ -1163,49 +1208,12 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: () async {
-                            // The local rules mirror the backend's exactly, so this
-                            // check saves a round trip rather than being the guard.
-                            // The backend re-checks: a client is not where a password
-                            // policy lives.
-                            final password =
-                                _model.newPasswardTextController.text;
-                            final matches = password ==
-                                _model.confirmPasswardTextController.text;
-
-                            if (!functions.validatePassword(password) ||
-                                !matches ||
-                                _model.isSubmitting) {
-                              return;
-                            }
-
-                            final feedback = ApiFeedback.of(context);
-                            safeSetState(() => _model.isSubmitting = true);
-
-                            final result = await AuthSession.instance
-                                .setPassword(password);
-
-                            if (!context.mounted) return;
-                            safeSetState(() => _model.isSubmitting = false);
-
-                            if (!result.isSuccess) {
-                              feedback.show(result);
-                              return;
-                            }
-
-                            context.pushNamed(SecurePageWidget.routeName);
-                          },
+                          onTap: _submit,
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: (functions.validatePassword(_model
-                                              .newPasswardTextController
-                                              .text) ==
-                                          true) &&
-                                      (_model.newPasswardTextController.text ==
-                                          _model.confirmPasswardTextController
-                                              .text)
+                              color: _canSubmit
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).secondary,
                               borderRadius: BorderRadius.circular(106.67),
@@ -1222,15 +1230,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: (functions.validatePassword(_model
-                                                    .newPasswardTextController
-                                                    .text) ==
-                                                true) &&
-                                            (_model.newPasswardTextController
-                                                    .text ==
-                                                _model
-                                                    .confirmPasswardTextController
-                                                    .text)
+                                    color: _canSubmit
                                         ? FlutterFlowTheme.of(context)
                                             .primaryBackground
                                         : FlutterFlowTheme.of(context).primary,

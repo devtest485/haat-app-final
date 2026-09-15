@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show debugPrint, kIsWeb;
 import 'package:flutter/services.dart' show rootBundle;
 
 /// Where the backend lives, and how patient we are with it.
@@ -30,9 +30,40 @@ class ApiConfig {
   /// [load] must have run first; it does, from `main`.
   static String get baseUrl => _baseUrl ?? _developmentDefault;
 
-  /// Reads the configured base URL once, at startup.
-  static Future<void> load() async {
-    _baseUrl = await _fromAssets() ?? _developmentDefault;
+  /// True once a base URL has been read from the environment file.
+  ///
+  /// False means the build fell back to [_developmentDefault], which is worth knowing:
+  /// a release build pointed at the developer's own machine reaches nobody.
+  static bool get isConfigured => _configured;
+
+  static bool _configured = false;
+
+  static Future<void>? _loading;
+
+  /// Reads the configured base URL, once.
+  ///
+  /// Safe to call from anywhere, as often as you like: concurrent callers share a
+  /// single read of the asset instead of each opening it. Every request awaits this,
+  /// so the app reaches the configured server whether or not startup got to it first
+  /// — FlutterFlow regenerates `main.dart`, and a base URL that depended on an edit
+  /// surviving that would quietly revert to localhost on the next export.
+  static Future<void> load() => _loading ??= _read();
+
+  /// Which server a build talks to is the first thing worth checking when nothing
+  /// works, so the answer is announced rather than inferred. An environment file that
+  /// has lost its `apiBaseUrl` key falls back to localhost **silently** otherwise —
+  /// and a phone talking to its own localhost looks exactly like a backend that is down.
+  static Future<void> _read() async {
+    final configured = await _fromAssets();
+
+    _configured = configured != null;
+    _baseUrl = configured ?? _developmentDefault;
+
+    debugPrint(
+      _configured
+          ? 'ApiConfig: $_baseUrl'
+          : 'ApiConfig: $_baseUrl — no "$_configKey" in $_configPath, using the local fallback',
+    );
   }
 
   static Future<String?> _fromAssets() async {

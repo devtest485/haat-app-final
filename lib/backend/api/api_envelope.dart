@@ -119,6 +119,14 @@ abstract final class ApiErrorCode {
   /// can count down instead of inviting an attempt that is certain to fail.
   static const String accountLocked = 'ACCOUNT_LOCKED';
 
+  /// Automated identity verification is switched off in the back office.
+  ///
+  /// The one refusal a screen should move **past** rather than report. Nothing is
+  /// broken and retrying will not help — an operator has turned the paid check off,
+  /// and the merchant carries on to the manual path without being told about a setting
+  /// that is none of their concern.
+  static const String kycProviderDisabled = 'KYC_PROVIDER_DISABLED';
+
   /// Not authenticated.
   ///
   /// Note that a rejected sign-in returns this too — the same code covers "your token

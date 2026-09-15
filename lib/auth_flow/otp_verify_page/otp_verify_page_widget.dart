@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
+
+import '/backend/auth/auth_session.dart';
+import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -11,11 +15,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
-import '/backend/api/api_result.dart';
-import '/backend/api/auth_api.dart';
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
 import 'otp_verify_page_model.dart';
 export 'otp_verify_page_model.dart';
 
@@ -44,89 +43,11 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
     super.initState();
     _model = createModel(context, () => OtpVerifyPageModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // The screen says "Resend code in 00:30", so something has to be counting. The
-      // designer's timer was never started, which left the label frozen and resending
-      // unreachable.
-      _model.timerController.onStartTimer();
-      safeSetState(() {});
-    });
-  }
+    // The screen promises "Resend code in 00:30", so the countdown has to be running.
+    // Nothing else starts it, and a frozen 00:30 never gets round to offering a resend.
+    _model.timerController.onStartTimer();
 
-  /// The one-time code, when a development backend handed it back.
-  ///
-  /// Null in a release build whatever the server sends, and null against production
-  /// whatever the build — so this is two independent conditions, not one.
-  ///
-  /// It saves typing during development and bypasses nothing: the digits still go to
-  /// `POST /auth/verify-otp` and are still verified there. See
-  /// `docs/BEFORE-GOING-LIVE.md`.
-  String? get _devCode => kDebugMode ? AuthSession.instance.devOtpCode : null;
-
-  /// Verifies the code and moves on to setting a password.
-  ///
-  /// Shared by the automatic submit when the sixth digit lands and by the Continue
-  /// button, so both behave identically.
-  Future<void> _submitCode() async {
-    if (_model.isSubmitting || _model.otpCode.length < 6) return;
-
-    final feedback = ApiFeedback.of(context);
-    safeSetState(() => _model.isSubmitting = true);
-
-    final result = await AuthSession.instance.verifyOtp(
-      code: _model.otpCode,
-      mobile: widget.phoneNum,
-    );
-
-    if (!mounted) return;
-    safeSetState(() => _model.isSubmitting = false);
-
-    if (!result.isSuccess) {
-      feedback.show(result);
-      return;
-    }
-
-    context.pushNamed(CreatePasswordPageWidget.routeName);
-  }
-
-  /// Asks for another code and restarts the countdown.
-  Future<void> _resend() async {
-    if (_model.isResending) return;
-
-    final feedback = ApiFeedback.of(context);
-    safeSetState(() => _model.isResending = true);
-
-    final result =
-        await AuthSession.instance.resendOtp(mobile: widget.phoneNum);
-
-    if (!mounted) return;
-    safeSetState(() {
-      _model.isResending = false;
-      if (result.isSuccess) {
-        _model.canResend = false;
-        _model.timerController.onResetTimer();
-        _model.timerController.onStartTimer();
-      }
-    });
-
-    // Shown on success too: "we have sent another code" is the confirmation the user
-    // is waiting for, and silence looks like the tap did nothing.
-    feedback.show(result, onlyOnFailure: false);
-
-    if (result case ApiSuccess<RegistrationStarted>(:final value)) {
-      _showDevCode(feedback, value.devOtpCode);
-    }
-  }
-
-  /// In a debug build against a non-production backend, puts the code on screen.
-  ///
-  /// The backend returns it precisely so the flow can be walked through without an SMS
-  /// gateway, which there is not one of yet. Guarded by [kDebugMode] so a release build
-  /// cannot show it even if a server were misconfigured to send it.
-  void _showDevCode(ApiFeedback feedback, String? code) {
-    if (!kDebugMode || code == null || code.isEmpty) return;
-
-    feedback.notice('Development code: $code');
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -134,6 +55,99 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  /// How many digits the code has.
+  ///
+  /// Stated once and handed to the boxes as well as used to decide when the code is
+  /// complete, so the two can never disagree about what "filled in" means.
+  static const int _otpLength = 6;
+
+  /// Whether Continue is live: a full code in, and nothing already in flight.
+  bool get _canSubmit => _model.otpCompleted && !_model.isSubmitting;
+
+  // ── Actions ───────────────────────────────────────────────────────────────────
+
+  /// Verifies the code and adopts the session it returns.
+  ///
+  /// The number is not passed: the session remembered it when registration started,
+  /// which still holds after the app has been backgrounded waiting for an SMS.
+  Future<void> _verify() async {
+    if (!_canSubmit) return;
+
+    final feedback = ApiFeedback.of(context);
+
+    safeSetState(() => _model.isSubmitting = true);
+
+    final result = await AuthSession.instance.verifyOtp(code: _model.otpCode);
+
+    if (!mounted) return;
+    safeSetState(() => _model.isSubmitting = false);
+
+    if (!result.isSuccess) {
+      // A wrong or spent code leaves the boxes as they are — retyping six digits to
+      // correct one is its own small punishment — and the backend's own sentence
+      // says which of the two it was.
+      feedback.show(result);
+      return;
+    }
+
+    final next = _nextRoute();
+
+    // A finished account has just signed in rather than signed up, so the sign-up
+    // screens behind this one are not somewhere to go back to.
+    if (next == BottomBarPagesWidget.routeName) {
+      context.goNamed(next);
+    } else {
+      context.pushNamed(next);
+    }
+  }
+
+  /// Where the account goes now that it has proved the number.
+  ///
+  /// An already-registered number gets a code and a session exactly like a new one —
+  /// the backend will not confirm to a stranger that an account exists — so this screen
+  /// cannot assume a fresh sign-up. What the account already holds decides where it
+  /// resumes. Sending everyone to "create a password" is what asked an account that
+  /// already had one for its current password.
+  String _nextRoute() {
+    final credentials = AuthSession.instance.credentials;
+
+    // Only a first password is set from here. Replacing one needs the current password
+    // as well, which this flow never collects — and an account in that state signs in
+    // by handle rather than by code, so it does not reach this screen.
+    if (credentials == null || !credentials.hasPassword) {
+      return CreatePasswordPageWidget.routeName;
+    }
+
+    if (!credentials.hasPasscode) return SecurePageWidget.routeName;
+    if (credentials.username == null) return UsernamePageWidget.routeName;
+
+    return BottomBarPagesWidget.routeName;
+  }
+
+  /// Asks for a new code, which invalidates the one already sent.
+  Future<void> _resend() async {
+    if (_model.isSubmitting) return;
+
+    final feedback = ApiFeedback.of(context);
+
+    safeSetState(() => _model.isSubmitting = true);
+
+    final result = await AuthSession.instance.resendOtp();
+
+    if (!mounted) return;
+    safeSetState(() => _model.isSubmitting = false);
+
+    // Shown either way here: "we have sent another one" is the whole point of the tap,
+    // so silence on success would read as nothing having happened.
+    feedback.show(result, onlyOnFailure: false);
+
+    if (result.isSuccess) {
+      safeSetState(() => _model.resendReady = false);
+      _model.timerController.onResetTimer();
+      _model.timerController.onStartTimer();
+    }
   }
 
   @override
@@ -256,11 +270,20 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Icon(
-                                    Icons.arrow_back,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 24.0,
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.safePop();
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 24.0,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -406,79 +429,54 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                 width: double.infinity,
                                                 height: 62.0,
                                                 autoFocus: true,
-                                                initialValue: _devCode,
+                                                otpLength: _otpLength,
                                                 onChanged: (otpValue) async {
-                                                  _model.otpCode = otpValue;
-                                                  _model.otpCompleted =
-                                                      otpValue.length == 6;
-                                                  safeSetState(() {});
+                                                  safeSetState(() {
+                                                    _model.otpCode = otpValue;
+                                                    _model.otpCompleted =
+                                                        otpValue.length ==
+                                                            _otpLength;
+                                                  });
                                                 },
                                                 onCompleted:
                                                     (isComplete) async {
+                                                  // Filling the last box submits, so
+                                                  // the usual case needs no button.
                                                   if (isComplete == true) {
-                                                    await _submitCode();
+                                                    await _verify();
                                                   }
                                                 },
                                               ),
                                             ),
-                                            // Says out loud that the code was
-                                            // filled in for you. A shortcut nobody
-                                            // can see is one somebody will mistake
-                                            // for the real thing working.
-                                            if (_devCode != null)
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .fromSTEB(0, 4, 0, 0),
-                                                child: Text(
-                                                  'Development build: code filled in automatically.',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodySmall
-                                                      .override(
-                                                        font:
-                                                            GoogleFonts.inter(),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .warning,
-                                                        fontSize: 11.0,
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ),
-                                            if (_model.canResend)
-                                              InkWell(
-                                                splashColor: Colors.transparent,
-                                                focusColor: Colors.transparent,
-                                                hoverColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
-                                                onTap: () async =>
-                                                    await _resend(),
-                                                child: Text(
-                                                  _model.isResending
-                                                      ? 'Sending…'
-                                                      : 'Resend code',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                        fontSize: 12.0,
-                                                        letterSpacing: 0.0,
+                                            // Development only. A backend with no SMS
+                                            // provider hands the code back in the
+                                            // response so the flow can be walked
+                                            // through; `kDebugMode` is what keeps a
+                                            // one-time code off a release build.
+                                            if (kDebugMode &&
+                                                AuthSession
+                                                        .instance.devOtpCode !=
+                                                    null)
+                                              SelectableText(
+                                                'Development code: ${AuthSession.instance.devOtpCode}',
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      font: GoogleFonts.inter(
                                                         fontWeight:
                                                             FontWeight.w600,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .underline,
                                                       ),
-                                                ),
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryText,
+                                                      fontSize: 13.0,
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
                                               ),
-                                            if (!_model.canResend)
+                                            if (!_model.resendReady)
                                               Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 crossAxisAlignment:
@@ -536,6 +534,9 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                     updateStateInterval:
                                                         Duration(
                                                             milliseconds: 1000),
+                                                    onEnded: () => safeSetState(
+                                                        () => _model
+                                                            .resendReady = true),
                                                     onChanged: (value,
                                                         displayTime,
                                                         shouldUpdate) {
@@ -543,15 +544,6 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                           value;
                                                       _model.timerValue =
                                                           displayTime;
-                                                      // Counting down, so zero is the
-                                                      // end. That is when the backend
-                                                      // will accept another request.
-                                                      if (value <= 0 &&
-                                                          !_model.canResend) {
-                                                        _model.canResend = true;
-                                                        safeSetState(() {});
-                                                        return;
-                                                      }
                                                       if (shouldUpdate)
                                                         safeSetState(() {});
                                                     },
@@ -582,6 +574,39 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                         ),
                                                   ),
                                                 ].divide(SizedBox(width: 5.0)),
+                                              )
+                                            else
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: _resend,
+                                                child: Text(
+                                                  'Resend code',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font: GoogleFonts.inter(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 13.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        lineHeight: 1.4,
+                                                      ),
+                                                ),
                                               ),
                                           ].divide(SizedBox(height: 7.0)),
                                         ),
@@ -602,14 +627,12 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: () async {
-                            await _submitCode();
-                          },
+                          onTap: _verify,
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: _model.otpCompleted == true
+                              color: _canSubmit
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).secondary,
                               borderRadius: BorderRadius.circular(106.67),
@@ -626,7 +649,7 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: _model.otpCompleted == true
+                                    color: _canSubmit
                                         ? FlutterFlowTheme.of(context)
                                             .primaryBackground
                                         : FlutterFlowTheme.of(context).primary,

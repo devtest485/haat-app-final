@@ -126,8 +126,12 @@ class _SignInPageWidgetState extends State<SignInPageWidget> {
         if (value.mustChangePassword) {
           // An employer chose this password and has read it. It is not a secret
           // between the account and its owner until the owner replaces it.
-          feedback.notice('Please choose your own password to continue.');
+          // Awaited so the sheet is read before the next screen replaces it.
+          await feedback.notice('Please choose your own password to continue.');
+
+          if (!mounted) return;
           context.goNamed(CreatePasswordPageWidget.routeName);
+
           return;
         }
 

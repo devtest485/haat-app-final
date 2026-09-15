@@ -1,3 +1,5 @@
+import '/backend/auth/auth_session.dart';
+import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -8,8 +10,6 @@ import 'pass_code_page_widget.dart' show PassCodePageWidget;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
 
 class PassCodePageModel extends FlutterFlowModel<PassCodePageWidget> {
   ///  Local state fields for this page.
@@ -21,9 +21,6 @@ class PassCodePageModel extends FlutterFlowModel<PassCodePageWidget> {
   String? createdPasscode;
 
   int passcodeResult = 0;
-
-  /// True while the confirmed passcode is being sent.
-  bool isSubmitting = false;
 
   @override
   void initState(BuildContext context) {}
@@ -44,32 +41,26 @@ class PassCodePageModel extends FlutterFlowModel<PassCodePageWidget> {
     reenterPin = functions.nextReenterPin(pinCode, reenterpin!, digit!, 6);
     pinCode = functions.nextPinCode(pinCode, digit!, 6);
     if (passcodeResult == 2) {
-      // Both entries matched. The passcode has to reach the backend before the flow
-      // continues: a passcode that only exists on this handset would let somebody set
-      // one, reinstall, and find it gone — with no way to tell why.
-      if (isSubmitting) return;
-
+      // The passcode is set on the server, which stores only a hash of it. It is
+      // deliberately not kept on the handset: signing in with it sends it to be
+      // checked, so a copy here would be a secret held for no reason.
       final feedback = ApiFeedback.of(context);
-      isSubmitting = true;
-
-      final result =
-          await AuthSession.instance.setPasscode(createdPasscode ?? '');
-
-      isSubmitting = false;
-
-      if (!context.mounted) return;
+      final result = await AuthSession.instance.setPasscode(createdPasscode!);
 
       if (!result.isSuccess) {
-        // Start the pair over. Leaving the confirmed value in place would show a
-        // passcode as set when the server does not have it.
+        feedback.show(result);
+
+        // Back to the first entry, so the pair is retyped rather than half-kept.
         pinCode = null;
         createdPasscode = null;
         reenterPin = false;
-        feedback.show(result);
+
         return;
       }
 
-      context.pushNamed(BiomatricPageWidget.routeName);
+      if (context.mounted) {
+        context.pushNamed(BiomatricPageWidget.routeName);
+      }
     } else {
       if (passcodeResult == 3) {
         ScaffoldMessenger.of(context).showSnackBar(

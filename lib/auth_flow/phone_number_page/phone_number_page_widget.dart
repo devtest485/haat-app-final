@@ -1,3 +1,5 @@
+import '/backend/auth/auth_session.dart';
+import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -8,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
 import 'phone_number_page_model.dart';
 export 'phone_number_page_model.dart';
 
@@ -42,6 +42,56 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  /// Whether Continue is live: a complete number, and nothing already in flight.
+  bool get _canSubmit => _model.isPhoneValid && !_model.isSubmitting;
+
+  // ── Actions ───────────────────────────────────────────────────────────────────
+
+  /// Starts registration, then hands the number to the code screen.
+  ///
+  /// There is no "this number is already registered" branch to write: the backend
+  /// answers a known number exactly as it answers a new one, reissuing a code rather
+  /// than confirming to a stranger that an account exists.
+  Future<void> _submit() async {
+    if (_model.isSubmitting || !_model.isPhoneValid) return;
+
+    _model.valid = true;
+    if (_model.formKey.currentState == null ||
+        !_model.formKey.currentState!.validate()) {
+      safeSetState(() => _model.valid = false);
+      return;
+    }
+
+    final typed = _model.phoneTextController.text;
+    final mobile = PhoneFormat.toE164(typed);
+    final feedback = ApiFeedback.of(context);
+
+    safeSetState(() => _model.isSubmitting = true);
+
+    final result = await AuthSession.instance.register(
+      mobile: mobile,
+      idempotencyKey: _model.idempotencyKeyFor(mobile),
+    );
+
+    if (!mounted) return;
+    safeSetState(() => _model.isSubmitting = false);
+
+    if (!result.isSuccess) {
+      feedback.show(result);
+      return;
+    }
+
+    // The number travels as a route parameter for display only. What the next screen
+    // verifies against is the number the session remembered, which survives the app
+    // being backgrounded in a way route arguments do not.
+    context.pushNamed(
+      OtpVerifyPageWidget.routeName,
+      queryParameters: {
+        'phoneNum': serializeParam(typed, ParamType.String),
+      }.withoutNulls,
+    );
   }
 
   @override
@@ -164,11 +214,20 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Icon(
-                                    Icons.arrow_back,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 24.0,
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.safePop();
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 24.0,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -373,11 +432,12 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                                     milliseconds:
                                                                         2000),
                                                                 () async {
-                                                                  _model.isPhoneValid =
-                                                                      PhoneFormat
-                                                                          .isComplete(_model
-                                                                              .phoneTextController
-                                                                              .text);
+                                                                  _model
+                                                                      .isPhoneValid = _model
+                                                                          .phoneTextController
+                                                                          .text
+                                                                          .length ==
+                                                                      10;
                                                                   safeSetState(
                                                                       () {});
                                                                 },
@@ -581,78 +641,18 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: () async {
-                            if (_model.isPhoneValid != true ||
-                                _model.isSubmitting) {
-                              return;
-                            }
-
-                            _model.valid = true;
-                            if (_model.formKey.currentState == null ||
-                                !_model.formKey.currentState!.validate()) {
-                              safeSetState(() => _model.valid = false);
-                              return;
-                            }
-
-                            final mobile = PhoneFormat.toE164(
-                                _model.phoneTextController.text);
-                            // Captured before the request: after it, this context may
-                            // be deactivated and looking up the messenger would throw.
-                            final feedback = ApiFeedback.of(context);
-
-                            safeSetState(() => _model.isSubmitting = true);
-
-                            final result =
-                                await AuthSession.instance.register(
-                              mobile: mobile,
-                              idempotencyKey:
-                                  _model.idempotencyKeyFor(mobile),
-                            );
-
-                            if (!context.mounted) return;
-                            safeSetState(() => _model.isSubmitting = false);
-
-                            // Only move on if a code was actually sent. Navigating
-                            // regardless would leave the user on a verification screen
-                            // waiting for an SMS that is never coming.
-                            if (!result.isSuccess) {
-                              feedback.show(result);
-                              return;
-                            }
-
-                            context.pushNamed(
-                              OtpVerifyPageWidget.routeName,
-                              queryParameters: {
-                                'phoneNum': serializeParam(
-                                  mobile,
-                                  ParamType.String,
-                                ),
-                              }.withoutNulls,
-                            );
-                          },
+                          onTap: _submit,
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: _model.isPhoneValid == true
+                              color: _canSubmit
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).secondary,
                               borderRadius: BorderRadius.circular(106.67),
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
-                            child: _model.isSubmitting
-                                ? SizedBox(
-                                    width: 22.0,
-                                    height: 22.0,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                      ),
-                                    ),
-                                  )
-                                : Text(
+                            child: Text(
                               'Continue',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -663,7 +663,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: _model.isPhoneValid == true
+                                    color: _canSubmit
                                         ? FlutterFlowTheme.of(context)
                                             .primaryBackground
                                         : FlutterFlowTheme.of(context).primary,

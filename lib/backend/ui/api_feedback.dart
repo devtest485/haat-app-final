@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '/flutter_flow/flutter_flow_theme.dart';
 import '../api/api_result.dart';
 import '../auth/auth_session.dart';
 
@@ -34,69 +35,195 @@ import '../auth/auth_session.dart';
 /// ```
 class ApiFeedback {
   const ApiFeedback._({
-    required ScaffoldMessengerState messenger,
-    required Color onNeutral,
-    required Color neutral,
-    required Color onError,
+    required NavigatorState navigator,
+    required Color surface,
+    required Color onSurface,
+    required Color muted,
     required Color error,
-  })  : _messenger = messenger,
-        _onNeutral = onNeutral,
-        _neutral = neutral,
-        _onError = onError,
-        _error = error;
+    required Color success,
+  })  : _navigator = navigator,
+        _surface = surface,
+        _onSurface = onSurface,
+        _muted = muted,
+        _error = error,
+        _success = success;
 
-  final ScaffoldMessengerState _messenger;
-  final Color _onNeutral;
-  final Color _neutral;
-  final Color _onError;
+  /// The navigator the sheet is shown on.
+  ///
+  /// Captured rather than the Scaffold's messenger because a bottom sheet needs a
+  /// context to be shown from, and the root navigator's own context outlives any screen
+  /// that started the request — which is the whole problem described above.
+  final NavigatorState _navigator;
+
+  final Color _surface;
+  final Color _onSurface;
+  final Color _muted;
   final Color _error;
+  final Color _success;
 
   /// Captures everything needed to report later. Call before the request.
   ///
-  /// The colours are read here too, for the same reason as the messenger: `Theme.of`
-  /// is an ancestor lookup.
+  /// The colours are read here too, for the same reason as the navigator:
+  /// `FlutterFlowTheme.of` is an ancestor lookup.
   factory ApiFeedback.of(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = FlutterFlowTheme.of(context);
 
     return ApiFeedback._(
-      messenger: ScaffoldMessenger.of(context),
-      onNeutral: scheme.onInverseSurface,
-      neutral: scheme.inverseSurface,
-      onError: scheme.onError,
-      error: scheme.error,
+      navigator: Navigator.of(context, rootNavigator: true),
+      // `secondary` rather than `secondaryBackground`: the latter is near-white in this
+      // theme while `primaryText` is white, which renders a sheet nobody can read. This
+      // is the dark card colour the rest of the app puts on its black ground.
+      surface: theme.secondary,
+      onSurface: theme.primaryText,
+      muted: theme.secondaryText,
+      error: theme.error,
+      success: theme.tertiary,
     );
   }
 
-  /// Shows the message from [result], in the session's language.
-  void show(ApiResult<dynamic> result, {bool onlyOnFailure = true}) {
-    if (onlyOnFailure && result.isSuccess) return;
+  /// Shows the outcome of [result], in the session's language.
+  ///
+  /// Returns when the sheet has been dismissed. A caller that navigates afterwards must
+  /// await it: pushing a route while the sheet is up takes the sheet away with it, and
+  /// the reason the screen was trying to give never gets read.
+  Future<void> show(ApiResult<dynamic> result, {bool onlyOnFailure = true}) {
+    if (onlyOnFailure && result.isSuccess) return Future<void>.value();
 
-    _show(
-      result.messageIn(AuthSession.instance.languageCode),
+    final language = AuthSession.instance.languageCode;
+
+    return _show(
+      title: result.titleIn(language),
+      message: result.messageIn(language),
       isError: !result.isSuccess,
     );
   }
 
   /// Shows a message this app wrote, for the cases with no server response to quote —
   /// a device with no biometric hardware, a field the user has not filled in.
-  void notice(String message, {bool isError = false}) =>
-      _show(message, isError: isError);
+  Future<void> notice(String message, {bool isError = false}) => _show(
+        title: isError ? 'Please check' : 'Done',
+        message: message,
+        isError: isError,
+      );
 
-  void _show(String message, {required bool isError}) {
-    // Nothing is looked up here, so a screen that has since gone away is not a
-    // problem: the messenger belongs to the Scaffold above it, which is still there.
-    _messenger.showSnackBar(
-      SnackBar(
-        // Each ground gets the colour meant to read on it. Using one for both put
-        // dark red text on a red bar, which was legible only if you knew what it said.
-        content: Text(
-          message,
-          style: TextStyle(color: isError ? _onError : _onNeutral),
+  Future<void> _show({
+    required String title,
+    required String message,
+    required bool isError,
+  }) {
+    // Nothing is looked up here, so a screen that has since gone away is not a problem:
+    // the navigator was captured while its context was certainly alive.
+    return showModalBottomSheet<void>(
+      context: _navigator.context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => _FeedbackSheet(
+        title: title,
+        message: message,
+        accent: isError ? _error : _success,
+        surface: _surface,
+        onSurface: _onSurface,
+        muted: _muted,
+      ),
+    );
+  }
+}
+
+/// The sheet itself.
+///
+/// A sheet rather than a snack bar because the backend writes a real sentence for every
+/// refusal — "the code has expired", "that handle is taken" — and a bar that slides away
+/// after three seconds is the wrong place to put a sentence somebody has to read and act
+/// on. This waits to be dismissed.
+class _FeedbackSheet extends StatelessWidget {
+  const _FeedbackSheet({
+    required this.title,
+    required this.message,
+    required this.accent,
+    required this.surface,
+    required this.onSurface,
+    required this.muted,
+  });
+
+  final String title;
+  final String message;
+  final Color accent;
+  final Color surface;
+  final Color onSurface;
+  final Color muted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24.0)),
+      ),
+      // The sheet sits over the gesture bar on a phone with no buttons, so its own
+      // padding has to clear whatever the system reserves down there.
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40.0,
+                  height: 4.0,
+                  decoration: BoxDecoration(
+                    color: muted.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              Text(
+                title,
+                style: TextStyle(
+                  color: accent,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Text(
+                message,
+                style: TextStyle(
+                  color: onSurface,
+                  fontSize: 15.0,
+                  height: 1.45,
+                ),
+              ),
+              const SizedBox(height: 24.0),
+              SizedBox(
+                width: double.infinity,
+                height: 50.0,
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: TextButton.styleFrom(
+                    backgroundColor: onSurface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100.0),
+                    ),
+                  ),
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      color: surface,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        backgroundColor: isError ? _error : _neutral,
-        duration: Duration(seconds: isError ? 5 : 3),
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -120,7 +247,13 @@ abstract final class PhoneFormat {
   /// Tolerates a leading zero and any spacing or dashes, because people type their
   /// number the way they say it rather than the way a regular expression wants it.
   static String toE164(String typed) {
-    var digits = typed.replaceAll(RegExp(r'\D'), '');
+    final trimmed = typed.trim();
+    var digits = trimmed.replaceAll(RegExp(r'\D'), '');
+
+    // Somebody who typed their own country code meant it. Putting the screen's dial
+    // code in front of it as well produces a number belonging to nobody — a Sudanese
+    // +249 911 000 007 would be sent as +92249911000007.
+    if (trimmed.startsWith('+')) return '+$digits';
 
     if (digits.startsWith(dialCode.substring(1))) {
       digits = digits.substring(dialCode.length - 1);

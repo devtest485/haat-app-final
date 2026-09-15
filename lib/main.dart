@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'backend/api/api_config.dart';
 import 'backend/auth/auth_session.dart';
+import 'index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,16 +19,27 @@ void main() async {
   final environmentValues = FFDevEnvironmentValues();
   await environmentValues.initialize();
 
-  await FlutterFlowTheme.initialize();
-
   // Both before the first frame, and in this order: the session restores tokens from
   // the keystore, and it cannot build its HTTP client until it knows where the backend
   // is. Doing this here rather than lazily means the router never has to render a
   // screen while the answer to "is anybody signed in" is still unknown.
+  //
+  // A FlutterFlow export has already removed this pair once. Requests resolve the
+  // address themselves now, so losing the first line only costs a moment — but losing
+  // the second throws on the first call that needs a session. If an export drops them
+  // again, put them back.
   await ApiConfig.load();
   await AuthSession.initialize();
 
-  runApp(MyApp());
+  await FlutterFlowTheme.initialize();
+
+  final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
