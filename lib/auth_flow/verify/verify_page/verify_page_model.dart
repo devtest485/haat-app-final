@@ -9,6 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class VerifyPageModel extends FlutterFlowModel<VerifyPageWidget> {
+  /// True from the moment Start Verification is tapped until the verdict is in.
+  bool isVerifying = false;
+
   @override
   void initState(BuildContext context) {}
 
