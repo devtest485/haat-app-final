@@ -1,11 +1,8 @@
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -40,54 +37,8 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
     super.dispose();
   }
 
-  static const int _pinLength = 6;
-
-  // ── Actions ───────────────────────────────────────────────────────────────────
-
-  /// Adds a digit, and signs in once the passcode is complete.
-  ///
-  /// The passcode is checked by the server rather than against a copy on the handset.
-  /// A comparison here would be worth exactly as much as the stored copy it compares
-  /// against — and would let past anyone who could read that copy.
-  Future<void> _enterDigit(String digit) async {
-    if (_model.isSubmitting) return;
-
-    safeSetState(() {
-      _model.pinCode =
-          functions.appendPinDigit(_model.pinCode, digit, _pinLength);
-    });
-
-    if (!functions.isPinComplete(_model.pinCode, _pinLength)) return;
-
-    final feedback = ApiFeedback.of(context);
-    final passcode = _model.pinCode ?? '';
-
-    safeSetState(() => _model.isSubmitting = true);
-
-    final result = await AuthSession.instance.signInWithPasscode(passcode);
-
-    if (!mounted) return;
-
-    safeSetState(() {
-      _model.isSubmitting = false;
-      // Cleared either way: a wrong passcode is retyped, and a correct one is spent.
-      _model.pinCode = '';
-    });
-
-    if (!result.isSuccess) {
-      feedback.show(result);
-      return;
-    }
-
-    // Replaces the stack rather than stacking on it, so Back does not return to a
-    // passcode screen for a session that is already open.
-    context.goNamed(BottomBarPagesWidget.routeName);
-  }
-
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -379,7 +330,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('1'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '1',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -418,7 +374,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('2'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '2',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -457,7 +418,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('3'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '3',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -503,7 +469,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('4'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '4',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -542,7 +513,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('5'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '5',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -581,7 +557,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('6'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '6',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -627,7 +608,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('7'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '7',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -666,7 +652,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('8'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '8',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -705,7 +696,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('9'),
+                                    onTap: () async {
+                                      await _model.passcodeDigit(
+                                        context,
+                                        digit: '9',
+                                      );
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -759,7 +755,12 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                           focusColor: Colors.transparent,
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
-                                          onTap: () => _enterDigit('0'),
+                                          onTap: () async {
+                                            await _model.passcodeDigit(
+                                              context,
+                                              digit: '0',
+                                            );
+                                          },
                                           child: Container(
                                             decoration: BoxDecoration(),
                                             child: Padding(

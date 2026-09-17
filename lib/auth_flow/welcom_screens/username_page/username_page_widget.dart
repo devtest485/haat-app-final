@@ -1,11 +1,9 @@
-import '/backend/api/api_result.dart';
-import '/backend/api/auth_api.dart';
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -46,80 +44,10 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
     super.dispose();
   }
 
-  /// The handle as the backend wants it.
-  ///
-  /// The field shows a leading `@` because that is how a handle is written; it is not
-  /// part of the handle, and sending it would break the format rules on every attempt.
-  String get _handle {
-    final typed = _model.usernameTextController.text.trim();
-
-    return typed.startsWith('@') ? typed.substring(1) : typed;
-  }
-
-  bool get _canSubmit =>
-      _model.isValidUser && _model.isAvailable == true && !_model.isSubmitting;
-
-  // ── Actions ───────────────────────────────────────────────────────────────────
-
-  /// Asks whether the handle is still free, so the answer arrives before the tap.
-  ///
-  /// Being told "taken" on the screen that claims it is a much worse moment than being
-  /// told while still typing.
-  Future<void> _checkAvailability() async {
-    final handle = _handle;
-
-    if (!_model.isValidUser || handle.isEmpty) {
-      safeSetState(() => _model.isAvailable = null);
-      return;
-    }
-
-    final result = await AuthSession.instance.api.checkUsername(handle);
-
-    if (!mounted) return;
-
-    // Ignore an answer about a handle the user has since typed past.
-    if (handle != _handle) return;
-
-    safeSetState(() {
-      _model.isAvailable = switch (result) {
-        ApiSuccess<UsernameCheck>(:final value) => value.available,
-        _ => null,
-      };
-    });
-  }
-
-  /// Claims the handle, then moves on.
-  Future<void> _submit() async {
-    if (!_canSubmit) return;
-
-    final handle = _handle;
-    final feedback = ApiFeedback.of(context);
-
-    safeSetState(() => _model.isSubmitting = true);
-
-    final result = await AuthSession.instance.claimUsername(handle);
-
-    if (!mounted) return;
-    safeSetState(() => _model.isSubmitting = false);
-
-    if (!result.isSuccess) {
-      // Somebody else can have taken it between the check and the tap, so the refusal
-      // is shown rather than assumed away.
-      safeSetState(() => _model.isAvailable = false);
-      feedback.show(result);
-      return;
-    }
-
-    context.pushNamed(
-      CongratsPageWidget.routeName,
-      queryParameters: {
-        'userName': serializeParam(handle, ParamType.String),
-      }.withoutNulls,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -279,7 +207,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Choose your handle',
+                                            'Book Store username',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -305,7 +233,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'This is how customers find you, and it appears in your payment links.',
+                                            'Enter your phone number. We\'ll send you a confirmation code there.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -386,17 +314,73 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                                   milliseconds:
                                                                       2000),
                                                               () async {
+                                                                _model.isValidUser =
+                                                                    functions.isValidname(_model
+                                                                        .usernameTextController
+                                                                        .text);
+                                                                _model.availability =
+                                                                    '';
                                                                 safeSetState(
-                                                                    () {
-                                                                  _model.isValidUser =
-                                                                      functions.isValidname(_model
-                                                                          .usernameTextController
-                                                                          .text);
-                                                                  _model.isAvailable =
-                                                                      null;
-                                                                });
+                                                                    () {});
+                                                                if (_model
+                                                                        .isValidUser !=
+                                                                    false) {
+                                                                  _model.checkResult =
+                                                                      await HaatAuthGroup
+                                                                          .checkUsernameCall
+                                                                          .call(
+                                                                    username: functions
+                                                                        .stripAt(_model
+                                                                            .usernameTextController
+                                                                            .text),
+                                                                    baseURL:
+                                                                        FFAppState()
+                                                                            .accessToken,
+                                                                    authToken:
+                                                                        FFAppState()
+                                                                            .languageCode,
+                                                                  );
 
-                                                                await _checkAvailability();
+                                                                  if (!(_model
+                                                                          .checkResult
+                                                                          ?.succeeded ??
+                                                                      true)) {
+                                                                    if (functions.stripAt(_model
+                                                                            .usernameTextController
+                                                                            .text) ==
+                                                                        getJsonField(
+                                                                          (_model.checkResult?.jsonBody ??
+                                                                              ''),
+                                                                          r'''$.data.username''',
+                                                                        ).toString()) {
+                                                                      if (true ==
+                                                                          getJsonField(
+                                                                            (_model.checkResult?.jsonBody ??
+                                                                                ''),
+                                                                            r'''$.data.available''',
+                                                                          )) {
+                                                                        _model.availability =
+                                                                            'yes';
+                                                                        safeSetState(
+                                                                            () {});
+                                                                      } else {
+                                                                        _model.availability =
+                                                                            'no';
+                                                                        safeSetState(
+                                                                            () {});
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                } else if (functions.stripAt(_model
+                                                                        .usernameTextController
+                                                                        .text) ==
+                                                                    '') {}
+
+                                                                safeSetState(
+                                                                    () {});
+
+                                                                safeSetState(
+                                                                    () {});
                                                               },
                                                             ),
                                                             autofocus: false,
@@ -580,12 +564,104 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: _submit,
+                          onTap: () async {
+                            if (_model.isSubmitting != true) {
+                              _model.isSubmitting = true;
+                              safeSetState(() {});
+                              _model.claimKey = await actions.newUuid();
+                              _model.claimResult =
+                                  await HaatAuthGroup.claimUsernameCall.call(
+                                username: functions.stripAt(
+                                    _model.usernameTextController.text),
+                                idempotencyKey: _model.claimKey,
+                                baseURL: FFAppState().accessToken,
+                                authToken: FFAppState().languageCode,
+                              );
+
+                              _model.isSubmitting = false;
+                              safeSetState(() {});
+                              if ((_model.claimResult?.succeeded ?? true)) {
+                                _model.credResult = await HaatAuthGroup
+                                    .credentialStatusCall
+                                    .call(
+                                  baseURL: FFAppState().accessToken,
+                                  authToken: FFAppState().languageCode,
+                                );
+
+                                if ((_model.credResult?.succeeded ?? true)) {
+                                  FFAppState().username = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.username''',
+                                  ).toString();
+                                  FFAppState().hasPassword = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.hasPassword''',
+                                  );
+                                  FFAppState().hasPasscode = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.hasPasscode''',
+                                  );
+                                  FFAppState().mobileVerified = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.mobileVerified''',
+                                  );
+                                  FFAppState().mfaEnabled = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.mfaEnabled''',
+                                  );
+                                  FFAppState().mustChangePassword =
+                                      getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.mustChangePassword''',
+                                  );
+                                  FFAppState().accountStatus = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.status''',
+                                  ).toString();
+                                  safeSetState(() {});
+                                }
+
+                                context.pushNamed(
+                                  CongratsPageWidget.routeName,
+                                  queryParameters: {
+                                    'userName': serializeParam(
+                                      functions.stripAt(
+                                          _model.usernameTextController.text),
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
+                                );
+                              } else {
+                                _model.availability = 'no';
+                                safeSetState(() {});
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      getJsonField(
+                                        (_model.claimResult?.jsonBody ?? ''),
+                                        r'''$.message''',
+                                      ).toString(),
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 4000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).secondary,
+                                  ),
+                                );
+                              }
+                            } else if (_model.isValidUser == false) {
+                            } else if (_model.availability == 'yes') {}
+
+                            safeSetState(() {});
+                          },
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: _canSubmit
+                              color: _model.isValidUser == true
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).secondary,
                               borderRadius: BorderRadius.circular(106.67),
@@ -602,7 +678,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: _canSubmit
+                                    color: _model.isValidUser == true
                                         ? FlutterFlowTheme.of(context)
                                             .primaryBackground
                                         : FlutterFlowTheme.of(context)

@@ -1,7 +1,9 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'username_page_widget.dart' show UsernamePageWidget;
@@ -15,14 +17,9 @@ class UsernamePageModel extends FlutterFlowModel<UsernamePageWidget> {
 
   bool isValidUser = false;
 
-  /// True while the handle is being claimed.
   bool isSubmitting = false;
 
-  /// What the server said about the handle as typed, or null before it has been asked.
-  ///
-  /// A handle is public identity and unique platform-wide, so "looks valid" and "is
-  /// yours to take" are different questions and only the server can answer the second.
-  bool? isAvailable;
+  String? availability;
 
   ///  State fields for stateful widgets in this page.
 
@@ -30,6 +27,14 @@ class UsernamePageModel extends FlutterFlowModel<UsernamePageWidget> {
   FocusNode? usernameFocusNode;
   TextEditingController? usernameTextController;
   String? Function(BuildContext, String?)? usernameTextControllerValidator;
+  // Stores action output result for [Backend Call - API (CheckUsername)] action in Username widget.
+  ApiCallResponse? checkResult;
+  // Stores action output result for [Custom Action - newUuid] action in Container widget.
+  String? claimKey;
+  // Stores action output result for [Backend Call - API (ClaimUsername)] action in Container widget.
+  ApiCallResponse? claimResult;
+  // Stores action output result for [Backend Call - API (CredentialStatus)] action in Container widget.
+  ApiCallResponse? credResult;
 
   @override
   void initState(BuildContext context) {}

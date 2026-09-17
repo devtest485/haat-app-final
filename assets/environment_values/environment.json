@@ -1,3 +1,4 @@
 {
-  "apiBaseUrl": "https://haat-api.xtroedge.com/api/v1"
+  "baseURL": "https://haat-api.xtroedge.com/api/v1",
+"dataSource": "dev"
 }

@@ -1,4 +1,4 @@
-import '/components/sign_out_button.dart';
+import '/components/log_out_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -250,7 +250,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                     ),
                                                   ),
                                                 ),
-                                                SignOutButton(size: 24.0),
                                               ].divide(SizedBox(width: 8.0)),
                                             ),
                                           ),
@@ -1908,55 +1907,132 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           Align(
             alignment: AlignmentDirectional(1.0, 1.0),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 20.0, 120.0),
-              child: InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () async {
-                  context.pushNamed(AddAmountPageWidget.routeName);
-                },
-                child: Container(
-                  width: 115.0,
-                  height: 43.0,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    boxShadow: [
-                      FlutterFlowTheme.of(context).designToken.shadow.sm
-                    ],
-                    borderRadius: BorderRadius.circular(16777200.0),
-                  ),
-                  alignment: AlignmentDirectional(0.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 14.0,
-                      ),
-                      Text(
-                        'New order',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
+              padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 120.0),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(AddAmountPageWidget.routeName);
+                      },
+                      child: Container(
+                        width: 115.0,
+                        height: 43.0,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          boxShadow: [
+                            FlutterFlowTheme.of(context).designToken.shadow.sm
+                          ],
+                          borderRadius: BorderRadius.circular(16777200.0),
+                        ),
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add,
                               color: FlutterFlowTheme.of(context).primaryText,
-                              fontSize: 11.0,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
+                              size: 14.0,
                             ),
+                            Text(
+                              'New order',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    fontSize: 11.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ].divide(SizedBox(width: 9.0)),
+                        ),
                       ),
-                    ].divide(SizedBox(width: 9.0)),
-                  ),
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        await showModalBottomSheet(
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          enableDrag: false,
+                          context: context,
+                          builder: (context) {
+                            return Padding(
+                              padding: MediaQuery.viewInsetsOf(context),
+                              child: LogOutWidget(),
+                            );
+                          },
+                        ).then((value) => safeSetState(() {}));
+                      },
+                      child: Container(
+                        width: 93.6,
+                        height: 43.0,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFDC0D17),
+                          boxShadow: [
+                            FlutterFlowTheme.of(context).designToken.shadow.sm
+                          ],
+                          borderRadius: BorderRadius.circular(16777200.0),
+                        ),
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.logout_sharp,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              size: 20.0,
+                            ),
+                            Text(
+                              'Log Out',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    fontSize: 11.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ].divide(SizedBox(width: 3.0)),
+                        ),
+                      ),
+                    ),
+                  ].divide(SizedBox(width: 10.0)),
                 ),
               ),
             ),

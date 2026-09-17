@@ -1,9 +1,9 @@
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -48,44 +48,10 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
     super.dispose();
   }
 
-  /// Whether the two fields agree and the password meets the app's own rules.
-  ///
-  /// The backend checks this again and answers with every unmet rule at once, so this
-  /// is only about not sending a request that is certain to be refused.
-  bool get _passwordsReady =>
-      functions.validatePassword(_model.newPasswardTextController.text) ==
-          true &&
-      _model.newPasswardTextController.text ==
-          _model.confirmPasswardTextController.text;
-
-  bool get _canSubmit => _passwordsReady && !_model.isSubmitting;
-
-  // ── Actions ───────────────────────────────────────────────────────────────────
-
-  /// Sets the account password, then moves on to the passcode.
-  Future<void> _submit() async {
-    if (!_canSubmit) return;
-
-    final feedback = ApiFeedback.of(context);
-
-    safeSetState(() => _model.isSubmitting = true);
-
-    final result = await AuthSession.instance
-        .setPassword(_model.newPasswardTextController.text);
-
-    if (!mounted) return;
-    safeSetState(() => _model.isSubmitting = false);
-
-    if (!result.isSuccess) {
-      feedback.show(result);
-      return;
-    }
-
-    context.pushNamed(SecurePageWidget.routeName);
-  }
-
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       excludeFromSemantics: true,
       onTap: () {
@@ -399,7 +365,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                                 FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                           ),
                                                                       hintText:
-                                                                          'Enter a password',
+                                                                          'Repeat your entered password',
                                                                       hintStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -1208,12 +1174,102 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: _submit,
+                          onTap: () async {
+                            if (_model.isSubmitting != true) {
+                              _model.isSubmitting = true;
+                              safeSetState(() {});
+                              _model.pwKey = await actions.newUuid();
+                              _model.setPwResult =
+                                  await HaatAuthGroup.setPasswordCall.call(
+                                bodyJson: functions.passwordBody(
+                                    _model.newPasswardTextController.text),
+                                baseURL: FFAppState().accessToken,
+                                idempotencyKey: _model.pwKey,
+                                authToken: FFAppState().languageCode,
+                              );
+
+                              _model.isSubmitting = false;
+                              safeSetState(() {});
+                              if ((_model.setPwResult?.succeeded ?? true)) {
+                                _model.credResult = await HaatAuthGroup
+                                    .credentialStatusCall
+                                    .call(
+                                  baseURL: FFAppState().accessToken,
+                                  authToken: FFAppState().languageCode,
+                                );
+
+                                if ((_model.credResult?.succeeded ?? true)) {
+                                  FFAppState().username = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.username''',
+                                  ).toString();
+                                  FFAppState().hasPassword = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.hasPassword''',
+                                  );
+                                  FFAppState().hasPasscode = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.hasPasscode	''',
+                                  );
+                                  FFAppState().mobileVerified = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.mobileVerified''',
+                                  );
+                                  FFAppState().mfaEnabled = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.mfaEnabled''',
+                                  );
+                                  FFAppState().mustChangePassword =
+                                      getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.mustChangePassword''',
+                                  );
+                                  FFAppState().accountStatus = getJsonField(
+                                    (_model.credResult?.jsonBody ?? ''),
+                                    r'''$.data.status''',
+                                  ).toString();
+                                  safeSetState(() {});
+                                }
+
+                                context.pushNamed(SecurePageWidget.routeName);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      getJsonField(
+                                        (_model.setPwResult?.jsonBody ?? ''),
+                                        r'''$.message''',
+                                      ).toString(),
+                                      style: TextStyle(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                    ),
+                                    duration: Duration(milliseconds: 4000),
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).secondary,
+                                  ),
+                                );
+                              }
+                            } else if (functions.validatePassword(
+                                    _model.newPasswardTextController.text) ==
+                                false) {
+                            } else if (_model.newPasswardTextController.text !=
+                                _model.confirmPasswardTextController.text) {}
+
+                            safeSetState(() {});
+                          },
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: _canSubmit
+                              color: (functions.validatePassword(_model
+                                              .newPasswardTextController
+                                              .text) ==
+                                          true) &&
+                                      (_model.newPasswardTextController.text ==
+                                          _model.confirmPasswardTextController
+                                              .text)
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).secondary,
                               borderRadius: BorderRadius.circular(106.67),
@@ -1230,7 +1286,15 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: _canSubmit
+                                    color: (functions.validatePassword(_model
+                                                    .newPasswardTextController
+                                                    .text) ==
+                                                true) &&
+                                            (_model.newPasswardTextController
+                                                    .text ==
+                                                _model
+                                                    .confirmPasswardTextController
+                                                    .text)
                                         ? FlutterFlowTheme.of(context)
                                             .primaryBackground
                                         : FlutterFlowTheme.of(context).primary,

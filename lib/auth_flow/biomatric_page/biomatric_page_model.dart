@@ -9,9 +9,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class BiomatricPageModel extends FlutterFlowModel<BiomatricPageWidget> {
-  /// True while the device key is being created and registered.
-  bool isSubmitting = false;
-
   @override
   void initState(BuildContext context) {}
 

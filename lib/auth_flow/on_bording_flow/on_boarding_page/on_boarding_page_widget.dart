@@ -1,10 +1,12 @@
 import '/auth_flow/on_bording_flow/on_boardin_components/first/first_widget.dart';
 import '/auth_flow/on_bording_flow/on_boardin_components/second/second_widget.dart';
 import '/auth_flow/on_bording_flow/on_boardin_components/third/third_widget.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -35,11 +37,135 @@ class _OnBoardingPageWidgetState extends State<OnBoardingPageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (FFAppState().hasLoggedInBefore) {
-        if (Navigator.of(context).canPop()) {
-          context.pop();
+      if (FFAppState().deviceFingerprint == '') {
+        _model.generatedId = await actions.newUuid();
+        FFAppState().deviceFingerprint = _model.generatedId!;
+        safeSetState(() {});
+      }
+      if (FFAppState().refreshToken == '') {
+        FFAppState().authStatus = 'signedOut';
+        safeSetState(() {});
+        if (FFAppState().hasLoggedInBefore == true) {
+          context.pushNamed(LoginScreenWidget.routeName);
         }
-        context.pushNamed(LoginScreenWidget.routeName);
+      } else {
+        _model.refreshResult = await HaatAuthGroup.refreshTokenCall.call(
+          refreshToken: FFAppState().refreshToken,
+          authToken: FFAppState().languageCode,
+          baseURL: FFAppState().accessToken,
+        );
+
+        if ((_model.refreshResult?.succeeded ?? true)) {
+          FFAppState().accessToken = getJsonField(
+            (_model.refreshResult?.jsonBody ?? ''),
+            r'''$.data.accessToken''',
+          ).toString();
+          FFAppState().refreshToken = getJsonField(
+            (_model.refreshResult?.jsonBody ?? ''),
+            r'''$.data.refreshToken''',
+          ).toString();
+          safeSetState(() {});
+          _model.credResult = await HaatAuthGroup.credentialStatusCall.call(
+            baseURL: FFAppState().accessToken,
+            authToken: FFAppState().languageCode,
+          );
+
+          if ((_model.credResult?.succeeded ?? true)) {
+            FFAppState().username = getJsonField(
+              (_model.credResult?.jsonBody ?? ''),
+              r'''$.data.username''',
+            ).toString();
+            FFAppState().hasPassword = getJsonField(
+              (_model.credResult?.jsonBody ?? ''),
+              r'''$.data.hasPassword''',
+            );
+            FFAppState().hasPasscode = getJsonField(
+              (_model.credResult?.jsonBody ?? ''),
+              r'''$.data.hasPasscode''',
+            );
+            FFAppState().mobileVerified = getJsonField(
+              (_model.credResult?.jsonBody ?? ''),
+              r'''$.data.mobileVerified''',
+            );
+            FFAppState().mfaEnabled = getJsonField(
+              (_model.credResult?.jsonBody ?? ''),
+              r'''$.data.mfaEnabled''',
+            );
+            FFAppState().mustChangePassword = getJsonField(
+              (_model.credResult?.jsonBody ?? ''),
+              r'''$.data.mustChangePassword''',
+            );
+            FFAppState().accountStatus = getJsonField(
+              (_model.credResult?.jsonBody ?? ''),
+              r'''$.data.status''',
+            ).toString();
+            safeSetState(() {});
+            if (FFAppState().mustChangePassword == true) {
+              FFAppState().authStatus = 'onboarding';
+              safeSetState(() {});
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              }
+              context.pushNamed(CreatePasswordPageWidget.routeName);
+            } else if (FFAppState().hasPassword == false) {
+              FFAppState().authStatus = 'onboarding';
+              safeSetState(() {});
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              }
+              context.pushNamed(CreatePasswordPageWidget.routeName);
+            } else if (FFAppState().hasPasscode == false) {
+              FFAppState().authStatus = 'onboarding';
+              safeSetState(() {});
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              }
+              context.pushNamed(SecurePageWidget.routeName);
+            } else if (FFAppState().username == '') {
+              FFAppState().authStatus = 'onboarding';
+              safeSetState(() {});
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              }
+              context.pushNamed(UsernamePageWidget.routeName);
+            } else {
+              FFAppState().authStatus = 'signedIn';
+              safeSetState(() {});
+              if (Navigator.of(context).canPop()) {
+                context.pop();
+              }
+              context.pushNamed(BottomBarPagesWidget.routeName);
+            }
+          } else {
+            FFAppState().authStatus = 'signedIn';
+            safeSetState(() {});
+            if (Navigator.of(context).canPop()) {
+              context.pop();
+            }
+            context.pushNamed(BottomBarPagesWidget.routeName);
+          }
+        } else {
+          if ((_model.refreshResult?.statusCode ?? 200) == -1) {
+            FFAppState().authStatus = 'signedIn';
+            safeSetState(() {});
+            if (Navigator.of(context).canPop()) {
+              context.pop();
+            }
+            context.pushNamed(BottomBarPagesWidget.routeName);
+          } else {
+            FFAppState().accessToken = '';
+            FFAppState().refreshToken = '';
+            FFAppState().userId = '';
+            FFAppState().sessionId = '';
+            FFAppState().deviceId = '';
+            FFAppState().authStatus = 'signedOut';
+            safeSetState(() {});
+            if (Navigator.of(context).canPop()) {
+              context.pop();
+            }
+            context.pushNamed(LoginScreenWidget.routeName);
+          }
+        }
       }
     });
   }

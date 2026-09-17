@@ -1,7 +1,9 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'create_password_page_widget.dart' show CreatePasswordPageWidget;
@@ -16,7 +18,6 @@ class CreatePasswordPageModel
 
   bool isSame = true;
 
-  /// True while the password is being saved, so a second tap cannot save it twice.
   bool isSubmitting = false;
 
   ///  State fields for stateful widgets in this page.
@@ -32,6 +33,12 @@ class CreatePasswordPageModel
   late bool confirmPasswardVisibility;
   String? Function(BuildContext, String?)?
       confirmPasswardTextControllerValidator;
+  // Stores action output result for [Custom Action - newUuid] action in Container widget.
+  String? pwKey;
+  // Stores action output result for [Backend Call - API (SetPassword)] action in Container widget.
+  ApiCallResponse? setPwResult;
+  // Stores action output result for [Backend Call - API (CredentialStatus)] action in Container widget.
+  ApiCallResponse? credResult;
 
   @override
   void initState(BuildContext context) {

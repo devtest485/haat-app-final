@@ -1,7 +1,10 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'phone_number_page_widget.dart' show PhoneNumberPageWidget;
 import 'package:easy_debounce/easy_debounce.dart';
@@ -9,32 +12,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class PhoneNumberPageModel extends FlutterFlowModel<PhoneNumberPageWidget> {
   ///  Local state fields for this page.
 
   bool isPhoneValid = false;
 
-  /// True while registration is in flight, so a second tap cannot start a second one.
   bool isSubmitting = false;
 
-  String? _attemptKey;
-  String? _attemptNumber;
+  String? idempotencyKey;
 
-  /// The idempotency key for registering [mobile].
-  ///
-  /// Held across retries of the same number, so tapping Continue again on a bad
-  /// connection returns the first result rather than sending a second code. Typing a
-  /// different number is a different attempt and gets its own key.
-  String idempotencyKeyFor(String mobile) {
-    if (_attemptNumber != mobile) {
-      _attemptNumber = mobile;
-      _attemptKey = const Uuid().v4();
-    }
+  String? keyForNumber;
 
-    return _attemptKey!;
-  }
+  String? mobileE164;
 
   ///  State fields for stateful widgets in this page.
 
@@ -56,6 +46,10 @@ class PhoneNumberPageModel extends FlutterFlowModel<PhoneNumberPageWidget> {
 
   // Stores action output result for [Validate Form] action in Container widget.
   bool? valid;
+  // Stores action output result for [Custom Action - newUuid] action in Container widget.
+  String? generatedId;
+  // Stores action output result for [Backend Call - API (RegisterUser)] action in Container widget.
+  ApiCallResponse? registerResult;
 
   @override
   void initState(BuildContext context) {
