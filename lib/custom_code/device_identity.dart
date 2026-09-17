@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-import 'token_store.dart';
+import '/custom_code/token_store.dart';
 
 /// Describes this handset to the backend.
 ///

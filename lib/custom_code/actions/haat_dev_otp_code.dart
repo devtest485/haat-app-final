@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/auth/auth_session.dart';
+import '/custom_code/auth_session.dart';
 
 /// The one-time code, when a non-production backend chose to hand it back.
 ///
@@ -17,5 +17,4 @@ import '/backend/auth/auth_session.dart';
 /// in development is the path that runs in production.
 ///
 /// See `docs/BEFORE-GOING-LIVE.md`.
-Future<String> haatDevOtpCode() async =>
-    AuthSession.instance.devOtpCode ?? '';
+Future<String> haatDevOtpCode() async => AuthSession.instance.devOtpCode ?? '';

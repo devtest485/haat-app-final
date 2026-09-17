@@ -1,11 +1,8 @@
-import '/backend/api/api_result.dart';
-import '/backend/api/auth_api.dart';
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -35,11 +32,11 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
     super.initState();
     _model = createModel(context, () => PasswardLoginModel());
 
-    _model.newPasswardTextController ??= TextEditingController();
-    _model.newPasswardFocusNode ??= FocusNode();
+    _model.usernameMobilenumberTextController ??= TextEditingController();
+    _model.usernameMobilenumberFocusNode ??= FocusNode();
 
-    _model.confirmPasswardTextController ??= TextEditingController();
-    _model.confirmPasswardFocusNode ??= FocusNode();
+    _model.passwordTextController ??= TextEditingController();
+    _model.passwordFocusNode ??= FocusNode();
   }
 
   @override
@@ -48,62 +45,6 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
 
     super.dispose();
   }
-
-  bool get _canSubmit => _model.setPassward && !_model.isSubmitting;
-
-  // ── Actions ───────────────────────────────────────────────────────────────────
-
-  /// Signs in with whichever identifier was typed.
-  ///
-  /// The field takes three kinds of thing and the backend refuses a request naming
-  /// more than one, so the app has to decide which was meant: an `@` makes it an email,
-  /// a leading `+` or all digits makes it a number, and anything else is a handle.
-  Future<void> _submit() async {
-    if (!_canSubmit) return;
-
-    final typed = _model.newPasswardTextController.text.trim();
-    final password = _model.confirmPasswardTextController.text;
-    final feedback = ApiFeedback.of(context);
-
-    safeSetState(() => _model.isSubmitting = true);
-
-    final result = await AuthSession.instance.signIn(
-      password: password,
-      mobile: _looksLikeNumber(typed) ? PhoneFormat.toE164(typed) : null,
-      email: typed.contains('@') ? typed : null,
-      username: (!_looksLikeNumber(typed) && !typed.contains('@'))
-          ? typed.toLowerCase()
-          : null,
-    );
-
-    if (!mounted) return;
-    safeSetState(() => _model.isSubmitting = false);
-
-    switch (result) {
-      case ApiSuccess<AuthTokens>(:final value):
-        if (value.mustChangePassword) {
-          // An employer chose this password and has read it. It is not a secret between
-          // the account and its owner until the owner replaces it.
-          // Awaited so the sheet is read before the next screen replaces it.
-          await feedback.notice('Please choose your own password to continue.');
-
-          if (!mounted) return;
-          context.goNamed(CreatePasswordPageWidget.routeName);
-
-          return;
-        }
-
-        context.goNamed(BottomBarPagesWidget.routeName);
-
-      case ApiFailure<AuthTokens>():
-      case ApiUnreachable<AuthTokens>():
-        feedback.show(result);
-    }
-  }
-
-  /// Whether what was typed reads as a phone number rather than a handle.
-  static bool _looksLikeNumber(String typed) =>
-      RegExp(r'^\+?[\d\s-]+$').hasMatch(typed);
 
   @override
   Widget build(BuildContext context) {
@@ -154,17 +95,8 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              // The design's 67 points of headroom do not fit next to
-                              // an open keyboard: the column ends up five pixels too
-                              // tall and clips its own Continue button. Given back the
-                              // moment the keyboard goes away.
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0,
-                                  MediaQuery.viewInsetsOf(context).bottom > 0
-                                      ? 24.0
-                                      : 67.0,
-                                  0.0,
-                                  0.0),
+                                  0.0, 67.0, 0.0, 0.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -230,7 +162,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'Please enter your username/ mobile number and password to continue',
+                                            'Please enter your username/ Mobile number adn password to contiue',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -360,10 +292,10 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                       TextFormField(
                                                                     controller:
                                                                         _model
-                                                                            .newPasswardTextController,
+                                                                            .usernameMobilenumberTextController,
                                                                     focusNode:
                                                                         _model
-                                                                            .newPasswardFocusNode,
+                                                                            .usernameMobilenumberFocusNode,
                                                                     autofocus:
                                                                         false,
                                                                     enabled:
@@ -391,7 +323,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                                 FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                           ),
                                                                       hintText:
-                                                                          'Username or mobile number',
+                                                                          'Repeat your entered password',
                                                                       hintStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -490,7 +422,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                     enableInteractiveSelection:
                                                                         false,
                                                                     validator: _model
-                                                                        .newPasswardTextControllerValidator
+                                                                        .usernameMobilenumberTextControllerValidator
                                                                         .asValidator(
                                                                             context),
                                                                   ),
@@ -581,24 +513,24 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                       TextFormField(
                                                                     controller:
                                                                         _model
-                                                                            .confirmPasswardTextController,
+                                                                            .passwordTextController,
                                                                     focusNode:
                                                                         _model
-                                                                            .confirmPasswardFocusNode,
+                                                                            .passwordFocusNode,
                                                                     onChanged: (_) =>
                                                                         EasyDebounce
                                                                             .debounce(
-                                                                      '_model.confirmPasswardTextController',
+                                                                      '_model.passwordTextController',
                                                                       Duration(
                                                                           milliseconds:
                                                                               2000),
                                                                       () async {
                                                                         safeSetState(
                                                                             () {});
-                                                                        if (_model.newPasswardTextController.text !=
-                                                                            _model.confirmPasswardTextController.text) {
+                                                                        if (_model.usernameMobilenumberTextController.text !=
+                                                                            _model.passwordTextController.text) {
                                                                           _model.setPassward = functions.checkLength(_model
-                                                                              .confirmPasswardTextController
+                                                                              .passwordTextController
                                                                               .text);
                                                                           safeSetState(
                                                                               () {});
@@ -613,7 +545,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                         true,
                                                                     obscureText:
                                                                         !_model
-                                                                            .confirmPasswardVisibility,
+                                                                            .passwordVisibility,
                                                                     decoration:
                                                                         InputDecoration(
                                                                       isDense:
@@ -635,7 +567,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                                 FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                           ),
                                                                       hintText:
-                                                                          'Enter your password',
+                                                                          'Repeat your entered password',
                                                                       hintStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -710,13 +642,13 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                         onTap:
                                                                             () async {
                                                                           safeSetState(() =>
-                                                                              _model.confirmPasswardVisibility = !_model.confirmPasswardVisibility);
+                                                                              _model.passwordVisibility = !_model.passwordVisibility);
                                                                         },
                                                                         focusNode:
                                                                             FocusNode(skipTraversal: true),
                                                                         child:
                                                                             Icon(
-                                                                          _model.confirmPasswardVisibility
+                                                                          _model.passwordVisibility
                                                                               ? Icons.visibility_outlined
                                                                               : Icons.visibility_off_outlined,
                                                                           color:
@@ -754,7 +686,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                     enableInteractiveSelection:
                                                                         false,
                                                                     validator: _model
-                                                                        .confirmPasswardTextControllerValidator
+                                                                        .passwordTextControllerValidator
                                                                         .asValidator(
                                                                             context),
                                                                   ),
@@ -789,12 +721,35 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: _submit,
+                          onTap: () async {
+                            _model.signIn = await actions.haatSignIn(
+                              _model.usernameMobilenumberTextController.text,
+                              _model.passwordTextController.text,
+                            );
+                            if (_model.signIn == '') {
+                              if (Navigator.of(context).canPop()) {
+                                context.pop();
+                              }
+                              context.pushNamed(BottomBarPagesWidget.routeName);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    _model.signIn!,
+                                    style: TextStyle(),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                ),
+                              );
+                            }
+
+                            safeSetState(() {});
+                          },
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: _canSubmit
+                              color: _model.setPassward == true
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).secondary,
                               borderRadius: BorderRadius.circular(106.67),
@@ -811,7 +766,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: _canSubmit
+                                    color: _model.setPassward == true
                                         ? FlutterFlowTheme.of(context)
                                             .primaryBackground
                                         : FlutterFlowTheme.of(context).primary,

@@ -2,7 +2,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -188,7 +190,7 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Create a passcode',
+                                                    'Create a password',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -258,7 +260,7 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 24.0, 0.0, 0.0),
+                                        0.0, 135.0, 0.0, 0.0),
                                     child: Container(
                                       width: MediaQuery.sizeOf(context).width *
                                           0.8,
@@ -396,12 +398,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '1',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '1', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetpy7860vq =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetpy7860vq ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetpy7860vq!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -449,12 +519,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '2',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '2', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetqp8u6zhy =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetqp8u6zhy ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetqp8u6zhy!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -502,12 +640,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '3',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '3', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetcy4acqxr =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetcy4acqxr ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetcy4acqxr!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -562,12 +768,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '4',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '4', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetiodh71kn =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetiodh71kn ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetiodh71kn!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -615,12 +889,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '5',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '5', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSete48eyjb4 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSete48eyjb4 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSete48eyjb4!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -668,12 +1010,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '6',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '6', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetkxo8m5pl =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetkxo8m5pl ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetkxo8m5pl!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -728,12 +1138,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '7',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '7', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetlxqdb44t =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetlxqdb44t ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetlxqdb44t!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -781,12 +1259,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '8',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '8', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetttmgmox4 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetttmgmox4 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetttmgmox4!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -834,12 +1380,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '9',
-                                              reenterpin: false,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '9', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSeteowv7u1j =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSeteowv7u1j ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSeteowv7u1j!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -904,12 +1518,95 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                 highlightColor:
                                                     Colors.transparent,
                                                 onTap: () async {
-                                                  await _model.pinCodeHandler(
-                                                    context,
-                                                    digit: '0',
-                                                    reenterpin: false,
-                                                  );
-                                                  _model.passcodeResult = 0;
+                                                  _model.passcodeResult =
+                                                      functions.passcodeStepResult(
+                                                          _model.pinCode,
+                                                          _model
+                                                              .createdPasscode,
+                                                          _model.reenterPin,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  _model.createdPasscode =
+                                                      functions
+                                                          .nextCreatedPasscode(
+                                                              _model.pinCode,
+                                                              _model
+                                                                  .createdPasscode,
+                                                              _model.reenterPin,
+                                                              '0',
+                                                              6);
+                                                  safeSetState(() {});
+                                                  _model.reenterPin =
+                                                      functions.nextReenterPin(
+                                                          _model.pinCode,
+                                                          _model.reenterPin,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  _model.pinCode =
+                                                      functions.nextPinCode(
+                                                          _model.pinCode,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  if (_model.passcodeResult ==
+                                                      2) {
+                                                    _model.passcodeSetm6hat50e =
+                                                        await actions
+                                                            .haatSetPasscode(
+                                                      _model.createdPasscode,
+                                                    );
+                                                    if (_model
+                                                            .passcodeSetm6hat50e ==
+                                                        '') {
+                                                      context.pushNamed(
+                                                          BiomatricPageWidget
+                                                              .routeName);
+
+                                                      if (_model
+                                                              .passcodeResult ==
+                                                          3) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              'Passcode does not match. Please try again.',
+                                                              style:
+                                                                  TextStyle(),
+                                                            ),
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    4000),
+                                                          ),
+                                                        );
+                                                      }
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            _model
+                                                                .passcodeSetm6hat50e!,
+                                                            style: TextStyle(),
+                                                          ),
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  4000),
+                                                        ),
+                                                      );
+                                                      _model.pinCode = '';
+                                                      safeSetState(() {});
+                                                      _model.createdPasscode =
+                                                          '';
+                                                      safeSetState(() {});
+                                                      _model.reenterPin = false;
+                                                      safeSetState(() {});
+                                                    }
+                                                  }
+
                                                   safeSetState(() {});
                                                 },
                                                 child: Container(
@@ -1214,7 +1911,7 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 24.0, 0.0, 0.0),
+                                        0.0, 135.0, 0.0, 0.0),
                                     child: Container(
                                       width: MediaQuery.sizeOf(context).width *
                                           0.8,
@@ -1352,12 +2049,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '1',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '1', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetm08zcyxp =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetm08zcyxp ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetm08zcyxp!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1405,12 +2170,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '2',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '2', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetpq7156x0 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetpq7156x0 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetpq7156x0!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1458,12 +2291,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '3',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '3', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetmkra9yy4 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetmkra9yy4 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetmkra9yy4!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1518,12 +2419,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '4',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '4', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetu52e5vjm =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetu52e5vjm ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetu52e5vjm!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1571,12 +2540,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '5',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '5', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetr1z0plpm =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetr1z0plpm ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetr1z0plpm!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1624,12 +2661,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '6',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '6', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetif8rcct6 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetif8rcct6 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetif8rcct6!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1684,12 +2789,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '7',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '7', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSeta06tmpwq =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSeta06tmpwq ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSeta06tmpwq!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1737,12 +2910,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '8',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '8', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetal48ni25 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetal48ni25 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetal48ni25!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1790,12 +3031,80 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            await _model.pinCodeHandler(
-                                              context,
-                                              digit: '9',
-                                              reenterpin: true,
-                                            );
-                                            _model.passcodeResult = 0;
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '9', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetcsbnm4x2 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetcsbnm4x2 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetcsbnm4x2!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
                                             safeSetState(() {});
                                           },
                                           child: Container(
@@ -1860,12 +3169,95 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                 highlightColor:
                                                     Colors.transparent,
                                                 onTap: () async {
-                                                  await _model.pinCodeHandler(
-                                                    context,
-                                                    digit: '0',
-                                                    reenterpin: true,
-                                                  );
-                                                  _model.passcodeResult = 0;
+                                                  _model.passcodeResult =
+                                                      functions.passcodeStepResult(
+                                                          _model.pinCode,
+                                                          _model
+                                                              .createdPasscode,
+                                                          _model.reenterPin,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  _model.createdPasscode =
+                                                      functions
+                                                          .nextCreatedPasscode(
+                                                              _model.pinCode,
+                                                              _model
+                                                                  .createdPasscode,
+                                                              _model.reenterPin,
+                                                              '0',
+                                                              6);
+                                                  safeSetState(() {});
+                                                  _model.reenterPin =
+                                                      functions.nextReenterPin(
+                                                          _model.pinCode,
+                                                          _model.reenterPin,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  _model.pinCode =
+                                                      functions.nextPinCode(
+                                                          _model.pinCode,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  if (_model.passcodeResult ==
+                                                      2) {
+                                                    _model.passcodeSetnaz2lsui =
+                                                        await actions
+                                                            .haatSetPasscode(
+                                                      _model.createdPasscode,
+                                                    );
+                                                    if (_model
+                                                            .passcodeSetnaz2lsui ==
+                                                        '') {
+                                                      context.pushNamed(
+                                                          BiomatricPageWidget
+                                                              .routeName);
+
+                                                      if (_model
+                                                              .passcodeResult ==
+                                                          3) {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              'Passcode does not match. Please try again.',
+                                                              style:
+                                                                  TextStyle(),
+                                                            ),
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    4000),
+                                                          ),
+                                                        );
+                                                      }
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            _model
+                                                                .passcodeSetnaz2lsui!,
+                                                            style: TextStyle(),
+                                                          ),
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  4000),
+                                                        ),
+                                                      );
+                                                      _model.pinCode = '';
+                                                      safeSetState(() {});
+                                                      _model.createdPasscode =
+                                                          '';
+                                                      safeSetState(() {});
+                                                      _model.reenterPin = false;
+                                                      safeSetState(() {});
+                                                    }
+                                                  }
+
                                                   safeSetState(() {});
                                                 },
                                                 child: Container(

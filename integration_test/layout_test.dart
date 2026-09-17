@@ -39,7 +39,6 @@ void main() {
   final routes = <String, Map<String, String>>{
     OnBoardingPageWidget.routeName: {},
     PhoneNumberPageWidget.routeName: {},
-    SignInPageWidget.routeName: {},
     OtpVerifyPageWidget.routeName: {'phoneNum': '+249911234567'},
     CreatePasswordPageWidget.routeName: {},
     SecurePageWidget.routeName: {},
@@ -47,6 +46,8 @@ void main() {
     BiomatricPageWidget.routeName: {},
     VerifyPageWidget.routeName: {},
     ChooseDocumentPageWidget.routeName: {},
+    IdCardScanPageWidget.routeName: {},
+    FaceScanPageWidget.routeName: {},
     SelfiInfoWidget.routeName: {},
     BusinessInfoWidget.routeName: {},
     LikeBusPageWidget.routeName: {},
@@ -70,6 +71,20 @@ void main() {
     EmpoleyRoleWidget.routeName: {},
     ReviewDetailsWidget.routeName: {},
     CreatingProfileWidget.routeName: {},
+    EmployeDetailsWidget.routeName: {},
+    // The screens the September FlutterFlow export added. SignInPage went with it,
+    // split into the three below: a chooser, and one screen per credential.
+    AddFundWidget.routeName: {'fund': '1000'},
+    BankOTPVerificationWidget.routeName: {},
+    OtherBanksWidget.routeName: {},
+    BankDetialsWidget.routeName: {},
+    PaymentStatusWidget.routeName: {'paymentStatus': 'success'},
+    TransfermethodWidget.routeName: {'transferMode': 'bank'},
+    PaymentReviewWidget.routeName: {},
+    OnBordingScreenWidget.routeName: {},
+    LoginScreenWidget.routeName: {},
+    PasswardLoginWidget.routeName: {},
+    PassCodeLoginWidget.routeName: {},
   };
 
   testWidgets('every route lays out on this device', (tester) async {

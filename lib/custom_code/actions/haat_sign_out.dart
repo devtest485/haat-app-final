@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/auth/auth_session.dart';
+import '/custom_code/auth_session.dart';
 
 /// Ends the session and clears the keystore.
 Future<void> haatSignOut() async {

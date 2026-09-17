@@ -28,14 +28,14 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   auto_size_text: 3.0.0
+  blink_kyc:
+    git:
+      url: https://github.com/BlinkPayGroup/blink-kyc-flutter.git
+      ref: 1.2.0
   cached_network_image: 3.4.1
   cached_network_image_platform_interface: 4.1.1
   cached_network_image_web: 1.3.1
   camera: ^0.11.0
-  blink_kyc:
-    git:
-      url: https://github.com/BlinkPayGroup/blink-kyc-flutter.git
-      ref: "1.2.0"
   carousel_slider: 5.0.0
   collection: ^1.19.1
   device_info_plus: ^13.2.0
@@ -96,6 +96,11 @@ dev_dependencies:
   flutter_lints: 4.0.0
   lints: 4.0.0
   flutter_test:
+    sdk: flutter
+  # Drives the app on a real handset. FlutterFlow regenerates this file and does not
+  # know about it, so it has to be added back after every export — without it the two
+  # suites under integration_test/ do not compile.
+  integration_test:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the

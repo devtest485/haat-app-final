@@ -18,8 +18,9 @@ import 'package:integration_test/integration_test.dart';
 /// GlobalKey collides, which fails every step after the first for a reason that has
 /// nothing to do with the app.
 ///
-/// It needs the backend reachable **from the phone**. Set `apiBaseUrl` in
-/// `assets/environment_values/environment.json` to the machine's LAN address:
+/// It needs the backend reachable **from the phone**. `baseURL` in
+/// `assets/environment_values/environment.json` decides which one it talks to. Against
+/// a server on the developer's own machine, set it to that machine's LAN address:
 /// `10.0.2.2` is the emulator's route to the host and `localhost` is the handset
 /// itself, so neither works on real hardware.
 ///
@@ -129,32 +130,32 @@ void main() {
     }
 
     // ── Signing in ──────────────────────────────────────────────────────────
+    //
+    // SignInPage and its Phone/Username toggle went with the September export. It is
+    // now LoginScreen, which picks a credential, and one screen per choice. The
+    // password screen is the one that reaches the backend, so that is the one driven.
     debugPrint('\nSign in');
-    await open(SignInPageWidget.routeName);
+    await open(LoginScreenWidget.routeName);
 
-    // The toggle exists because a merchant signs in with a number while an
-    // employer-created account has only a handle.
-    check('offers Phone', find.text('Phone').evaluate().isNotEmpty);
-    check('offers Username', find.text('Username').evaluate().isNotEmpty);
+    check('offers a password route',
+        find.text('Login with Password').evaluate().isNotEmpty);
+    check('offers a passcode route',
+        find.text('Login with Passcode').evaluate().isNotEmpty);
+
+    await open(PasswardLoginWidget.routeName);
 
     final signInFields = find.byType(TextFormField);
     check('has identifier and password', signInFields.evaluate().length == 2,
         'found ${signInFields.evaluate().length}');
 
     if (signInFields.evaluate().length == 2) {
-      await type(signInFields.at(0), '3001234567');
+      // One field takes either a handle or a number, so there is nothing to switch
+      // between and nothing to clear — the check that used to live here went with the
+      // toggle.
+      await type(signInFields.at(0), 'nobody');
+      await type(signInFields.at(1), 'Wrong!Passw0rd');
 
-      await tester.tap(find.text('Username'));
-      await tester.pump(const Duration(milliseconds: 600));
-      // A phone number is not a username, and leaving it behind makes the field look
-      // already filled in with something that cannot work.
-      check('switching clears the field',
-          find.text('3001234567').evaluate().isEmpty);
-
-      await type(find.byType(TextFormField).at(0), 'nobody');
-      await type(find.byType(TextFormField).at(1), 'Wrong!Passw0rd');
-
-      await tester.tap(find.text('Sign in'), warnIfMissed: false);
+      await tester.tap(find.text('Continue'), warnIfMissed: false);
       // Long enough for a round trip; the password hash is scrypt, slow on purpose.
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 6));
@@ -164,7 +165,7 @@ void main() {
       check(
         'reaches the backend and shows what it said',
         find.byType(SnackBar).evaluate().isNotEmpty,
-        'nothing appeared — the phone probably cannot reach apiBaseUrl',
+        'nothing appeared — the phone probably cannot reach baseURL',
       );
     }
 

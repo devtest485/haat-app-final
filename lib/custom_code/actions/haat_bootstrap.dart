@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/api/api_config.dart';
-import '/backend/auth/auth_session.dart';
+import '/custom_code/api_config.dart';
+import '/custom_code/auth_session.dart';
 
 /// Brings the session up before the first frame.
 ///

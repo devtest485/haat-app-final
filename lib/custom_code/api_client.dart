@@ -5,10 +5,10 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
-import '../auth/token_store.dart';
-import 'api_config.dart';
-import 'api_envelope.dart';
-import 'api_result.dart';
+import '/custom_code/token_store.dart';
+import '/custom_code/api_config.dart';
+import '/custom_code/api_envelope.dart';
+import '/custom_code/api_result.dart';
 
 /// Talks to the HAAT backend.
 ///
@@ -69,6 +69,7 @@ class ApiClient {
     required T Function(ApiEnvelope) parse,
     Map<String, dynamic>? body,
     bool authenticated = true,
+
     /// Reuse a key across retries of the same logical action, so a request the server
     /// carried out but never acknowledged is not carried out twice. Omit it and one is
     /// generated per call, which is right for a fresh attempt.
@@ -88,7 +89,11 @@ class ApiClient {
     required T Function(ApiEnvelope) parse,
     bool authenticated = true,
   }) =>
-      _send(method: 'DELETE', path: path, parse: parse, authenticated: authenticated);
+      _send(
+          method: 'DELETE',
+          path: path,
+          parse: parse,
+          authenticated: authenticated);
 
   Future<ApiResult<T>> patch<T>(
     String path, {
@@ -131,7 +136,8 @@ class ApiClient {
     };
 
     final token = _tokens.accessToken;
-    if (authenticated && token != null) headers['Authorization'] = 'Bearer $token';
+    if (authenticated && token != null)
+      headers['Authorization'] = 'Bearer $token';
 
     http.Response response;
     try {
@@ -151,7 +157,8 @@ class ApiClient {
 
     final envelope = _decode(response);
 
-    if (_shouldAttemptRefresh(envelope, authenticated: authenticated, isRetry: isRetry)) {
+    if (_shouldAttemptRefresh(envelope,
+        authenticated: authenticated, isRetry: isRetry)) {
       if (await _refresh()) {
         return _send(
           method: method,

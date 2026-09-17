@@ -68,9 +68,13 @@ class ApiEnvelope {
       message: text('message'),
       messageAr: text('message_ar'),
       data: json['data'],
-      responseCode: json['responseCode'] is int ? json['responseCode'] as int : statusCode,
-      errorCode: json['errorCode'] is String ? json['errorCode'] as String : null,
-      requestId: json['requestId'] is String ? json['requestId'] as String : null,
+      responseCode: json['responseCode'] is int
+          ? json['responseCode'] as int
+          : statusCode,
+      errorCode:
+          json['errorCode'] is String ? json['errorCode'] as String : null,
+      requestId:
+          json['requestId'] is String ? json['requestId'] as String : null,
     );
   }
 
@@ -84,7 +88,8 @@ class ApiEnvelope {
         title: 'Something Went Wrong',
         titleAr: 'حدث خطأ ما',
         message: 'The server sent a reply we could not read. Please try again.',
-        messageAr: 'أرسل الخادم ردًا لم نتمكن من قراءته. يرجى المحاولة مرة أخرى.',
+        messageAr:
+            'أرسل الخادم ردًا لم نتمكن من قراءته. يرجى المحاولة مرة أخرى.',
         data: const <String, dynamic>{},
         responseCode: statusCode,
         errorCode: 'UNREADABLE_RESPONSE',
@@ -102,8 +107,9 @@ class ApiEnvelope {
       languageCode == 'ar' ? (titleAr.isEmpty ? title : titleAr) : title;
 
   /// The message in [languageCode], falling back to whichever the server filled in.
-  String messageIn(String languageCode) =>
-      languageCode == 'ar' ? (messageAr.isEmpty ? message : messageAr) : message;
+  String messageIn(String languageCode) => languageCode == 'ar'
+      ? (messageAr.isEmpty ? message : messageAr)
+      : message;
 }
 
 /// Error codes the app changes its behaviour for.

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/auth/auth_session.dart';
+import '/custom_code/auth_session.dart';
 
 /// Where the app should send the user, as one word.
 ///

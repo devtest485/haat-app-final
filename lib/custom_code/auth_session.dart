@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../api/api_client.dart';
-import '../api/kyc_api.dart';
-import '../api/api_result.dart';
-import '../api/auth_api.dart';
-import 'biometric_key_store.dart';
-import 'device_identity.dart';
-import 'token_store.dart';
+import '/custom_code/api_client.dart';
+import '/custom_code/kyc_api.dart';
+import '/custom_code/api_result.dart';
+import '/custom_code/auth_api.dart';
+import '/custom_code/biometric_key_store.dart';
+import '/custom_code/device_identity.dart';
+import '/custom_code/organization_api.dart';
+import '/custom_code/token_store.dart';
 
 /// What a biometric sign-in attempt came to.
 ///
@@ -134,6 +135,10 @@ class AuthSession extends ChangeNotifier {
 
   /// Identity verification. Shares the client, so it shares the session and its refresh.
   late final KycApi kyc = KycApi(_client);
+
+  /// The merchant's business, and the option lists its setup screens render. Shares
+  /// the client for the same reason.
+  late final OrganizationApi organizations = OrganizationApi(_client);
 
   /// The device key behind biometric sign-in. Held here so the screens that offer it and
   /// the screen that enrols it are talking to the same thing.
@@ -344,9 +349,14 @@ class AuthSession extends ChangeNotifier {
   /// The two calls carry different payloads and the same failure shapes, and the screen
   /// only ever wants the message — so the envelope is moved across rather than the
   /// caller being made to handle two result types for one attempt.
-  static ApiResult<AuthTokens> _recast(ApiResult<String> failure) => switch (failure) {
+  static ApiResult<AuthTokens> _recast(ApiResult<String> failure) =>
+      switch (failure) {
         ApiFailure<String>(:final envelope) => ApiFailure<AuthTokens>(envelope),
-        ApiUnreachable<String>(:final cause, :final message, :final messageAr) =>
+        ApiUnreachable<String>(
+          :final cause,
+          :final message,
+          :final messageAr
+        ) =>
           ApiUnreachable<AuthTokens>(
             cause,
             message: message,
@@ -446,6 +456,9 @@ class AuthSession extends ChangeNotifier {
     _credentials = null;
     _pendingMobile = null;
     _devOtpCode = null;
+    // The option lists are the same for everyone, but the next person to sign in on
+    // this handset should not inherit anything this one fetched.
+    organizations.forget();
     _status = AuthStatus.signedOut;
     notifyListeners();
   }

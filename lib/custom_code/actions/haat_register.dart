@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 
 import 'package:uuid/uuid.dart';
 
-import '/backend/api/haat_result.dart';
-import '/backend/api/phone_format.dart';
-import '/backend/auth/auth_session.dart';
+import '/custom_code/haat_result.dart';
+import '/custom_code/phone_format.dart';
+import '/custom_code/auth_session.dart';
 
 /// The number the current attempt belongs to, and the key standing for it.
 ///

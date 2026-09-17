@@ -182,6 +182,9 @@ enum ParamType {
   FFPlace,
   FFUploadedFile,
   JSON,
+
+  CustomClass,
+  CustomEnum,
 }
 
 dynamic deserializeParam<T>(

@@ -1,6 +1,6 @@
-import '../auth/device_identity.dart';
-import 'api_client.dart';
-import 'api_result.dart';
+import '/custom_code/device_identity.dart';
+import '/custom_code/api_client.dart';
+import '/custom_code/api_result.dart';
 
 /// A session and the tokens that carry it.
 class AuthTokens {
@@ -58,7 +58,8 @@ class RegistrationStarted {
   /// the handset.
   final String? devOtpCode;
 
-  factory RegistrationStarted.fromData(Map<String, dynamic> data) => RegistrationStarted(
+  factory RegistrationStarted.fromData(Map<String, dynamic> data) =>
+      RegistrationStarted(
         userId: data['userId'] as String,
         mobileMasked: data['mobileMasked'] as String? ?? '',
         otpExpiresAt: DateTime.tryParse(data['otpExpiresAt'] as String? ?? ''),
@@ -113,7 +114,8 @@ class CredentialStatus {
   final bool mustChangePassword;
   final String status;
 
-  factory CredentialStatus.fromData(Map<String, dynamic> data) => CredentialStatus(
+  factory CredentialStatus.fromData(Map<String, dynamic> data) =>
+      CredentialStatus(
         username: data['username'] as String?,
         hasPassword: data['hasPassword'] == true,
         hasPasscode: data['hasPasscode'] == true,
@@ -199,8 +201,8 @@ class AuthApi {
           'password': password,
           if (currentPassword != null) 'currentPassword': currentPassword,
         },
-        parse: (envelope) =>
-            DateTime.tryParse(envelope.object['passwordSetAt'] as String? ?? ''),
+        parse: (envelope) => DateTime.tryParse(
+            envelope.object['passwordSetAt'] as String? ?? ''),
       );
 
   /// Sets or replaces the six-digit passcode.
@@ -217,12 +219,13 @@ class AuthApi {
           'passcode': passcode,
           if (password != null) 'password': password,
         },
-        parse: (envelope) =>
-            DateTime.tryParse(envelope.object['passcodeSetAt'] as String? ?? ''),
+        parse: (envelope) => DateTime.tryParse(
+            envelope.object['passcodeSetAt'] as String? ?? ''),
       );
 
   /// Checks a handle before the user commits to it.
-  Future<ApiResult<UsernameCheck>> checkUsername(String username) => _client.get(
+  Future<ApiResult<UsernameCheck>> checkUsername(String username) =>
+      _client.get(
         '/auth/username/available',
         query: {'username': username},
         parse: (envelope) => UsernameCheck.fromData(envelope.object),
@@ -327,7 +330,8 @@ class AuthApi {
       );
 
   /// Exchanges a signed challenge for a session.
-  Future<ApiResult<AuthTokens>> biometricVerify({required String signature}) async =>
+  Future<ApiResult<AuthTokens>> biometricVerify(
+          {required String signature}) async =>
       _client.post(
         '/auth/biometric/verify',
         authenticated: false,

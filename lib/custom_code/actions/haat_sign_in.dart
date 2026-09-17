@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/api/phone_format.dart';
-import '/backend/auth/auth_session.dart';
+import '/custom_code/phone_format.dart';
+import '/custom_code/auth_session.dart';
 
 /// Signs in with whichever identifier was typed.
 ///
@@ -42,5 +42,4 @@ Future<String> haatSignIn(String identifier, String password) async {
   return result.isSuccess ? '' : result.messageIn(session.languageCode);
 }
 
-bool _looksLikeNumber(String typed) =>
-    RegExp(r'^\+?[\d\s-]+$').hasMatch(typed);
+bool _looksLikeNumber(String typed) => RegExp(r'^\+?[\d\s-]+$').hasMatch(typed);

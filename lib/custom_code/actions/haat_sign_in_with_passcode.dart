@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/api/haat_result.dart';
-import '/backend/auth/auth_session.dart';
+import '/custom_code/haat_result.dart';
+import '/custom_code/auth_session.dart';
 
 /// Signs in with the passcode, on a device that already has a session.
 ///

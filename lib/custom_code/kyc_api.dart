@@ -1,5 +1,5 @@
-import 'api_result.dart';
-import 'api_client.dart';
+import '/custom_code/api_result.dart';
+import '/custom_code/api_client.dart';
 
 /// What the device SDK needs to run a capture.
 class KycProviderSession {
@@ -26,7 +26,8 @@ class KycProviderSession {
   final String? expiresAt;
   final String? purpose;
 
-  factory KycProviderSession.fromData(Map<String, dynamic> data) => KycProviderSession(
+  factory KycProviderSession.fromData(Map<String, dynamic> data) =>
+      KycProviderSession(
         sessionToken: data['sessionToken'] as String? ?? '',
         baseUrl: data['baseUrl'] as String? ?? '',
         expiresAt: data['expiresAt'] as String?,
@@ -54,7 +55,8 @@ class KycProviderOutcome {
   bool get isVerified => result == 'VERIFIED';
   bool get needsReview => result == 'REVIEW';
 
-  factory KycProviderOutcome.fromData(Map<String, dynamic> data) => KycProviderOutcome(
+  factory KycProviderOutcome.fromData(Map<String, dynamic> data) =>
+      KycProviderOutcome(
         result: data['result'] as String?,
         status: data['status'] as String? ?? 'UNKNOWN',
         isComplete: data['isComplete'] == true,

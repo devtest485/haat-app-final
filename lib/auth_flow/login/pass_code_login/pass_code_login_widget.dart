@@ -1,9 +1,8 @@
-import '/backend/auth/auth_session.dart';
-import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -40,54 +39,8 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
     super.dispose();
   }
 
-  static const int _pinLength = 6;
-
-  // ── Actions ───────────────────────────────────────────────────────────────────
-
-  /// Adds a digit, and signs in once the passcode is complete.
-  ///
-  /// The passcode is checked by the server rather than against a copy on the handset.
-  /// A comparison here would be worth exactly as much as the stored copy it compares
-  /// against — and would let past anyone who could read that copy.
-  Future<void> _enterDigit(String digit) async {
-    if (_model.isSubmitting) return;
-
-    safeSetState(() {
-      _model.pinCode =
-          functions.appendPinDigit(_model.pinCode, digit, _pinLength);
-    });
-
-    if (!functions.isPinComplete(_model.pinCode, _pinLength)) return;
-
-    final feedback = ApiFeedback.of(context);
-    final passcode = _model.pinCode ?? '';
-
-    safeSetState(() => _model.isSubmitting = true);
-
-    final result = await AuthSession.instance.signInWithPasscode(passcode);
-
-    if (!mounted) return;
-
-    safeSetState(() {
-      _model.isSubmitting = false;
-      // Cleared either way: a wrong passcode is retyped, and a correct one is spent.
-      _model.pinCode = '';
-    });
-
-    if (!result.isSuccess) {
-      feedback.show(result);
-      return;
-    }
-
-    // Replaces the stack rather than stacking on it, so Back does not return to a
-    // passcode screen for a session that is already open.
-    context.goNamed(BottomBarPagesWidget.routeName);
-  }
-
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -379,7 +332,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('1'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '1', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignInaamy74vi =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignInaamy74vi ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignInaamy74vi!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -418,7 +416,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('2'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '2', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignInow8ohec3 =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignInow8ohec3 ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignInow8ohec3!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -457,7 +500,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('3'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '3', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignIn3ew0os73 =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignIn3ew0os73 ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignIn3ew0os73!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -503,7 +591,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('4'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '4', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignIn743xths0 =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignIn743xths0 ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignIn743xths0!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -542,7 +675,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('5'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '5', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignInwbfh2jjb =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignInwbfh2jjb ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignInwbfh2jjb!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -581,7 +759,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('6'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '6', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignInb7p8p1a9 =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignInb7p8p1a9 ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignInb7p8p1a9!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -627,7 +850,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('7'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '7', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignIn51ajygc9 =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignIn51ajygc9 ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignIn51ajygc9!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -666,7 +934,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('8'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '8', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignInitbkegeb =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignInitbkegeb ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignInitbkegeb!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -705,7 +1018,52 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onTap: () => _enterDigit('9'),
+                                    onTap: () async {
+                                      if (_model.isSubmitting == false) {
+                                        _model.pinCode =
+                                            functions.appendPinDigit(
+                                                _model.pinCode, '9', 6);
+                                        safeSetState(() {});
+                                        if (functions.isPinComplete(
+                                            _model.pinCode, 6)) {
+                                          _model.isSubmitting = true;
+                                          safeSetState(() {});
+                                          _model.passcodeSignIn9vhvvnct =
+                                              await actions
+                                                  .haatSignInWithPasscode(
+                                            _model.pinCode,
+                                          );
+                                          _model.isSubmitting = false;
+                                          safeSetState(() {});
+                                          _model.pinCode = '';
+                                          safeSetState(() {});
+                                          if (_model.passcodeSignIn9vhvvnct ==
+                                              '') {
+                                            if (Navigator.of(context)
+                                                .canPop()) {
+                                              context.pop();
+                                            }
+                                            context.pushNamed(
+                                                BottomBarPagesWidget.routeName);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  _model
+                                                      .passcodeSignIn9vhvvnct!,
+                                                  style: TextStyle(),
+                                                ),
+                                                duration: Duration(
+                                                    milliseconds: 4000),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(),
                                       child: Padding(
@@ -759,7 +1117,54 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                           focusColor: Colors.transparent,
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
-                                          onTap: () => _enterDigit('0'),
+                                          onTap: () async {
+                                            if (_model.isSubmitting == false) {
+                                              _model.pinCode =
+                                                  functions.appendPinDigit(
+                                                      _model.pinCode, '0', 6);
+                                              safeSetState(() {});
+                                              if (functions.isPinComplete(
+                                                  _model.pinCode, 6)) {
+                                                _model.isSubmitting = true;
+                                                safeSetState(() {});
+                                                _model.passcodeSignInfhzn9ofb =
+                                                    await actions
+                                                        .haatSignInWithPasscode(
+                                                  _model.pinCode,
+                                                );
+                                                _model.isSubmitting = false;
+                                                safeSetState(() {});
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                if (_model
+                                                        .passcodeSignInfhzn9ofb ==
+                                                    '') {
+                                                  if (Navigator.of(context)
+                                                      .canPop()) {
+                                                    context.pop();
+                                                  }
+                                                  context.pushNamed(
+                                                      BottomBarPagesWidget
+                                                          .routeName);
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        _model
+                                                            .passcodeSignInfhzn9ofb!,
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
                                           child: Container(
                                             decoration: BoxDecoration(),
                                             child: Padding(

@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -35,11 +36,32 @@ class _OnBoardingPageWidgetState extends State<OnBoardingPageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (FFAppState().hasLoggedInBefore) {
+      _model.startupRoute = await actions.haatStartupRoute();
+      if (_model.startupRoute == 'login') {
         if (Navigator.of(context).canPop()) {
           context.pop();
         }
         context.pushNamed(LoginScreenWidget.routeName);
+      } else if (_model.startupRoute == 'createPassword') {
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        }
+        context.pushNamed(CreatePasswordPageWidget.routeName);
+      } else if (_model.startupRoute == 'securePage') {
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        }
+        context.pushNamed(SecurePageWidget.routeName);
+      } else if (_model.startupRoute == 'username') {
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        }
+        context.pushNamed(UsernamePageWidget.routeName);
+      } else if (_model.startupRoute == 'home') {
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        }
+        context.pushNamed(BottomBarPagesWidget.routeName);
       }
     });
   }
@@ -53,8 +75,6 @@ class _OnBoardingPageWidgetState extends State<OnBoardingPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();

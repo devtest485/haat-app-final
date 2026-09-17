@@ -22,7 +22,8 @@ class ApiConfig {
   /// The name this file used before it was reconciled with FlutterFlow's. Read as a
   /// fallback so a build carrying the older asset still resolves.
   static const String _legacyConfigKey = 'apiBaseUrl';
-  static const String _configPath = 'assets/environment_values/environment.json';
+  static const String _configPath =
+      'assets/environment_values/environment.json';
 
   static String? _baseUrl;
 

@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'passward_login_widget.dart' show PasswardLoginWidget;
@@ -15,33 +16,34 @@ class PasswardLoginModel extends FlutterFlowModel<PasswardLoginWidget> {
 
   bool setPassward = false;
 
-  /// True while the sign-in request is in flight.
-  bool isSubmitting = false;
+  bool? isSubmitting = false;
 
   ///  State fields for stateful widgets in this page.
 
-  // State field(s) for newPassward widget.
-  FocusNode? newPasswardFocusNode;
-  TextEditingController? newPasswardTextController;
-  String? Function(BuildContext, String?)? newPasswardTextControllerValidator;
-  // State field(s) for ConfirmPassward widget.
-  FocusNode? confirmPasswardFocusNode;
-  TextEditingController? confirmPasswardTextController;
-  late bool confirmPasswardVisibility;
+  // State field(s) for UsernameMobilenumber widget.
+  FocusNode? usernameMobilenumberFocusNode;
+  TextEditingController? usernameMobilenumberTextController;
   String? Function(BuildContext, String?)?
-      confirmPasswardTextControllerValidator;
+      usernameMobilenumberTextControllerValidator;
+  // State field(s) for Password widget.
+  FocusNode? passwordFocusNode;
+  TextEditingController? passwordTextController;
+  late bool passwordVisibility;
+  String? Function(BuildContext, String?)? passwordTextControllerValidator;
+  // Stores action output result for [Custom Action - haatSignIn] action in Container widget.
+  String? signIn;
 
   @override
   void initState(BuildContext context) {
-    confirmPasswardVisibility = false;
+    passwordVisibility = false;
   }
 
   @override
   void dispose() {
-    newPasswardFocusNode?.dispose();
-    newPasswardTextController?.dispose();
+    usernameMobilenumberFocusNode?.dispose();
+    usernameMobilenumberTextController?.dispose();
 
-    confirmPasswardFocusNode?.dispose();
-    confirmPasswardTextController?.dispose();
+    passwordFocusNode?.dispose();
+    passwordTextController?.dispose();
   }
 }

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/auth/auth_session.dart';
+import '/custom_code/auth_session.dart';
 
 /// The number the one-time code was sent to, masked for display.
 ///

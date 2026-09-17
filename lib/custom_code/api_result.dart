@@ -1,4 +1,4 @@
-import 'api_envelope.dart';
+import '/custom_code/api_envelope.dart';
 
 /// The outcome of a call, in the three shapes a caller actually has to tell apart.
 ///
@@ -30,7 +30,8 @@ sealed class ApiResult<T> {
   String titleIn(String languageCode) => switch (this) {
         ApiSuccess<T>(:final envelope) => envelope.titleIn(languageCode),
         ApiFailure<T>(:final envelope) => envelope.titleIn(languageCode),
-        ApiUnreachable<T>() => languageCode == 'ar' ? 'لا يوجد اتصال' : 'No Connection',
+        ApiUnreachable<T>() =>
+          languageCode == 'ar' ? 'لا يوجد اتصال' : 'No Connection',
       };
 
   /// The server's error code, or null when the server was not reached.
@@ -64,7 +65,8 @@ final class ApiFailure<T> extends ApiResult<T> {
 
 /// The server was never reached, or answered too late to matter.
 final class ApiUnreachable<T> extends ApiResult<T> {
-  const ApiUnreachable(this.cause, {required this.message, required this.messageAr});
+  const ApiUnreachable(this.cause,
+      {required this.message, required this.messageAr});
 
   /// The underlying exception, for logging. Never shown to a user: a
   /// `SocketException` naming a port helps nobody holding a phone.
@@ -79,7 +81,8 @@ final class ApiUnreachable<T> extends ApiResult<T> {
   /// idempotency key, so retrying is safe.
   static ApiUnreachable<T> offline<T>(Object cause) => ApiUnreachable<T>(
         cause,
-        message: 'We could not reach HAAT. Check your connection and try again.',
+        message:
+            'We could not reach HAAT. Check your connection and try again.',
         messageAr: 'لم نتمكن من الوصول إلى هات. تحقق من اتصالك وحاول مرة أخرى.',
       );
 

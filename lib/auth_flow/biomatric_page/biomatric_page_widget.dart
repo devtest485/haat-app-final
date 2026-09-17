@@ -1,6 +1,3 @@
-import '/backend/auth/auth_session.dart';
-import '/backend/auth/biometric_key_store.dart';
-import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -38,38 +35,6 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
     _model.dispose();
 
     super.dispose();
-  }
-
-  // ── Actions ───────────────────────────────────────────────────────────────────
-
-  /// Creates a device key and registers its public half, then moves on.
-  ///
-  /// Enrolment can refuse for reasons that are nobody's fault — no sensor, nothing
-  /// enrolled, or the device key not being available yet — and none of them should trap
-  /// a merchant on this screen. So a refusal is explained and the flow continues: the
-  /// passcode set a moment ago is already a working way back in.
-  Future<void> _enable() async {
-    if (_model.isSubmitting) return;
-
-    final feedback = ApiFeedback.of(context);
-
-    safeSetState(() => _model.isSubmitting = true);
-
-    final enrolment = await AuthSession.instance.enableBiometrics();
-
-    if (!mounted) return;
-    safeSetState(() => _model.isSubmitting = false);
-
-    // Awaited, not fired and forgotten: moving on while the sheet is up takes the sheet
-    // with it, and the explanation for why biometrics did not turn on is never read.
-    await switch (enrolment) {
-      BiometricRefused(:final reason) =>
-        feedback.notice(BiometricKeyStore.describe(reason), isError: true),
-      BiometricEnrolled() => feedback.notice('Biometric sign-in is on.'),
-    };
-
-    if (!mounted) return;
-    context.pushNamed(VerifyPageWidget.routeName);
   }
 
   @override
@@ -224,7 +189,9 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
-                              onTap: _enable,
+                              onTap: () async {
+                                context.pushNamed(VerifyPageWidget.routeName);
+                              },
                               child: Container(
                                 width: double.infinity,
                                 height: 50.0,

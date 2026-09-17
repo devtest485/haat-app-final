@@ -1,3 +1,4 @@
+import '/custom_code/actions/index.dart' as actions;
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,6 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/nav/nav.dart';
-import 'backend/api/api_config.dart';
-import 'backend/auth/auth_session.dart';
 import 'index.dart';
 
 void main() async {
@@ -19,17 +18,9 @@ void main() async {
   final environmentValues = FFDevEnvironmentValues();
   await environmentValues.initialize();
 
-  // Both before the first frame, and in this order: the session restores tokens from
-  // the keystore, and it cannot build its HTTP client until it knows where the backend
-  // is. Doing this here rather than lazily means the router never has to render a
-  // screen while the answer to "is anybody signed in" is still unknown.
-  //
-  // A FlutterFlow export has already removed this pair once. Requests resolve the
-  // address themselves now, so losing the first line only costs a moment — but losing
-  // the second throws on the first call that needs a session. If an export drops them
-  // again, put them back.
-  await ApiConfig.load();
-  await AuthSession.initialize();
+  // Start initial custom actions code
+  await actions.haatBootstrap();
+  // End initial custom actions code
 
   await FlutterFlowTheme.initialize();
 

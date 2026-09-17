@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import '/backend/auth/auth_session.dart';
-import '/backend/auth/biometric_key_store.dart';
+import '/custom_code/auth_session.dart';
+import '/custom_code/biometric_key_store.dart';
 
 /// Enrols this device's key and registers its public half. Empty means it worked.
 ///
@@ -32,7 +32,7 @@ Future<String> haatEnableBiometrics() async {
       'Your biometrics changed, so the old key no longer works. Set it up again.',
     BiometricUnavailable.keyUnsupported =>
       'Biometric sign-in is not available on this device yet.',
-    BiometricUnavailable.platformError =>
-      refused.detail ?? 'We could not set up biometric sign-in. You can try again.',
+    BiometricUnavailable.platformError => refused.detail ??
+        'We could not set up biometric sign-in. You can try again.',
   };
 }
