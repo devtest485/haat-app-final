@@ -88,6 +88,25 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
 
     final session = opened.value;
 
+    // Asked before the camera opens, because the provider checks the capture against
+    // whatever type it was told to expect and refuses anything else — "this document
+    // does not match your selection". Hard-coding a national ID meant a merchant holding
+    // a passport was refused for presenting the right document.
+    //
+    // The SDK has no chooser of its own. Its documentation describes one, and a
+    // `country:` parameter to go with it, but neither exists in any released version —
+    // 1.3.0 is the repository head and `document()` still takes only a type and a side.
+    // Omitting the type does not help either: the server then assumes a national ID.
+    final chosen = await _chooseDocument(feedback);
+
+    if (!mounted) return;
+
+    if (chosen == null) {
+      safeSetState(() => _model.isVerifying = false);
+
+      return;
+    }
+
     // Everything the capture can throw has to land here. The provider raises
     // `BlinkStepError` for a document or a face it would not accept and `BlinkError`
     // for everything else — and either one escaping takes the whole screen down with
@@ -95,32 +114,58 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
     // trusting that list to stay complete.
     String? failure;
 
-    try {
-      await BlinkKyc(session.baseUrl, session.sessionToken)
-          // The chooser screen this flow already has should feed this once it is
-          // wired; until then a national ID is what most merchants present.
-          .document(type: DocumentType.nationalId)
-          .face()
-          .present(context)
-          .run();
-    } on BlinkStepError catch (error) {
-      // The provider writes these for the person holding the phone — "take a clearer
-      // photo showing the entire document" — and that is more use than anything we
-      // could say from here, which would only be vaguer.
-      failure = error.message;
-    } on BlinkError catch (error) {
-      // Backing out of the camera is a choice, not a fault, and saying "verification
-      // failed" to somebody who pressed close is how a screen loses trust.
-      if (error.code == BlinkErrorCode.cancelled) {
+    // ## Why this is a loop
+    //
+    // A refused photograph used to end the whole attempt. The merchant was returned to
+    // this screen, and tapping the button again opened a **new** session — so a blurred
+    // first try became a second session, a third, a fourth. One tester needed six before
+    // one went through, and six sessions is what the records show.
+    //
+    // Retrying inside the loop reuses the session that is already open, so a bad
+    // photograph costs another photograph rather than another session. If the provider
+    // will not accept a second attempt on a spent session it says so, and that arrives
+    // as a `BlinkError` below, which already tells the merchant to start again.
+    while (true) {
+      try {
+        await BlinkKyc(session.baseUrl, session.sessionToken)
+            .document(type: chosen)
+            .face()
+            .present(context)
+            .run();
+
+        failure = null;
+        break;
+      } on BlinkStepError catch (error) {
         if (!mounted) return;
-        safeSetState(() => _model.isVerifying = false);
 
-        return;
+        // The provider writes these for the person holding the phone — "take a clearer
+        // photo showing the entire document" — and that is more use than anything we
+        // could say from here, which would only be vaguer.
+        final again = await _offerRetry(feedback, error.message);
+
+        if (!mounted) return;
+
+        if (again != true) {
+          safeSetState(() => _model.isVerifying = false);
+
+          return;
+        }
+      } on BlinkError catch (error) {
+        // Backing out of the camera is a choice, not a fault, and saying "verification
+        // failed" to somebody who pressed close is how a screen loses trust.
+        if (error.code == BlinkErrorCode.cancelled) {
+          if (!mounted) return;
+          safeSetState(() => _model.isVerifying = false);
+
+          return;
+        }
+
+        failure = _captureFailure(error);
+        break;
+      } catch (_) {
+        failure = 'The verification could not be completed. You can try again.';
+        break;
       }
-
-      failure = _captureFailure(error);
-    } catch (_) {
-      failure = 'The verification could not be completed. You can try again.';
     }
 
     if (!mounted) return;
@@ -160,6 +205,69 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
     if (!mounted) return;
     context.pushNamed(BusinessInfoWidget.routeName);
   }
+
+  /// Which document the merchant is holding.
+  ///
+  /// ## Why this list, and why it is fragile
+  ///
+  /// These are the three the provider accepts, read off its own hosted chooser. Anything
+  /// outside the set is refused with "this document does not match your selection".
+  ///
+  /// It is a copy of a setting held in the provider's account, and it has already been
+  /// seen to change: the same page offered two types one day and three the next. The
+  /// session knows the allowed set — the SDK's documentation says it reads the session
+  /// policy on `run()` — but nothing exposes it. `StatusView` carries the status, the
+  /// current step and the steps completed, and no list of documents. So this is
+  /// maintained by hand, and it is wrong the day the account is reconfigured.
+  ///
+  /// **The country is not ours to choose.** It is fixed on the provider's account, and
+  /// `document()` takes no country — the parameter their documentation describes does not
+  /// exist in any released version. A document issued anywhere else is refused however
+  /// well the type matches, which is worth knowing before blaming the capture.
+  Future<DocumentType?> _chooseDocument(ApiFeedback feedback) =>
+      feedback.choose<DocumentType>(
+        title: 'Which document?',
+        message: 'Pick the one you are holding, so we check it against the right thing.',
+        options: const [
+          (
+            value: DocumentType.passport,
+            label: 'Passport',
+            detail: 'The photo page',
+          ),
+          (
+            value: DocumentType.nationalId,
+            label: 'National ID',
+            detail: 'Both sides, front first',
+          ),
+          (
+            value: DocumentType.drivingLicence,
+            label: 'Driving licence',
+            detail: 'Both sides, front first',
+          ),
+        ],
+      );
+
+  /// Offers another photograph after the provider refused one.
+  ///
+  /// The provider's own sentence is the question's body, because it says what to change
+  /// — a clearer photo, the whole document in frame — and repeating it as a bare failure
+  /// with an OK button would throw that away and send the merchant back to the start.
+  ///
+  /// Asked rather than retried silently: the camera reopening on its own, immediately
+  /// after a refusal, reads as a crash rather than an offer.
+  Future<bool?> _offerRetry(ApiFeedback feedback, String reason) =>
+      feedback.choose<bool>(
+        title: 'Try that again?',
+        message: reason,
+        options: const [
+          (
+            value: true,
+            label: 'Take another photo',
+            detail: 'Reopens the camera on the same check',
+          ),
+          (value: false, label: 'Not now', detail: null),
+        ],
+      );
 
   /// What to say about a transport failure, in words that suggest what to do next.
   ///

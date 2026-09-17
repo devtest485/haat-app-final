@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart' show kDebugMode;
-
 import '/backend/auth/auth_session.dart';
 import '/backend/ui/api_feedback.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -448,15 +446,25 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                 },
                                               ),
                                             ),
-                                            // Development only. A backend with no SMS
-                                            // provider hands the code back in the
-                                            // response so the flow can be walked
-                                            // through; `kDebugMode` is what keeps a
-                                            // one-time code off a release build.
-                                            if (kDebugMode &&
-                                                AuthSession
-                                                        .instance.devOtpCode !=
-                                                    null)
+                                            // Shown whenever the server sends one, and
+                                            // the server is what decides. A backend
+                                            // with no SMS provider returns the code in
+                                            // `devOtpCode` only while `EXPOSE_OTP_CODE`
+                                            // is set; a real one leaves the field null
+                                            // and nothing renders.
+                                            //
+                                            // This used to be gated on `kDebugMode` as
+                                            // well, which was the wrong control: it hid
+                                            // the code from the release builds handed
+                                            // to testers, whose backend is the one
+                                            // deliberately handing it out, while adding
+                                            // no protection at all — the code is in the
+                                            // response body either way, and the only
+                                            // thing that keeps it out of production is
+                                            // the server not sending it.
+                                            if (AuthSession
+                                                    .instance.devOtpCode !=
+                                                null)
                                               SelectableText(
                                                 'Development code: ${AuthSession.instance.devOtpCode}',
                                                 style: FlutterFlowTheme.of(

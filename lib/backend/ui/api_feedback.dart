@@ -106,6 +106,36 @@ class ApiFeedback {
         isError: isError,
       );
 
+  /// Asks the user to pick one of [options], and resolves with what they chose.
+  ///
+  /// Null when the sheet is dismissed without a choice, which is a decision like any
+  /// other — a caller must not treat it as a default.
+  ///
+  /// Here rather than on the screen that needs it because a question and a refusal are
+  /// the same furniture: both are a sheet the app raises, and having two of them drift
+  /// apart in colour and spacing is how an app starts to look assembled rather than
+  /// designed.
+  Future<T?> choose<T>({
+    required String title,
+    required String message,
+    required List<({T value, String label, String? detail})> options,
+  }) {
+    return showModalBottomSheet<T>(
+      context: _navigator.context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => _ChoiceSheet<T>(
+        title: title,
+        message: message,
+        options: options,
+        accent: _success,
+        surface: _surface,
+        onSurface: _onSurface,
+        muted: _muted,
+      ),
+    );
+  }
+
   Future<void> _show({
     required String title,
     required String message,
@@ -221,6 +251,124 @@ class _FeedbackSheet extends StatelessWidget {
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A sheet that asks a question, built to match [_FeedbackSheet].
+///
+/// Each option is a row rather than a dropdown, because the list is short and a person
+/// holding a document wants to see their own document named on screen — a collapsed
+/// picker makes them open it to find out what the app even accepts.
+class _ChoiceSheet<T> extends StatelessWidget {
+  const _ChoiceSheet({
+    required this.title,
+    required this.message,
+    required this.options,
+    required this.accent,
+    required this.surface,
+    required this.onSurface,
+    required this.muted,
+  });
+
+  final String title;
+  final String message;
+  final List<({T value, String label, String? detail})> options;
+  final Color accent;
+  final Color surface;
+  final Color onSurface;
+  final Color muted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24.0)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40.0,
+                  height: 4.0,
+                  decoration: BoxDecoration(
+                    color: muted.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              Text(
+                title,
+                style: TextStyle(
+                  color: accent,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Text(
+                message,
+                style: TextStyle(color: onSurface, fontSize: 15.0, height: 1.45),
+              ),
+              const SizedBox(height: 20.0),
+              for (final option in options)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () => Navigator.of(context).pop(option.value),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 14.0,
+                        ),
+                        alignment: AlignmentDirectional.centerStart,
+                        backgroundColor: onSurface.withValues(alpha: 0.08),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0),
+                          side: BorderSide(color: onSurface.withValues(alpha: 0.18)),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            option.label,
+                            style: TextStyle(
+                              color: onSurface,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          if (option.detail != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Text(
+                                option.detail!,
+                                style: TextStyle(color: muted, fontSize: 13.0),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
