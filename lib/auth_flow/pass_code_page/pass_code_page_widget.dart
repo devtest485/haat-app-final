@@ -188,7 +188,7 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Create a password',
+                                                    'Create a passcode',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -258,7 +258,7 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 135.0, 0.0, 0.0),
+                                        0.0, 24.0, 0.0, 0.0),
                                     child: Container(
                                       width: MediaQuery.sizeOf(context).width *
                                           0.8,
@@ -1214,7 +1214,7 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 135.0, 0.0, 0.0),
+                                        0.0, 24.0, 0.0, 0.0),
                                     child: Container(
                                       width: MediaQuery.sizeOf(context).width *
                                           0.8,

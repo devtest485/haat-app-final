@@ -14,7 +14,14 @@ import 'package:flutter/services.dart' show rootBundle;
 class ApiConfig {
   ApiConfig._();
 
-  static const String _configKey = 'apiBaseUrl';
+  /// FlutterFlow owns this file and writes it from the Dev Environments UI, where
+  /// the value is named `baseURL`. Reading that name rather than our own is what
+  /// keeps the app pointed at the real backend across an export.
+  static const String _configKey = 'baseURL';
+
+  /// The name this file used before it was reconciled with FlutterFlow's. Read as a
+  /// fallback so a build carrying the older asset still resolves.
+  static const String _legacyConfigKey = 'apiBaseUrl';
   static const String _configPath = 'assets/environment_values/environment.json';
 
   static String? _baseUrl;
@@ -71,7 +78,7 @@ class ApiConfig {
       final decoded = json.decode(await rootBundle.loadString(_configPath));
       if (decoded is! Map) return null;
 
-      final configured = decoded[_configKey];
+      final configured = decoded[_configKey] ?? decoded[_legacyConfigKey];
       if (configured is! String || configured.trim().isEmpty) return null;
 
       return _withoutTrailingSlash(configured.trim());

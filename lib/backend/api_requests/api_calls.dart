@@ -13,19 +13,11 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
 class HaatAuthGroup {
   static String getBaseUrl({
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
-  }) {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
-    return '${baseURL}';
-  }
-
+  }) =>
+      'https://haat-api.xtroedge.com/api/v1';
   static Map<String, String> headers = {
-    'Authorization': 'Bearer [auth_token]',
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'Accept-Language': '[language]',
@@ -48,27 +40,16 @@ class HaatAuthGroup {
       SignInWithPasscodeCall();
   static LogoutCall logoutCall = LogoutCall();
   static RegisterBiometricCall registerBiometricCall = RegisterBiometricCall();
-  static KycProviderSessionCall kycProviderSessionCall =
-      KycProviderSessionCall();
-  static KycProviderResultCall kycProviderResultCall = KycProviderResultCall();
 }
 
 class RegisterUserCall {
   Future<ApiCallResponse> call({
     dynamic? bodyJson,
     String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -81,7 +62,6 @@ ${body}''';
       apiUrl: '${baseUrl}/auth/register',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -144,34 +124,21 @@ ${body}''';
 class ResendOtpCall {
   Future<ApiCallResponse> call({
     String? mobile = '',
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
 
     final ffApiRequestBody = '''
-{
-  "mobile": "${mobile}",
-  "idempotency": "${idempotencyKey}"
-}''';
+{"mobile": "${mobile}"}''';
     return ApiManager.instance.makeApiCall(
       callName: 'ResendOtp',
       apiUrl: '${baseUrl}/auth/resend-otp',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -237,18 +204,10 @@ class VerifyOtpCall {
     String? deviceFingerprint = '',
     String? deviceLabel = '',
     String? platform = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -266,7 +225,6 @@ class VerifyOtpCall {
       apiUrl: '${baseUrl}/auth/verify-otp',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -340,34 +298,22 @@ class VerifyOtpCall {
 class SignInCall {
   Future<ApiCallResponse> call({
     dynamic? bodyJson,
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
 
     final body = _serializeJson(bodyJson);
     final ffApiRequestBody = '''
-{
-  "Idempotency-Key": "${idempotencyKey}"
-}''';
+${body}''';
     return ApiManager.instance.makeApiCall(
       callName: 'SignIn',
       apiUrl: '${baseUrl}/auth/sign-in',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -449,18 +395,10 @@ class VerifyMfaCall {
     String? deviceFingerprint = '',
     String? deviceLabel = '',
     String? platform = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -472,7 +410,6 @@ class VerifyMfaCall {
       apiUrl: '${baseUrl}/auth/mfa/verify',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -546,18 +483,10 @@ class VerifyMfaCall {
 class BiometricChallengeCall {
   Future<ApiCallResponse> call({
     String? deviceFingerprint = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -569,7 +498,6 @@ class BiometricChallengeCall {
       apiUrl: '${baseUrl}/auth/biometric/challenge',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -620,18 +548,10 @@ class BiometricVerifyCall {
   Future<ApiCallResponse> call({
     String? deviceFingerprint = '',
     String? signature = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -643,7 +563,6 @@ class BiometricVerifyCall {
       apiUrl: '${baseUrl}/auth/biometric/verify',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -717,18 +636,10 @@ class BiometricVerifyCall {
 class RefreshTokenCall {
   Future<ApiCallResponse> call({
     String? refreshToken = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -740,7 +651,6 @@ class RefreshTokenCall {
       apiUrl: '${baseUrl}/auth/refresh',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -794,34 +704,22 @@ class RefreshTokenCall {
 class SetPasswordCall {
   Future<ApiCallResponse> call({
     dynamic? bodyJson,
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
 
     final body = _serializeJson(bodyJson);
     final ffApiRequestBody = '''
-{
-  "idempotency": "${idempotencyKey}"
-}''';
+${body}''';
     return ApiManager.instance.makeApiCall(
       callName: 'SetPassword',
       apiUrl: '${baseUrl}/auth/password',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -871,35 +769,23 @@ class SetPasswordCall {
 
 class SetPasscodeCall {
   Future<ApiCallResponse> call({
-    String? passcode = '',
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
+    dynamic? bodyJson,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
 
+    final body = _serializeJson(bodyJson);
     final ffApiRequestBody = '''
-{
-  "passcode": "${passcode}",
-  "idempotency": "${idempotencyKey}"
-}''';
+[body]''';
     return ApiManager.instance.makeApiCall(
       callName: 'SetPasscode',
       apiUrl: '${baseUrl}/auth/passcode',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -950,18 +836,10 @@ class SetPasscodeCall {
 class CheckUsernameCall {
   Future<ApiCallResponse> call({
     String? username = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -971,7 +849,6 @@ class CheckUsernameCall {
       apiUrl: '${baseUrl}/auth/username/available?username=${username}',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1033,34 +910,23 @@ class CheckUsernameCall {
 class ClaimUsernameCall {
   Future<ApiCallResponse> call({
     String? username = '',
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
 
     final ffApiRequestBody = '''
 {
-  "username": "${username}",
-  "Idempotency-Key": "${idempotencyKey}"
+  "username": "${username}"
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'ClaimUsername',
       apiUrl: '${baseUrl}/auth/username',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1110,18 +976,10 @@ class ClaimUsernameCall {
 
 class CredentialStatusCall {
   Future<ApiCallResponse> call({
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -1131,7 +989,6 @@ class CredentialStatusCall {
       apiUrl: '${baseUrl}/auth/credentials',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1204,34 +1061,21 @@ class CredentialStatusCall {
 class SignInWithPasscodeCall {
   Future<ApiCallResponse> call({
     String? passcode = '',
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
 
     final ffApiRequestBody = '''
-{
-  "passcode": "${passcode}",
-  "Idempotency-Key": "${idempotencyKey}"
-}''';
+{"passcode":"${passcode}"}''';
     return ApiManager.instance.makeApiCall(
       callName: 'SignInWithPasscode',
       apiUrl: '${baseUrl}/auth/passcode/verify',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1305,41 +1149,26 @@ class SignInWithPasscodeCall {
 
 class LogoutCall {
   Future<ApiCallResponse> call({
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
 
-    final ffApiRequestBody = '''
-{
-  "Idempotency-Key": "${idempotencyKey}"
-}''';
     return ApiManager.instance.makeApiCall(
       callName: 'Logout',
       apiUrl: '${baseUrl}/auth/logout',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
         'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
-      body: ffApiRequestBody,
-      bodyType: BodyType.JSON,
+      bodyType: BodyType.NONE,
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
@@ -1379,18 +1208,10 @@ class RegisterBiometricCall {
   Future<ApiCallResponse> call({
     String? deviceId = '',
     String? publicKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
     String? accessToken = '',
     String? language = '',
   }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
     final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
       accessToken: accessToken,
       language: language,
     );
@@ -1402,7 +1223,6 @@ class RegisterBiometricCall {
       apiUrl: '${baseUrl}/auth/biometric',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1444,98 +1264,6 @@ class RegisterBiometricCall {
         response,
         r'''$.requestId''',
       ));
-}
-
-class KycProviderSessionCall {
-  Future<ApiCallResponse> call({
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
-    String? accessToken = '',
-    String? language = '',
-  }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
-    final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
-      accessToken: accessToken,
-      language: language,
-    );
-
-    final ffApiRequestBody = '''
-{
-  "Idempotency-Key": "${escapeStringForJson(idempotencyKey)}"
-}''';
-    return ApiManager.instance.makeApiCall(
-      callName: 'KycProviderSession',
-      apiUrl: '${baseUrl}/kyc/user/provider-session',
-      callType: ApiCallType.POST,
-      headers: {
-        'Authorization': 'Bearer ${authToken}',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Accept-Language': '${language}',
-      },
-      params: {},
-      body: ffApiRequestBody,
-      bodyType: BodyType.JSON,
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
-      isStreamingApi: false,
-      alwaysAllowBody: false,
-    );
-  }
-}
-
-class KycProviderResultCall {
-  Future<ApiCallResponse> call({
-    String? idempotencyKey = '',
-    String? baseURL,
-    String? authToken = '',
-    String? dataSource,
-    String? accessToken = '',
-    String? language = '',
-  }) async {
-    baseURL ??= FFDevEnvironmentValues().baseURL;
-    dataSource ??= FFDevEnvironmentValues().dataSource;
-    final baseUrl = HaatAuthGroup.getBaseUrl(
-      baseURL: baseURL,
-      authToken: authToken,
-      dataSource: dataSource,
-      accessToken: accessToken,
-      language: language,
-    );
-
-    final ffApiRequestBody = '''
-{
-  "Idempotency-Key": "${escapeStringForJson(idempotencyKey)}"
-}''';
-    return ApiManager.instance.makeApiCall(
-      callName: 'KycProviderResult',
-      apiUrl: '${baseUrl}/kyc/user/provider-result',
-      callType: ApiCallType.POST,
-      headers: {
-        'Authorization': 'Bearer ${authToken}',
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Accept-Language': '${language}',
-      },
-      params: {},
-      body: ffApiRequestBody,
-      bodyType: BodyType.JSON,
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
-      isStreamingApi: false,
-      alwaysAllowBody: false,
-    );
-  }
 }
 
 /// End HaatAuth Group Code
@@ -1582,15 +1310,4 @@ String _serializeJson(dynamic jsonVar, [bool isList = false]) {
     }
     return isList ? '[]' : '{}';
   }
-}
-
-String? escapeStringForJson(String? input) {
-  if (input == null) {
-    return null;
-  }
-  return input
-      .replaceAll('\\', '\\\\')
-      .replaceAll('"', '\\"')
-      .replaceAll('\n', '\\n')
-      .replaceAll('\t', '\\t');
 }

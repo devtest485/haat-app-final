@@ -109,7 +109,7 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Please Help us to secure your money more ! creat a passcode for your bank account',
+                            'Please Help us to secure your money more ! create a passcode for your bank account',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -202,7 +202,7 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                                 ),
                                 alignment: AlignmentDirectional(0.0, 0.0),
                                 child: Text(
-                                  'create Passcode',
+                                  'Create Passcode',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(

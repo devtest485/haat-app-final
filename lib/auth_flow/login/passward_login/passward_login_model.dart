@@ -1,9 +1,7 @@
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'passward_login_widget.dart' show PasswardLoginWidget;
@@ -17,42 +15,33 @@ class PasswardLoginModel extends FlutterFlowModel<PasswardLoginWidget> {
 
   bool setPassward = false;
 
-  bool? isSubmitting = false;
+  /// True while the sign-in request is in flight.
+  bool isSubmitting = false;
 
   ///  State fields for stateful widgets in this page.
 
-  // State field(s) for UsernameMobilenumber widget.
-  FocusNode? usernameMobilenumberFocusNode;
-  TextEditingController? usernameMobilenumberTextController;
+  // State field(s) for newPassward widget.
+  FocusNode? newPasswardFocusNode;
+  TextEditingController? newPasswardTextController;
+  String? Function(BuildContext, String?)? newPasswardTextControllerValidator;
+  // State field(s) for ConfirmPassward widget.
+  FocusNode? confirmPasswardFocusNode;
+  TextEditingController? confirmPasswardTextController;
+  late bool confirmPasswardVisibility;
   String? Function(BuildContext, String?)?
-      usernameMobilenumberTextControllerValidator;
-  // State field(s) for Password widget.
-  FocusNode? passwordFocusNode;
-  TextEditingController? passwordTextController;
-  late bool passwordVisibility;
-  String? Function(BuildContext, String?)? passwordTextControllerValidator;
-  // Stores action output result for [Custom Action - getDeviceLabel] action in Container widget.
-  String? deviceLabel;
-  // Stores action output result for [Custom Action - getPlatformName] action in Container widget.
-  String? platformName;
-  // Stores action output result for [Custom Action - newUuid] action in Container widget.
-  String? signInKey;
-  // Stores action output result for [Backend Call - API (SignIn)] action in Container widget.
-  ApiCallResponse? signInResult;
-  // Stores action output result for [Backend Call - API (CredentialStatus)] action in Container widget.
-  ApiCallResponse? credResult;
+      confirmPasswardTextControllerValidator;
 
   @override
   void initState(BuildContext context) {
-    passwordVisibility = false;
+    confirmPasswardVisibility = false;
   }
 
   @override
   void dispose() {
-    usernameMobilenumberFocusNode?.dispose();
-    usernameMobilenumberTextController?.dispose();
+    newPasswardFocusNode?.dispose();
+    newPasswardTextController?.dispose();
 
-    passwordFocusNode?.dispose();
-    passwordTextController?.dispose();
+    confirmPasswardFocusNode?.dispose();
+    confirmPasswardTextController?.dispose();
   }
 }

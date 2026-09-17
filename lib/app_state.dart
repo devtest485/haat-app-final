@@ -44,11 +44,11 @@ class FFAppState extends ChangeNotifier {
       _pendingMobile = prefs.getString('ff_pendingMobile') ?? _pendingMobile;
     });
     _safeInit(() {
-      _hasLoggedInBefore =
-          prefs.getBool('ff_hasLoggedInBefore') ?? _hasLoggedInBefore;
+      _userPasscode = prefs.getString('ff_userPasscode') ?? _userPasscode;
     });
     _safeInit(() {
-      _userPasscode = prefs.getString('ff_userPasscode') ?? _userPasscode;
+      _hasLoggedInBefore =
+          prefs.getBool('ff_hasLoggedInBefore') ?? _hasLoggedInBefore;
     });
   }
 
@@ -121,6 +121,16 @@ class FFAppState extends ChangeNotifier {
     _mfaToken = value;
   }
 
+  /// The passcode the user set during onboarding.
+  ///
+  /// Checked on the passcode login screen.
+  String _userPasscode = '';
+  String get userPasscode => _userPasscode;
+  set userPasscode(String value) {
+    _userPasscode = value;
+    prefs.setString('ff_userPasscode', value);
+  }
+
   /// True once the user has reached the home screen at least once.
   ///
   /// Switches the app from the first-time welcome to the returning-user login
@@ -130,70 +140,6 @@ class FFAppState extends ChangeNotifier {
   set hasLoggedInBefore(bool value) {
     _hasLoggedInBefore = value;
     prefs.setBool('ff_hasLoggedInBefore', value);
-  }
-
-  String _devOtpCode = '';
-  String get devOtpCode => _devOtpCode;
-  set devOtpCode(String value) {
-    _devOtpCode = value;
-  }
-
-  String _username = '';
-  String get username => _username;
-  set username(String value) {
-    _username = value;
-  }
-
-  bool _hasPassword = false;
-  bool get hasPassword => _hasPassword;
-  set hasPassword(bool value) {
-    _hasPassword = value;
-  }
-
-  bool _hasPasscode = false;
-  bool get hasPasscode => _hasPasscode;
-  set hasPasscode(bool value) {
-    _hasPasscode = value;
-  }
-
-  bool _mobileVerified = false;
-  bool get mobileVerified => _mobileVerified;
-  set mobileVerified(bool value) {
-    _mobileVerified = value;
-  }
-
-  bool _mfaEnabled = false;
-  bool get mfaEnabled => _mfaEnabled;
-  set mfaEnabled(bool value) {
-    _mfaEnabled = value;
-  }
-
-  bool _mustChangePassword = false;
-  bool get mustChangePassword => _mustChangePassword;
-  set mustChangePassword(bool value) {
-    _mustChangePassword = value;
-  }
-
-  String _accountStatus = '';
-  String get accountStatus => _accountStatus;
-  set accountStatus(String value) {
-    _accountStatus = value;
-  }
-
-  String _authStatus = '';
-  String get authStatus => _authStatus;
-  set authStatus(String value) {
-    _authStatus = value;
-  }
-
-  /// The passcode the user set during onboarding.
-  ///
-  /// Checked on the passcode login screen.
-  String _userPasscode = '';
-  String get userPasscode => _userPasscode;
-  set userPasscode(String value) {
-    _userPasscode = value;
-    prefs.setString('ff_userPasscode', value);
   }
 }
 

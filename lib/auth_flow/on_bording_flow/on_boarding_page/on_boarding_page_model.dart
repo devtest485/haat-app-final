@@ -1,12 +1,10 @@
 import '/auth_flow/on_bording_flow/on_boardin_components/first/first_widget.dart';
 import '/auth_flow/on_bording_flow/on_boardin_components/second/second_widget.dart';
 import '/auth_flow/on_bording_flow/on_boardin_components/third/third_widget.dart';
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
-import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'on_boarding_page_widget.dart' show OnBoardingPageWidget;
 import 'package:flutter/material.dart';
@@ -17,12 +15,6 @@ import 'package:provider/provider.dart';
 class OnBoardingPageModel extends FlutterFlowModel<OnBoardingPageWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - newUuid] action in OnBoardingPage widget.
-  String? generatedId;
-  // Stores action output result for [Backend Call - API (RefreshToken)] action in OnBoardingPage widget.
-  ApiCallResponse? refreshResult;
-  // Stores action output result for [Backend Call - API (CredentialStatus)] action in OnBoardingPage widget.
-  ApiCallResponse? credResult;
   // State field(s) for OnBoardingPageView widget.
   PageController? onBoardingPageViewController;
 
