@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Lets a debug build talk to a backend on the developer's own machine.
+
+  Android has refused cleartext HTTP by default since API 28, so a handset pointed at
+  http://<laptop>:3000 fails before a request leaves it — and the failure looks exactly
+  like a server that is down, which is where an afternoon goes.
+
+  This file lives under src/debug only. A release build never sees it, so production
+  still refuses cleartext to anything; the `baseURL` shipped to merchants is HTTPS.
+
+  FlutterFlow exposes only four Android files — AndroidManifest.xml, build.gradle,
+  proguard-rules.pro and MainActivity.kt — so this one cannot be pushed through the DSL
+  and every export deletes it again. It is a local development file, and re-adding it
+  after an export is part of pointing the app at a local server.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

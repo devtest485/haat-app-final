@@ -195,6 +195,52 @@ class FFAppState extends ChangeNotifier {
     _userPasscode = value;
     prefs.setString('ff_userPasscode', value);
   }
+
+  /// What the business sells, as backend category keys — never labels, because
+  /// PATCH /organizations validates against its own catalogue.
+  List<String> _selectedCategories = [];
+  List<String> get selectedCategories => _selectedCategories;
+  set selectedCategories(List<String> value) {
+    _selectedCategories = value;
+  }
+
+  void addToSelectedCategories(String value) {
+    selectedCategories.add(value);
+  }
+
+  void removeFromSelectedCategories(String value) {
+    selectedCategories.remove(value);
+  }
+
+  void removeAtIndexFromSelectedCategories(int index) {
+    selectedCategories.removeAt(index);
+  }
+
+  void updateSelectedCategoriesAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    selectedCategories[index] = updateFn(_selectedCategories[index]);
+  }
+
+  void insertAtIndexInSelectedCategories(int index, String value) {
+    selectedCategories.insert(index, value);
+  }
+
+  /// Where the business sells — one sales-channel key, or empty.
+  String _selectedSalesChannel = '';
+  String get selectedSalesChannel => _selectedSalesChannel;
+  set selectedSalesChannel(String value) {
+    _selectedSalesChannel = value;
+  }
+
+  /// One of the Blink SDK's own names: passport, nationalId, idCard or
+  /// drivingLicence.
+  String _kycDocumentType = 'nationalId';
+  String get kycDocumentType => _kycDocumentType;
+  set kycDocumentType(String value) {
+    _kycDocumentType = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

@@ -40,6 +40,8 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -160,13 +162,14 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                               onTap: () async {
                                 _model.kyc = await actions.haatRunKyc(
                                   context,
+                                  FFAppState().kycDocumentType,
                                 );
                                 if (!(_model.kyc == 'CANCELLED')) {
-                                  if (!(_model.kyc == '')) {
+                                  if (_model.kyc == 'REJECTED') {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          _model.kyc!,
+                                          'We could not verify those documents. Try again, or verify with a different one.',
                                           style: TextStyle(),
                                         ),
                                         duration: Duration(milliseconds: 4000),
@@ -174,7 +177,24 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                                     );
 
                                     context.pushNamed(
-                                        BusinessInfoWidget.routeName);
+                                        ChooseDocumentPageWidget.routeName);
+                                  } else {
+                                    if (!(_model.kyc == '')) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            _model.kyc!,
+                                            style: TextStyle(),
+                                          ),
+                                          duration:
+                                              Duration(milliseconds: 4000),
+                                        ),
+                                      );
+
+                                      context.pushNamed(
+                                          BusinessInfoWidget.routeName);
+                                    }
                                   }
                                 }
 

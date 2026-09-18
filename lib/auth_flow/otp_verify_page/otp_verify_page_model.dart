@@ -50,6 +50,8 @@ class OtpVerifyPageModel extends FlutterFlowModel<OtpVerifyPageWidget> {
 
   // Stores action output result for [Custom Action - haatResendOtp] action in Text widget.
   String? resent;
+  // Stores action output result for [Custom Action - haatDevOtpCode] action in Text widget.
+  String? resentCode;
   // Stores action output result for [Custom Action - haatVerifyOtp] action in Container widget.
   String? verified;
   // Stores action output result for [Custom Action - haatStartupRoute] action in Container widget.

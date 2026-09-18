@@ -31,8 +31,17 @@ import '/custom_code/organization_api.dart';
 /// App State list would also throw away the half that matters — App State would carry
 /// the labels, and [BusinessOption.key] is what `PATCH /organizations` validates.
 ///
-/// So [onChanged] reports **keys**, never labels. The screen keeps them, shows the
-/// count, and submits them unchanged.
+/// ## Why the answer goes to App State
+///
+/// A callback parameter would be the tidier shape, but a custom widget's
+/// parameters have to be declared to FlutterFlow, and there is no action-typed
+/// parameter in the DSL's type constructors — so a widget with an `onChanged`
+/// could not be pushed, and would exist only in the local export. App State is
+/// reachable from both sides and needs nothing the DSL cannot express.
+///
+/// What is written are **keys**, never labels: `PATCH /organizations` validates
+/// against its own catalogue, so the label is for reading and the key is for
+/// sending.
 class BusinessOptionPicker extends StatefulWidget {
   const BusinessOptionPicker({
     super.key,
@@ -40,25 +49,27 @@ class BusinessOptionPicker extends StatefulWidget {
     this.height,
     this.optionSet,
     this.singleSelect,
-    this.selected,
-    this.onChanged,
+    this.layout,
   });
 
   final double? width;
   final double? height;
 
-  /// Which list to show: `categories` (what the business sells) or `salesChannels`
-  /// (where it sells). Anything else shows the categories.
+  /// Which list to show: `salesChannels` (where the business sells) or anything
+  /// else for the categories (what it sells).
   final String? optionSet;
 
   /// One choice only, for "Where would you like to sell?" — default: false.
   final bool? singleSelect;
 
-  /// Keys already chosen, so returning to the screen shows the earlier answer.
-  final List<String>? selected;
-
-  /// The chosen keys, every time they change. Keys, not labels.
-  final Future Function(List<String> selectedKeys)? onChanged;
+  /// `rows` for full-width rows with an icon and a radio, anything else for the
+  /// chip cloud.
+  ///
+  /// Two presentations rather than two widgets: both ask the same question of the
+  /// same endpoint and differ only in how a choice is drawn, and a second widget
+  /// would be a second copy of the fetching, the selection and the failure
+  /// handling — three things that would then have to be fixed twice.
+  final String? layout;
 
   @override
   State<BusinessOptionPicker> createState() => _BusinessOptionPickerState();
@@ -70,7 +81,9 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
   static const _borderColour = Color(0xFF292E38);
 
   List<BusinessOption> _options = const [];
-  late List<String> _selected = List<String>.from(widget.selected ?? const []);
+
+  /// Seeded from App State so coming back to the screen shows the earlier answer.
+  late List<String> _selected = _readSelection();
 
   /// Null while loading, empty once loaded, or the server's own wording on a
   /// failure. The server writes its messages in both languages, so none of them are
@@ -88,19 +101,37 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
   void didUpdateWidget(BusinessOptionPicker old) {
     super.didUpdateWidget(old);
 
-    // The page can hand back a different selection — a Back that restored earlier
-    // answers, or a reset. Ignored while the lists match, so a rebuild caused by
-    // this widget's own onChanged does not fight the user's next tap.
-    final incoming = widget.selected ?? const <String>[];
-    if (!_sameMembers(incoming, _selected)) {
-      setState(() => _selected = List<String>.from(incoming));
+    if (old.optionSet != widget.optionSet) {
+      setState(() => _selected = _readSelection());
+      _load();
     }
-
-    if (old.optionSet != widget.optionSet) _load();
   }
 
-  static bool _sameMembers(List<String> a, List<String> b) =>
-      a.length == b.length && a.toSet().containsAll(b);
+  bool get _isChannels => widget.optionSet == 'salesChannels';
+
+  /// The answer already held for this list.
+  ///
+  /// The channel is one key and the categories are many, so they are two App
+  /// State fields rather than one shared list — a single field would make
+  /// "changed the channel" and "cleared the categories" the same event.
+  List<String> _readSelection() {
+    if (_isChannels) {
+      final channel = FFAppState().selectedSalesChannel;
+
+      return channel.isEmpty ? <String>[] : <String>[channel];
+    }
+
+    return List<String>.from(FFAppState().selectedCategories);
+  }
+
+  void _writeSelection() {
+    if (_isChannels) {
+      FFAppState().selectedSalesChannel =
+          _selected.isEmpty ? '' : _selected.first;
+    } else {
+      FFAppState().selectedCategories = List<String>.from(_selected);
+    }
+  }
 
   Future<void> _load() async {
     setState(() {
@@ -146,7 +177,7 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
       }
     });
 
-    widget.onChanged?.call(List<String>.from(_selected));
+    _writeSelection();
   }
 
   @override
@@ -169,21 +200,179 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
             )
           : _problem != null
               ? _Problem(message: _problem!, onRetry: _load)
-              : Wrap(
-                  spacing: 9,
-                  runSpacing: 12,
-                  children: [
-                    for (final option in _options)
-                      _Chip(
-                        label: option.labelIn(AuthSession.instance.languageCode),
-                        chosen: _selected.contains(option.key),
-                        onTap: () => _toggle(option),
-                        theme: theme,
-                      ),
-                  ],
-                ),
+              : widget.layout == 'rows'
+                  // Scrollable, because the back office maintains this list and
+                  // may add to it. A screen that fitted five channels has no
+                  // reason to fit nine, and the ones past the fold would simply
+                  // not be reachable.
+                  ? ListView.separated(
+                      padding: EdgeInsets.zero,
+                      // Sized by its content and not scrollable itself: the page
+                      // around it scrolls, so a list that also scrolled would be
+                      // a second scrollable inside the first, and a drag would
+                      // have to guess which one it meant. The page is the right
+                      // one to scroll — the title and the Continue button have
+                      // to come with the rows when the catalogue is long.
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _options.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (_, index) {
+                        final option = _options[index];
+
+                        return _OptionRow(
+                          label:
+                              option.labelIn(AuthSession.instance.languageCode),
+                          icon: _iconFor(option.icon),
+                          chosen: _selected.contains(option.key),
+                          onTap: () => _toggle(option),
+                          theme: theme,
+                        );
+                      },
+                    )
+                  // Sized by its own content, like the Wrap it replaced. The page
+                  // node has `enforceCustomWidgetDimensions` cleared, so width and
+                  // height arrive null and this lays out to whatever the chips need
+                  // — which is the only honest answer when the number of runs
+                  // depends on the language and on the catalogue's length.
+                  : Wrap(
+                      spacing: 9,
+                      runSpacing: 12,
+                      children: [
+                        for (final option in _options)
+                          _Chip(
+                            label: option
+                                .labelIn(AuthSession.instance.languageCode),
+                            chosen: _selected.contains(option.key),
+                            onTap: () => _toggle(option),
+                            theme: theme,
+                          ),
+                      ],
+                    ),
     );
   }
+}
+
+/// The icons an option may name, and what they draw.
+///
+/// A lookup table rather than a reflective one: Flutter's tree shaker keeps only the
+/// glyphs it can see referenced, so building `IconData` from a string at runtime ships an
+/// icon font with nothing in it. Every name the back office can usefully choose has to
+/// appear here, which is the cost of letting it choose at all.
+///
+/// An unknown name — one added in the back office before this list caught up — draws
+/// [_fallbackIcon] rather than nothing, so the row still looks like the others.
+const Map<String, IconData> _icons = {
+  'storefront': Icons.storefront_outlined,
+  'restaurant': Icons.restaurant_outlined,
+  'local_pharmacy': Icons.local_pharmacy_outlined,
+  'local_grocery_store': Icons.local_grocery_store_outlined,
+  'devices': Icons.devices_outlined,
+  'handyman': Icons.handyman_outlined,
+  'warehouse': Icons.warehouse_outlined,
+  'local_shipping': Icons.local_shipping_outlined,
+  'badge': Icons.badge_outlined,
+  'shopping_bag': Icons.shopping_bag_outlined,
+  'add_reaction': Icons.add_reaction_outlined,
+  'language': Icons.language_outlined,
+  'bakery_dining': Icons.bakery_dining_outlined,
+  'local_cafe': Icons.local_cafe_outlined,
+  'local_florist': Icons.local_florist_outlined,
+  'checkroom': Icons.checkroom_outlined,
+  'spa': Icons.spa_outlined,
+  'fitness_center': Icons.fitness_center_outlined,
+  'directions_car': Icons.directions_car_outlined,
+  'pets': Icons.pets_outlined,
+  'menu_book': Icons.menu_book_outlined,
+  'construction': Icons.construction_outlined,
+  'agriculture': Icons.agriculture_outlined,
+  'shopping_cart': Icons.shopping_cart_outlined,
+  'card_giftcard': Icons.card_giftcard_outlined,
+  'phone_iphone': Icons.phone_iphone_outlined,
+};
+
+const IconData _fallbackIcon = Icons.category_outlined;
+
+IconData _iconFor(String? name) => _icons[name] ?? _fallbackIcon;
+
+/// One full-width row: icon, label, and the circle that says whether it is chosen.
+///
+/// The shape the sales-channel screen already had. Kept rather than replaced with a chip
+/// because the icons carry meaning here — the list is read down, not scanned across.
+class _OptionRow extends StatelessWidget {
+  const _OptionRow({
+    required this.label,
+    required this.icon,
+    required this.chosen,
+    required this.onTap,
+    required this.theme,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool chosen;
+  final VoidCallback onTap;
+  final FlutterFlowTheme theme;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          height: 86,
+          decoration: BoxDecoration(
+            color: const Color(0xFF141414),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              // The chosen row is outlined rather than filled: filling it would
+              // hide the icon, which is the part that tells the rows apart.
+              color: chosen ? theme.secondary : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+          child: Row(
+            children: [
+              Icon(icon, color: theme.primaryText, size: 26),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.bodyMedium.override(
+                    font: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                    color: theme.primaryText,
+                    fontSize: 17,
+                    letterSpacing: 0,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: chosen ? theme.secondary : Colors.transparent,
+                  border: Border.all(
+                    color: chosen ? theme.secondary : const Color(0xFF4A4A4A),
+                    width: 1.5,
+                  ),
+                ),
+                child: chosen
+                    ? Icon(Icons.check,
+                        size: 16, color: theme.primaryBackground)
+                    : null,
+              ),
+            ],
+          ),
+        ),
+      );
 }
 
 /// One chip. Sized by its own text rather than a fixed width, which is what lets the

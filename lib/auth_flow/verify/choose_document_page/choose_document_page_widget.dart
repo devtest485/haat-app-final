@@ -200,7 +200,7 @@ class _ChooseDocumentPageWidgetState extends State<ChooseDocumentPageWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'Enter your phone number. We\'ll send you a confirmation code there.',
+                                            'Pick the document you would like to verify with.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -246,9 +246,12 @@ class _ChooseDocumentPageWidgetState extends State<ChooseDocumentPageWidget> {
                                             hoverColor: Colors.transparent,
                                             highlightColor: Colors.transparent,
                                             onTap: () async {
+                                              FFAppState().kycDocumentType =
+                                                  'passport';
+                                              safeSetState(() {});
+
                                               context.pushNamed(
-                                                  IdCardScanPageWidget
-                                                      .routeName);
+                                                  VerifyPageWidget.routeName);
                                             },
                                             child: Container(
                                               width: double.infinity,
@@ -320,9 +323,12 @@ class _ChooseDocumentPageWidgetState extends State<ChooseDocumentPageWidget> {
                                             hoverColor: Colors.transparent,
                                             highlightColor: Colors.transparent,
                                             onTap: () async {
+                                              FFAppState().kycDocumentType =
+                                                  'nationalId';
+                                              safeSetState(() {});
+
                                               context.pushNamed(
-                                                  IdCardScanPageWidget
-                                                      .routeName);
+                                                  VerifyPageWidget.routeName);
                                             },
                                             child: Container(
                                               width: double.infinity,
@@ -352,7 +358,7 @@ class _ChooseDocumentPageWidgetState extends State<ChooseDocumentPageWidget> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      'Passport',
+                                                      'National ID',
                                                       style: FlutterFlowTheme
                                                               .of(context)
                                                           .bodyMedium

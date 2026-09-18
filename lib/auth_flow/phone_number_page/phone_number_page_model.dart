@@ -44,6 +44,8 @@ class PhoneNumberPageModel extends FlutterFlowModel<PhoneNumberPageWidget> {
 
   // Stores action output result for [Custom Action - haatRegister] action in Container widget.
   String? registered;
+  // Stores action output result for [Custom Action - haatDevOtpCode] action in Container widget.
+  String? devCode;
 
   @override
   void initState(BuildContext context) {

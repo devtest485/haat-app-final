@@ -148,15 +148,34 @@ class _CustomBottombarState extends State<CustomBottombar> {
     _bottomTabNavigator = navigateTo;
   }
 
+  /// The router this bar is listening to.
+  ///
+  /// Held rather than looked up again in [dispose]. `GoRouter.of(context)` walks the
+  /// inherited widget tree, and by the time dispose runs this element is deactivated —
+  /// "Looking up a deactivated widget's ancestor is unsafe", which is what the framework
+  /// raised on every teardown. The reference is resolved where a dependency is meant to
+  /// be, and the listener is removed from the same object it was added to.
+  GoRouter? _router;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    GoRouter.of(context).routerDelegate.addListener(_onRouteChange);
+
+    final router = GoRouter.of(context);
+    if (identical(router, _router)) return;
+
+    // Dependencies can change more than once, and the old code only ever added — so a
+    // second call left two listeners on the same delegate and rebuilt the page twice
+    // for every route change.
+    _router?.routerDelegate.removeListener(_onRouteChange);
+    _router = router;
+    router.routerDelegate.addListener(_onRouteChange);
   }
 
   @override
   void dispose() {
-    GoRouter.of(context).routerDelegate.removeListener(_onRouteChange);
+    _disposed = true;
+    _router?.routerDelegate.removeListener(_onRouteChange);
     if (_bottomTabNavigator == navigateTo) {
       _bottomTabNavigator = null;
     }
@@ -166,12 +185,25 @@ class _CustomBottombarState extends State<CustomBottombar> {
     super.dispose();
   }
 
+  /// Set in [dispose], and the only reliable guard for the callback below.
+  ///
+  /// `mounted` is not enough: it is read when the frame callback runs, and the
+  /// element can be torn down between that read and `setState` reaching
+  /// `markNeedsBuild`. Navigating quickly — which a run through every route
+  /// does — then fails with "_lifecycleState != _ElementLifecycle.defunct".
+  bool _disposed = false;
+
   void _onRouteChange() {
     if (!mounted) return;
+
+    // Post-frame because the router notifies mid-build, and rebuilding the page
+    // from inside that build is not allowed. The callback is registered on the
+    // binding, which outlives this widget — so one already scheduled still runs
+    // after dispose, and has to be told not to.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() => _pageKeys[_currentIndex]++);
-      }
+      if (_disposed || !mounted) return;
+
+      setState(() => _pageKeys[_currentIndex]++);
     });
   }
 
@@ -358,8 +390,12 @@ class _CustomBottombarState extends State<CustomBottombar> {
                     _buildNavItem(
                       index: 3,
                       label: widget.storeLabel ?? 'mystore',
-                      selectedIcon: 'assets/images/add_business.svg',
-                      unselectedIcon: 'assets/images/add_business.svg',
+                      // add_business.svg went with a FlutterFlow export.
+                      // add_business_white.svg is the same mark and is still
+                      // bundled; useColorFilter tints it either way, so "white"
+                      // describes the file rather than what appears on screen.
+                      selectedIcon: 'assets/images/add_business_white.svg',
+                      unselectedIcon: 'assets/images/add_business_white.svg',
                       useColorFilter: true,
                       iconSize: 28,
                       fallbackIcon: Icons.add_business_outlined,
@@ -450,6 +486,14 @@ class _CustomBottombarState extends State<CustomBottombar> {
         width: iconSize,
         height: iconSize,
         fit: BoxFit.contain,
+        // The same protection Image.asset below already had, and the reason the
+        // bar needed it: a FlutterFlow export removed several SVGs from
+        // assets/images while the code still named one of them, so the tab drew
+        // nothing and every frame reported "Unable to load asset". A raster icon
+        // in that position would have quietly shown the fallback; the vector one
+        // had nowhere to fall back to.
+        placeholderBuilder: (_) =>
+            Icon(fallbackIcon, size: iconSize, color: color),
         colorFilter: useColorFilter
             ? ColorFilter.mode(color, BlendMode.srcIn)
             : (isSelected

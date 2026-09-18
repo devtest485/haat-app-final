@@ -9,14 +9,28 @@ import 'package:flutter/material.dart';
 
 import 'package:blink_kyc/blink_kyc.dart';
 
+/// The document the capture should ask for.
+///
+/// Named by the SDK's own enum so the value that crosses the action boundary and
+/// the value the SDK takes are the same word. An unknown name falls back to the
+/// national ID, which is what every capture used while the choice on
+/// ChooseDocumentPage was wired to nothing.
+DocumentType _documentType(String? name) => switch (name) {
+      'passport' => DocumentType.passport,
+      'idCard' => DocumentType.idCard,
+      'drivingLicence' => DocumentType.drivingLicence,
+      _ => DocumentType.nationalId,
+    };
+
 Future<String> runKycCapture(
   BuildContext context,
   String baseUrl,
   String sessionToken,
+  String? documentType,
 ) async {
   try {
     await BlinkKyc(baseUrl, sessionToken)
-        .document(type: DocumentType.nationalId)
+        .document(type: _documentType(documentType))
         .face()
         .present(context)
         .run();

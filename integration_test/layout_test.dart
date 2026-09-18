@@ -165,7 +165,19 @@ Future<List<String>> _collect(Future<void> Function() action) async {
         message.contains('RenderBox was not laid out') ||
         message.contains('unbounded')) {
       problems.add(_summarise(message));
+
+      return;
     }
+
+    // Anything else is not what this test is about, but dropping it is worse
+    // than letting it through: the framework counts an error nobody dealt with
+    // and ends the run with "a test overrode FlutterError.onError ... had
+    // unexpected additional errors that it could not handle", which says
+    // nothing about what actually went wrong. That assertion was the only
+    // failure left once the three overflowing pages were fixed — the real error
+    // had been hidden behind them the whole time. Forwarded so it is reported
+    // as itself.
+    previous?.call(details);
   };
 
   try {

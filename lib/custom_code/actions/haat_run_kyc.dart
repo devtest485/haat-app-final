@@ -20,10 +20,18 @@ import '/custom_code/actions/run_kyc_capture.dart';
 /// what the provider concluded. The SDK's own documentation is blunt about it —
 /// act on the verdict your backend fetches, not the copy the app reports.
 ///
+/// The document is the merchant's choice, carried in from the screen that asked.
+/// It reaches the SDK and nothing else — `POST /kyc/user/provider-session` takes
+/// no body, so the backend neither knows nor needs to know which one was used;
+/// it reads the provider's verdict either way. That is also why a failed attempt
+/// can simply be run again with a different document: there is no server-side
+/// state tied to the first choice.
+///
 /// Returns `CANCELLED` when the person backed out, which is not a failure and
 /// nothing should be said about it. Empty means carry on without a message.
-/// Anything else is text to show before carrying on.
-Future<String> haatRunKyc(BuildContext context) async {
+/// `REJECTED` means the documents were refused and another attempt is worth
+/// offering. Anything else is text to show before carrying on.
+Future<String> haatRunKyc(BuildContext context, String documentType) async {
   final session = AuthSession.instance;
   final opened = await session.kyc.startSession();
 
@@ -42,6 +50,7 @@ Future<String> haatRunKyc(BuildContext context) async {
     context,
     opened.value.baseUrl,
     opened.value.sessionToken,
+    documentType,
   );
   if (capture != 'OK') return capture;
 
@@ -53,7 +62,11 @@ Future<String> haatRunKyc(BuildContext context) async {
   return switch (collected.value.result) {
     'VERIFIED' => 'Your identity is verified.',
     'REVIEW' => 'Your documents are with our team for a closer look.',
-    'REJECTED' => 'We could not verify those documents. You can try again.',
+    // The one verdict the screen acts on rather than just reports. Returned as
+    // a word, not a sentence, for the same reason CANCELLED is: an action chain
+    // can branch on it, and the wording that goes on screen then lives in one
+    // place instead of being matched against.
+    'REJECTED' => 'REJECTED',
     _ => 'Your verification is still being processed.',
   };
 }

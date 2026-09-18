@@ -595,6 +595,10 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                               _model.phoneTextController.text,
                             );
                             if (_model.registered == '') {
+                              _model.devCode = await actions.haatDevOtpCode();
+                              FFAppState().devOtpCode = _model.devCode!;
+                              safeSetState(() {});
+
                               context.pushNamed(
                                 OtpVerifyPageWidget.routeName,
                                 queryParameters: {

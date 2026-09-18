@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -190,7 +191,31 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(VerifyPageWidget.routeName);
+                                _model.enrolled =
+                                    await actions.haatEnableBiometrics();
+                                if (_model.enrolled == '') {
+                                  context.pushNamed(VerifyPageWidget.routeName);
+                                } else {
+                                  if (_model.enrolled == 'CANCELLED') {
+                                    context
+                                        .pushNamed(VerifyPageWidget.routeName);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          _model.enrolled!,
+                                          style: TextStyle(),
+                                        ),
+                                        duration: Duration(milliseconds: 4000),
+                                      ),
+                                    );
+
+                                    context
+                                        .pushNamed(VerifyPageWidget.routeName);
+                                  }
+                                }
+
+                                safeSetState(() {});
                               },
                               child: Container(
                                 width: double.infinity,

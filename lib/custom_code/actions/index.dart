@@ -21,3 +21,7 @@ export '/custom_code/actions/haat_claim_username.dart' show haatClaimUsername;
 export '/custom_code/actions/haat_enable_biometrics.dart'
     show haatEnableBiometrics;
 export '/custom_code/actions/haat_run_kyc.dart' show haatRunKyc;
+export '/custom_code/actions/haat_categories_chosen.dart'
+    show haatCategoriesChosen;
+export '/custom_code/actions/haat_sales_channel_chosen.dart'
+    show haatSalesChannelChosen;

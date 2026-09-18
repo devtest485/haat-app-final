@@ -7,6 +7,7 @@ class BusinessOption {
     required this.key,
     required this.label,
     required this.labelAr,
+    this.icon,
   });
 
   /// What the backend stores and validates against, and the only part it accepts.
@@ -20,6 +21,13 @@ class BusinessOption {
   final String label;
   final String labelAr;
 
+  /// Material icon name the back office chose, or null to let the screen decide.
+  ///
+  /// A name rather than an asset path: an asset has to be bundled with a release, which
+  /// would leave every option the back office adds as the only row on the screen with a
+  /// blank where the others have a picture.
+  final String? icon;
+
   /// The label in [languageCode], falling back to English when Arabic is absent.
   String labelIn(String languageCode) =>
       languageCode == 'ar' && labelAr.isNotEmpty ? labelAr : label;
@@ -28,6 +36,9 @@ class BusinessOption {
         key: data['key'] as String? ?? '',
         label: data['label'] as String? ?? '',
         labelAr: data['labelAr'] as String? ?? '',
+        icon: (data['icon'] as String?)?.trim().isEmpty ?? true
+            ? null
+            : (data['icon'] as String).trim(),
       );
 }
 

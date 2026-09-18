@@ -794,6 +794,14 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                                                     4000),
                                                           ),
                                                         );
+                                                      } else {
+                                                        _model.resentCode =
+                                                            await actions
+                                                                .haatDevOtpCode();
+                                                        FFAppState()
+                                                                .devOtpCode =
+                                                            _model.resentCode!;
+                                                        safeSetState(() {});
                                                       }
 
                                                       safeSetState(() {});

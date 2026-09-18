@@ -3,7 +3,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
-import '/flutter_flow/custom_functions.dart' as functions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'business_catagerious_widget.dart' show BusinessCatageriousWidget;
 import 'package:flutter/gestures.dart';
@@ -30,30 +30,8 @@ class BusinessCatageriousModel
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click2;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click3;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click4;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click5;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click6;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click7;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click8;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click9;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click10;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click11;
-  // Stores action output result for [Custom Action - toggleSelection] action in Container widget.
-  List<String>? click12;
+  // Stores action output result for [Custom Action - haatCategoriesChosen] action in Container widget.
+  String? chosen;
 
   @override
   void initState(BuildContext context) {}
