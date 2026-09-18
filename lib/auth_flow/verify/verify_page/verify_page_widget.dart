@@ -164,37 +164,46 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                                   context,
                                   FFAppState().kycDocumentType,
                                 );
-                                if (!(_model.kyc == 'CANCELLED')) {
-                                  if (_model.kyc == 'REJECTED') {
+                                if (_model.kyc == 'VERIFIED') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        FFAppState().kycMessage,
+                                        style: TextStyle(),
+                                      ),
+                                      duration: Duration(milliseconds: 4000),
+                                    ),
+                                  );
+
+                                  context
+                                      .pushNamed(BusinessInfoWidget.routeName);
+                                } else if (_model.kyc == 'REVIEW') {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        FFAppState().kycMessage,
+                                        style: TextStyle(),
+                                      ),
+                                      duration: Duration(milliseconds: 4000),
+                                    ),
+                                  );
+
+                                  context
+                                      .pushNamed(BusinessInfoWidget.routeName);
+                                } else if (_model.kyc == 'UNAVAILABLE') {
+                                  context
+                                      .pushNamed(BusinessInfoWidget.routeName);
+                                } else {
+                                  if (!(FFAppState().kycMessage == '')) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'We could not verify those documents. Try again, or verify with a different one.',
+                                          FFAppState().kycMessage,
                                           style: TextStyle(),
                                         ),
                                         duration: Duration(milliseconds: 4000),
                                       ),
                                     );
-
-                                    context.pushNamed(
-                                        ChooseDocumentPageWidget.routeName);
-                                  } else {
-                                    if (!(_model.kyc == '')) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            _model.kyc!,
-                                            style: TextStyle(),
-                                          ),
-                                          duration:
-                                              Duration(milliseconds: 4000),
-                                        ),
-                                      );
-
-                                      context.pushNamed(
-                                          BusinessInfoWidget.routeName);
-                                    }
                                   }
                                 }
 

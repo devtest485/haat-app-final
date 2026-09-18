@@ -173,6 +173,32 @@ class AuthSession extends ChangeNotifier {
   bool get isSignedIn =>
       _status == AuthStatus.signedIn || _status == AuthStatus.onboarding;
 
+  /// Whether the passcode screen stands between this session and the app.
+  ///
+  /// ## Why the passcode locks rather than signs in
+  ///
+  /// `POST /auth/passcode/verify` confirms a passcode for a session that already
+  /// exists and refuses to issue one — six digits is a million combinations,
+  /// which is nothing to a script. So it can never be what gets somebody back in
+  /// after signing out; offering it there produced "Sign In Required" every time,
+  /// whatever the merchant typed.
+  ///
+  /// What it can do is guard a session the app already holds. This is true on the
+  /// run that opened onto stored tokens, and false once the passcode has been
+  /// given — or on a run where the merchant signed in properly, which is a
+  /// stronger proof than the passcode would have been.
+  ///
+  /// **A cold start with no network does not lock.** [_credentials] is null then,
+  /// because the call that reads them did not come back, and the passcode cannot
+  /// be checked without the server either — so locking would shut the owner out
+  /// of their own app with no way through. The stored tokens are trusted for that
+  /// run, which is the same bargain [_resolveStartingStatus] already makes.
+  bool get lockedByPasscode =>
+      _restoredSession && (_credentials?.hasPasscode ?? false);
+
+  /// Whether this run opened onto tokens the last one left behind.
+  bool _restoredSession = false;
+
   String? get userId => _tokens.userId;
 
   /// What the account has set up, as of the last time it was read.
@@ -468,6 +494,10 @@ class AuthSession extends ChangeNotifier {
     // The code has been spent, so there is no reason to keep it around.
     _devOtpCode = null;
 
+    // Whatever got us here — a code, a password, a fingerprint, the passcode
+    // itself — the session is this run's now and the lock has been answered.
+    _restoredSession = false;
+
     await _tokens.save(
       accessToken: issued.accessToken,
       refreshToken: issued.refreshToken,
@@ -489,6 +519,10 @@ class AuthSession extends ChangeNotifier {
 
       return;
     }
+
+    // Opened onto a session from a previous run, which is the case the passcode
+    // guards. Cleared by `_adopt` if the merchant signs in properly instead.
+    _restoredSession = true;
 
     // A stored session is not proof of a live one — the refresh token may have been
     // revoked from another device while the app was closed. Reading the credential

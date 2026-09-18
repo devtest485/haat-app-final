@@ -1,4 +1,3 @@
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -29,14 +28,6 @@ class OtpVerifyPageModel extends FlutterFlowModel<OtpVerifyPageWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - getDeviceLabel] action in OtpVerify widget.
-  String? deviceLabel;
-  // Stores action output result for [Custom Action - getPlatformName] action in OtpVerify widget.
-  String? platformName;
-  // Stores action output result for [Backend Call - API (VerifyOtp)] action in OtpVerify widget.
-  ApiCallResponse? verifyResult;
-  // Stores action output result for [Backend Call - API (CredentialStatus)] action in OtpVerify widget.
-  ApiCallResponse? credResult;
   // State field(s) for Timer widget.
   final timerInitialTimeMs = 30000;
   int timerMilliseconds = 30000;

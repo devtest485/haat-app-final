@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:haat/custom_code/api_result.dart';
-import 'package:haat/custom_code/auth_session.dart';
 import 'package:haat/flutter_flow/nav/nav.dart';
-import 'package:haat/index.dart';
 import 'package:haat/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
+
+import 'sign_in.dart';
 
 /// Boots the app, opens one page, and holds it on screen long enough to
 /// photograph.
@@ -22,7 +21,7 @@ import 'package:integration_test/integration_test.dart';
 ///
 /// Change [_route] to look at a different screen. This is a viewing tool, not a
 /// check — it asserts nothing and is not part of the suite's coverage.
-const String _route = 'LikeBusPage';
+const String _route = 'VerifyPage';
 
 /// How long the page stays up.
 ///
@@ -40,43 +39,16 @@ const Duration _hold = Duration(seconds: 60);
 /// look at.
 const bool _signIn = true;
 
-/// Registers a throwaway number and verifies it, leaving the app signed in.
+/// Options to tap once the page is up, by their visible label. Empty to leave the
+/// screen as it opens.
+const List<String> _tap = ['Start Verification'];
+
+/// How long the untouched page stays up before [_tap] runs.
 ///
-/// Uses the real endpoints rather than writing a token into storage: the point is to
-/// look at a screen in the state a merchant reaches it in, and a hand-made session is
-/// not that state. Depends on the backend returning `devOtpCode`, which every
-/// non-production environment does — against one that does not, this stops and says so.
-Future<void> _register(WidgetTester tester) async {
-  final session = AuthSession.instance;
-  final mobile = '+2499000${DateTime.now().millisecondsSinceEpoch % 100000}';
-
-  await tester.runAsync(() async {
-    final started = await session.register(mobile: mobile);
-
-    if (started is! ApiSuccess) {
-      debugPrint('SIGN-IN FAILED at register: ${started.messageIn('en')}');
-
-      return;
-    }
-
-    final code = session.devOtpCode;
-    if (code == null || code.isEmpty) {
-      debugPrint('SIGN-IN FAILED: the backend did not return devOtpCode.');
-
-      return;
-    }
-
-    final verified = await session.verifyOtp(code: code, mobile: mobile);
-
-    debugPrint(
-      verified is ApiSuccess
-          ? 'SIGNED IN as $mobile'
-          : 'SIGN-IN FAILED at verify: ${verified.messageIn('en')}',
-    );
-  });
-
-  await tester.pump(const Duration(milliseconds: 600));
-}
+/// Two states worth photographing, one run: a screen whose button is only right
+/// when something is chosen is also a screen whose button has to be right when
+/// nothing is. Zero to go straight to the taps.
+const Duration _restHold = Duration(seconds: 3);
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -86,7 +58,7 @@ void main() {
     app.main();
     await tester.pumpAndSettle(const Duration(seconds: 2));
 
-    if (_signIn) await _register(tester);
+    if (_signIn) await signInAsNewMerchant(tester);
 
     appNavigatorKey.currentContext!.goNamed(_route);
 
@@ -95,6 +67,29 @@ void main() {
     await tester.pump();
     for (var frame = 0; frame < 6; frame += 1) {
       await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    if (_tap.isNotEmpty && _restHold > Duration.zero) {
+      debugPrint('SHOWING $_route untouched — capture now.');
+      await tester.runAsync(() => Future<void>.delayed(_restHold));
+    }
+
+    // Tap a few options before the hold, so the picture shows the chosen state
+    // as well as the resting one.
+    //
+    // Done through the tester rather than `adb shell input tap`: the live test
+    // binding does not deliver injected touches the way a running app does, so
+    // taps sent from the host land nowhere and the screen stays untouched.
+    for (final label in _tap) {
+      final target = find.text(label);
+      if (target.evaluate().isEmpty) {
+        debugPrint('NOT FOUND: $label');
+        continue;
+      }
+
+      await tester.tap(target, warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 400));
+      debugPrint('TAPPED: $label');
     }
 
     debugPrint('SHOWING $_route — capture now.');

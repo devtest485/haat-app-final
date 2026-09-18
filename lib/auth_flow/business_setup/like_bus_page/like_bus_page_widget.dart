@@ -42,6 +42,8 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -211,7 +213,7 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                                                   ),
                                             ),
                                             Text(
-                                              'Pick where you sell — you can change it later. We\'ll set you up for it.',
+                                              'Choose as many as you want – you can change later. We\'ll ensure you\'re ready to sell.',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -254,7 +256,7 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                                           child: custom_widgets
                                               .BusinessOptionPicker(
                                             optionSet: 'salesChannels',
-                                            singleSelect: true,
+                                            singleSelect: false,
                                             layout: 'rows',
                                           ),
                                         ),
@@ -298,7 +300,10 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                               width: double.infinity,
                               height: 50.0,
                               decoration: BoxDecoration(
-                                color: _model.select == true
+                                color: FFAppState()
+                                            .selectedSalesChannels
+                                            .length >
+                                        0
                                     ? FlutterFlowTheme.of(context).primaryText
                                     : FlutterFlowTheme.of(context).secondary,
                                 borderRadius: BorderRadius.circular(106.67),
@@ -320,7 +325,10 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                                                     .bodyMedium
                                                     .fontStyle,
                                           ),
-                                          color: _model.select == true
+                                          color: FFAppState()
+                                                      .selectedSalesChannels
+                                                      .length >
+                                                  0
                                               ? FlutterFlowTheme.of(context)
                                                   .primaryBackground
                                               : FlutterFlowTheme.of(context)
@@ -334,7 +342,10 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                                                   .fontStyle,
                                         ),
                                   ),
-                                  if (_model.isSelected.length > 0)
+                                  if (FFAppState()
+                                          .selectedSalesChannels
+                                          .length >
+                                      0)
                                     RichText(
                                       textScaler:
                                           MediaQuery.of(context).textScaler,
@@ -345,7 +356,9 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                                             style: TextStyle(),
                                           ),
                                           TextSpan(
-                                            text: _model.isSelected.length
+                                            text: FFAppState()
+                                                .selectedSalesChannels
+                                                .length
                                                 .toString(),
                                             style: TextStyle(),
                                           ),
@@ -367,7 +380,10 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color: _model.select == true
+                                              color: FFAppState()
+                                                          .selectedSalesChannels
+                                                          .length >
+                                                      0
                                                   ? FlutterFlowTheme.of(context)
                                                       .primaryBackground
                                                   : FlutterFlowTheme.of(context)

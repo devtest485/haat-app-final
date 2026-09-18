@@ -14,8 +14,6 @@ export '/auth_flow/biomatric_page/biomatric_page_widget.dart'
     show BiomatricPageWidget;
 export '/auth_flow/verify/verify_page/verify_page_widget.dart'
     show VerifyPageWidget;
-export '/auth_flow/verify/choose_document_page/choose_document_page_widget.dart'
-    show ChooseDocumentPageWidget;
 export '/auth_flow/verify/id_card_scan_page/id_card_scan_page_widget.dart'
     show IdCardScanPageWidget;
 export '/auth_flow/verify/face_scan_page/face_scan_page_widget.dart'

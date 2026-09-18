@@ -43,6 +43,8 @@ class _BusinessCatageriousWidgetState extends State<BusinessCatageriousWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -290,7 +292,7 @@ class _BusinessCatageriousWidgetState extends State<BusinessCatageriousWidget> {
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: _model.blink == true
+                              color: FFAppState().selectedCategories.length > 0
                                   ? FlutterFlowTheme.of(context).primaryText
                                   : FlutterFlowTheme.of(context).secondary,
                               borderRadius: BorderRadius.circular(106.67),
@@ -312,9 +314,10 @@ class _BusinessCatageriousWidgetState extends State<BusinessCatageriousWidget> {
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
-                                        color: (_model.selectedCategories
-                                                    .isNotEmpty) !=
-                                                null
+                                        color: FFAppState()
+                                                    .selectedCategories
+                                                    .length >
+                                                0
                                             ? FlutterFlowTheme.of(context)
                                                 .primaryBackground
                                             : FlutterFlowTheme.of(context)
@@ -327,7 +330,7 @@ class _BusinessCatageriousWidgetState extends State<BusinessCatageriousWidget> {
                                             .fontStyle,
                                       ),
                                 ),
-                                if (_model.selectedCategories.length > 0)
+                                if (FFAppState().selectedCategories.length > 0)
                                   RichText(
                                     textScaler:
                                         MediaQuery.of(context).textScaler,
@@ -338,7 +341,9 @@ class _BusinessCatageriousWidgetState extends State<BusinessCatageriousWidget> {
                                           style: TextStyle(),
                                         ),
                                         TextSpan(
-                                          text: _model.selectedCategories.length
+                                          text: FFAppState()
+                                              .selectedCategories
+                                              .length
                                               .toString(),
                                           style: TextStyle(),
                                         ),
@@ -360,9 +365,10 @@ class _BusinessCatageriousWidgetState extends State<BusinessCatageriousWidget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                            color: (_model.selectedCategories
-                                                        .isNotEmpty) !=
-                                                    null
+                                            color: FFAppState()
+                                                        .selectedCategories
+                                                        .length >
+                                                    0
                                                 ? FlutterFlowTheme.of(context)
                                                     .primaryBackground
                                                 : FlutterFlowTheme.of(context)

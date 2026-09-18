@@ -80,6 +80,14 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
   static const _chipRadius = 52.0;
   static const _borderColour = Color(0xFF292E38);
 
+  /// The surface a chip or row sits on, and the lighter one it takes when chosen.
+  ///
+  /// Taken from the design rather than the theme: both screens are drawn on the
+  /// dark artwork and the palette's `secondary` is the brand green, which the
+  /// design does not use for a selected option — it lightens the fill instead.
+  static const _restFill = Color(0xFF141414);
+  static const _chosenFill = Color(0xFF3A3A3C);
+
   List<BusinessOption> _options = const [];
 
   /// Seeded from App State so coming back to the screen shows the earlier answer.
@@ -111,26 +119,38 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
 
   /// The answer already held for this list.
   ///
-  /// The channel is one key and the categories are many, so they are two App
-  /// State fields rather than one shared list — a single field would make
-  /// "changed the channel" and "cleared the categories" the same event.
+  /// The two screens keep theirs in two App State fields rather than one shared
+  /// list — a single field would make "changed the channel" and "cleared the
+  /// categories" the same event.
   List<String> _readSelection() {
     if (_isChannels) {
-      final channel = FFAppState().selectedSalesChannel;
-
-      return channel.isEmpty ? <String>[] : <String>[channel];
+      return List<String>.from(FFAppState().selectedSalesChannels);
     }
 
     return List<String>.from(FFAppState().selectedCategories);
   }
 
+  /// Hands the answer to App State, through `update` rather than the setter.
+  ///
+  /// The setters assign and tell nobody; `update` notifies. The Continue button
+  /// on the page above reads this same list for its colour and its count, so
+  /// assigning directly would leave it showing the state the screen opened in
+  /// however many rows were ticked.
   void _writeSelection() {
-    if (_isChannels) {
-      FFAppState().selectedSalesChannel =
-          _selected.isEmpty ? '' : _selected.first;
-    } else {
-      FFAppState().selectedCategories = List<String>.from(_selected);
-    }
+    FFAppState().update(() {
+      if (_isChannels) {
+        FFAppState().selectedSalesChannels = List<String>.from(_selected);
+
+        // The single key `PATCH /organizations` still takes, kept in step.
+        // It goes on being written until that endpoint accepts a list, and is
+        // the first choice rather than the last so that picking a second one
+        // does not quietly change what gets sent.
+        FFAppState().selectedSalesChannel =
+            _selected.isEmpty ? '' : _selected.first;
+      } else {
+        FFAppState().selectedCategories = List<String>.from(_selected);
+      }
+    });
   }
 
   Future<void> _load() async {
@@ -223,7 +243,11 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
                         return _OptionRow(
                           label:
                               option.labelIn(AuthSession.instance.languageCode),
-                          icon: _iconFor(option.icon),
+                          icon: _optionIcon(
+                            option.icon,
+                            size: 26,
+                            colour: theme.primaryText,
+                          ),
                           chosen: _selected.contains(option.key),
                           onTap: () => _toggle(option),
                           theme: theme,
@@ -243,6 +267,11 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
                           _Chip(
                             label: option
                                 .labelIn(AuthSession.instance.languageCode),
+                            icon: _optionIcon(
+                              option.icon,
+                              size: 18,
+                              colour: theme.primaryText,
+                            ),
                             chosen: _selected.contains(option.key),
                             onTap: () => _toggle(option),
                             theme: theme,
@@ -263,37 +292,92 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
 /// An unknown name — one added in the back office before this list caught up — draws
 /// [_fallbackIcon] rather than nothing, so the row still looks like the others.
 const Map<String, IconData> _icons = {
+  // The five the sales-channel screen ships with.
   'storefront': Icons.storefront_outlined,
-  'restaurant': Icons.restaurant_outlined,
-  'local_pharmacy': Icons.local_pharmacy_outlined,
-  'local_grocery_store': Icons.local_grocery_store_outlined,
-  'devices': Icons.devices_outlined,
-  'handyman': Icons.handyman_outlined,
-  'warehouse': Icons.warehouse_outlined,
-  'local_shipping': Icons.local_shipping_outlined,
-  'badge': Icons.badge_outlined,
   'shopping_bag': Icons.shopping_bag_outlined,
   'add_reaction': Icons.add_reaction_outlined,
   'language': Icons.language_outlined,
+  'badge': Icons.badge_outlined,
+
+  // One for every category in the design, so an option added in the back office
+  // has something to pick that matches what the screens already show.
+  'restaurant': Icons.restaurant_outlined, // Food
+  'checkroom': Icons.checkroom_outlined, // Fashion
+  'spa': Icons.spa_outlined, // Beauty
+  'home': Icons.home_outlined, // Home
+  'devices': Icons.devices_outlined, // Electronics
+  'card_giftcard': Icons.card_giftcard_outlined, // Gifts
+  'palette': Icons.palette_outlined, // Handmade
+  'menu_book': Icons.menu_book_outlined, // Books
+  'child_care': Icons.child_care_outlined, // Kids
+  'handyman': Icons.handyman_outlined, // Services
+  'agriculture': Icons.agriculture_outlined, // Livestock, Agriculture
+  'sports_soccer': Icons.sports_soccer_outlined, // Sports
+  'directions_car': Icons.directions_car_outlined, // Automotive
+  'medical_services': Icons.medical_services_outlined, // Health
+  'business_center': Icons.business_center_outlined, // Business
+  'more_horiz': Icons.more_horiz, // Others
+
+  // The rest of the seeded catalogue, and a few near neighbours.
+  'local_pharmacy': Icons.local_pharmacy_outlined,
+  'local_grocery_store': Icons.local_grocery_store_outlined,
+  'warehouse': Icons.warehouse_outlined,
+  'local_shipping': Icons.local_shipping_outlined,
   'bakery_dining': Icons.bakery_dining_outlined,
   'local_cafe': Icons.local_cafe_outlined,
   'local_florist': Icons.local_florist_outlined,
-  'checkroom': Icons.checkroom_outlined,
-  'spa': Icons.spa_outlined,
   'fitness_center': Icons.fitness_center_outlined,
-  'directions_car': Icons.directions_car_outlined,
   'pets': Icons.pets_outlined,
-  'menu_book': Icons.menu_book_outlined,
   'construction': Icons.construction_outlined,
-  'agriculture': Icons.agriculture_outlined,
   'shopping_cart': Icons.shopping_cart_outlined,
-  'card_giftcard': Icons.card_giftcard_outlined,
   'phone_iphone': Icons.phone_iphone_outlined,
+  'diamond': Icons.diamond_outlined,
+  'toys': Icons.toys_outlined,
+  'chair': Icons.chair_outlined,
+  'watch': Icons.watch_outlined,
+  'laptop': Icons.laptop_outlined,
+  'brush': Icons.brush_outlined,
+  'cake': Icons.cake_outlined,
+  'liquor': Icons.liquor_outlined,
+  'hardware': Icons.hardware_outlined,
+  'print': Icons.print_outlined,
+  'school': Icons.school_outlined,
+  'music_note': Icons.music_note_outlined,
+  'camera_alt': Icons.camera_alt_outlined,
+  'flight': Icons.flight_outlined,
+  'cleaning_services': Icons.cleaning_services_outlined,
+  'electrical_services': Icons.electrical_services_outlined,
+  'water_drop': Icons.water_drop_outlined,
+  'eco': Icons.eco_outlined,
 };
 
 const IconData _fallbackIcon = Icons.category_outlined;
 
-IconData _iconFor(String? name) => _icons[name] ?? _fallbackIcon;
+/// What an option's `icon` draws, or null when it has none.
+///
+/// Two kinds of value are accepted, because the design uses both. The rows carry
+/// line icons and name them — `storefront`, `badge` — and those come out of
+/// [_icons]. The chips carry emoji, and an emoji is just text, so it is drawn as
+/// text rather than looked up.
+///
+/// They are told apart by shape: a Material name is lowercase letters, digits and
+/// underscores and nothing else, so anything that is not is treated as a glyph to
+/// print. That way the back office can type either into the same field without
+/// having to say which it meant.
+///
+/// An empty value draws nothing at all — the design's "Others" chip has no icon,
+/// and a fallback there would invent one.
+Widget? _optionIcon(String? name,
+    {required double size, required Color colour}) {
+  final value = name?.trim() ?? '';
+  if (value.isEmpty) return null;
+
+  if (RegExp(r'^[a-z0-9_]+$').hasMatch(value)) {
+    return Icon(_icons[value] ?? _fallbackIcon, color: colour, size: size);
+  }
+
+  return Text(value, style: TextStyle(fontSize: size * 0.8));
+}
 
 /// One full-width row: icon, label, and the circle that says whether it is chosen.
 ///
@@ -309,7 +393,7 @@ class _OptionRow extends StatelessWidget {
   });
 
   final String label;
-  final IconData icon;
+  final Widget? icon;
   final bool chosen;
   final VoidCallback onTap;
   final FlutterFlowTheme theme;
@@ -325,20 +409,17 @@ class _OptionRow extends StatelessWidget {
           width: double.infinity,
           height: 86,
           decoration: BoxDecoration(
-            color: const Color(0xFF141414),
+            // Lightened rather than outlined when chosen, which is what the design
+            // does — the icon and the label stay legible either way.
+            color: chosen
+                ? _BusinessOptionPickerState._chosenFill
+                : _BusinessOptionPickerState._restFill,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              // The chosen row is outlined rather than filled: filling it would
-              // hide the icon, which is the part that tells the rows apart.
-              color: chosen ? theme.secondary : Colors.transparent,
-              width: 1.5,
-            ),
           ),
           padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
           child: Row(
             children: [
-              Icon(icon, color: theme.primaryText, size: 26),
-              const SizedBox(width: 16),
+              if (icon != null) ...[icon!, const SizedBox(width: 16)],
               Expanded(
                 child: Text(
                   label,
@@ -353,22 +434,22 @@ class _OptionRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: chosen ? theme.secondary : Colors.transparent,
-                  border: Border.all(
-                    color: chosen ? theme.secondary : const Color(0xFF4A4A4A),
-                    width: 1.5,
-                  ),
-                ),
-                child: chosen
-                    ? Icon(Icons.check,
-                        size: 16, color: theme.primaryBackground)
-                    : null,
-              ),
+              // An empty ring until chosen, then a filled tick — the design's own
+              // way of saying "this one", and the same shape whether one row is
+              // chosen or several.
+              chosen
+                  ? Icon(Icons.check_circle, size: 24, color: theme.primaryText)
+                  : Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xFF4A4A4A),
+                          width: 1.5,
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),
@@ -380,12 +461,14 @@ class _OptionRow extends StatelessWidget {
 class _Chip extends StatelessWidget {
   const _Chip({
     required this.label,
+    required this.icon,
     required this.chosen,
     required this.onTap,
     required this.theme,
   });
 
   final String label;
+  final Widget? icon;
   final bool chosen;
   final VoidCallback onTap;
   final FlutterFlowTheme theme;
@@ -400,7 +483,9 @@ class _Chip extends StatelessWidget {
         child: Container(
           height: _BusinessOptionPickerState._chipHeight,
           decoration: BoxDecoration(
-            color: chosen ? theme.secondary : Colors.transparent,
+            color: chosen
+                ? _BusinessOptionPickerState._chosenFill
+                : _BusinessOptionPickerState._restFill,
             borderRadius:
                 BorderRadius.circular(_BusinessOptionPickerState._chipRadius),
             border: Border.all(
@@ -408,19 +493,34 @@ class _Chip extends StatelessWidget {
               width: 1,
             ),
           ),
-          alignment: AlignmentDirectional.center,
-          padding: const EdgeInsetsDirectional.fromSTEB(14, 0, 14, 0),
-          child: Text(
-            label,
-            style: theme.bodyMedium.override(
-              font: GoogleFonts.inter(
-                fontWeight: theme.bodyMedium.fontWeight,
-                fontStyle: theme.bodyMedium.fontStyle,
+          // No `alignment`. A Container carrying one expands to whatever the parent
+          // offers instead of sizing to its child — so every chip took the Wrap's
+          // full width, one per row, and the cloud became a list. The padding is
+          // what centres the label, and it leaves the chip as wide as its text.
+          // Taken from the design, which packs three chips to a row at 390 wide.
+          // Every dp here is one the cloud does not have for the next chip, so a
+          // roomier chip is a chip that wraps a row earlier.
+          padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+          child: Row(
+            // Sized to the chip's own contents. Without this the Row takes the
+            // Wrap's full width and the cloud collapses into a list — the same
+            // trap the Container's `alignment` set, one layer in.
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) ...[icon!, const SizedBox(width: 6)],
+              Text(
+                label,
+                style: theme.bodyMedium.override(
+                  font: GoogleFonts.inter(
+                    fontWeight: theme.bodyMedium.fontWeight,
+                    fontStyle: theme.bodyMedium.fontStyle,
+                  ),
+                  color: theme.primaryText,
+                  fontSize: 15,
+                  letterSpacing: 0,
+                ),
               ),
-              color: theme.primaryText,
-              fontSize: 15,
-              letterSpacing: 0,
-            ),
+            ],
           ),
         ),
       );
@@ -466,7 +566,8 @@ class _Problem extends StatelessWidget {
                 width: 1,
               ),
             ),
-            alignment: AlignmentDirectional.center,
+            // Same reason as the chip: an alignment here would stretch the button
+            // across the screen.
             padding: const EdgeInsetsDirectional.fromSTEB(18, 0, 18, 0),
             child: Text(
               'Try again',

@@ -242,68 +242,6 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                                   ),
                                 ),
                               ),
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context
-                                      .pushNamed(PassCodeLoginWidget.routeName);
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 52.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 18.4,
-                                        color: Color(0x0F000000),
-                                        offset: Offset(
-                                          0.0,
-                                          7.0,
-                                        ),
-                                        spreadRadius: 0.0,
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(106.67),
-                                    border: Border.all(
-                                      color: Color(0x45FFFFFF),
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  alignment: AlignmentDirectional(0.0, 0.0),
-                                  child: Text(
-                                    'Login with Passcode',
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .override(
-                                          font: GoogleFonts.interTight(
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleMedium
-                                                    .fontStyle,
-                                          ),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBackground,
-                                          fontSize: 18.0,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleMedium
-                                                  .fontStyle,
-                                          lineHeight: 1.44,
-                                        ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
                             ].divide(SizedBox(height: 12.0)),
                           ),
                         ),

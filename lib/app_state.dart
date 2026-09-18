@@ -241,6 +241,48 @@ class FFAppState extends ChangeNotifier {
   set kycDocumentType(String value) {
     _kycDocumentType = value;
   }
+
+  /// Where the business sells, as backend sales-channel keys.
+  ///
+  /// The count the setup screen shows on Continue is read from here.
+  List<String> _selectedSalesChannels = [];
+  List<String> get selectedSalesChannels => _selectedSalesChannels;
+  set selectedSalesChannels(List<String> value) {
+    _selectedSalesChannels = value;
+  }
+
+  void addToSelectedSalesChannels(String value) {
+    selectedSalesChannels.add(value);
+  }
+
+  void removeFromSelectedSalesChannels(String value) {
+    selectedSalesChannels.remove(value);
+  }
+
+  void removeAtIndexFromSelectedSalesChannels(int index) {
+    selectedSalesChannels.removeAt(index);
+  }
+
+  void updateSelectedSalesChannelsAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    selectedSalesChannels[index] = updateFn(_selectedSalesChannels[index]);
+  }
+
+  void insertAtIndexInSelectedSalesChannels(int index, String value) {
+    selectedSalesChannels.insert(index, value);
+  }
+
+  /// The sentence to show after an identity check, or empty when there is
+  /// nothing to say.
+  ///
+  /// Written by haatRunKyc.
+  String _kycMessage = '';
+  String get kycMessage => _kycMessage;
+  set kycMessage(String value) {
+    _kycMessage = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

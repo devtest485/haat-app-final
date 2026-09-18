@@ -9,13 +9,14 @@ import 'package:flutter/material.dart';
 
 /// Whether the merchant has picked where they sell. Empty means they have.
 ///
-/// One choice, not several: the screen shows a radio beside each row and
-/// `PATCH /organizations` takes a single `salesChannel`. The screen's own subtitle
-/// used to say "choose as many as you want", which agreed with neither.
+/// Reads the list rather than `selectedSalesChannel`, which holds only the first
+/// key: the screen is multi-select — the design shows two channels ticked and a
+/// "Continue (2)" beside them — and the two are written together, so the list is
+/// the one that answers "has anything been chosen".
 ///
 /// Empty-means-yes matches every other action here — the caller compares against
 /// '' and shows whatever else it gets.
 Future<String> haatSalesChannelChosen() async =>
-    FFAppState().selectedSalesChannel.isEmpty
+    FFAppState().selectedSalesChannels.isEmpty
         ? 'Choose where you sell to continue.'
         : '';

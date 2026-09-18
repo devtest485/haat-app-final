@@ -45,7 +45,6 @@ void main() {
     PassCodePageWidget.routeName: {},
     BiomatricPageWidget.routeName: {},
     VerifyPageWidget.routeName: {},
-    ChooseDocumentPageWidget.routeName: {},
     IdCardScanPageWidget.routeName: {},
     FaceScanPageWidget.routeName: {},
     SelfiInfoWidget.routeName: {},

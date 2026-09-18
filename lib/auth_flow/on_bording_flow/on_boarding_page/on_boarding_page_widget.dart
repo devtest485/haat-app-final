@@ -37,7 +37,12 @@ class _OnBoardingPageWidgetState extends State<OnBoardingPageWidget> {
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.startupRoute = await actions.haatStartupRoute();
-      if (_model.startupRoute == 'login') {
+      if (_model.startupRoute == 'passcode') {
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        }
+        context.pushNamed(PassCodeLoginWidget.routeName);
+      } else if (_model.startupRoute == 'login') {
         if (Navigator.of(context).canPop()) {
           context.pop();
         }

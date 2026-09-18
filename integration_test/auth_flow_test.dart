@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:haat/custom_code/actions/haat_startup_route.dart';
+import 'package:haat/custom_code/auth_session.dart';
+import 'package:haat/custom_code/widgets/business_option_picker.dart';
 import 'package:haat/flutter_flow/nav/nav.dart';
 import 'package:haat/index.dart';
 import 'package:haat/main.dart' as app;
 import 'package:integration_test/integration_test.dart';
+
+import 'sign_in.dart';
 
 /// Drives the authentication screens on the handset, with the real keyboard.
 ///
@@ -27,6 +32,18 @@ import 'package:integration_test/integration_test.dart';
 /// ```
 /// flutter test integration_test/auth_flow_test.dart -d <device-id>
 /// ```
+/// Whatever a SnackBar on screen is saying, for a finding that names the reason.
+String _snackText(WidgetTester tester) {
+  final snack = find.descendant(
+    of: find.byType(SnackBar),
+    matching: find.byType(Text),
+  );
+
+  if (snack.evaluate().isEmpty) return '';
+
+  return tester.widget<Text>(snack.first).data ?? '';
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -47,19 +64,59 @@ void main() {
     app.main();
     await tester.pumpAndSettle(const Duration(seconds: 2));
 
+    // Start signed out, whatever the last run left behind.
+    //
+    // Every screen below is one a signed-out merchant sees, and the app no longer
+    // ignores a stored session: one with a passcode set now opens on the passcode
+    // screen and replaces the route underneath. Without this the suite spent its
+    // first run driving a phone-number screen that had already been navigated
+    // away from, and simply stopped.
+    // Fixed pumps, not `pumpAndSettle`: signing out can land on a page that runs
+    // a looping animation, and settling on one of those never returns.
+    await tester.runAsync(() => AuthSession.instance.signOut());
+    for (var frame = 0; frame < 4; frame += 1) {
+      await tester.pump(const Duration(milliseconds: 400));
+    }
+
+    // Which screen is on show, so a finding says where it happened.
+    //
+    // The framework's own report cannot say: by the time an overflow is printed the
+    // widget has usually been torn down, and every entry in its creator chain reads
+    // DEFUNCT. That turns "5 pixels somewhere in the sign-up flow" into a screen name.
+    var current = 'startup';
+
     // Anything the framework raises from here on is a finding, whichever screen it
     // came from.
     final previousOnError = FlutterError.onError;
     FlutterError.onError = (details) {
-      thrown.add(details.exceptionAsString().split('\n').first.trim());
+      thrown.add(
+        '$current: ${details.exceptionAsString().split('\n').first.trim()}',
+      );
       previousOnError?.call(details);
     };
     addTearDown(() => FlutterError.onError = previousOnError);
 
     Future<void> open(String route, [Map<String, String> query = const {}]) async {
+      current = route;
       appNavigatorKey.currentContext!.goNamed(route, queryParameters: query);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
+    }
+
+    /// Waits in real seconds for a request to come back, then paints.
+    ///
+    /// `tester.pump` advances the test's own clock, which costs no wall-clock time
+    /// at all. A screen that has just submitted something is then checked before
+    /// the reply could possibly have arrived, and a screen that is working reads
+    /// as one that said nothing. Every step below that submits waits this way.
+    Future<void> waitForBackend([int seconds = 6]) async {
+      await tester.runAsync(
+        () => Future<void>.delayed(Duration(seconds: seconds)),
+      );
+
+      for (var frame = 0; frame < 5; frame += 1) {
+        await tester.pump(const Duration(milliseconds: 400));
+      }
     }
 
     /// Taps a field, waits for the keyboard, then types — so the layout is exercised
@@ -88,9 +145,12 @@ void main() {
     // ── The code screen ─────────────────────────────────────────────────────
     //
     // The one that needed a device. The six boxes are a custom widget with its own
-    // focus nodes, and the page submits as soon as the last digit lands — so typing
-    // here disposes the widget mid-interaction, which is where a stale focus node or a
-    // defunct context shows up.
+    // focus nodes, and submitting disposes the widget mid-interaction, which is where
+    // a stale focus node or a defunct context shows up.
+    //
+    // Submitted by tapping Continue. The field used to send itself on the sixth
+    // digit, down a chain that could not work — see the DSL's OtpVerifyPage block —
+    // and that chain is gone.
     debugPrint('\nOne-time code');
     await open(OtpVerifyPageWidget.routeName, {'phoneNum': '+249911234567'});
 
@@ -104,9 +164,10 @@ void main() {
         await tester.pump(const Duration(milliseconds: 250));
       }
 
-      // Submission fires on the sixth digit and will be refused — the code is made up.
-      // What matters is that the screen survives it and reports what the server said.
-      await tester.pump(const Duration(seconds: 4));
+      // Refused, because the code is made up. What matters is that the screen
+      // survives being submitted and reports what the server said.
+      await tester.tap(find.text('Continue'), warnIfMissed: false);
+      await waitForBackend();
       check('reports the refusal', find.byType(SnackBar).evaluate().isNotEmpty);
     }
 
@@ -139,8 +200,13 @@ void main() {
 
     check('offers a password route',
         find.text('Login with Password').evaluate().isNotEmpty);
-    check('offers a passcode route',
-        find.text('Login with Passcode').evaluate().isNotEmpty);
+    // The opposite of what this used to check. "Login with Passcode" opened a
+    // screen that called an endpoint which refuses to issue a session, so it
+    // answered "Sign In Required" to every merchant who tried it. The passcode
+    // guards a session the app already holds instead — see the passcode section
+    // below — and this screen is only ever reached when there is none.
+    check('does not offer the passcode as a way in',
+        find.text('Login with Passcode').evaluate().isEmpty);
 
     await open(PasswardLoginWidget.routeName);
 
@@ -156,9 +222,8 @@ void main() {
       await type(signInFields.at(1), 'Wrong!Passw0rd');
 
       await tester.tap(find.text('Continue'), warnIfMissed: false);
-      // Long enough for a round trip; the password hash is scrypt, slow on purpose.
-      await tester.pump(const Duration(seconds: 1));
-      await tester.pump(const Duration(seconds: 6));
+      // Generous, because the password hash is scrypt and slow on purpose.
+      await waitForBackend(10);
 
       // The credentials are deliberately wrong, so a refusal is the right answer — and
       // its presence is the proof the screen is wired to the backend at all.
@@ -181,6 +246,202 @@ void main() {
       // Debounced for two seconds, then asked of the backend.
       await tester.pump(const Duration(seconds: 4));
       check('checked availability without throwing', true);
+    }
+
+    // ── Registration, all the way through ───────────────────────────────────
+    //
+    // The step the suite was missing, and the reason a broken sign-up reached a
+    // handset. The code screen above types six made-up digits and checks that a
+    // refusal appears — which it does whether the screen is working or not. A
+    // screen that rejects *every* code, including the right one, passes that
+    // check perfectly.
+    //
+    // So this types the code the backend actually issued and asks the only
+    // question that matters: did we leave the screen.
+    debugPrint('\nRegistration, end to end');
+
+    final realCode = await registerForRealCode(tester);
+    check(
+      'the backend issued a code',
+      realCode != null,
+      'needs a backend that returns devOtpCode — check baseURL',
+    );
+
+    if (realCode != null) {
+      await open(OtpVerifyPageWidget.routeName, {'phoneNum': realCode.mobile});
+
+      final codeBoxes = find.byType(TextField);
+      if (codeBoxes.evaluate().length == 6) {
+        for (var index = 0; index < 6; index += 1) {
+          await tester.enterText(codeBoxes.at(index), realCode.code[index]);
+          await tester.pump(const Duration(milliseconds: 250));
+        }
+
+        // `hitTestable`, and checked before tapping. A tap that lands on nothing
+        // leaves the screen exactly as a rejected code would, so without this a
+        // missed tap and a broken screen are the same result.
+        final submit = find.text('Continue').hitTestable();
+        check(
+          'the code screen offers a way to submit',
+          submit.evaluate().isNotEmpty,
+          'no tappable Continue on screen',
+        );
+
+        if (submit.evaluate().isNotEmpty) {
+          await tester.tap(submit.first);
+          // The verify, the routing call after it, and the navigation they lead
+          // to — all of it real work on a real network.
+          await waitForBackend();
+        }
+
+        check(
+          'the right code is accepted',
+          find.byType(SnackBar).evaluate().isEmpty,
+          _snackText(tester),
+        );
+        // The session is reported alongside, because the two ways this fails look
+        // identical on screen: a code the server refused, and a code it accepted
+        // followed by a routing step that went nowhere.
+        final signedIn = AuthSession.instance.isSignedIn;
+        var route = '?';
+        await tester.runAsync(() async => route = await haatStartupRoute());
+
+        check(
+          'the code screen is left behind',
+          find.byType(TextField).evaluate().length != 6,
+          'still sitting on the six boxes — signedIn=$signedIn, route=$route',
+        );
+      }
+    }
+
+    // ── The passcode, and what it is for ────────────────────────────────────
+    //
+    // A merchant who set one was offered "Login with Passcode" after signing out,
+    // and got "Sign In Required" every time. `POST /auth/passcode/verify` confirms
+    // a passcode against a session that already exists and deliberately refuses to
+    // issue one — six digits is a million combinations — so that button could
+    // never have worked.
+    //
+    // The passcode locks instead. This checks the decision that makes it so: a run
+    // that opens onto stored tokens, with a passcode set, goes to the passcode
+    // screen rather than straight in.
+    debugPrint('\nPasscode');
+
+    final locked = await registerForRealCode(tester);
+
+    if (locked != null) {
+      var route = '';
+
+      await tester.runAsync(() async {
+        final session = AuthSession.instance;
+        await session.verifyOtp(code: locked.code, mobile: locked.mobile);
+        await session.setPasscode('471903');
+
+        // Signing in during this run is a stronger proof than the passcode, so
+        // nothing is locked yet.
+        route = await haatStartupRoute();
+      });
+
+      check(
+        'a fresh sign-in is not asked for the passcode',
+        route != 'passcode',
+        'got $route',
+      );
+
+      await tester.runAsync(() async {
+        // What a cold start does: build the session from whatever the last run
+        // left in storage. There is no other way to reach that state from here —
+        // the app boots once per test.
+        await AuthSession.initialize();
+        route = await haatStartupRoute();
+      });
+
+      check(
+        'a restored session is asked for the passcode',
+        route == 'passcode',
+        'got $route',
+      );
+    }
+
+    // ── The business-setup screens ──────────────────────────────────────────
+    //
+    // Nothing here names an option: the catalogue is maintained in the back office,
+    // so a test that knew the labels would start failing the day someone renamed
+    // one. What is checked is the Continue button.
+    //
+    // It was drawn right and connected to nothing — every binding read page state
+    // that no code anywhere wrote — so it stayed grey and countless however many
+    // options were ticked. It reads App State now, which the picker does write, and
+    // this is the check that says so rather than a screenshot.
+    //
+    // Both screens fetch their options with a bearer token, so this needs a session.
+    debugPrint('\nBusiness setup');
+
+    /// The Continue button's fill, or null when it is not on screen.
+    Color? continueFill() {
+      final button = find.ancestor(
+        of: find.text('Continue '),
+        matching: find.byType(Container),
+      );
+
+      if (button.evaluate().isEmpty) return null;
+      final decoration = tester.widget<Container>(button.first).decoration;
+
+      return decoration is BoxDecoration ? decoration.color : null;
+    }
+
+    final signedIn = await signInAsNewMerchant(tester);
+    check(
+      'signed in for the setup screens',
+      signedIn,
+      'needs a backend that returns devOtpCode — check baseURL',
+    );
+
+    if (signedIn) {
+      for (final screen in [
+        (route: LikeBusPageWidget.routeName, what: 'where they sell'),
+        (route: BusinessCatageriousWidget.routeName, what: 'what they sell'),
+      ]) {
+        await open(screen.route);
+        // The catalogue is fetched on mount, over the network.
+        await tester.pump(const Duration(seconds: 4));
+
+        // Both layouts — the rows and the chip cloud — make each option an InkWell,
+        // so this finds them without caring which screen it is on.
+        final options = find.descendant(
+          of: find.byType(BusinessOptionPicker),
+          matching: find.byType(InkWell),
+        );
+
+        check(
+          '${screen.what}: the back office filled the list',
+          options.evaluate().length >= 2,
+          'found ${options.evaluate().length}',
+        );
+
+        if (options.evaluate().length < 2) continue;
+
+        final atRest = continueFill();
+        check(
+          '${screen.what}: Continue has no count before choosing',
+          find.textContaining('(2)', findRichText: true).evaluate().isEmpty,
+        );
+
+        for (var index = 0; index < 2; index += 1) {
+          await tester.tap(options.at(index), warnIfMissed: false);
+          await tester.pump(const Duration(milliseconds: 400));
+        }
+
+        check(
+          '${screen.what}: Continue counts both choices',
+          find.textContaining('(2)', findRichText: true).evaluate().isNotEmpty,
+        );
+        check(
+          '${screen.what}: Continue turns on',
+          continueFill() != null && continueFill() != atRest,
+          'still ${continueFill()}',
+        );
+      }
     }
 
     // ── Verdict ─────────────────────────────────────────────────────────────

@@ -93,11 +93,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => VerifyPageWidget(),
         ),
         FFRoute(
-          name: ChooseDocumentPageWidget.routeName,
-          path: ChooseDocumentPageWidget.routePath,
-          builder: (context, params) => ChooseDocumentPageWidget(),
-        ),
-        FFRoute(
           name: IdCardScanPageWidget.routeName,
           path: IdCardScanPageWidget.routePath,
           builder: (context, params) => IdCardScanPageWidget(),
