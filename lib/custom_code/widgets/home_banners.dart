@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+import 'dart:async';
+
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/banner_api.dart';
@@ -43,6 +45,15 @@ class HomeBanners extends StatefulWidget {
 class _HomeBannersState extends State<HomeBanners> {
   final PageController _pages = PageController();
 
+  /// How long each card holds the screen before the next one slides in.
+  ///
+  /// The design's carousel moved on its own, and a merchant who never swipes should
+  /// still see all of them — the second card is the one asking for a QR stand, which
+  /// nobody would find by scrolling past a screen they think is finished.
+  static const _dwell = Duration(seconds: 4);
+
+  Timer? _slide;
+
   List<HomeBanner> _banners = const [];
   int _current = 0;
 
@@ -54,6 +65,7 @@ class _HomeBannersState extends State<HomeBanners> {
 
   @override
   void dispose() {
+    _slide?.cancel();
     _pages.dispose();
     super.dispose();
   }
@@ -64,7 +76,29 @@ class _HomeBannersState extends State<HomeBanners> {
 
     if (result is ApiSuccess<List<HomeBanner>>) {
       setState(() => _banners = result.value);
+      _startSliding();
     }
+  }
+
+  /// Moves to the next card every few seconds, wrapping at the end.
+  ///
+  /// Restarted whenever the page changes, which is what gives a swipe its due: a
+  /// merchant who has just moved to a card gets the full dwell to read it rather than
+  /// whatever was left of the previous one's.
+  void _startSliding() {
+    _slide?.cancel();
+
+    if (_banners.length < 2) return;
+
+    _slide = Timer.periodic(_dwell, (_) {
+      if (!mounted || !_pages.hasClients) return;
+
+      _pages.animateToPage(
+        (_current + 1) % _banners.length,
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   /// Opens what the card points at, when the app has that screen.
@@ -97,7 +131,10 @@ class _HomeBannersState extends State<HomeBanners> {
             child: PageView.builder(
               controller: _pages,
               itemCount: _banners.length,
-              onPageChanged: (index) => setState(() => _current = index),
+              onPageChanged: (index) {
+                setState(() => _current = index);
+                _startSliding();
+              },
               itemBuilder: (context, index) => _card(_banners[index], language),
             ),
           ),
