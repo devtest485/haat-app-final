@@ -71,10 +71,108 @@ class KycProviderOutcome {
 /// The app never reads the verdict from the SDK. The SDK's own documentation is blunt
 /// about it: act on the verdict your backend fetches, not the copy the app reports. A
 /// value that passed through the device is a value the device could have changed.
+/// One document on a case, as the app needs to show it.
+///
+/// No bytes: the phone that uploaded it has no reason to fetch it back, and the body
+/// is fetched one document at a time by the back office through a separately audited
+/// call. What a merchant needs to see is that it arrived.
+class KycDocument {
+  const KycDocument({
+    required this.kind,
+    required this.contentType,
+    required this.byteSize,
+    required this.uploadedAt,
+  });
+
+  /// `trade_licence`, `tax_certificate`, `proof_of_address` for a business.
+  final String kind;
+  final String contentType;
+  final int byteSize;
+  final String uploadedAt;
+
+  factory KycDocument.fromData(Map<String, dynamic> data) => KycDocument(
+        kind: data['kind'] as String? ?? '',
+        contentType: data['contentType'] as String? ?? '',
+        byteSize: (data['byteSize'] as num?)?.toInt() ?? 0,
+        uploadedAt: data['uploadedAt'] as String? ?? '',
+      );
+}
+
+/// A verification case — the business's, in the screens that use this.
+class KycCase {
+  const KycCase({
+    required this.status,
+    required this.editable,
+    required this.complete,
+    required this.documents,
+  });
+
+  /// `draft`, `submitted`, `in_review`, `approved`, `rejected`, `expired`.
+  final String status;
+
+  /// Whether the merchant may still change it. False once it is with the back office,
+  /// which is what stops the screen offering an upload that would be refused.
+  final bool editable;
+
+  /// Every required document is in, so submitting would be accepted.
+  final bool complete;
+
+  final List<KycDocument> documents;
+
+  bool has(String kind) => documents.any((document) => document.kind == kind);
+
+  factory KycCase.fromData(Map<String, dynamic> data) => KycCase(
+        status: data['status'] as String? ?? 'draft',
+        editable: data['editable'] as bool? ?? true,
+        complete: data['complete'] as bool? ?? false,
+        documents: (data['documents'] as List<dynamic>? ?? const [])
+            .whereType<Map<String, dynamic>>()
+            .map(KycDocument.fromData)
+            .toList(),
+      );
+}
+
 class KycApi {
   KycApi(this._client);
 
   final ApiClient _client;
+
+  /// The business's case, opened by the backend if this is the first look at it.
+  ///
+  /// Separate from the person's case above: a merchant proves who they are with a
+  /// national ID and a selfie, and proves the business exists with a trade licence.
+  /// The backend keeps them as two cases for that reason, and refuses a document filed
+  /// against the wrong one.
+  Future<ApiResult<KycCase>> businessCase() => _client.get(
+        '/kyc/organization',
+        parse: (envelope) => KycCase.fromData(envelope.object),
+      );
+
+  /// Sends one business document, replacing whatever was filed under that kind.
+  ///
+  /// The type is read from the file's own bytes by the backend, not from the name, so
+  /// a photograph renamed `.pdf` is refused rather than filed as one.
+  Future<ApiResult<KycCase>> uploadBusinessDocument({
+    required String kind,
+    required List<int> bytes,
+    required String filename,
+  }) =>
+      _client.postFile(
+        '/kyc/organization/documents',
+        bytes: bytes,
+        filename: filename,
+        fields: {'kind': kind},
+        parse: (envelope) => KycCase.fromData(envelope.object),
+      );
+
+  /// Hands the case to the back office.
+  ///
+  /// Refused while anything is outstanding, and the refusal names what is missing —
+  /// which is the message worth showing, rather than one this app invents.
+  Future<ApiResult<KycCase>> submitBusinessCase() => _client.post(
+        '/kyc/organization/submit',
+        parse: (envelope) => KycCase.fromData(envelope.object),
+      );
 
   /// Whether the automated check can run at all.
   ///

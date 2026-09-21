@@ -243,6 +243,10 @@ class ApiClient {
     required String filename,
     required T Function(ApiEnvelope) parse,
     String field = 'file',
+
+    /// Text parts sent beside the file — a KYC upload names the document's kind
+    /// this way, in the same request as the file it describes.
+    Map<String, String> fields = const {},
     bool isRetry = false,
   }) async {
     await ApiConfig.load();
@@ -253,6 +257,7 @@ class ApiClient {
         'Accept-Language': languageCode,
         'Idempotency-Key': _uuid.v4(),
       })
+      ..fields.addAll(fields)
       ..files.add(
         // No content type sent. The server reads the kind of file from its own
         // bytes and ignores the label, so claiming one here would only be a second
@@ -286,6 +291,7 @@ class ApiClient {
         filename: filename,
         parse: parse,
         field: field,
+        fields: fields,
         isRetry: true,
       );
     }

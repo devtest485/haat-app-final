@@ -10,3 +10,7 @@ export '/custom_code/widgets/business_option_picker.dart'
 export '/custom_code/widgets/business_logo_avatar.dart' show BusinessLogoAvatar;
 export '/custom_code/widgets/business_logo_mark.dart' show BusinessLogoMark;
 export '/custom_code/widgets/home_banners.dart' show HomeBanners;
+export '/custom_code/widgets/kyb_documents.dart' show KybDocuments;
+export '/custom_code/widgets/merchant_transactions.dart'
+    show MerchantTransactions;
+export '/custom_code/widgets/recent_transactions.dart' show RecentTransactions;

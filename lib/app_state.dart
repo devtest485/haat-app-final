@@ -319,6 +319,16 @@ class FFAppState extends ChangeNotifier {
   set bban(String value) {
     _bban = value;
   }
+
+  /// True once the statement has come back with at least one line.
+  ///
+  /// Written by the MerchantTransactions widget, read by the empty screen
+  /// beside it.
+  bool _hasTransactions = false;
+  bool get hasTransactions => _hasTransactions;
+  set hasTransactions(bool value) {
+    _hasTransactions = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {
