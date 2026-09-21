@@ -206,7 +206,7 @@ class _SetupBisinessLocationPageWidgetState
                                 .businessNameFieldTextControllerValidator
                                 .asValidator(context),
                           ),
-                        ],
+                        ].divide(SizedBox(height: 16.0)),
                       ),
                     ),
                     Padding(

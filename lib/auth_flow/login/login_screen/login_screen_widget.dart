@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,6 +40,8 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -89,16 +92,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Container(
-                            width: 130.0,
-                            height: 130.0,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: Image.asset(
-                              'assets/images/Text.png',
-                              fit: BoxFit.cover,
-                            ),
+                            child: custom_widgets.BusinessLogoMark(),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
@@ -123,7 +117,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                             ),
                           ),
                           Text(
-                            'Lipper Piiza',
+                            FFAppState().displayName,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -145,7 +139,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 0.0),
                             child: Text(
-                              'Login tou your account',
+                              'Log in to your account',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(

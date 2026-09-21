@@ -166,7 +166,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                   ),
                                             ),
                                             Text(
-                                              'Please enter your username/ Mobile number adn password to contiue',
+                                              'Enter your username or mobile number, and your password.',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -322,7 +322,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                               fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                             ),
                                                                         hintText:
-                                                                            'Repeat your entered password',
+                                                                            'Username or mobile number',
                                                                         hintStyle: FlutterFlowTheme.of(context)
                                                                             .labelMedium
                                                                             .override(
@@ -547,7 +547,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                               fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                             ),
                                                                         hintText:
-                                                                            'Repeat your entered password',
+                                                                            'Your password',
                                                                         hintStyle: FlutterFlowTheme.of(context)
                                                                             .labelMedium
                                                                             .override(

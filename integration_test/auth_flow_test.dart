@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:haat/custom_code/actions/haat_startup_route.dart';
+import 'package:haat/custom_code/api_result.dart';
 import 'package:haat/custom_code/auth_session.dart';
 import 'package:haat/custom_code/widgets/business_option_picker.dart';
 import 'package:haat/flutter_flow/nav/nav.dart';
@@ -359,6 +360,29 @@ void main() {
       check(
         'a restored session is asked for the passcode',
         route == 'passcode',
+        'got $route',
+      );
+
+      // And the passcode opens it. This is the half that was never checked, and
+      // the half that was broken: the unlock read `{"verified": true}` as though
+      // it were a pair of tokens, so every correct passcode came back "the server
+      // sent a reply we could not read" and nobody who set one could get back in.
+      ApiResult<bool>? unlocked;
+
+      await tester.runAsync(() async {
+        unlocked = await AuthSession.instance.unlockWithPasscode('471903');
+        route = await haatStartupRoute();
+      });
+
+      check(
+        'the right passcode is accepted',
+        unlocked is ApiSuccess<bool>,
+        unlocked?.messageIn('en') ?? 'nothing came back',
+      );
+
+      check(
+        'the passcode opens the app',
+        route != 'passcode',
         'got $route',
       );
     }
