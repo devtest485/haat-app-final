@@ -326,14 +326,19 @@ class AuthApi {
         parse: (envelope) => AuthTokens.fromData(envelope.object),
       );
 
-  /// Signs in with the six-digit passcode, on a device already trusted.
-  Future<ApiResult<AuthTokens>> signInWithPasscode({
-    required String passcode,
-  }) =>
+  /// Confirms the six-digit passcode for the session this device already holds.
+  ///
+  /// Answers `{"verified": true}` — deliberately not a session. Six digits is a
+  /// million combinations, which is nothing to a script, so the server will only
+  /// let a passcode re-open an app whose session is already valid. Reading that
+  /// reply as tokens is what made every unlock fail with "the server sent a reply
+  /// we could not read": the reply was fine, the app was asking it for something
+  /// the route had never issued.
+  Future<ApiResult<bool>> verifyPasscode({required String passcode}) =>
       _client.post(
         '/auth/passcode/verify',
         body: {'passcode': passcode},
-        parse: (envelope) => AuthTokens.fromData(envelope.object),
+        parse: (envelope) => envelope.object['verified'] == true,
       );
 
   /// Completes a sign-in that asked for a second factor.

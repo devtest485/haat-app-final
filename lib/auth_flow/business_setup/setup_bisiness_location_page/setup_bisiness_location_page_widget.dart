@@ -77,7 +77,6 @@ class _SetupBisinessLocationPageWidgetState
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 600.0,
                       decoration: BoxDecoration(),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import '/custom_code/haat_result.dart';
 import '/custom_code/auth_session.dart';
 
-/// Signs in with the passcode, on a device that already has a session.
+/// Unlocks the app with the passcode, on a device that already has a session.
 ///
 /// Verified by the server, not compared on the phone: a passcode checked locally
 /// is a passcode anybody holding the handset can change.
@@ -20,7 +20,7 @@ Future<String> haatSignInWithPasscode(String? passcode) async {
   final session = AuthSession.instance;
 
   return HaatResult.messageOrEmpty(
-    await session.signInWithPasscode(passcode ?? ''),
+    await session.unlockWithPasscode(passcode ?? ''),
     session.languageCode,
   );
 }

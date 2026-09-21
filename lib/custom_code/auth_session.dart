@@ -311,12 +311,17 @@ class AuthSession extends ChangeNotifier {
     return result;
   }
 
-  /// Signs in with the passcode on a device that already has a session.
-  Future<ApiResult<AuthTokens>> signInWithPasscode(String passcode) async {
-    final result = await api.signInWithPasscode(passcode: passcode);
+  /// Answers the passcode lock on a device that already has a session.
+  ///
+  /// Not a sign-in: the session is the one the last run left behind, and the
+  /// passcode only settles whether the person holding the phone is its owner. So
+  /// nothing is adopted — [_restoredSession] is cleared, which is the whole of
+  /// what [lockedByPasscode] was waiting for.
+  Future<ApiResult<bool>> unlockWithPasscode(String passcode) async {
+    final result = await api.verifyPasscode(passcode: passcode);
 
-    if (result case ApiSuccess<AuthTokens>(:final value)) {
-      await _adopt(value);
+    if (result case ApiSuccess<bool>(value: true)) {
+      _restoredSession = false;
     }
 
     return result;

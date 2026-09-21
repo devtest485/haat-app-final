@@ -164,7 +164,7 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                                     ),
                                               ),
                                               Text(
-                                                'Please create a 6-digit passcode to use when logging in and approving actions.',
+                                                'Enter your passcode to unlock the app.',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
