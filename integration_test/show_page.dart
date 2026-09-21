@@ -21,7 +21,7 @@ import 'sign_in.dart';
 ///
 /// Change [_route] to look at a different screen. This is a viewing tool, not a
 /// check — it asserts nothing and is not part of the suite's coverage.
-const String _route = 'VerifyPage';
+const String _route = 'BottomBarPages';
 
 /// How long the page stays up.
 ///
@@ -41,7 +41,7 @@ const bool _signIn = true;
 
 /// Options to tap once the page is up, by their visible label. Empty to leave the
 /// screen as it opens.
-const List<String> _tap = ['Start Verification'];
+const List<String> _tap = [];
 
 /// How long the untouched page stays up before [_tap] runs.
 ///

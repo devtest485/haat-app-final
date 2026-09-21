@@ -1,5 +1,6 @@
 import '/custom_code/api_result.dart';
 import '/custom_code/api_client.dart';
+import '/custom_code/api_config.dart';
 
 /// One choice on a business-setup screen, in both languages.
 class BusinessOption {
@@ -118,7 +119,158 @@ class OrganizationApi {
     return result;
   }
 
+  /// Whether this account already has a business, and which one.
+  ///
+  /// Returns null when it has none, which is the ordinary state through the whole of
+  /// onboarding — a merchant registers as a person and becomes a business later.
+  ///
+  /// The endpoint answers with a bare array — one entry per business this account can
+  /// act in — so it is read as a list. It was read as an object at first, which comes
+  /// back empty for an array, which meant this always said "none": a merchant who
+  /// tapped Continue twice was sent to register the same business a second time and
+  /// stopped by the handle already being taken.
+  ///
+  /// The owned one is preferred. Staff can act in a business without owning it, and
+  /// the setup screens are about the merchant's own.
+  Future<ApiResult<String?>> currentOrganizationId() => _client.get(
+        '/organizations',
+        parse: (envelope) {
+          final rows = envelope.list.whereType<Map<String, dynamic>>().toList();
+          if (rows.isEmpty) return null;
+
+          final owned = rows.where((row) => row['isOwner'] == true);
+          final chosen = owned.isNotEmpty ? owned.first : rows.first;
+
+          return chosen['organizationId'] as String?;
+        },
+      );
+
+  /// Registers the business, with its first branch, and makes this account its owner.
+  ///
+  /// **The token in hand goes stale.** It was minted before this account had any
+  /// permission over any business, so the caller has to refresh before the very next
+  /// request — which is why [AuthSession.createOrganization] does that rather than
+  /// leaving it to each screen to remember.
+  ///
+  /// [slug] is the platform-wide handle and has to be unique; a clash comes back as a
+  /// 409 for the caller to resolve, because only they know whether to try another name
+  /// or another handle.
+  Future<ApiResult<String>> create({
+    required String name,
+    required String slug,
+    String? category,
+  }) =>
+      _client.post(
+        '/organizations',
+        body: {
+          'name': name,
+          'slug': slug,
+          if (category != null) 'category': category,
+        },
+        parse: (envelope) => envelope.object['organizationId'] as String,
+      );
+
+  /// Saves what the business sells, where it sells, and where it is.
+  ///
+  /// One call for three screens, matching the endpoint: every field is optional, so a
+  /// screen sends only its own answer and a merchant who stops halfway leaves nothing
+  /// half-written.
+  ///
+  /// [categories] and [salesChannel] carry **keys**, never labels — the backend checks
+  /// them against its own catalogue, which is the same catalogue [setupOptions]
+  /// returned.
+  Future<ApiResult<bool>> updateProfile({
+    String? name,
+    List<String>? categories,
+    String? salesChannel,
+    String? addressLine,
+    String? city,
+    double? latitude,
+    double? longitude,
+  }) =>
+      _client.patch(
+        '/organizations',
+        body: {
+          if (name != null) 'name': name,
+          if (categories != null) 'categories': categories,
+          if (salesChannel != null) 'salesChannel': salesChannel,
+          if (addressLine != null) 'addressLine': addressLine,
+          if (city != null) 'city': city,
+          if (latitude != null) 'latitude': latitude,
+          if (longitude != null) 'longitude': longitude,
+        },
+        parse: (_) => true,
+      );
+
+  /// Sets the business's logo. Returns the address it can now be fetched from.
+  ///
+  /// PNG, JPEG or WebP, up to 512 KB. The server decides what kind of file it is from
+  /// the bytes themselves, so there is nothing to declare here.
+  Future<ApiResult<String>> uploadLogo({
+    required List<int> bytes,
+    required String filename,
+  }) =>
+      _client.postFile(
+        '/organizations/logo',
+        bytes: bytes,
+        filename: filename,
+        parse: (envelope) =>
+            logoUrlFor(envelope.object['logoPath'] as String?) ?? '',
+      );
+
+  /// The business's current logo address, or null if it has none yet.
+  Future<ApiResult<String?>> currentLogoUrl() => _client.get(
+        '/organizations',
+        parse: (envelope) {
+          final rows = envelope.list.whereType<Map<String, dynamic>>().toList();
+          if (rows.isEmpty) return null;
+
+          final owned = rows.where((row) => row['isOwner'] == true);
+          final chosen = owned.isNotEmpty ? owned.first : rows.first;
+
+          return logoUrlFor(chosen['logoPath'] as String?);
+        },
+      );
+
   /// Forgets the cached lists. Called when the session ends, so the next merchant
   /// on this handset does not read the previous one's copy.
   void forget() => _cached = null;
+}
+
+/// Turns the path the backend hands back into an address an image can load from.
+///
+/// The backend returns a path because it cannot know the address the app reached it
+/// by — the same gateway answers on a local address in development and a public one
+/// in production. So the path is joined to whatever [ApiConfig.baseUrl] the app is
+/// actually using.
+///
+/// No token is attached, and none is needed: a logo is branding, served to anyone,
+/// which is also what lets an ordinary network image draw it.
+String? logoUrlFor(String? path) {
+  if (path == null || path.isEmpty) return null;
+
+  return '${ApiConfig.baseUrl}$path';
+}
+
+/// Turns a business name into the handle the platform stores.
+///
+/// `Souq Al Madina` becomes `souq-al-madina`, which is the shape `POST /organizations`
+/// insists on — lowercase words joined by single hyphens.
+///
+/// Derived rather than asked for. A handle is a technical detail of the platform, and
+/// a merchant typing their shop's name has no reason to also invent a URL-safe version
+/// of it. Uniqueness is still the backend's to enforce: a clash comes back as a 409,
+/// which the caller resolves rather than this guessing at a suffix.
+String handleFor(String businessName) {
+  final slug = businessName
+      .toLowerCase()
+      .replaceAll(RegExp(r"[^a-z0-9]+"), '-')
+      .replaceAll(RegExp(r'^-+|-+$'), '');
+
+  // A name with nothing a handle can be built from — all Arabic, say, which is the
+  // ordinary case here. The platform needs *something* unique, and the alternative is
+  // refusing a merchant their own shop's name.
+  return slug.isEmpty
+      ? 'shop-${DateTime.now().millisecondsSinceEpoch.toRadixString(36)}'
+      : slug;
 }

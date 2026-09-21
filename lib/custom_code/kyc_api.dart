@@ -65,8 +65,8 @@ class KycProviderOutcome {
 
 /// Identity verification, as far as the app is concerned.
 ///
-/// Two calls and no more: ask the backend to open a session, then — once the SDK has
-/// finished with the camera — ask the backend what the provider concluded.
+/// Ask whether the automated check is on the table, ask the backend to open a session,
+/// then — once the SDK has finished with the camera — ask what the provider concluded.
 ///
 /// The app never reads the verdict from the SDK. The SDK's own documentation is blunt
 /// about it: act on the verdict your backend fetches, not the copy the app reports. A
@@ -75,6 +75,37 @@ class KycApi {
   KycApi(this._client);
 
   final ApiClient _client;
+
+  /// Whether the automated check can run at all.
+  ///
+  /// An operator switches it off in the back office to stop the platform paying per
+  /// check while a build is being tested, and the provider's credentials can simply be
+  /// absent. Either way the capture is impossible, and this says so before the app
+  /// draws a screen about it.
+  ///
+  /// Asked rather than discovered. The alternative was to open a session and read the
+  /// refusal, which meant a merchant was shown the camera step and asked which document
+  /// they were holding before anything admitted the check was never going to run.
+  ///
+  /// **Only an explicit `false` skips the check**, and that matters twice over.
+  ///
+  /// A backend that predates this field says nothing, and a build that read silence as
+  /// "unavailable" would walk every merchant straight past identity verification the
+  /// moment it shipped ahead of the deployment. The same goes for a failed call: a
+  /// train tunnel is not an operator's decision.
+  ///
+  /// So anything short of a clear no means carry on, and `startProviderSession` gives
+  /// the real answer a moment later — which is exactly what happened before this
+  /// existed. The field only ever saves a merchant from being asked questions about a
+  /// check that was never going to run.
+  Future<bool> isAutomatedAvailable() async {
+    final result = await _client.get(
+      '/kyc/user',
+      parse: (envelope) => envelope.object['automatedAvailable'] != false,
+    );
+
+    return result is! ApiSuccess<bool> || result.value;
+  }
 
   /// Opens a capture session for the signed-in user.
   Future<ApiResult<KycProviderSession>> startSession() => _client.post(

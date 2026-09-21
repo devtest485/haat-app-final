@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -227,8 +228,50 @@ class _BusinessLocatePageWidgetState extends State<BusinessLocatePageWidget> {
                                   hoverColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    context.pushNamed(
-                                        UsernamePageWidget.routeName);
+                                    _model.startupRoute =
+                                        await actions.haatStartupRoute();
+                                    if (_model.startupRoute == 'passcode') {
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                      }
+                                      context.pushNamed(
+                                          PassCodeLoginWidget.routeName);
+                                    } else if (_model.startupRoute == 'login') {
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                      }
+                                      context.pushNamed(
+                                          LoginScreenWidget.routeName);
+                                    } else if (_model.startupRoute ==
+                                        'createPassword') {
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                      }
+                                      context.pushNamed(
+                                          CreatePasswordPageWidget.routeName);
+                                    } else if (_model.startupRoute ==
+                                        'securePage') {
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                      }
+                                      context.pushNamed(
+                                          SecurePageWidget.routeName);
+                                    } else if (_model.startupRoute ==
+                                        'username') {
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                      }
+                                      context.pushNamed(
+                                          UsernamePageWidget.routeName);
+                                    } else if (_model.startupRoute == 'home') {
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                      }
+                                      context.pushNamed(
+                                          BottomBarPagesWidget.routeName);
+                                    }
+
+                                    safeSetState(() {});
                                   },
                                   child: Container(
                                     width: double.infinity,

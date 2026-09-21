@@ -7,3 +7,4 @@ export '/custom_code/widgets/name_pattern_background.dart'
     show NamePatternBackground;
 export '/custom_code/widgets/business_option_picker.dart'
     show BusinessOptionPicker;
+export '/custom_code/widgets/business_logo_avatar.dart' show BusinessLogoAvatar;

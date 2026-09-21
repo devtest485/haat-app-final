@@ -283,6 +283,34 @@ class FFAppState extends ChangeNotifier {
   set kycMessage(String value) {
     _kycMessage = value;
   }
+
+  /// The signed-in merchant's name, or their handle, or their masked number —
+  /// whichever they have.
+  ///
+  /// Never empty for a signed-in account.
+  String _displayName = '';
+  String get displayName => _displayName;
+  set displayName(String value) {
+    _displayName = value;
+  }
+
+  /// The last four digits of the signed-in number, as the backend masks it.
+  ///
+  /// The whole number never reaches the handset.
+  String _mobileMasked = '';
+  String get mobileMasked => _mobileMasked;
+  set mobileMasked(String value) {
+    _mobileMasked = value;
+  }
+
+  /// Address of the business's logo, or empty when it has none.
+  ///
+  /// Written by haatPickBusinessLogo and haatLoadProfile.
+  String _businessLogoUrl = '';
+  String get businessLogoUrl => _businessLogoUrl;
+  set businessLogoUrl(String value) {
+    _businessLogoUrl = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

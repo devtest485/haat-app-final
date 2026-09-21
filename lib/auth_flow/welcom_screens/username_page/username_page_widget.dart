@@ -1,4 +1,3 @@
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -46,8 +45,6 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -233,7 +230,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'Enter your phone number. We\'ll send you a confirmation code there.',
+                                            'This is how customers will find your store.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -318,66 +315,28 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                                     functions.isValidname(_model
                                                                         .usernameTextController
                                                                         .text);
+                                                                safeSetState(
+                                                                    () {});
                                                                 _model.availability =
                                                                     '';
                                                                 safeSetState(
                                                                     () {});
                                                                 if (_model
-                                                                        .isValidUser !=
-                                                                    false) {
-                                                                  _model.checkResult =
-                                                                      await HaatAuthGroup
-                                                                          .checkUsernameCall
-                                                                          .call(
-                                                                    username: functions
-                                                                        .stripAt(_model
-                                                                            .usernameTextController
-                                                                            .text),
-                                                                    baseURL:
-                                                                        FFAppState()
-                                                                            .accessToken,
-                                                                    authToken:
-                                                                        FFAppState()
-                                                                            .languageCode,
-                                                                  );
-
-                                                                  if (!(_model
-                                                                          .checkResult
-                                                                          ?.succeeded ??
-                                                                      true)) {
-                                                                    if (functions.stripAt(_model
-                                                                            .usernameTextController
-                                                                            .text) ==
-                                                                        getJsonField(
-                                                                          (_model.checkResult?.jsonBody ??
-                                                                              ''),
-                                                                          r'''$.data.username''',
-                                                                        ).toString()) {
-                                                                      if (true ==
-                                                                          getJsonField(
-                                                                            (_model.checkResult?.jsonBody ??
-                                                                                ''),
-                                                                            r'''$.data.available''',
-                                                                          )) {
-                                                                        _model.availability =
-                                                                            'yes';
-                                                                        safeSetState(
-                                                                            () {});
-                                                                      } else {
-                                                                        _model.availability =
-                                                                            'no';
-                                                                        safeSetState(
-                                                                            () {});
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                } else if (functions.stripAt(_model
+                                                                        .isValidUser ==
+                                                                    true) {
+                                                                  _model.checked =
+                                                                      await actions
+                                                                          .haatCheckUsername(
+                                                                    _model
                                                                         .usernameTextController
-                                                                        .text) ==
-                                                                    '') {}
-
-                                                                safeSetState(
-                                                                    () {});
+                                                                        .text,
+                                                                  );
+                                                                  _model.availability =
+                                                                      _model
+                                                                          .checked;
+                                                                  safeSetState(
+                                                                      () {});
+                                                                }
 
                                                                 safeSetState(
                                                                     () {});
@@ -546,6 +505,15 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                               ),
                                             ),
                                           ),
+                                          if (!(_model.availability == ''))
+                                            Text(
+                                              _model.availability!,
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .error,
+                                              ),
+                                            ),
                                         ].divide(SizedBox(height: 9.0)),
                                       ),
                                     ),

@@ -228,6 +228,86 @@ class ApiClient {
       _tokens.hasSession;
 
   /// Exchanges the refresh token for a new pair. At most one runs at a time.
+  /// Uploads one file as `multipart/form-data`, under the field name [field].
+  ///
+  /// Takes bytes rather than a path. A path is a thing only a phone has — in a browser
+  /// there is no file system to read from, only the bytes the picker handed over — so
+  /// working from bytes is what lets the same upload run on both.
+  ///
+  /// Retried once on a 401 after a refresh, like every other call here. The body is
+  /// rebuilt for the retry: a multipart request is a stream, and a stream is spent the
+  /// first time it is sent.
+  Future<ApiResult<T>> postFile<T>(
+    String path, {
+    required List<int> bytes,
+    required String filename,
+    required T Function(ApiEnvelope) parse,
+    String field = 'file',
+    bool isRetry = false,
+  }) async {
+    await ApiConfig.load();
+
+    final request = http.MultipartRequest('POST', Uri.parse('$_base$path'))
+      ..headers.addAll({
+        'Accept': 'application/json',
+        'Accept-Language': languageCode,
+        'Idempotency-Key': _uuid.v4(),
+      })
+      ..files.add(
+        // No content type sent. The server reads the kind of file from its own
+        // bytes and ignores the label, so claiming one here would only be a second
+        // opinion nobody consults.
+        http.MultipartFile.fromBytes(field, bytes, filename: filename),
+      );
+
+    final token = _tokens.accessToken;
+    if (token != null) request.headers['Authorization'] = 'Bearer $token';
+
+    http.Response response;
+    try {
+      response = await _http
+          .send(request)
+          .then(http.Response.fromStream)
+          .timeout(ApiConfig.timeout);
+    } on TimeoutException catch (error) {
+      return ApiUnreachable.tooSlow<T>(error);
+    } on http.ClientException catch (error) {
+      return ApiUnreachable.offline<T>(error);
+    }
+
+    final envelope = _decode(response);
+
+    if (_shouldAttemptRefresh(envelope,
+            authenticated: true, isRetry: isRetry) &&
+        await _refresh()) {
+      return postFile(
+        path,
+        bytes: bytes,
+        filename: filename,
+        parse: parse,
+        field: field,
+        isRetry: true,
+      );
+    }
+
+    return envelope.isSuccess
+        ? ApiSuccess<T>(parse(envelope), envelope)
+        : ApiFailure<T>(envelope);
+  }
+
+  /// Mints a new access token now, rather than waiting for one to be refused.
+  ///
+  /// Every other refresh here is reactive: a 401 comes back and the call is retried.
+  /// That is the right shape for an *expired* token and the wrong one for a token that
+  /// is merely out of date — after registering a business the account gains permissions
+  /// its current token was minted without, and the token does not fail, it just does
+  /// less than it should. Waiting for a 401 there means the next call is refused for a
+  /// reason the merchant did nothing to cause.
+  ///
+  /// Shares the in-flight guard with the reactive path, so a refresh already under way
+  /// is awaited rather than duplicated.
+  Future<bool> refreshSession() => _refresh();
+
   Future<bool> _refresh() {
     final existing = _refreshInFlight;
     if (existing != null) return existing;

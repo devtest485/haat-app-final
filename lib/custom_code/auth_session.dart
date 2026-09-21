@@ -455,6 +455,39 @@ class AuthSession extends ChangeNotifier {
     return result;
   }
 
+  /// Re-reads who the signed-in account is.
+  ///
+  /// Returns the profile so the caller can put it wherever the screens read from —
+  /// App State, in this app's case, which is written by `haatLoadProfile` rather than
+  /// here. This class is deliberately free of FlutterFlow: it is ported Dart that the
+  /// tests exercise without a widget tree, and reaching for `FFAppState` here would
+  /// drag the framework into every one of them.
+  ///
+  /// Null on failure, and nothing is disturbed. A greeting is not worth an error in
+  /// front of somebody who has just signed in.
+  Future<UserProfile?> refreshProfile() async {
+    if (!_tokens.hasSession) return null;
+
+    final result = await api.profile();
+
+    if (result case ApiSuccess<UserProfile>(:final value)) {
+      _profile = value;
+      notifyListeners();
+
+      return value;
+    }
+
+    return null;
+  }
+
+  /// The signed-in account, or null before the first successful read.
+  UserProfile? get profile => _profile;
+
+  /// The handle this account chose, if it has one. For building a greeting.
+  String? get username => _credentials?.username;
+
+  UserProfile? _profile;
+
   /// Re-reads which credentials the account has, and updates [status] from it.
   Future<void> refreshCredentials() async {
     if (!_tokens.hasSession) return;
@@ -466,6 +499,53 @@ class AuthSession extends ChangeNotifier {
       _status = _statusFor(value);
       notifyListeners();
     }
+  }
+
+  // ── The business ────────────────────────────────────────────────────────────
+
+  /// Registers the business this account will trade as, and adopts the reach it grants.
+  ///
+  /// The token refresh is the part worth naming. `POST /organizations` makes this
+  /// account the business's owner, which is a set of permissions the token in hand was
+  /// minted without — and nothing about that token *fails*, so the reactive refresh
+  /// never fires. The next call would simply be refused for a reason the merchant did
+  /// nothing to cause. Asking for a new one here closes that window.
+  ///
+  /// ## Two shops with one name
+  ///
+  /// The handle is built from the name, so the second "Flow Bakery" on the platform
+  /// asks for a handle the first already holds and is refused. That is a clash in a
+  /// technical detail the merchant never chose and never sees, so it is not theirs to
+  /// resolve: the handle is retried once with a short suffix, and the name they typed
+  /// is kept exactly as they typed it.
+  Future<ApiResult<String>> createOrganization({
+    required String name,
+    String? category,
+  }) async {
+    var result = await organizations.create(
+      name: name,
+      slug: handleFor(name),
+      category: category,
+    );
+
+    // `CONFLICT` is what a taken handle comes back as — the only conflict creating a
+    // business can raise, so retrying on it cannot mask a different problem.
+    if (result.errorCode == 'CONFLICT') {
+      final suffix = DateTime.now().millisecondsSinceEpoch.toRadixString(36);
+
+      result = await organizations.create(
+        name: name,
+        slug: '${handleFor(name)}-${suffix.substring(suffix.length - 4)}',
+        category: category,
+      );
+    }
+
+    if (result is ApiSuccess<String>) {
+      await _client.refreshSession();
+      await refreshCredentials();
+    }
+
+    return result;
   }
 
   // ── Ending a session ────────────────────────────────────────────────────────
@@ -480,6 +560,7 @@ class AuthSession extends ChangeNotifier {
 
     await _tokens.clear();
     _credentials = null;
+    _profile = null;
     _pendingMobile = null;
     _devOtpCode = null;
     // The option lists are the same for everyone, but the next person to sign in on
@@ -551,6 +632,7 @@ class AuthSession extends ChangeNotifier {
 
   void _onSessionExpired() {
     _credentials = null;
+    _profile = null;
     _status = AuthStatus.signedOut;
     notifyListeners();
   }

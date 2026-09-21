@@ -126,6 +126,49 @@ class CredentialStatus {
       );
 }
 
+/// Who the signed-in account belongs to.
+///
+/// The number arrives masked and there is no way to ask for it whole. That is the
+/// backend's decision and the right one: a screen shows the last four digits so the
+/// owner recognises their own account, and nothing on a handset needs more than that.
+class UserProfile {
+  const UserProfile({
+    required this.userId,
+    required this.fullName,
+    required this.mobileMasked,
+    required this.status,
+  });
+
+  final String userId;
+  final String? fullName;
+  final String mobileMasked;
+
+  /// `active`, `suspended`, or `pending_verification`.
+  final String status;
+
+  factory UserProfile.fromData(Map<String, dynamic> data) => UserProfile(
+        userId: data['userId'] as String? ?? '',
+        fullName: data['fullName'] as String?,
+        mobileMasked: data['mobileMasked'] as String? ?? '',
+        status: data['status'] as String? ?? 'unknown',
+      );
+
+  /// What to greet this person with.
+  ///
+  /// The name if they gave one, then the handle they chose, then the masked number —
+  /// which every account has, so this never comes back empty. A screen that says
+  /// "Welcome" to a blank space is worse than one that says it to a phone number.
+  String displayName(String? username) {
+    final name = fullName?.trim();
+    if (name != null && name.isNotEmpty) return name;
+
+    final handle = username?.trim();
+    if (handle != null && handle.isNotEmpty) return handle;
+
+    return mobileMasked;
+  }
+}
+
 /// The authentication and onboarding routes.
 ///
 /// One method per endpoint, named for what the user is doing rather than for the verb
@@ -242,6 +285,19 @@ class AuthApi {
   Future<ApiResult<CredentialStatus>> credentialStatus() => _client.get(
         '/auth/credentials',
         parse: (envelope) => CredentialStatus.fromData(envelope.object),
+      );
+
+  /// Who the signed-in account is.
+  ///
+  /// The identity comes from the token and never from the request, so there is no id to
+  /// pass and no way to ask after somebody else.
+  ///
+  /// Separate from [credentialStatus], which answers what the account has *set up* —
+  /// whether there is a password, a passcode, a handle. This answers who they are, and
+  /// the screens that greet a merchant by name need the second, not the first.
+  Future<ApiResult<UserProfile>> profile() => _client.get(
+        '/auth/me',
+        parse: (envelope) => UserProfile.fromData(envelope.object),
       );
 
   // ── Signing in ──────────────────────────────────────────────────────────────

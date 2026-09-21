@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/request_stand/request_n_f_c/request_n_f_c_widget.dart';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'home_screen_widget.dart' show HomeScreenWidget;
 import 'package:carousel_slider/carousel_slider.dart';

@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/home_screen/home_screen_widget.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -34,6 +35,7 @@ class _BottomBarPagesWidgetState extends State<BottomBarPagesWidget> {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().hasLoggedInBefore = true;
       safeSetState(() {});
+      await actions.haatLoadProfile();
     });
   }
 

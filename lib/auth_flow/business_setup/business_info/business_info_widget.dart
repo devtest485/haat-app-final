@@ -108,7 +108,7 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Your business account and digital store has been successfully created',
+                            'Set up your business account and digital store.',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium

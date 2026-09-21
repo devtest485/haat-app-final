@@ -444,6 +444,72 @@ void main() {
       }
     }
 
+    // ── Naming the business, and the setup reaching the backend ─────────────
+    //
+    // The step that did not exist. The screen after the categories said the business
+    // had been created and created nothing: there was no field for its name, so there
+    // was nothing to register, so the channels and categories chosen before it were
+    // never sent anywhere. This types a name, taps Continue, and then asks the backend
+    // — not the screen — whether a business now exists.
+    //
+    // Runs on the session the setup screens above left signed in, with their choices
+    // still in App State, which is exactly the state a merchant reaches it in.
+    debugPrint('\nNaming the business');
+
+    if (signedIn) {
+      await open(SetupBisinessLocationPageWidget.routeName);
+
+      final nameField = find.byType(TextFormField);
+      check('asks for the business name', nameField.evaluate().isNotEmpty);
+
+      if (nameField.evaluate().isNotEmpty) {
+        await type(nameField.first, 'Flow Test Bakery');
+
+        // Put the keyboard away and bring Continue into view, as a merchant would.
+        // With the keyboard up the button sits underneath it, which is how the
+        // overflow on this screen first showed itself.
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pump(const Duration(milliseconds: 600));
+
+        final submit = find.text('Continue');
+        if (submit.evaluate().isNotEmpty) {
+          await tester.ensureVisible(submit.first);
+          await tester.pump(const Duration(milliseconds: 400));
+        }
+
+        check(
+          'Continue can be reached with a name typed in',
+          submit.hitTestable().evaluate().isNotEmpty,
+          'the button is off screen or covered',
+        );
+
+        if (submit.hitTestable().evaluate().isNotEmpty) {
+          await tester.tap(submit.hitTestable().first);
+          // Two writes and a token refresh between them, all on a real network.
+          await waitForBackend(10);
+        }
+
+        check(
+          'the name is accepted',
+          find.byType(SnackBar).evaluate().isEmpty,
+          _snackText(tester),
+        );
+
+        String? organizationId;
+        await tester.runAsync(() async {
+          final held =
+              await AuthSession.instance.organizations.currentOrganizationId();
+          organizationId = held.valueOrNull;
+        });
+
+        check(
+          'the business now exists on the backend',
+          organizationId != null && organizationId!.isNotEmpty,
+          'GET /organizations still lists none',
+        );
+      }
+    }
+
     // ── Verdict ─────────────────────────────────────────────────────────────
     debugPrint('');
     if (thrown.isEmpty) {

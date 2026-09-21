@@ -53,6 +53,20 @@ Future<String> haatRunKyc(BuildContext context, String documentType) async {
     return result;
   }
 
+  // The first question, and the cheapest. An operator can switch the automated
+  // check off in the back office — they do it to stop the platform paying per
+  // check while a build is tested — and then nothing below can work.
+  //
+  // Answered before the merchant is asked anything. Until this existed the only
+  // way to find out was to open a session and read the refusal, which meant a
+  // merchant was shown the document sheet, made a choice, and was then moved
+  // silently past a check that had never been going to run. The screen stays —
+  // it is how the step is shown to exist — but pressing the button now simply
+  // carries on.
+  if (!await session.kyc.isAutomatedAvailable()) return outcome(kycUnavailable);
+
+  if (!context.mounted) return outcome(kycCancelled);
+
   // Asked before the session is opened. A session is a paid thing and the
   // provider spends one the moment it is created, so a merchant who opens the
   // sheet and thinks better of it should not have cost anything.
@@ -63,11 +77,10 @@ Future<String> haatRunKyc(BuildContext context, String documentType) async {
   final opened = await session.kyc.startSession();
 
   if (opened is! ApiSuccess<KycProviderSession>) {
-    // Automated verification being switched off in the back office is the one
-    // refusal to move past rather than report. Nothing is broken and retrying
-    // will not help — an operator turned the paid check off, and the merchant
-    // carries on to the manual path without being told about a setting that is
-    // none of their concern.
+    // Switched off between the question above and this call — a narrow window,
+    // but the same answer: nothing is broken, retrying will not help, and the
+    // merchant carries on without being shown a setting that is none of their
+    // concern.
     if (opened.errorCode == ApiErrorCode.kycProviderDisabled) {
       return outcome(kycUnavailable);
     }

@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/request_stand/request_n_f_c/request_n_f_c_widget.dart';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
@@ -45,6 +46,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -100,52 +103,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Container(
-                                                height: double.infinity,
-                                                decoration: BoxDecoration(),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
-                                                child: Stack(
-                                                  children: [
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      24.0),
-                                                          child: Image.asset(
-                                                            'assets/images/e5963e08f43d18fc508f583240a0c1e7aef54ab2.png',
-                                                            width: 31.0,
-                                                            height: 31.0,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  20.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(24.0),
-                                                        child: Image.asset(
-                                                          'assets/images/e5963e08f43d18fc508f583240a0c1e7aef54ab2.png',
-                                                          width: 31.0,
-                                                          height: 31.0,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                child: custom_widgets
+                                                    .BusinessLogoAvatar(),
                                               ),
                                               Column(
                                                 mainAxisSize: MainAxisSize.max,
@@ -183,7 +142,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                         ),
                                                   ),
                                                   Text(
-                                                    'AHMED ALAMIN',
+                                                    FFAppState().displayName,
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium

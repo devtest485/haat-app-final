@@ -1,4 +1,3 @@
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -19,7 +18,7 @@ class UsernamePageModel extends FlutterFlowModel<UsernamePageWidget> {
 
   bool isSubmitting = false;
 
-  String? availability;
+  String? availability = '';
 
   ///  State fields for stateful widgets in this page.
 
@@ -27,8 +26,8 @@ class UsernamePageModel extends FlutterFlowModel<UsernamePageWidget> {
   FocusNode? usernameFocusNode;
   TextEditingController? usernameTextController;
   String? Function(BuildContext, String?)? usernameTextControllerValidator;
-  // Stores action output result for [Backend Call - API (CheckUsername)] action in Username widget.
-  ApiCallResponse? checkResult;
+  // Stores action output result for [Custom Action - haatCheckUsername] action in Username widget.
+  String? checked;
   // Stores action output result for [Custom Action - haatClaimUsername] action in Container widget.
   String? claimed;
 
