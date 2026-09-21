@@ -88,3 +88,5 @@ export '/auth_flow/login/pass_code_login/pass_code_login_widget.dart'
     show PassCodeLoginWidget;
 export '/auth_flow/login/login_screen/login_screen_widget.dart'
     show LoginScreenWidget;
+export '/home_screens/new_order_flow/transactions_detials/transactions_detials_widget.dart'
+    show TransactionsDetialsWidget;

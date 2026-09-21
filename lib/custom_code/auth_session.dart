@@ -5,6 +5,7 @@ import '/custom_code/api_client.dart';
 import '/custom_code/kyc_api.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_api.dart';
+import '/custom_code/banner_api.dart';
 import '/custom_code/biometric_key_store.dart';
 import '/custom_code/device_identity.dart';
 import '/custom_code/organization_api.dart';
@@ -139,6 +140,9 @@ class AuthSession extends ChangeNotifier {
   /// The merchant's business, and the option lists its setup screens render. Shares
   /// the client for the same reason.
   late final OrganizationApi organizations = OrganizationApi(_client);
+
+  /// The cards on the home screen, which the platform maintains rather than the app.
+  late final BannerApi banners = BannerApi(_client);
 
   /// The device key behind biometric sign-in. Held here so the screens that offer it and
   /// the screen that enrols it are talking to the same thing.

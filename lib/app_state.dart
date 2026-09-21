@@ -311,6 +311,14 @@ class FFAppState extends ChangeNotifier {
   set businessLogoUrl(String value) {
     _businessLogoUrl = value;
   }
+
+  /// The business's account number, as a value — the line it is written in is
+  /// made from it by the bbanLine function.
+  String _bban = 'SA 8891 8891 8812 1990';
+  String get bban => _bban;
+  set bban(String value) {
+    _bban = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

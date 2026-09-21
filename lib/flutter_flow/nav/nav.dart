@@ -296,6 +296,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: LoginScreenWidget.routeName,
           path: LoginScreenWidget.routePath,
           builder: (context, params) => LoginScreenWidget(),
+        ),
+        FFRoute(
+          name: TransactionsDetialsWidget.routeName,
+          path: TransactionsDetialsWidget.routePath,
+          builder: (context, params) => TransactionsDetialsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

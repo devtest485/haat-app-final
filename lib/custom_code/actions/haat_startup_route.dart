@@ -37,7 +37,19 @@ Future<String> haatStartupRoute() async {
   // the account and its owner until the owner replaces it.
   if (credentials.mustChangePassword) return 'createPassword';
   if (!credentials.hasPassword) return 'createPassword';
-  if (!credentials.hasPasscode) return 'securePage';
+
+  // A missing passcode is deliberately *not* a step to be sent back to.
+  //
+  // It used to be, and that is what put a merchant who had just named their
+  // business back on the identity screen: naming it ends by asking this function
+  // where to go, the answer was "set a passcode", and the passcode screen hands
+  // on to biometrics, which hands on to verification, which hands on to business
+  // setup — the whole of onboarding again, for somebody who had just finished it.
+  //
+  // The passcode is offered once, during onboarding, with "Not now" beside it. A
+  // merchant who declines has an account that works; what they do not have is the
+  // lock on re-opening the app, which is theirs to decline. It is offered again
+  // from settings, not by refusing to let them past.
 
   final username = credentials.username;
   if (username == null || username.isEmpty) return 'username';

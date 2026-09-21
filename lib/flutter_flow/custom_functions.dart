@@ -12,3 +12,4 @@ export '/custom_code/functions/mask_phone_number.dart';
 export '/custom_code/functions/is_category_selected.dart';
 export '/custom_code/functions/check_length.dart';
 export '/custom_code/functions/strip_at.dart';
+export '/custom_code/functions/bban_line.dart';
