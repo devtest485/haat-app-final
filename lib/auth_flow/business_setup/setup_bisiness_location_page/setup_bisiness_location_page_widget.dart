@@ -160,7 +160,15 @@ class _SetupBisinessLocationPageWidgetState
                               obscureText: false,
                               decoration: InputDecoration(
                                 labelText: 'Business name',
+                                labelStyle: TextStyle(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
                                 hintText: 'What your customers know you by',
+                                hintStyle: TextStyle(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0x00000000),
@@ -202,9 +210,16 @@ class _SetupBisinessLocationPageWidgetState
                                   ),
                                 ),
                                 filled: true,
+                                fillColor: Color(0xFF1D1D1D),
+                                contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 18.0, 16.0, 18.0),
                               ),
-                              style: TextStyle(),
+                              style: TextStyle(
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
                               maxLines: null,
+                              cursorColor:
+                                  FlutterFlowTheme.of(context).primaryText,
                               validator: _model
                                   .businessNameFieldTextControllerValidator
                                   .asValidator(context),

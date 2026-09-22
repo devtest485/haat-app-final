@@ -32,7 +32,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
     super.initState();
     _model = createModel(context, () => UsernamePageModel());
 
-    _model.usernameTextController ??= TextEditingController(text: '@');
+    _model.usernameTextController ??= TextEditingController();
     _model.usernameFocusNode ??= FocusNode();
   }
 
@@ -286,6 +286,15 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                   mainAxisSize:
                                                       MainAxisSize.max,
                                                   children: [
+                                                    Text(
+                                                      '@',
+                                                      style: TextStyle(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                      ),
+                                                    ),
                                                     Expanded(
                                                       child: Padding(
                                                         padding:
@@ -571,7 +580,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: Text(
-                              'Continue',
+                              functions.handleButtonLabel(_model.isValidUser)!,
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
