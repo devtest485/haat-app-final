@@ -12,6 +12,17 @@ import 'package:flutter/material.dart';
 // custom widget has to ask for.
 import 'package:provider/provider.dart';
 
+/// The same default the home screen shows before a logo exists: the brand's company
+/// mark on white, inside the circle an uploaded logo would fill. See
+/// [BusinessLogoAvatar] for why it is drawn on white.
+Widget _defaultMark(double size) => Padding(
+      padding: EdgeInsets.all(size * 0.22),
+      child: Image.asset(
+        'assets/images/button_company_icon.png',
+        fit: BoxFit.contain,
+      ),
+    );
+
 /// The business's logo, shown and nothing more.
 ///
 /// The same picture as [BusinessLogoAvatar] without the tap: this is used where
@@ -48,18 +59,13 @@ class BusinessLogoMark extends StatelessWidget {
           height: size,
           color: Colors.white,
           child: url.isEmpty
-              ? Icon(Icons.storefront_outlined,
-                  size: size * 0.45, color: Colors.black54)
+              ? _defaultMark(size)
               : Image.network(
                   url,
                   fit: BoxFit.cover,
-                  // A broken address shows the storefront rather than a broken
+                  // A broken address shows the default mark rather than a broken
                   // image, so a failed load never looks like a failed app.
-                  errorBuilder: (_, __, ___) => Icon(
-                    Icons.storefront_outlined,
-                    size: size * 0.45,
-                    color: Colors.black54,
-                  ),
+                  errorBuilder: (_, __, ___) => _defaultMark(size),
                 ),
         ),
       ),
