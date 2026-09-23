@@ -11,6 +11,7 @@ import '/custom_code/device_identity.dart';
 import '/custom_code/organization_api.dart';
 import '/custom_code/token_store.dart';
 import '/custom_code/transaction_api.dart';
+import '/custom_code/wallet_api.dart';
 
 /// What a biometric sign-in attempt came to.
 ///
@@ -147,6 +148,9 @@ class AuthSession extends ChangeNotifier {
 
   /// What has moved through the business's account.
   late final TransactionApi transactions = TransactionApi(_client);
+
+  /// What the business holds, bank by bank.
+  late final WalletApi wallet = WalletApi(_client);
 
   /// The device key behind biometric sign-in. Held here so the screens that offer it and
   /// the screen that enrols it are talking to the same thing.

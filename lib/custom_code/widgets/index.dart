@@ -14,3 +14,4 @@ export '/custom_code/widgets/kyb_documents.dart' show KybDocuments;
 export '/custom_code/widgets/merchant_transactions.dart'
     show MerchantTransactions;
 export '/custom_code/widgets/recent_transactions.dart' show RecentTransactions;
+export '/custom_code/widgets/wallet_balance.dart' show WalletBalance;
