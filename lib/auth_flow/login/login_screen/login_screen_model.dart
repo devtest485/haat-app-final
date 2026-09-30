@@ -10,6 +10,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreenModel extends FlutterFlowModel<LoginScreenWidget> {
+  /// Whether this handset holds a device key, so the fingerprint option is shown.
+  bool hasBiometricKey = false;
+
+  /// Whether this handset was bound for passcode sign-in, so that option is shown.
+  bool hasPasscodeSignIn = false;
+
+  /// Set once the fingerprint is accepted, so the mark turns into a tick.
+  bool biometricDone = false;
+
+  /// True while the prompt is up, so a second tap cannot spend a second challenge.
+  bool isSigningIn = false;
+
+  // Stores action output result for [Custom Action - haatSignInWithBiometrics].
+  String? biometricSignIn;
   @override
   void initState(BuildContext context) {}
 

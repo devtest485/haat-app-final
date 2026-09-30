@@ -133,6 +133,11 @@ abstract final class ApiErrorCode {
   /// that is none of their concern.
   static const String kycProviderDisabled = 'KYC_PROVIDER_DISABLED';
 
+  /// The handset's passcode secret matches nothing on the server — the device was
+  /// revoked or bound again elsewhere. The secret will never work again, so the
+  /// "Login with Passcode" option is withdrawn rather than offered to fail.
+  static const String passcodeDeviceNotBound = 'PASSCODE_DEVICE_NOT_BOUND';
+
   /// Not authenticated.
   ///
   /// Note that a rejected sign-in returns this too — the same code covers "your token

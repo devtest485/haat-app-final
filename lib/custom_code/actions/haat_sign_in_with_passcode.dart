@@ -10,7 +10,12 @@ import 'package:flutter/material.dart';
 import '/custom_code/haat_result.dart';
 import '/custom_code/auth_session.dart';
 
-/// Unlocks the app with the passcode, on a device that already has a session.
+/// Gets past the passcode screen. Empty means it worked.
+///
+/// The same keypad serves two cases. With a session already on the phone, the
+/// passcode unlocks it. After a sign-out there is no session, and the passcode
+/// signs in — together with the secret this handset was given while it was
+/// signed in, never on its own.
 ///
 /// Verified by the server, not compared on the phone: a passcode checked locally
 /// is a passcode anybody holding the handset can change.
@@ -19,8 +24,15 @@ import '/custom_code/auth_session.dart';
 Future<String> haatSignInWithPasscode(String? passcode) async {
   final session = AuthSession.instance;
 
+  if (session.isSignedIn) {
+    return HaatResult.messageOrEmpty(
+      await session.unlockWithPasscode(passcode ?? ''),
+      session.languageCode,
+    );
+  }
+
   return HaatResult.messageOrEmpty(
-    await session.unlockWithPasscode(passcode ?? ''),
+    await session.signInWithPasscode(passcode ?? ''),
     session.languageCode,
   );
 }

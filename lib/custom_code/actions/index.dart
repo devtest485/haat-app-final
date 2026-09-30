@@ -33,3 +33,9 @@ export '/custom_code/actions/haat_pick_business_logo.dart'
 export '/custom_code/actions/haat_submit_kyb.dart' show haatSubmitKyb;
 export '/custom_code/actions/haat_has_transactions.dart'
     show haatHasTransactions;
+export '/custom_code/actions/haat_has_biometric_key.dart'
+    show haatHasBiometricKey;
+export '/custom_code/actions/haat_sign_in_with_biometrics.dart'
+    show haatSignInWithBiometrics;
+export '/custom_code/actions/haat_has_passcode_sign_in.dart'
+    show haatHasPasscodeSignIn;

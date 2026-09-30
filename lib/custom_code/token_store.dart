@@ -32,12 +32,16 @@ class TokenStore {
   static const _userIdKey = 'haat.userId';
   static const _deviceKey = 'haat.deviceFingerprint';
   static const _deviceIdKey = 'haat.deviceId';
+  static const _passcodeSecretKey = 'haat.passcodeDeviceSecret';
+  static const _passcodeUserKey = 'haat.passcodeUserId';
 
   String? _access;
   String? _refresh;
   String? _userId;
   String? _deviceId;
   String? _fingerprint;
+  String? _passcodeSecret;
+  String? _passcodeUserId;
 
   /// The current access token, or null when signed out.
   ///
@@ -59,6 +63,17 @@ class TokenStore {
 
   bool get hasSession => _refresh != null;
 
+  /// The secret that, together with the passcode, signs this handset back in.
+  ///
+  /// Issued by `POST /auth/passcode/device` to a session that was already open here.
+  /// The passcode alone is six digits and never enough to open a session; this is the
+  /// half that proves the request comes from a phone the owner has signed in on.
+  String? get passcodeSecret => _passcodeSecret;
+
+  /// Whose account [passcodeSecret] belongs to. A second person signing in on the same
+  /// phone needs their own, and this is how the session knows the stored one is not it.
+  String? get passcodeUserId => _passcodeUserId;
+
   /// Loads whatever the last run left behind. Call once, at startup.
   Future<void> restore() async {
     _access = await _read(_accessKey);
@@ -66,6 +81,29 @@ class TokenStore {
     _userId = await _read(_userIdKey);
     _deviceId = await _read(_deviceIdKey);
     _fingerprint = await _read(_deviceKey);
+    _passcodeSecret = await _read(_passcodeSecretKey);
+    _passcodeUserId = await _read(_passcodeUserKey);
+  }
+
+  Future<void> savePasscodeSecret({
+    required String userId,
+    required String secret,
+  }) async {
+    _passcodeSecret = secret;
+    _passcodeUserId = userId;
+
+    await _write(_passcodeSecretKey, secret);
+    await _write(_passcodeUserKey, userId);
+  }
+
+  /// Forgets the passcode secret — once the server has stopped accepting it, offering
+  /// "Login with Passcode" would only ever produce a refusal.
+  Future<void> clearPasscodeSecret() async {
+    _passcodeSecret = null;
+    _passcodeUserId = null;
+
+    await _delete(_passcodeSecretKey);
+    await _delete(_passcodeUserKey);
   }
 
   Future<void> save({
@@ -105,6 +143,8 @@ class TokenStore {
     await _write(_refreshKey, refreshToken);
   }
 
+  /// Ends the session here. The passcode secret survives, like the fingerprint: it is
+  /// what lets the owner sign back in with the passcode after signing out.
   Future<void> clear() async {
     _access = null;
     _refresh = null;

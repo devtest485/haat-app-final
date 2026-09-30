@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '/custom_code/api_client.dart';
+import '/custom_code/api_envelope.dart';
 import '/custom_code/kyc_api.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_api.dart';
@@ -339,6 +340,62 @@ class AuthSession extends ChangeNotifier {
     return result;
   }
 
+  /// Whether "Login with Passcode" can work here: this handset was bound while signed in.
+  bool get hasPasscodeSignIn => _tokens.passcodeSecret != null;
+
+  /// Signs in with the passcode, after a sign-out, on a handset that was bound for it.
+  ///
+  /// The passcode is never enough by itself — six digits is nothing to a script. It goes
+  /// with the secret the server issued to a session that was open on this phone, so a
+  /// stranger who knows the digits still needs this handset, and a copied secret still
+  /// needs the digits. Wrong digits count towards the same lockout as a wrong password.
+  Future<ApiResult<AuthTokens>> signInWithPasscode(String passcode) async {
+    final result = await api.signInWithPasscode(
+      deviceSecret: _tokens.passcodeSecret ?? '',
+      passcode: passcode,
+    );
+
+    if (result case ApiSuccess<AuthTokens>(:final value)) {
+      await _adopt(value);
+    } else if (result.errorCode == ApiErrorCode.passcodeDeviceNotBound) {
+      // The server no longer recognises this handset's secret — the device was revoked,
+      // or another binding replaced it. Stop offering an option that cannot succeed.
+      await _tokens.clearPasscodeSecret();
+      notifyListeners();
+    }
+
+    return result;
+  }
+
+  /// Asks the server for this handset's passcode secret, and keeps it.
+  ///
+  /// Quiet on failure: passcode sign-in is a convenience, and the owner has just signed
+  /// in or set a passcode successfully — nothing about that should be reported as broken
+  /// because this extra step did not come back.
+  Future<void> _bindPasscodeDevice() async {
+    final userId = _tokens.userId;
+    if (userId == null) return;
+
+    final result = await api.bindPasscodeDevice();
+
+    if (result case ApiSuccess<String>(:final value)) {
+      await _tokens.savePasscodeSecret(userId: userId, secret: value);
+      notifyListeners();
+    }
+  }
+
+  /// Binds passcode sign-in when the account has a passcode and this handset does not
+  /// yet hold that account's secret.
+  Future<void> _ensurePasscodeBinding() async {
+    if (!(_credentials?.hasPasscode ?? false)) return;
+    if (_tokens.passcodeSecret != null &&
+        _tokens.passcodeUserId == _tokens.userId) {
+      return;
+    }
+
+    await _bindPasscodeDevice();
+  }
+
   /// Whether this handset holds a device key, so biometric sign-in is worth offering.
   ///
   /// Asked of the phone rather than remembered in a flag: the key can be destroyed
@@ -440,6 +497,7 @@ class AuthSession extends ChangeNotifier {
       publicKey: enrolment.publicKey,
     );
 
+   
     if (!registered.isSuccess) {
       await biometrics.remove();
 
@@ -460,7 +518,11 @@ class AuthSession extends ChangeNotifier {
 
   Future<ApiResult<DateTime?>> setPasscode(String passcode) async {
     final result = await api.setPasscode(passcode: passcode);
-    if (result.isSuccess) await refreshCredentials();
+    if (result.isSuccess) {
+      await refreshCredentials();
+      // A new passcode is the moment passcode sign-in becomes possible on this handset.
+      await _bindPasscodeDevice();
+    }
 
     return result;
   }
@@ -609,6 +671,10 @@ class AuthSession extends ChangeNotifier {
     notifyListeners();
 
     await refreshCredentials();
+
+    // An account that set its passcode on another phone, or before this was built, has
+    // no secret here yet. Signing in is the proof the binding needs.
+    await _ensurePasscodeBinding();
   }
 
   Future<void> _resolveStartingStatus() async {

@@ -341,6 +341,32 @@ class AuthApi {
         parse: (envelope) => envelope.object['verified'] == true,
       );
 
+  /// Binds passcode sign-in to this handset, returning the secret that goes with it.
+  ///
+  /// Needs the session that is open here, and a passcode already set. Calling again
+  /// issues a new secret and retires the old one.
+  Future<ApiResult<String>> bindPasscodeDevice() async => _client.post(
+        '/auth/passcode/device',
+        body: {'deviceFingerprint': await _device.fingerprint()},
+        parse: (envelope) => envelope.object['deviceSecret'] as String,
+      );
+
+  /// Signs in with the passcode and the secret this handset was given at binding.
+  Future<ApiResult<AuthTokens>> signInWithPasscode({
+    required String deviceSecret,
+    required String passcode,
+  }) async =>
+      _client.post(
+        '/auth/passcode/sign-in',
+        authenticated: false,
+        body: {
+          'deviceFingerprint': await _device.fingerprint(),
+          'deviceSecret': deviceSecret,
+          'passcode': passcode,
+        },
+        parse: (envelope) => AuthTokens.fromData(envelope.object),
+      );
+
   /// Completes a sign-in that asked for a second factor.
   ///
   /// [mfaToken] comes from the `data` of the `MFA_REQUIRED` failure.
