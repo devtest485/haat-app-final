@@ -516,8 +516,13 @@ class AuthSession extends ChangeNotifier {
     return result;
   }
 
-  Future<ApiResult<DateTime?>> setPasscode(String passcode) async {
-    final result = await api.setPasscode(passcode: passcode);
+  /// Sets the passcode, or replaces it — replacing needs [password], because a
+  /// passcode someone watched being typed must not be enough to change it.
+  Future<ApiResult<DateTime?>> setPasscode(
+    String passcode, {
+    String? password,
+  }) async {
+    final result = await api.setPasscode(passcode: passcode, password: password);
     if (result.isSuccess) {
       await refreshCredentials();
       // A new passcode is the moment passcode sign-in becomes possible on this handset.
