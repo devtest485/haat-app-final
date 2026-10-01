@@ -10,6 +10,7 @@ import '/custom_code/banner_api.dart';
 import '/custom_code/biometric_key_store.dart';
 import '/custom_code/device_identity.dart';
 import '/custom_code/organization_api.dart';
+import '/custom_code/payout_api.dart';
 import '/custom_code/token_store.dart';
 import '/custom_code/transaction_api.dart';
 import '/custom_code/wallet_api.dart';
@@ -152,6 +153,9 @@ class AuthSession extends ChangeNotifier {
 
   /// What the business holds, bank by bank.
   late final WalletApi wallet = WalletApi(_client);
+
+  /// Money the business sends from its wallet to its own bank account.
+  late final PayoutApi payouts = PayoutApi(_client);
 
   /// The device key behind biometric sign-in. Held here so the screens that offer it and
   /// the screen that enrols it are talking to the same thing.

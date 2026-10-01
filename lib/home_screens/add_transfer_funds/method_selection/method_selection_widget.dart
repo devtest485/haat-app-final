@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/index.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -213,17 +214,20 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(
-                                  TransfermethodWidget.routeName,
-                                  queryParameters: {
-                                    'transferMode': serializeParam(
-                                      'BBAN',
-                                      ParamType.String,
+                                // A payout: the business's available money to its own
+                                // bank account, with the amount already typed.
+                                // The navigator is taken before the sheet closes: once
+                                // it has, this sheet's context is gone.
+                                final amount = widget!.fundsAmount;
+                                final navigator = Navigator.of(context);
+                                navigator.pop();
+                                await navigator.push(
+                                  MaterialPageRoute(
+                                    builder: (_) => custom_widgets.PayoutScreen(
+                                      initialAmount: amount,
                                     ),
-                                  }.withoutNulls,
+                                  ),
                                 );
-
-                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: double.infinity,
@@ -272,7 +276,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'From my bank account',
+                                                'To my bank account',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -302,7 +306,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'CIF : •••7812',
+                                                'HAAT sends it from your wallet',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium

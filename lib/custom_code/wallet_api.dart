@@ -43,6 +43,7 @@ int placesOf(String currency) => _places[currency.toUpperCase()] ?? 2;
 /// for a payment, or held against refunds.
 class WalletLine {
   const WalletLine({
+    this.institutionId = '',
     required this.institutionCode,
     required this.institutionName,
     required this.currency,
@@ -52,6 +53,8 @@ class WalletLine {
     required this.reserveMinor,
   });
 
+  /// The bank's id — what a payout from this line names as the books it leaves.
+  final String institutionId;
   final String institutionCode;
   final String institutionName;
   final String currency;
@@ -64,6 +67,7 @@ class WalletLine {
   static BigInt _minor(Object? value) => BigInt.tryParse('${value ?? '0'}') ?? BigInt.zero;
 
   factory WalletLine.fromData(Map<String, dynamic> data) => WalletLine(
+        institutionId: data['institutionId'] as String? ?? '',
         institutionCode: data['institutionCode'] as String? ?? '',
         institutionName: data['institutionName'] as String? ?? '',
         currency: data['currency'] as String? ?? 'SDG',

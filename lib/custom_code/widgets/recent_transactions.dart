@@ -14,6 +14,12 @@ import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/transaction_api.dart';
 
+/// HAAT's green, for the arrow on money coming in.
+///
+/// The theme's `primary` is `0x4CFFFFFF` in this app — a translucent white, and this
+/// card sits on white. See [BusinessLogoAvatar].
+const _haatGreen = Color(0xFF00DA76);
+
 /// The last few movements, on the home screen.
 ///
 /// The design drew two rows and the app shipped them: "Solace Studio · Invoice paid ·
@@ -72,8 +78,6 @@ class _RecentTransactionsState extends State<RecentTransactions> {
   }
 
   Widget _row(BuildContext context, MerchantTransaction row) {
-    final theme = FlutterFlowTheme.of(context);
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -88,7 +92,7 @@ class _RecentTransactionsState extends State<RecentTransactions> {
             child: Icon(
               row.incoming ? Icons.south_west : Icons.north_east,
               size: 18,
-              color: row.incoming ? theme.primary : Colors.black87,
+              color: row.incoming ? _haatGreen : Colors.black87,
             ),
           ),
           const SizedBox(width: 12),

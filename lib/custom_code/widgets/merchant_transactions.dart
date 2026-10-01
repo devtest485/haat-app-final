@@ -14,6 +14,16 @@ import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/transaction_api.dart';
 
+/// HAAT's green, for the chosen filter and the arrow on money coming in.
+///
+/// Written out rather than taken from the theme, for the reason [BusinessLogoAvatar]
+/// gives: this app's `primary` is `0x4CFFFFFF`, a translucent white, which on this
+/// screen's near-white background is nothing at all.
+const _haatGreen = Color(0xFF00DA76);
+
+/// The grey the unchosen filters sit in.
+const _chipRest = Color(0xFFEFEFEF);
+
 /// The windows the screen offers, as the design drew them.
 ///
 /// A window rather than a page size for all but the first: "last 20" is how many, the
@@ -135,8 +145,6 @@ class _MerchantTransactionsState extends State<MerchantTransactions> {
   }
 
   Widget _chips(BuildContext context) {
-    final theme = FlutterFlowTheme.of(context);
-
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -153,23 +161,23 @@ class _MerchantTransactionsState extends State<MerchantTransactions> {
                 },
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
-                    color:
-                        index == _filter ? theme.primary : Colors.transparent,
+                    // The design's green on the chosen one, and a grey pill on the
+                    // rest. `theme.primary` is deliberately not used: in this app it
+                    // is `0x4CFFFFFF`, a translucent white, so the selected chip came
+                    // out white on a white screen and the only thing marking it was
+                    // the weight of its text.
+                    color: index == _filter ? _haatGreen : _chipRest,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: index == _filter ? theme.primary : Colors.black26,
-                    ),
                   ),
                   child: Text(
                     _filters[index].label,
                     style: TextStyle(
                       color: index == _filter ? Colors.black : Colors.black87,
                       fontSize: 13,
-                      fontWeight: index == _filter
-                          ? FontWeight.w600
-                          : FontWeight.normal,
+                      fontWeight:
+                          index == _filter ? FontWeight.w600 : FontWeight.w500,
                     ),
                   ),
                 ),
@@ -181,8 +189,6 @@ class _MerchantTransactionsState extends State<MerchantTransactions> {
   }
 
   Widget _row(BuildContext context, MerchantTransaction row) {
-    final theme = FlutterFlowTheme.of(context);
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -197,7 +203,7 @@ class _MerchantTransactionsState extends State<MerchantTransactions> {
             child: Icon(
               row.incoming ? Icons.south_west : Icons.north_east,
               size: 18,
-              color: row.incoming ? theme.primary : Colors.black87,
+              color: row.incoming ? _haatGreen : Colors.black87,
             ),
           ),
           const SizedBox(width: 12),
