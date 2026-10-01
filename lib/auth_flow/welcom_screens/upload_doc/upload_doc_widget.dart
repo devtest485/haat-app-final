@@ -297,11 +297,7 @@ class _UploadDocWidgetState extends State<UploadDocWidget> {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  if (Navigator.of(context).canPop()) {
-                                    context.pop();
-                                  }
-                                  context.pushNamed(
-                                      BottomBarPagesWidget.routeName);
+                                  context.goNamed(BottomBarPagesWidget.routeName);
                                 },
                                 child: Container(
                                   width: 327.0,
@@ -347,11 +343,7 @@ class _UploadDocWidgetState extends State<UploadDocWidget> {
                                     _model.submitted =
                                         await actions.haatSubmitKyb();
                                     if (_model.submitted == '') {
-                                      if (Navigator.of(context).canPop()) {
-                                        context.pop();
-                                      }
-                                      context.pushNamed(
-                                          BottomBarPagesWidget.routeName);
+                                      context.goNamed(BottomBarPagesWidget.routeName);
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(

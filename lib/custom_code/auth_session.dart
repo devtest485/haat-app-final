@@ -190,28 +190,35 @@ class AuthSession extends ChangeNotifier {
   bool get isSignedIn =>
       _status == AuthStatus.signedIn || _status == AuthStatus.onboarding;
 
-  /// Whether the passcode screen stands between this session and the app.
+  /// Whether the sign-in screen stands between this session and the app.
   ///
-  /// ## Why the passcode locks rather than signs in
+  /// Reopening the app always asks who is holding the phone, whether the owner
+  /// signed out or simply closed it: the same sign-in screen, with the fingerprint,
+  /// the password and the passcode. What the stored session buys is that the
+  /// passcode there only *unlocks* it (`POST /auth/passcode/verify`) — a check the
+  /// server makes against a session it already issued.
   ///
-  /// `POST /auth/passcode/verify` confirms a passcode for a session that already
-  /// exists and refuses to issue one — six digits is a million combinations,
-  /// which is nothing to a script. So it can never be what gets somebody back in
-  /// after signing out; offering it there produced "Sign In Required" every time,
-  /// whatever the merchant typed.
-  ///
-  /// What it can do is guard a session the app already holds. This is true on the
-  /// run that opened onto stored tokens, and false once the passcode has been
-  /// given — or on a run where the merchant signed in properly, which is a
-  /// stronger proof than the passcode would have been.
+  /// True on the run that opened onto stored tokens for an account that finished
+  /// onboarding, and false once any of the three has been given. An account still
+  /// in onboarding is not locked: it may have no password yet, and the onboarding
+  /// screens are where it has to go anyway.
   ///
   /// **A cold start with no network does not lock.** [_credentials] is null then,
-  /// because the call that reads them did not come back, and the passcode cannot
-  /// be checked without the server either — so locking would shut the owner out
-  /// of their own app with no way through. The stored tokens are trusted for that
-  /// run, which is the same bargain [_resolveStartingStatus] already makes.
-  bool get lockedByPasscode =>
-      _restoredSession && (_credentials?.hasPasscode ?? false);
+  /// because the call that reads them did not come back, and nothing on the sign-in
+  /// screen can be checked without the server either — so locking would shut the
+  /// owner out of their own app with no way through. The stored tokens are trusted
+  /// for that run, which is the same bargain [_resolveStartingStatus] already makes.
+  bool get lockedOnReopen =>
+      _restoredSession &&
+      _credentials != null &&
+      _status == AuthStatus.signedIn;
+
+  /// Whether "Login with Passcode" can work on the sign-in screen right now: this
+  /// handset holds a passcode secret, or the app is locked over a session whose
+  /// account has a passcode, which the passcode can unlock.
+  bool get canUsePasscode =>
+      hasPasscodeSignIn ||
+      (lockedOnReopen && (_credentials?.hasPasscode ?? false));
 
   /// Whether this run opened onto tokens the last one left behind.
   bool _restoredSession = false;

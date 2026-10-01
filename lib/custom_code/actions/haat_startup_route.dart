@@ -17,7 +17,7 @@ import '/custom_code/auth_session.dart';
 /// change their password has to be sent to do that before anything notices they
 /// also have no passcode yet.
 ///
-/// Returns one of `passcode`, `login`, `createPassword`, `securePage`,
+/// Returns one of `login`, `createPassword`, `securePage`,
 /// `username`, `home`, or `welcome` for a first run with no session at all.
 Future<String> haatStartupRoute() async {
   final session = AuthSession.instance;
@@ -26,9 +26,10 @@ Future<String> haatStartupRoute() async {
     return FFAppState().hasLoggedInBefore ? 'login' : 'welcome';
   }
 
-  // Asked before anything else this run: the app is locked, and nothing behind
-  // it is any of the caller's business until the passcode is given.
-  if (session.lockedByPasscode) return 'passcode';
+  // Asked before anything else this run: the app reopened onto a stored session,
+  // and nothing behind it is any of the caller's business until the owner signs in
+  // again — the fingerprint, the password or the passcode, all on the one screen.
+  if (session.lockedOnReopen) return 'login';
 
   final credentials = session.credentials;
   if (credentials == null) return 'home';

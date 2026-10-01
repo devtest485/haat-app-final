@@ -631,11 +631,7 @@ class _OtpVerifyPageWidgetState extends State<OtpVerifyPageWidget> {
                                 }
                                 context.pushNamed(UsernamePageWidget.routeName);
                               } else if (_model.startupRoute == 'home') {
-                                if (Navigator.of(context).canPop()) {
-                                  context.pop();
-                                }
-                                context
-                                    .pushNamed(BottomBarPagesWidget.routeName);
+                                context.goNamed(BottomBarPagesWidget.routeName);
                               }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
