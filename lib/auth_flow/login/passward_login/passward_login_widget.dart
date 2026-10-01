@@ -85,7 +85,14 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                 decoration: BoxDecoration(),
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
-                  child: SingleChildScrollView(
+                  // At least the screen's height, so `spaceBetween` puts Continue at the
+                  // bottom as the design has it. Inside a scroll view alone the column has
+                  // no height to share out, and the button sat under the password field.
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => SingleChildScrollView(
+                    child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -754,6 +761,9 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                           ),
                         ),
                       ],
+                    ),
+                    ),
+                    ),
                     ),
                   ),
                 ),
