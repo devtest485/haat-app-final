@@ -28,10 +28,13 @@ import '/custom_code/auth_session.dart';
 /// shape the backend offers: `POST /organizations` makes the business and hands this
 /// account ownership of it, and the profile fields are a separate write.
 ///
-/// Empty means it worked. Anything else is a sentence to show.
+/// Empty means it worked. Anything else is a sentence to show. When the sentence is
+/// about the name — another business already has it — [haatBusinessNameWasTaken] says
+/// so, and the screen puts it under the name field rather than in a passing snackbar.
 Future<String> haatSaveBusinessSetup(String? businessName) async {
   final session = AuthSession.instance;
   final name = businessName?.trim() ?? '';
+  _nameTaken = false;
 
   if (name.isEmpty) {
     return 'Enter your business name to continue.';
@@ -48,6 +51,7 @@ Future<String> haatSaveBusinessSetup(String? businessName) async {
     final created = await session.createOrganization(name: name);
 
     if (created is! ApiSuccess<String>) {
+      _nameTaken = _isNameClash(created);
       return created.messageIn(session.languageCode);
     }
   }
@@ -64,8 +68,22 @@ Future<String> haatSaveBusinessSetup(String? businessName) async {
   );
 
   if (saved is! ApiSuccess<bool>) {
+    // A merchant who comes back and renames the business meets the same rule here.
+    _nameTaken = _isNameClash(saved);
     return saved.messageIn(session.languageCode);
   }
 
   return '';
 }
+
+bool _nameTaken = false;
+
+/// Whether the last [haatSaveBusinessSetup] was refused because another business
+/// already uses that name — the one refusal only the merchant can fix, by typing a
+/// different one.
+bool haatBusinessNameWasTaken() => _nameTaken;
+
+bool _isNameClash(ApiResult<Object?> result) =>
+    result is ApiFailure<Object?> &&
+    result.errorCode == 'CONFLICT' &&
+    result.data['field'] == 'name';

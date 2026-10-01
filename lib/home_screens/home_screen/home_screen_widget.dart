@@ -811,6 +811,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Says so while HAAT has not approved the business yet.
+                                  const custom_widgets.ApprovalNotice(),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         10.0, 0.0, 10.0, 0.0),

@@ -154,6 +154,7 @@ class _SetupBisinessLocationPageWidgetState
                                 () async {
                                   _model.businessName = _model
                                       .businessNameFieldTextController.text;
+                                  _model.nameError = null;
                                   safeSetState(() {});
                                 },
                               ),
@@ -224,6 +225,13 @@ class _SetupBisinessLocationPageWidgetState
                                   .businessNameFieldTextControllerValidator
                                   .asValidator(context),
                             ),
+                            if (_model.nameError != null)
+                              Text(
+                                _model.nameError!,
+                                style: TextStyle(
+                                  color: FlutterFlowTheme.of(context).error,
+                                ),
+                              ),
                           ].divide(SizedBox(height: 16.0)),
                         ),
                       ),
@@ -254,6 +262,10 @@ class _SetupBisinessLocationPageWidgetState
                                 if (_model.saved == '') {
                                   context.pushNamed(
                                       BusinessLocatePageWidget.routeName);
+                                } else if (actions.haatBusinessNameWasTaken()) {
+                                  // Only the merchant can fix this one, so it stays
+                                  // beside the field they have to change.
+                                  _model.nameError = _model.saved;
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

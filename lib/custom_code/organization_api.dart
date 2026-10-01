@@ -218,6 +218,22 @@ class OrganizationApi {
             logoUrlFor(envelope.object['logoPath'] as String?) ?? '',
       );
 
+  /// Where the merchant's own business stands with HAAT: `pending` until the back
+  /// office approves it, `active` once it has, `suspended` if it has been stopped.
+  /// Null when this account has no business yet.
+  Future<ApiResult<String?>> currentStatus() => _client.get(
+        '/organizations',
+        parse: (envelope) {
+          final rows = envelope.list.whereType<Map<String, dynamic>>().toList();
+          if (rows.isEmpty) return null;
+
+          final owned = rows.where((row) => row['isOwner'] == true);
+          final chosen = owned.isNotEmpty ? owned.first : rows.first;
+
+          return chosen['status'] as String?;
+        },
+      );
+
   /// The business's current logo address, or null if it has none yet.
   Future<ApiResult<String?>> currentLogoUrl() => _client.get(
         '/organizations',

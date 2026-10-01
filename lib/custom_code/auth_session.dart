@@ -595,13 +595,16 @@ class AuthSession extends ChangeNotifier {
   /// never fires. The next call would simply be refused for a reason the merchant did
   /// nothing to cause. Asking for a new one here closes that window.
   ///
-  /// ## Two shops with one name
+  /// ## Names and handles
   ///
-  /// The handle is built from the name, so the second "Flow Bakery" on the platform
-  /// asks for a handle the first already holds and is refused. That is a clash in a
-  /// technical detail the merchant never chose and never sees, so it is not theirs to
-  /// resolve: the handle is retried once with a short suffix, and the name they typed
-  /// is kept exactly as they typed it.
+  /// No two businesses share a name — the server refuses a second "Flow Bakery",
+  /// whatever its case or spacing, and that refusal is returned as it is for the screen
+  /// to show under the name field. Only the merchant can choose another name.
+  ///
+  /// The handle is different. It is built from the name, so "Flow Bakery" and
+  /// "Flow-Bakery!" ask for the same one. That is a clash in a technical detail the
+  /// merchant never chose and never sees, so it is not theirs to resolve: the handle is
+  /// retried once with a short suffix, and the name they typed is kept as typed.
   Future<ApiResult<String>> createOrganization({
     required String name,
     String? category,
@@ -612,9 +615,12 @@ class AuthSession extends ChangeNotifier {
       category: category,
     );
 
-    // `CONFLICT` is what a taken handle comes back as — the only conflict creating a
-    // business can raise, so retrying on it cannot mask a different problem.
-    if (result.errorCode == 'CONFLICT') {
+    // A taken handle is retried; a taken *name* is not. Both come back as `CONFLICT`,
+    // told apart by the field the server names: the name is the merchant's own choice
+    // and only they can pick another, so it goes straight back to the screen.
+    if (result is ApiFailure<String> &&
+        result.errorCode == 'CONFLICT' &&
+        result.data['field'] == 'slug') {
       final suffix = DateTime.now().millisecondsSinceEpoch.toRadixString(36);
 
       result = await organizations.create(

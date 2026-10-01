@@ -27,7 +27,7 @@ export '/custom_code/actions/haat_sales_channel_chosen.dart'
     show haatSalesChannelChosen;
 export '/custom_code/actions/haat_load_profile.dart' show haatLoadProfile;
 export '/custom_code/actions/haat_save_business_setup.dart'
-    show haatSaveBusinessSetup;
+    show haatSaveBusinessSetup, haatBusinessNameWasTaken;
 export '/custom_code/actions/haat_pick_business_logo.dart'
     show haatPickBusinessLogo;
 export '/custom_code/actions/haat_submit_kyb.dart' show haatSubmitKyb;

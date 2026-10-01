@@ -27,6 +27,10 @@ class SetupBisinessLocationPageModel
   // Stores action output result for [Custom Action - haatSaveBusinessSetup] action in Container widget.
   String? saved;
 
+  /// Why the name was refused — another business already has it — shown under the
+  /// field until the merchant types a different one.
+  String? nameError;
+
   @override
   void initState(BuildContext context) {}
 
