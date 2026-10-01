@@ -199,7 +199,9 @@ class _LogOutWidgetState extends State<LogOutWidget> {
                           if (Navigator.of(context).canPop()) {
                             context.pop();
                           }
-                          context.pushNamed(OnBoardingPageWidget.routeName);
+                          // Replaces the whole stack: nothing from the signed-in app, and nothing from
+                          // sign-up, is left underneath for Back to return to.
+                          context.goNamed(OnBoardingPageWidget.routeName);
                         },
                         child: Container(
                           width: double.infinity,

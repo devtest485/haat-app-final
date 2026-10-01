@@ -704,11 +704,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                 _model.passwordTextController.text,
                               );
                               if (_model.signIn == '') {
-                                if (Navigator.of(context).canPop()) {
-                                  context.pop();
-                                }
-                                context
-                                    .pushNamed(BottomBarPagesWidget.routeName);
+                                context.goNamed(BottomBarPagesWidget.routeName);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

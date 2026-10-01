@@ -38,35 +38,17 @@ class _OnBoardingPageWidgetState extends State<OnBoardingPageWidget> {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.startupRoute = await actions.haatStartupRoute();
       if (_model.startupRoute == 'passcode') {
-        if (Navigator.of(context).canPop()) {
-          context.pop();
-        }
-        context.pushNamed(PassCodeLoginWidget.routeName);
+        context.goNamed(PassCodeLoginWidget.routeName);
       } else if (_model.startupRoute == 'login') {
-        if (Navigator.of(context).canPop()) {
-          context.pop();
-        }
-        context.pushNamed(LoginScreenWidget.routeName);
+        context.goNamed(LoginScreenWidget.routeName);
       } else if (_model.startupRoute == 'createPassword') {
-        if (Navigator.of(context).canPop()) {
-          context.pop();
-        }
-        context.pushNamed(CreatePasswordPageWidget.routeName);
+        context.goNamed(CreatePasswordPageWidget.routeName);
       } else if (_model.startupRoute == 'securePage') {
-        if (Navigator.of(context).canPop()) {
-          context.pop();
-        }
-        context.pushNamed(SecurePageWidget.routeName);
+        context.goNamed(SecurePageWidget.routeName);
       } else if (_model.startupRoute == 'username') {
-        if (Navigator.of(context).canPop()) {
-          context.pop();
-        }
-        context.pushNamed(UsernamePageWidget.routeName);
+        context.goNamed(UsernamePageWidget.routeName);
       } else if (_model.startupRoute == 'home') {
-        if (Navigator.of(context).canPop()) {
-          context.pop();
-        }
-        context.pushNamed(BottomBarPagesWidget.routeName);
+        context.goNamed(BottomBarPagesWidget.routeName);
       }
     });
   }
