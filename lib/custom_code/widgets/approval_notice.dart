@@ -61,9 +61,12 @@ class _ApprovalNoticeState extends State<ApprovalNotice> {
 
     final arabic = AuthSession.instance.languageCode == 'ar';
     final suspended = status == 'suspended';
-    final colour = suspended
-        ? FlutterFlowTheme.of(context).error
-        : const Color(0xFFE0A526);
+    // Fixed colours rather than the theme's: the card sits on the home screen's light
+    // panel in either theme, and the theme's text colour is white in the dark one —
+    // which drew the explanation white on pale yellow, unreadable.
+    final colour =
+        suspended ? const Color(0xFFB3261E) : const Color(0xFF8A5A00);
+    const ink = Color(0xFF2E2E2E);
 
     final title = suspended
         ? (arabic ? 'تم إيقاف نشاطك التجاري' : 'Your business is suspended')
@@ -82,7 +85,7 @@ class _ApprovalNoticeState extends State<ApprovalNotice> {
         width: double.infinity,
         padding: const EdgeInsets.all(14.0),
         decoration: BoxDecoration(
-          color: colour.withValues(alpha: 0.12),
+          color: suspended ? const Color(0xFFFCE8E6) : const Color(0xFFFFF3D6),
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(color: colour.withValues(alpha: 0.5)),
         ),
@@ -110,8 +113,8 @@ class _ApprovalNoticeState extends State<ApprovalNotice> {
                   const SizedBox(height: 4.0),
                   Text(
                     body,
-                    style: TextStyle(
-                      color: FlutterFlowTheme.of(context).primaryText,
+                    style: const TextStyle(
+                      color: ink,
                       fontSize: 12.5,
                       height: 1.35,
                     ),
