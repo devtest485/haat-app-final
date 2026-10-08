@@ -176,13 +176,13 @@ class OrganizationApi {
   /// screen sends only its own answer and a merchant who stops halfway leaves nothing
   /// half-written.
   ///
-  /// [categories] and [salesChannel] carry **keys**, never labels — the backend checks
+  /// [categories] and [salesChannels] carry **keys**, never labels — the backend checks
   /// them against its own catalogue, which is the same catalogue [setupOptions]
   /// returned.
   Future<ApiResult<bool>> updateProfile({
     String? name,
     List<String>? categories,
-    String? salesChannel,
+    List<String>? salesChannels,
     String? addressLine,
     String? city,
     double? latitude,
@@ -193,7 +193,7 @@ class OrganizationApi {
         body: {
           if (name != null) 'name': name,
           if (categories != null) 'categories': categories,
-          if (salesChannel != null) 'salesChannel': salesChannel,
+          if (salesChannels != null) 'salesChannels': salesChannels,
           if (addressLine != null) 'addressLine': addressLine,
           if (city != null) 'city': city,
           if (latitude != null) 'latitude': latitude,
