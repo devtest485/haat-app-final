@@ -56,15 +56,14 @@ Future<String> haatSaveBusinessSetup(String? businessName) async {
     }
   }
 
-  final channels = FFAppState().selectedSalesChannels;
-
   final saved = await session.organizations.updateProfile(
     name: name,
     categories: List<String>.from(FFAppState().selectedCategories),
-    // The backend stores one. The screen lets a merchant pick several — the design's
-    // own second frame shows two ticked — so the first is sent and the rest are kept
-    // in App State against the day the endpoint takes a list.
-    salesChannel: channels.isEmpty ? null : channels.first,
+    // Every channel ticked — a counter and a website are both. Null rather than an
+    // empty list leaves what the server holds alone.
+    salesChannels: FFAppState().selectedSalesChannels.isEmpty
+        ? null
+        : List<String>.from(FFAppState().selectedSalesChannels),
   );
 
   if (saved is! ApiSuccess<bool>) {

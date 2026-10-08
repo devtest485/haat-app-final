@@ -141,10 +141,9 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
       if (_isChannels) {
         FFAppState().selectedSalesChannels = List<String>.from(_selected);
 
-        // The single key `PATCH /organizations` still takes, kept in step.
-        // It goes on being written until that endpoint accepts a list, and is
-        // the first choice rather than the last so that picking a second one
-        // does not quietly change what gets sent.
+        // The single key, kept in step with the list for anything in App State
+        // that still reads one. The first choice rather than the last, so that
+        // picking a second does not change it.
         FFAppState().selectedSalesChannel =
             _selected.isEmpty ? '' : _selected.first;
       } else {
