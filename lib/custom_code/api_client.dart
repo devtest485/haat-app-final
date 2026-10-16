@@ -136,6 +136,8 @@ class ApiClient {
       'Accept-Language': languageCode,
       if (body != null) 'Content-Type': 'application/json',
       if (idempotencyKey != null) 'Idempotency-Key': idempotencyKey,
+      // The bank this app was built for: accounts are looked up within it.
+      if (ApiConfig.bankCode.isNotEmpty) 'X-Haat-Bank': ApiConfig.bankCode,
     };
 
     final token = _tokens.accessToken;
