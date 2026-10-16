@@ -46,6 +46,7 @@ class WalletLine {
     this.institutionId = '',
     required this.institutionCode,
     required this.institutionName,
+    this.walletNumber,
     required this.currency,
     required this.availableMinor,
     required this.pendingMinor,
@@ -57,6 +58,9 @@ class WalletLine {
   final String institutionId;
   final String institutionCode;
   final String institutionName;
+
+  /// The wallet's 14-digit number at this bank: prefix, nine digits, the bank's suffix.
+  final String? walletNumber;
   final String currency;
   final BigInt availableMinor;
   final BigInt pendingMinor;
@@ -70,6 +74,7 @@ class WalletLine {
         institutionId: data['institutionId'] as String? ?? '',
         institutionCode: data['institutionCode'] as String? ?? '',
         institutionName: data['institutionName'] as String? ?? '',
+        walletNumber: data['walletNumber'] as String?,
         currency: data['currency'] as String? ?? 'SDG',
         availableMinor: _minor(data['availableMinor']),
         pendingMinor: _minor(data['pendingMinor']),
@@ -92,6 +97,17 @@ class Wallet {
   /// Summed because to the merchant it is one balance; the banks behind it are the
   /// platform's arrangement. Other currencies are left out rather than added, since
   /// pounds and dollars do not add up.
+  /// The wallet number, spaced the way it is read out: `090 123456789 01`. Empty until
+  /// a wallet is open — a merchant belongs to one bank, so there is one.
+  String get displayNumber {
+    final number = lines
+        .map((line) => line.walletNumber ?? '')
+        .firstWhere((n) => n.length == 14, orElse: () => '');
+    if (number.isEmpty) return '';
+
+    return '${number.substring(0, 3)} ${number.substring(3, 12)} ${number.substring(12)}';
+  }
+
   BigInt get available => lines
       .where((line) => line.currency == currency)
       .fold(BigInt.zero, (sum, line) => sum + line.availableMinor);

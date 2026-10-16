@@ -27,6 +27,15 @@ class ApiConfig {
 
   static String? _baseUrl;
 
+  /// The bank this build of the app is for, from `bankCode` in the same file.
+  ///
+  /// Every partner bank publishes its own HAAT app, and an account belongs to the bank
+  /// whose app it registered in — the same number in two banks' apps is two accounts.
+  /// The code travels on every request as `X-Haat-Bank`. Empty in a build made before
+  /// banks were configured, and the server then uses its own default bank.
+  static String get bankCode => _bankCode;
+  static String _bankCode = '';
+
   /// How long a single request may take before we call it unreachable.
   ///
   /// Sign-in deliberately does slow work — the password hash is scrypt, which is
@@ -78,6 +87,9 @@ class ApiConfig {
     try {
       final decoded = json.decode(await rootBundle.loadString(_configPath));
       if (decoded is! Map) return null;
+
+      final bank = decoded['bankCode'];
+      if (bank is String) _bankCode = bank.trim().toUpperCase();
 
       final configured = decoded[_configKey] ?? decoded[_legacyConfigKey];
       if (configured is! String || configured.trim().isEmpty) return null;

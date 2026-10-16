@@ -46,7 +46,13 @@ class _WalletBalanceState extends State<WalletBalance> {
     final result = await AuthSession.instance.wallet.get();
     if (!mounted) return;
 
-    if (result is ApiSuccess<Wallet>) setState(() => _wallet = result.value);
+    if (result is ApiSuccess<Wallet>) {
+      setState(() => _wallet = result.value);
+
+      // The number under the balance is the wallet's own. Written here because this is
+      // where the wallet is read; the line beneath listens to App State for it.
+      FFAppState().update(() => FFAppState().bban = result.value.displayNumber);
+    }
   }
 
   TextStyle _style(BuildContext context, double size) =>

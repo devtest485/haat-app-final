@@ -958,7 +958,9 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'SA 8891 8891 8812 1990',
+                                            FFAppState().bban.isEmpty
+                                                ? 'Opens once HAAT approves your business'
+                                                : FFAppState().bban,
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
