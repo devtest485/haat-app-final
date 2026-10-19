@@ -163,8 +163,8 @@ class ResendOtpCall {
 
     final ffApiRequestBody = '''
 {
-  "mobile": "${mobile}",
-  "idempotency": "${idempotencyKey}"
+  "mobile": ${mobile == null ? 'null' : '"${mobile}"'},
+  "idempotency": ${idempotencyKey == null ? 'null' : '"${idempotencyKey}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'ResendOtp',
@@ -255,11 +255,11 @@ class VerifyOtpCall {
 
     final ffApiRequestBody = '''
 {
-  "mobile": "${mobile}",
-  "code": "${code}",
-  "deviceFingerprint": "${deviceFingerprint}",
-  "deviceLabel": "${deviceLabel}",
-  "platform": "${platform}"
+  "mobile": ${mobile == null ? 'null' : '"${mobile}"'},
+  "code": ${code == null ? 'null' : '"${code}"'},
+  "deviceFingerprint": ${deviceFingerprint == null ? 'null' : '"${deviceFingerprint}"'},
+  "deviceLabel": ${deviceLabel == null ? 'null' : '"${deviceLabel}"'},
+  "platform": ${platform == null ? 'null' : '"${platform}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'VerifyOtp',
@@ -360,7 +360,7 @@ class SignInCall {
     final body = _serializeJson(bodyJson);
     final ffApiRequestBody = '''
 {
-  "Idempotency-Key": "${idempotencyKey}"
+  "Idempotency-Key": ${idempotencyKey == null ? 'null' : '"${idempotencyKey}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'SignIn',
@@ -466,7 +466,7 @@ class VerifyMfaCall {
     );
 
     final ffApiRequestBody = '''
-{"mfaToken":"${mfaToken}","code":"${code}","deviceFingerprint":"${deviceFingerprint}","deviceLabel":"${deviceLabel}","platform":"${platform}"}''';
+{"mfaToken":${mfaToken == null ? 'null' : '"${mfaToken}"'},"code":${code == null ? 'null' : '"${code}"'},"deviceFingerprint":${deviceFingerprint == null ? 'null' : '"${deviceFingerprint}"'},"deviceLabel":${deviceLabel == null ? 'null' : '"${deviceLabel}"'},"platform":${platform == null ? 'null' : '"${platform}"'}}''';
     return ApiManager.instance.makeApiCall(
       callName: 'VerifyMfa',
       apiUrl: '${baseUrl}/auth/mfa/verify',
@@ -563,7 +563,7 @@ class BiometricChallengeCall {
     );
 
     final ffApiRequestBody = '''
-{"deviceFingerprint":"${deviceFingerprint}"}''';
+{"deviceFingerprint":${deviceFingerprint == null ? 'null' : '"${deviceFingerprint}"'}}''';
     return ApiManager.instance.makeApiCall(
       callName: 'BiometricChallenge',
       apiUrl: '${baseUrl}/auth/biometric/challenge',
@@ -637,7 +637,7 @@ class BiometricVerifyCall {
     );
 
     final ffApiRequestBody = '''
-{"deviceFingerprint":"${deviceFingerprint}","signature":"${signature}"}''';
+{"deviceFingerprint":${deviceFingerprint == null ? 'null' : '"${deviceFingerprint}"'},"signature":${signature == null ? 'null' : '"${signature}"'}}''';
     return ApiManager.instance.makeApiCall(
       callName: 'BiometricVerify',
       apiUrl: '${baseUrl}/auth/biometric/verify',
@@ -734,7 +734,7 @@ class RefreshTokenCall {
     );
 
     final ffApiRequestBody = '''
-{"refreshToken":"${refreshToken}"}''';
+{"refreshToken":${refreshToken == null ? 'null' : '"${refreshToken}"'}}''';
     return ApiManager.instance.makeApiCall(
       callName: 'RefreshToken',
       apiUrl: '${baseUrl}/auth/refresh',
@@ -814,7 +814,7 @@ class SetPasswordCall {
     final body = _serializeJson(bodyJson);
     final ffApiRequestBody = '''
 {
-  "idempotency": "${idempotencyKey}"
+  "idempotency": ${idempotencyKey == null ? 'null' : '"${idempotencyKey}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'SetPassword',
@@ -891,8 +891,8 @@ class SetPasscodeCall {
 
     final ffApiRequestBody = '''
 {
-  "passcode": "${passcode}",
-  "idempotency": "${idempotencyKey}"
+  "passcode": ${passcode == null ? 'null' : '"${passcode}"'},
+  "idempotency": ${idempotencyKey == null ? 'null' : '"${idempotencyKey}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'SetPasscode',
@@ -1052,8 +1052,8 @@ class ClaimUsernameCall {
 
     final ffApiRequestBody = '''
 {
-  "username": "${username}",
-  "Idempotency-Key": "${idempotencyKey}"
+  "username": ${username == null ? 'null' : '"${username}"'},
+  "Idempotency-Key": ${idempotencyKey == null ? 'null' : '"${idempotencyKey}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'ClaimUsername',
@@ -1223,8 +1223,8 @@ class SignInWithPasscodeCall {
 
     final ffApiRequestBody = '''
 {
-  "passcode": "${passcode}",
-  "Idempotency-Key": "${idempotencyKey}"
+  "passcode": ${passcode == null ? 'null' : '"${passcode}"'},
+  "Idempotency-Key": ${idempotencyKey == null ? 'null' : '"${idempotencyKey}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'SignInWithPasscode',
@@ -1324,7 +1324,7 @@ class LogoutCall {
 
     final ffApiRequestBody = '''
 {
-  "Idempotency-Key": "${idempotencyKey}"
+  "Idempotency-Key": ${idempotencyKey == null ? 'null' : '"${idempotencyKey}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'Logout',
@@ -1396,7 +1396,7 @@ class RegisterBiometricCall {
     );
 
     final ffApiRequestBody = '''
-{"deviceId":"${deviceId}","publicKey":"${publicKey}"}''';
+{"deviceId":${deviceId == null ? 'null' : '"${deviceId}"'},"publicKey":${publicKey == null ? 'null' : '"${publicKey}"'}}''';
     return ApiManager.instance.makeApiCall(
       callName: 'RegisterBiometric',
       apiUrl: '${baseUrl}/auth/biometric',
@@ -1467,7 +1467,7 @@ class KycProviderSessionCall {
 
     final ffApiRequestBody = '''
 {
-  "Idempotency-Key": "${escapeStringForJson(idempotencyKey)}"
+  "Idempotency-Key": ${idempotencyKey == null ? 'null' : '"${escapeStringForJson(idempotencyKey)}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'KycProviderSession',
@@ -1513,7 +1513,7 @@ class KycProviderResultCall {
 
     final ffApiRequestBody = '''
 {
-  "Idempotency-Key": "${escapeStringForJson(idempotencyKey)}"
+  "Idempotency-Key": ${idempotencyKey == null ? 'null' : '"${escapeStringForJson(idempotencyKey)}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'KycProviderResult',
@@ -1588,9 +1588,6 @@ String? escapeStringForJson(String? input) {
   if (input == null) {
     return null;
   }
-  return input
-      .replaceAll('\\', '\\\\')
-      .replaceAll('"', '\\"')
-      .replaceAll('\n', '\\n')
-      .replaceAll('\t', '\\t');
+  final encoded = jsonEncode(input);
+  return encoded.substring(1, encoded.length - 1);
 }

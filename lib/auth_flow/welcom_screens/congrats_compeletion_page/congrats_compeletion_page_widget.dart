@@ -153,7 +153,7 @@ class _CongratsCompeletionPageWidgetState
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            context.goNamed(BottomBarPagesWidget.routeName);
+                            context.pushNamed(BottomBarPagesWidget.routeName);
                           },
                           child: Container(
                             width: double.infinity,

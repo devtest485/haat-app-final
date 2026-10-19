@@ -17,6 +17,9 @@ class HomeBanner {
     required this.imageUrl,
     required this.backgroundColor,
     required this.actionRoute,
+    this.actionUrl = '',
+    this.ctaLabel = '',
+    this.ctaLabelAr = '',
   });
 
   final String id;
@@ -35,11 +38,22 @@ class HomeBanner {
   /// only announces something.
   final String actionRoute;
 
+  /// A web page a tap opens in the phone's browser, or empty. Wins over
+  /// [actionRoute] when the back office set both.
+  final String actionUrl;
+
+  /// The words on a marketplace slide's button, or empty for a slide with none.
+  final String ctaLabel;
+  final String ctaLabelAr;
+
   String titleIn(String languageCode) =>
       languageCode == 'ar' && titleAr.isNotEmpty ? titleAr : title;
 
   String subtitleIn(String languageCode) =>
       languageCode == 'ar' && subtitleAr.isNotEmpty ? subtitleAr : subtitle;
+
+  String ctaIn(String languageCode) =>
+      languageCode == 'ar' && ctaLabelAr.isNotEmpty ? ctaLabelAr : ctaLabel;
 
   factory HomeBanner.fromData(Map<String, dynamic> data) {
     final path = (data['imagePath'] as String?) ?? '';
@@ -55,11 +69,14 @@ class HomeBanner {
       imageUrl: path.isEmpty ? '' : '${ApiConfig.baseUrl}$path',
       backgroundColor: data['backgroundColor'] as String? ?? '#0b6b3a',
       actionRoute: data['actionRoute'] as String? ?? '',
+      actionUrl: data['actionUrl'] as String? ?? '',
+      ctaLabel: data['ctaLabel'] as String? ?? '',
+      ctaLabelAr: data['ctaLabelAr'] as String? ?? '',
     );
   }
 }
 
-/// The cards the home screen shows.
+/// The cards the home screen shows, and the slides atop the Marketplace tab.
 class BannerApi {
   BannerApi(this._client);
 
@@ -69,8 +86,13 @@ class BannerApi {
   ///
   /// An empty list is an ordinary answer, not a failure: it means the platform has
   /// nothing to say today, and the home screen simply has no cards on it.
-  Future<ApiResult<List<HomeBanner>>> list() => _client.get(
+  ///
+  /// [placement] is the screen asking: `home` for the home screen's cards,
+  /// `marketplace` for the slides at the top of the Marketplace tab.
+  Future<ApiResult<List<HomeBanner>>> list({String placement = 'home'}) =>
+      _client.get(
         '/banners',
+        query: {'placement': placement},
         parse: (envelope) => envelope.list
             .whereType<Map<String, dynamic>>()
             .map(HomeBanner.fromData)

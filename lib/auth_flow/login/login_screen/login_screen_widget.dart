@@ -4,9 +4,9 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
-import 'package:flutter/scheduler.dart';
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'login_screen_model.dart';
@@ -32,45 +32,53 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
     super.initState();
     _model = createModel(context, () => LoginScreenModel());
 
-    // On page load: offer the fingerprint by itself on a handset that has a key.
+    // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.hasPasscodeSignIn = await actions.haatHasPasscodeSignIn();
-      _model.hasBiometricKey = await actions.haatHasBiometricKey();
+      _model.passcodeSignIn = await actions.haatHasPasscodeSignIn();
+      _model.biometricKey = await actions.haatHasBiometricKey();
+      _model.hasPasscodeSignIn = _model.passcodeSignIn;
+      _model.hasBiometricKey = _model.biometricKey;
       safeSetState(() {});
-      if (_model.hasBiometricKey) {
-        await _signInWithBiometrics(true);
+      if (_model.hasBiometricKey!) {
+        if (!_model.isSigningIn!) {
+          _model.isSigningIn = true;
+          safeSetState(() {});
+          _model.biometricSignIn = await actions.haatSignInWithBiometrics(
+            true,
+          );
+          _model.isSigningIn = false;
+          safeSetState(() {});
+          if (_model.biometricSignIn == '') {
+            _model.biometricDone = true;
+            safeSetState(() {});
+            await Future.delayed(
+              Duration(
+                milliseconds: 600,
+              ),
+            );
+
+            context.goNamed(BottomBarPagesWidget.routeName);
+          } else {
+            if (_model.biometricSignIn == 'NOT_ENROLLED') {
+              _model.hasBiometricKey = false;
+              safeSetState(() {});
+            } else {
+              if (!(_model.biometricSignIn == 'CANCELLED')) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      _model.biometricSignIn!,
+                      style: TextStyle(),
+                    ),
+                    duration: Duration(milliseconds: 4000),
+                  ),
+                );
+              }
+            }
+          }
+        }
       }
     });
-  }
-
-  Future<void> _signInWithBiometrics(bool automatic) async {
-    if (_model.isSigningIn) return;
-    _model.isSigningIn = true;
-    _model.biometricSignIn = await actions.haatSignInWithBiometrics(automatic);
-    _model.isSigningIn = false;
-    if (!mounted) return;
-    if (_model.biometricSignIn == '') {
-      _model.biometricDone = true;
-      safeSetState(() {});
-      await Future.delayed(const Duration(milliseconds: 600));
-      if (!mounted) return;
-      context.goNamed(BottomBarPagesWidget.routeName);
-      return;
-    }
-    if (_model.biometricSignIn == 'NOT_ENROLLED') {
-      _model.hasBiometricKey = false;
-    } else if (_model.biometricSignIn != 'CANCELLED') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _model.biometricSignIn!,
-            style: TextStyle(),
-          ),
-          duration: Duration(milliseconds: 4000),
-        ),
-      );
-    }
-    safeSetState(() {});
   }
 
   @override
@@ -278,7 +286,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                                   ),
                                 ),
                               ),
-                              if (_model.hasPasscodeSignIn)
+                              if (_model.hasPasscodeSignIn ?? true)
                                 InkWell(
                                   splashColor: Colors.transparent,
                                   focusColor: Colors.transparent,
@@ -350,42 +358,52 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                   ],
                 ),
               ),
-              // The biometric state, as the design shows it: the sensor mark while the
-              // prompt is up or can be raised again, a tick once the signature is accepted.
-              // Tapping it raises the prompt again for somebody who dismissed it.
-              if (_model.hasBiometricKey)
-                Align(
-                  alignment: AlignmentDirectional(0.0, -1.0),
-                  child: SafeArea(
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          await _signInWithBiometrics(false);
-                        },
-                        child: Container(
-                          width: 110.0,
-                          height: 110.0,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(26.0),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Icon(
-                            _model.biometricDone
-                                ? Icons.check_circle_outline_rounded
-                                : Icons.fingerprint_rounded,
-                            color: Color(0xFFA6E59D),
-                            size: 60.0,
-                          ),
-                        ),
-                      ),
-                    ),
+              if (_model.hasBiometricKey ?? true)
+                Container(
+                  child: custom_widgets.BiometricSignInMark(
+                    done: _model.biometricDone,
+                    onTap: () async {
+                      if (!_model.isSigningIn!) {
+                        _model.isSigningIn = true;
+                        safeSetState(() {});
+                        _model.biometricRetry =
+                            await actions.haatSignInWithBiometrics(
+                          false,
+                        );
+                        _model.isSigningIn = false;
+                        safeSetState(() {});
+                        if (_model.biometricRetry == '') {
+                          _model.biometricDone = true;
+                          safeSetState(() {});
+                          await Future.delayed(
+                            Duration(
+                              milliseconds: 600,
+                            ),
+                          );
+
+                          context.goNamed(BottomBarPagesWidget.routeName);
+                        } else {
+                          if (_model.biometricRetry == 'NOT_ENROLLED') {
+                            _model.hasBiometricKey = false;
+                            safeSetState(() {});
+                          } else {
+                            if (!(_model.biometricRetry == 'CANCELLED')) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    _model.biometricRetry!,
+                                    style: TextStyle(),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                ),
+                              );
+                            }
+                          }
+                        }
+                      }
+
+                      safeSetState(() {});
+                    },
                   ),
                 ),
             ],

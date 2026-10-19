@@ -1,10 +1,11 @@
 // Automatic FlutterFlow imports
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -239,10 +240,10 @@ class _SecuritySettingsState extends State<SecuritySettings> {
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.only(
-          topLeft:
-              Radius.circular(FlutterFlowTheme.of(context).designToken.radius.sm),
-          topRight:
-              Radius.circular(FlutterFlowTheme.of(context).designToken.radius.sm),
+          topLeft: Radius.circular(
+              FlutterFlowTheme.of(context).designToken.radius.sm),
+          topRight: Radius.circular(
+              FlutterFlowTheme.of(context).designToken.radius.sm),
         ),
       ),
       child: SafeArea(
@@ -333,7 +334,8 @@ class _SecuritySettingsState extends State<SecuritySettings> {
                     Text(
                       _error!,
                       textAlign: TextAlign.center,
-                      style: _style(13, FontWeight.w500, const Color(0xFFDC0D17)),
+                      style:
+                          _style(13, FontWeight.w500, const Color(0xFFDC0D17)),
                     ),
                   ],
                   if (_notice != null) ...[
@@ -341,7 +343,8 @@ class _SecuritySettingsState extends State<SecuritySettings> {
                     Text(
                       _notice!,
                       textAlign: TextAlign.center,
-                      style: _style(13, FontWeight.w500, const Color(0xFF2E7D32)),
+                      style:
+                          _style(13, FontWeight.w500, const Color(0xFF2E7D32)),
                     ),
                   ],
                 ],

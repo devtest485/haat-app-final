@@ -10,10 +10,8 @@ import '/custom_code/banner_api.dart';
 import '/custom_code/biometric_key_store.dart';
 import '/custom_code/device_identity.dart';
 import '/custom_code/organization_api.dart';
-import '/custom_code/payout_api.dart';
 import '/custom_code/token_store.dart';
 import '/custom_code/transaction_api.dart';
-import '/custom_code/wallet_api.dart';
 
 /// What a biometric sign-in attempt came to.
 ///
@@ -151,12 +149,6 @@ class AuthSession extends ChangeNotifier {
   /// What has moved through the business's account.
   late final TransactionApi transactions = TransactionApi(_client);
 
-  /// What the business holds, bank by bank.
-  late final WalletApi wallet = WalletApi(_client);
-
-  /// Money the business sends from its wallet to its own bank account.
-  late final PayoutApi payouts = PayoutApi(_client);
-
   /// The device key behind biometric sign-in. Held here so the screens that offer it and
   /// the screen that enrols it are talking to the same thing.
   final BiometricKeyStore biometrics = BiometricKeyStore();
@@ -190,35 +182,28 @@ class AuthSession extends ChangeNotifier {
   bool get isSignedIn =>
       _status == AuthStatus.signedIn || _status == AuthStatus.onboarding;
 
-  /// Whether the sign-in screen stands between this session and the app.
+  /// Whether the passcode screen stands between this session and the app.
   ///
-  /// Reopening the app always asks who is holding the phone, whether the owner
-  /// signed out or simply closed it: the same sign-in screen, with the fingerprint,
-  /// the password and the passcode. What the stored session buys is that the
-  /// passcode there only *unlocks* it (`POST /auth/passcode/verify`) — a check the
-  /// server makes against a session it already issued.
+  /// ## Why the passcode locks rather than signs in
   ///
-  /// True on the run that opened onto stored tokens for an account that finished
-  /// onboarding, and false once any of the three has been given. An account still
-  /// in onboarding is not locked: it may have no password yet, and the onboarding
-  /// screens are where it has to go anyway.
+  /// `POST /auth/passcode/verify` confirms a passcode for a session that already
+  /// exists and refuses to issue one — six digits is a million combinations,
+  /// which is nothing to a script. So it can never be what gets somebody back in
+  /// after signing out; offering it there produced "Sign In Required" every time,
+  /// whatever the merchant typed.
+  ///
+  /// What it can do is guard a session the app already holds. This is true on the
+  /// run that opened onto stored tokens, and false once the passcode has been
+  /// given — or on a run where the merchant signed in properly, which is a
+  /// stronger proof than the passcode would have been.
   ///
   /// **A cold start with no network does not lock.** [_credentials] is null then,
-  /// because the call that reads them did not come back, and nothing on the sign-in
-  /// screen can be checked without the server either — so locking would shut the
-  /// owner out of their own app with no way through. The stored tokens are trusted
-  /// for that run, which is the same bargain [_resolveStartingStatus] already makes.
-  bool get lockedOnReopen =>
-      _restoredSession &&
-      _credentials != null &&
-      _status == AuthStatus.signedIn;
-
-  /// Whether "Login with Passcode" can work on the sign-in screen right now: this
-  /// handset holds a passcode secret, or the app is locked over a session whose
-  /// account has a passcode, which the passcode can unlock.
-  bool get canUsePasscode =>
-      hasPasscodeSignIn ||
-      (lockedOnReopen && (_credentials?.hasPasscode ?? false));
+  /// because the call that reads them did not come back, and the passcode cannot
+  /// be checked without the server either — so locking would shut the owner out
+  /// of their own app with no way through. The stored tokens are trusted for that
+  /// run, which is the same bargain [_resolveStartingStatus] already makes.
+  bool get lockedByPasscode =>
+      _restoredSession && (_credentials?.hasPasscode ?? false);
 
   /// Whether this run opened onto tokens the last one left behind.
   bool _restoredSession = false;
@@ -508,7 +493,6 @@ class AuthSession extends ChangeNotifier {
       publicKey: enrolment.publicKey,
     );
 
-   
     if (!registered.isSuccess) {
       await biometrics.remove();
 
@@ -533,7 +517,8 @@ class AuthSession extends ChangeNotifier {
     String passcode, {
     String? password,
   }) async {
-    final result = await api.setPasscode(passcode: passcode, password: password);
+    final result =
+        await api.setPasscode(passcode: passcode, password: password);
     if (result.isSuccess) {
       await refreshCredentials();
       // A new passcode is the moment passcode sign-in becomes possible on this handset.
@@ -606,16 +591,13 @@ class AuthSession extends ChangeNotifier {
   /// never fires. The next call would simply be refused for a reason the merchant did
   /// nothing to cause. Asking for a new one here closes that window.
   ///
-  /// ## Names and handles
+  /// ## Two shops with one name
   ///
-  /// No two businesses share a name — the server refuses a second "Flow Bakery",
-  /// whatever its case or spacing, and that refusal is returned as it is for the screen
-  /// to show under the name field. Only the merchant can choose another name.
-  ///
-  /// The handle is different. It is built from the name, so "Flow Bakery" and
-  /// "Flow-Bakery!" ask for the same one. That is a clash in a technical detail the
-  /// merchant never chose and never sees, so it is not theirs to resolve: the handle is
-  /// retried once with a short suffix, and the name they typed is kept as typed.
+  /// The handle is built from the name, so the second "Flow Bakery" on the platform
+  /// asks for a handle the first already holds and is refused. That is a clash in a
+  /// technical detail the merchant never chose and never sees, so it is not theirs to
+  /// resolve: the handle is retried once with a short suffix, and the name they typed
+  /// is kept exactly as they typed it.
   Future<ApiResult<String>> createOrganization({
     required String name,
     String? category,
@@ -626,12 +608,9 @@ class AuthSession extends ChangeNotifier {
       category: category,
     );
 
-    // A taken handle is retried; a taken *name* is not. Both come back as `CONFLICT`,
-    // told apart by the field the server names: the name is the merchant's own choice
-    // and only they can pick another, so it goes straight back to the screen.
-    if (result is ApiFailure<String> &&
-        result.errorCode == 'CONFLICT' &&
-        result.data['field'] == 'slug') {
+    // `CONFLICT` is what a taken handle comes back as — the only conflict creating a
+    // business can raise, so retrying on it cannot mask a different problem.
+    if (result.errorCode == 'CONFLICT') {
       final suffix = DateTime.now().millisecondsSinceEpoch.toRadixString(36);
 
       result = await organizations.create(

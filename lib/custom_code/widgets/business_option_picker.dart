@@ -1,10 +1,11 @@
 // Automatic FlutterFlow imports
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -141,9 +142,10 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
       if (_isChannels) {
         FFAppState().selectedSalesChannels = List<String>.from(_selected);
 
-        // The single key, kept in step with the list for anything in App State
-        // that still reads one. The first choice rather than the last, so that
-        // picking a second does not change it.
+        // The single key `PATCH /organizations` still takes, kept in step.
+        // It goes on being written until that endpoint accepts a list, and is
+        // the first choice rather than the last so that picking a second one
+        // does not quietly change what gets sent.
         FFAppState().selectedSalesChannel =
             _selected.isEmpty ? '' : _selected.first;
       } else {

@@ -27,7 +27,7 @@ export '/custom_code/actions/haat_sales_channel_chosen.dart'
     show haatSalesChannelChosen;
 export '/custom_code/actions/haat_load_profile.dart' show haatLoadProfile;
 export '/custom_code/actions/haat_save_business_setup.dart'
-    show haatSaveBusinessSetup, haatBusinessNameWasTaken;
+    show haatSaveBusinessSetup;
 export '/custom_code/actions/haat_pick_business_logo.dart'
     show haatPickBusinessLogo;
 export '/custom_code/actions/haat_submit_kyb.dart' show haatSubmitKyb;
@@ -35,7 +35,8 @@ export '/custom_code/actions/haat_has_transactions.dart'
     show haatHasTransactions;
 export '/custom_code/actions/haat_has_biometric_key.dart'
     show haatHasBiometricKey;
-export '/custom_code/actions/haat_sign_in_with_biometrics.dart'
-    show haatSignInWithBiometrics;
 export '/custom_code/actions/haat_has_passcode_sign_in.dart'
     show haatHasPasscodeSignIn;
+export '/custom_code/actions/haat_sign_in_with_biometrics.dart'
+    show haatSignInWithBiometrics;
+export '/custom_code/haat_marketplace_banners.dart' show haatMarketplaceBanners;

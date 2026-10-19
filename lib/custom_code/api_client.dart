@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:uuid/uuid.dart';
 
 import '/custom_code/token_store.dart';
@@ -19,7 +20,9 @@ import '/custom_code/api_result.dart';
 class ApiClient {
   ApiClient({required TokenStore tokens, http.Client? inner, String? baseUrl})
       : _tokens = tokens,
-        _http = inner ?? http.Client(),
+        _http = inner ??
+            IOClient(
+                HttpClient()..connectionTimeout = ApiConfig.connectTimeout),
         _baseUrl = baseUrl;
 
   final TokenStore _tokens;
@@ -133,8 +136,6 @@ class ApiClient {
       'Accept-Language': languageCode,
       if (body != null) 'Content-Type': 'application/json',
       if (idempotencyKey != null) 'Idempotency-Key': idempotencyKey,
-      // The bank this app was built for: accounts are looked up within it.
-      if (ApiConfig.bankCode.isNotEmpty) 'X-Haat-Bank': ApiConfig.bankCode,
     };
 
     final token = _tokens.accessToken;

@@ -1,10 +1,11 @@
 // Automatic FlutterFlow imports
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -385,7 +386,7 @@ class _CustomBottombarState extends State<CustomBottombar> {
                       unselectedIcon: '',
                       useColorFilter: true,
                       iconSize: 28,
-                      fallbackIcon: Icons.grid_view_rounded,
+                      fallbackIcon: Icons.storefront_outlined,
                     ),
                     _buildNavItem(
                       index: 3,
@@ -449,17 +450,25 @@ class _CustomBottombarState extends State<CustomBottombar> {
               ),
             ),
             const SizedBox(height: _kIconLabelGap),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: FlutterFlowTheme.of(context).labelMedium.override(
-                    fontSize: widget.labelSize ?? 13.0,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: color,
-                    letterSpacing: 0.0,
-                  ),
+            // Scaled down rather than cut off: "Marketplace" at 15px is wider than a
+            // quarter of a 360px phone, and "Marketpl…" reads as a fault.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: FlutterFlowTheme.of(context).labelMedium.override(
+                        fontSize: widget.labelSize ?? 13.0,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w500,
+                        color: color,
+                        letterSpacing: 0.0,
+                      ),
+                ),
+              ),
             ),
           ],
         ),

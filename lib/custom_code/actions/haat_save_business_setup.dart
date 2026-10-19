@@ -1,9 +1,10 @@
 // Automatic FlutterFlow imports
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart'; // Imports other custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -28,13 +29,10 @@ import '/custom_code/auth_session.dart';
 /// shape the backend offers: `POST /organizations` makes the business and hands this
 /// account ownership of it, and the profile fields are a separate write.
 ///
-/// Empty means it worked. Anything else is a sentence to show. When the sentence is
-/// about the name — another business already has it — [haatBusinessNameWasTaken] says
-/// so, and the screen puts it under the name field rather than in a passing snackbar.
+/// Empty means it worked. Anything else is a sentence to show.
 Future<String> haatSaveBusinessSetup(String? businessName) async {
   final session = AuthSession.instance;
   final name = businessName?.trim() ?? '';
-  _nameTaken = false;
 
   if (name.isEmpty) {
     return 'Enter your business name to continue.';
@@ -51,38 +49,24 @@ Future<String> haatSaveBusinessSetup(String? businessName) async {
     final created = await session.createOrganization(name: name);
 
     if (created is! ApiSuccess<String>) {
-      _nameTaken = _isNameClash(created);
       return created.messageIn(session.languageCode);
     }
   }
 
+  final channels = FFAppState().selectedSalesChannels;
+
   final saved = await session.organizations.updateProfile(
     name: name,
     categories: List<String>.from(FFAppState().selectedCategories),
-    // Every channel ticked — a counter and a website are both. Null rather than an
-    // empty list leaves what the server holds alone.
-    salesChannels: FFAppState().selectedSalesChannels.isEmpty
-        ? null
-        : List<String>.from(FFAppState().selectedSalesChannels),
+    // The backend stores one. The screen lets a merchant pick several — the design's
+    // own second frame shows two ticked — so the first is sent and the rest are kept
+    // in App State against the day the endpoint takes a list.
+    salesChannel: channels.isEmpty ? null : channels.first,
   );
 
   if (saved is! ApiSuccess<bool>) {
-    // A merchant who comes back and renames the business meets the same rule here.
-    _nameTaken = _isNameClash(saved);
     return saved.messageIn(session.languageCode);
   }
 
   return '';
 }
-
-bool _nameTaken = false;
-
-/// Whether the last [haatSaveBusinessSetup] was refused because another business
-/// already uses that name — the one refusal only the merchant can fix, by typing a
-/// different one.
-bool haatBusinessNameWasTaken() => _nameTaken;
-
-bool _isNameClash(ApiResult<Object?> result) =>
-    result is ApiFailure<Object?> &&
-    result.errorCode == 'CONFLICT' &&
-    result.data['field'] == 'name';

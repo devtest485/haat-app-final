@@ -176,13 +176,13 @@ class OrganizationApi {
   /// screen sends only its own answer and a merchant who stops halfway leaves nothing
   /// half-written.
   ///
-  /// [categories] and [salesChannels] carry **keys**, never labels — the backend checks
+  /// [categories] and [salesChannel] carry **keys**, never labels — the backend checks
   /// them against its own catalogue, which is the same catalogue [setupOptions]
   /// returned.
   Future<ApiResult<bool>> updateProfile({
     String? name,
     List<String>? categories,
-    List<String>? salesChannels,
+    String? salesChannel,
     String? addressLine,
     String? city,
     double? latitude,
@@ -193,7 +193,7 @@ class OrganizationApi {
         body: {
           if (name != null) 'name': name,
           if (categories != null) 'categories': categories,
-          if (salesChannels != null) 'salesChannels': salesChannels,
+          if (salesChannel != null) 'salesChannel': salesChannel,
           if (addressLine != null) 'addressLine': addressLine,
           if (city != null) 'city': city,
           if (latitude != null) 'latitude': latitude,
@@ -216,22 +216,6 @@ class OrganizationApi {
         filename: filename,
         parse: (envelope) =>
             logoUrlFor(envelope.object['logoPath'] as String?) ?? '',
-      );
-
-  /// Where the merchant's own business stands with HAAT: `pending` until the back
-  /// office approves it, `active` once it has, `suspended` if it has been stopped.
-  /// Null when this account has no business yet.
-  Future<ApiResult<String?>> currentStatus() => _client.get(
-        '/organizations',
-        parse: (envelope) {
-          final rows = envelope.list.whereType<Map<String, dynamic>>().toList();
-          if (rows.isEmpty) return null;
-
-          final owned = rows.where((row) => row['isOwner'] == true);
-          final chosen = owned.isNotEmpty ? owned.first : rows.first;
-
-          return chosen['status'] as String?;
-        },
       );
 
   /// The business's current logo address, or null if it has none yet.
