@@ -20,3 +20,5 @@ export '/custom_code/widgets/payout_screen.dart' show PayoutScreen;
 export '/custom_code/widgets/security_settings.dart' show SecuritySettings;
 export '/custom_code/widgets/biometric_sign_in_mark.dart'
     show BiometricSignInMark;
+export '/custom_code/widgets/marketplace_banner_slider.dart'
+    show MarketplaceBannerSlider;

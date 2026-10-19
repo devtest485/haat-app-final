@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -5,8 +6,8 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/marketplace/market_space/market_space_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'market_place_widget.dart' show MarketPlaceWidget;
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,12 +27,10 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
 
   ///  State fields for stateful widgets in this component.
 
-  // Stores action output result for [Custom Action - haatMarketplaceBanners] action in MarketPlace widget.
-  List<dynamic>? slides;
-  // State field(s) for Carousel widget.
-  CarouselSliderController? carouselController;
-  int carouselCurrentIndex = 1;
-
+  // Stores action output result for [Custom Action - haatAccessToken] action in MarketPlace widget.
+  String? token;
+  // Stores action output result for [Backend Call - API (MarketplaceBanners)] action in MarketPlace widget.
+  ApiCallResponse? bannersResult;
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;

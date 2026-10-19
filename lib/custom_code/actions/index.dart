@@ -40,3 +40,4 @@ export '/custom_code/actions/haat_has_passcode_sign_in.dart'
 export '/custom_code/actions/haat_sign_in_with_biometrics.dart'
     show haatSignInWithBiometrics;
 export '/custom_code/haat_marketplace_banners.dart' show haatMarketplaceBanners;
+export '/custom_code/actions/haat_access_token.dart' show haatAccessToken;

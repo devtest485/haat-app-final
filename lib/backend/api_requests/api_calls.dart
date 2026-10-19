@@ -51,6 +51,8 @@ class HaatAuthGroup {
   static KycProviderSessionCall kycProviderSessionCall =
       KycProviderSessionCall();
   static KycProviderResultCall kycProviderResultCall = KycProviderResultCall();
+  static MarketplaceBannersCall marketplaceBannersCall =
+      MarketplaceBannersCall();
 }
 
 class RegisterUserCall {
@@ -1536,6 +1538,53 @@ class KycProviderResultCall {
       alwaysAllowBody: false,
     );
   }
+}
+
+class MarketplaceBannersCall {
+  Future<ApiCallResponse> call({
+    String? placement = 'marketplace',
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'MarketplaceBanners',
+      apiUrl: '${baseUrl}/banners?placement=${placement}',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? banners(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
 }
 
 /// End HaatAuth Group Code

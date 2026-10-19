@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -5,7 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/marketplace/market_space/market_space_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
-import 'package:carousel_slider/carousel_slider.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,9 +37,21 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
 
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.slides = await actions.haatMarketplaceBanners();
-      _model.banners = _model.slides!.toList().cast<dynamic>();
-      safeSetState(() {});
+      _model.token = await actions.haatAccessToken();
+      _model.bannersResult = await HaatAuthGroup.marketplaceBannersCall.call(
+        accessToken: _model.token,
+        placement: 'marketplace',
+      );
+
+      if ((_model.bannersResult?.succeeded ?? true)) {
+        _model.banners = HaatAuthGroup.marketplaceBannersCall
+            .banners(
+              (_model.bannersResult?.jsonBody ?? ''),
+            )!
+            .toList()
+            .cast<dynamic>();
+        safeSetState(() {});
+      }
     });
 
     _model.textController ??= TextEditingController();
@@ -72,55 +85,19 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                   decoration: BoxDecoration(),
                   child: Container(
                     width: double.infinity,
-                    height: 200.0,
-                    child: CarouselSlider(
-                      items: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(),
-                          child: Image.network(
-                            'https://picsum.photos/seed/208/600',
-                            width: 200.0,
-                            height: 200.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(),
-                          child: Image.network(
-                            'https://picsum.photos/seed/97/600',
-                            width: 200.0,
-                            height: 200.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(),
-                          child: Image.network(
-                            'https://picsum.photos/seed/211/600',
-                            width: 200.0,
-                            height: 200.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ],
-                      carouselController: _model.carouselController ??=
-                          CarouselSliderController(),
-                      options: CarouselOptions(
-                        initialPage: 1,
-                        viewportFraction: 1.0,
-                        disableCenter: true,
-                        enlargeCenterPage: true,
-                        enlargeFactor: 0.1,
-                        enableInfiniteScroll: true,
-                        scrollDirection: Axis.horizontal,
-                        autoPlay: true,
-                        autoPlayAnimationDuration: Duration(milliseconds: 800),
-                        autoPlayInterval: Duration(milliseconds: (800 + 4000)),
-                        autoPlayCurve: Curves.linear,
-                        pauseAutoPlayInFiniteScroll: true,
-                        onPageChanged: (index, _) =>
-                            _model.carouselCurrentIndex = index,
-                      ),
+                    height: 492.0,
+                    child: custom_widgets.MarketplaceBannerSlider(
+                      width: double.infinity,
+                      height: 492.0,
+                      imagePath: '\$.imagePath',
+                      logoPath: '\$.logoPath',
+                      titlePath: '\$.title',
+                      buttonPath: '\$.ctaLabel',
+                      linkPath: '\$.actionUrl',
+                      routePath: '\$.actionRoute',
+                      contentBottomPadding: 56.0,
+                      autoPlay: true,
+                      banners: _model.banners,
                     ),
                   ),
                 ),
