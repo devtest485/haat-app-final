@@ -10,8 +10,10 @@ import '/custom_code/banner_api.dart';
 import '/custom_code/biometric_key_store.dart';
 import '/custom_code/device_identity.dart';
 import '/custom_code/organization_api.dart';
+import '/custom_code/payout_api.dart';
 import '/custom_code/token_store.dart';
 import '/custom_code/transaction_api.dart';
+import '/custom_code/wallet_api.dart';
 
 /// What a biometric sign-in attempt came to.
 ///
@@ -148,6 +150,12 @@ class AuthSession extends ChangeNotifier {
 
   /// What has moved through the business's account.
   late final TransactionApi transactions = TransactionApi(_client);
+
+  /// What the business holds, bank by bank.
+  late final WalletApi wallet = WalletApi(_client);
+
+  /// Money the business sends from its wallet to its own bank account.
+  late final PayoutApi payouts = PayoutApi(_client);
 
   /// The device key behind biometric sign-in. Held here so the screens that offer it and
   /// the screen that enrols it are talking to the same thing.
@@ -500,6 +508,7 @@ class AuthSession extends ChangeNotifier {
       publicKey: enrolment.publicKey,
     );
 
+   
     if (!registered.isSuccess) {
       await biometrics.remove();
 
@@ -524,8 +533,7 @@ class AuthSession extends ChangeNotifier {
     String passcode, {
     String? password,
   }) async {
-    final result =
-        await api.setPasscode(passcode: passcode, password: password);
+    final result = await api.setPasscode(passcode: passcode, password: password);
     if (result.isSuccess) {
       await refreshCredentials();
       // A new passcode is the moment passcode sign-in becomes possible on this handset.
@@ -598,13 +606,16 @@ class AuthSession extends ChangeNotifier {
   /// never fires. The next call would simply be refused for a reason the merchant did
   /// nothing to cause. Asking for a new one here closes that window.
   ///
-  /// ## Two shops with one name
+  /// ## Names and handles
   ///
-  /// The handle is built from the name, so the second "Flow Bakery" on the platform
-  /// asks for a handle the first already holds and is refused. That is a clash in a
-  /// technical detail the merchant never chose and never sees, so it is not theirs to
-  /// resolve: the handle is retried once with a short suffix, and the name they typed
-  /// is kept exactly as they typed it.
+  /// No two businesses share a name — the server refuses a second "Flow Bakery",
+  /// whatever its case or spacing, and that refusal is returned as it is for the screen
+  /// to show under the name field. Only the merchant can choose another name.
+  ///
+  /// The handle is different. It is built from the name, so "Flow Bakery" and
+  /// "Flow-Bakery!" ask for the same one. That is a clash in a technical detail the
+  /// merchant never chose and never sees, so it is not theirs to resolve: the handle is
+  /// retried once with a short suffix, and the name they typed is kept as typed.
   Future<ApiResult<String>> createOrganization({
     required String name,
     String? category,
@@ -615,9 +626,12 @@ class AuthSession extends ChangeNotifier {
       category: category,
     );
 
-    // `CONFLICT` is what a taken handle comes back as — the only conflict creating a
-    // business can raise, so retrying on it cannot mask a different problem.
-    if (result.errorCode == 'CONFLICT') {
+    // A taken handle is retried; a taken *name* is not. Both come back as `CONFLICT`,
+    // told apart by the field the server names: the name is the merchant's own choice
+    // and only they can pick another, so it goes straight back to the screen.
+    if (result is ApiFailure<String> &&
+        result.errorCode == 'CONFLICT' &&
+        result.data['field'] == 'slug') {
       final suffix = DateTime.now().millisecondsSinceEpoch.toRadixString(36);
 
       result = await organizations.create(
