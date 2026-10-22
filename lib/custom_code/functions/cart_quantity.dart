@@ -1,0 +1,26 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import '/flutter_flow/custom_functions.dart';
+import '/flutter_flow/lat_lng.dart';
+import '/flutter_flow/place.dart';
+import '/flutter_flow/uploaded_file.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
+
+/// How many of one product are in the cart; nought when it is not in it.
+int cartQuantity(
+  List<dynamic>? cart,
+  String? productId,
+) {
+  for (final line in cart ?? const []) {
+    if (line is Map && '${line['id']}' == productId) {
+      return int.tryParse('${line['qty']}') ?? 0;
+    }
+  }
+
+  return 0;
+}

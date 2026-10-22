@@ -3,14 +3,30 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/index.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'pay_your_model.dart';
 export 'pay_your_model.dart';
 
 class PayYourWidget extends StatefulWidget {
-  const PayYourWidget({super.key});
+  const PayYourWidget({
+    super.key,
+    String? billerName,
+    String? logoUrl,
+    String? flow,
+  })  : this.billerName = billerName ?? 'MTN',
+        this.logoUrl = logoUrl ?? '',
+        this.flow = flow ?? 'mobile';
+
+  /// The biller tapped on the Marketplace tab, its logo's address (empty for none) and
+  /// what is paid: `mobile`, `electricity` or `account`.
+  final String billerName;
+  final String logoUrl;
+  final String flow;
 
   static String routeName = 'PayYour';
   static String routePath = '/payYour';
@@ -28,6 +44,12 @@ class _PayYourWidgetState extends State<PayYourWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PayYourModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.billType = functions.billTypesFor(widget.flow).firstOrNull;
+      safeSetState(() {});
+    });
 
     _model.usernameTextController ??= TextEditingController();
     _model.usernameFocusNode ??= FocusNode();
@@ -170,20 +192,93 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                   height: 35.0,
                                                   clipBehavior: Clip.antiAlias,
                                                   decoration: BoxDecoration(
+                                                    color: Color(0xFFEBEBEB),
                                                     shape: BoxShape.circle,
                                                   ),
-                                                  child: Image.asset(
-                                                    'assets/images/mk_mtn.png',
-                                                    fit: BoxFit.cover,
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, 0.0),
+                                                  child: Stack(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.0, 0.0),
+                                                    children: [
+                                                      if (widget.logoUrl == '')
+                                                        Text(
+                                                          functions.initialLetter(
+                                                              widget
+                                                                  .billerName),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBackground,
+                                                                fontSize: 15.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                        ),
+                                                      if (widget.logoUrl != '')
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      17.5),
+                                                          child: Image.network(
+                                                            widget.logoUrl,
+                                                            width: 35.0,
+                                                            height: 35.0,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                    ],
                                                   ),
                                                 ),
-                                                Text(
-                                                  'MTN bill',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
+                                                Flexible(
+                                                  child: Text(
+                                                    '${widget.billerName} bill',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font:
+                                                              GoogleFonts.inter(
+                                                            fontWeight:
+                                                                FontWeight.w800,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryBackground,
+                                                          fontSize: 24.0,
+                                                          letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w800,
                                                           fontStyle:
@@ -192,24 +287,15 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
-                                                        color: FlutterFlowTheme
-                                                                .of(context)
-                                                            .primaryBackground,
-                                                        fontSize: 24.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
+                                                  ),
                                                 ),
                                               ].divide(SizedBox(width: 9.0)),
                                             ),
                                             Text(
-                                              'Select bill type and enter the MTN number to pay.',
+                                              functions.billFlowText(
+                                                  widget.flow,
+                                                  widget.billerName,
+                                                  'subtitle'),
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -243,125 +329,127 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                         lineHeight: 1.4,
                                                       ),
                                             ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      0.0, 12.0, 0.0, 0.0),
-                                              child: Container(
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(),
-                                                child: SingleChildScrollView(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Container(
-                                                        width: 68.0,
-                                                        height: 35.0,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryBackground,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      50.0),
-                                                        ),
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                0.0, 0.0),
-                                                        child: Text(
-                                                          'Prepaid',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
+                                            if (functions
+                                                .billTypesFor(widget.flow)
+                                                .isNotEmpty)
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 12.0, 0.0, 0.0),
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(),
+                                                  child: Builder(
+                                                    builder: (context) {
+                                                      final billType = functions
+                                                          .billTypesFor(
+                                                              widget.flow)
+                                                          .toList();
+
+                                                      return SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: List.generate(
+                                                              billType.length,
+                                                              (billTypeIndex) {
+                                                            final billTypeItem =
+                                                                billType[
+                                                                    billTypeIndex];
+                                                            return InkWell(
+                                                              splashColor: Colors
+                                                                  .transparent,
+                                                              focusColor: Colors
+                                                                  .transparent,
+                                                              hoverColor: Colors
+                                                                  .transparent,
+                                                              highlightColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              onTap: () async {
+                                                                _model.billType =
+                                                                    billTypeItem;
+                                                                safeSetState(
+                                                                    () {});
+                                                              },
+                                                              child: Container(
+                                                                height: 35.0,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: billTypeItem ==
+                                                                          _model
+                                                                              .billType
+                                                                      ? FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primaryBackground
+                                                                      : Color(
+                                                                          0xFFEBEBEB),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50.0),
                                                                 ),
-                                                                fontSize: 12.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 78.0,
-                                                        height: 35.0,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              Color(0xFFEBEBEB),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      50.0),
-                                                        ),
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                0.0, 0.0),
-                                                        child: Text(
-                                                          'Postpaid',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        0.0,
+                                                                        0.0),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          16.0,
+                                                                          0.0,
+                                                                          16.0,
+                                                                          0.0),
+                                                                  child: Text(
+                                                                    billTypeItem,
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          font:
+                                                                              GoogleFonts.inter(
+                                                                            fontWeight: billTypeItem == _model.billType
+                                                                                ? FontWeight.bold
+                                                                                : FontWeight.normal,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                          color: billTypeItem == _model.billType
+                                                                              ? FlutterFlowTheme.of(context).primaryText
+                                                                              : FlutterFlowTheme.of(context).primaryBackground,
+                                                                          fontSize:
+                                                                              12.0,
+                                                                          letterSpacing:
+                                                                              0.0,
+                                                                          fontWeight: billTypeItem == _model.billType
+                                                                              ? FontWeight.bold
+                                                                              : FontWeight.normal,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                  ),
                                                                 ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryBackground,
-                                                                fontSize: 12.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
                                                               ),
+                                                            );
+                                                          }).divide(SizedBox(
+                                                              width: 8.0)),
                                                         ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 8.0)),
+                                                      );
+                                                    },
                                                   ),
                                                 ),
                                               ),
-                                            ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(0.0, 8.0, 0.0, 0.0),
                                               child: Text(
-                                                'MTN mobile number',
+                                                functions.billFlowText(
+                                                    widget.flow,
+                                                    widget.billerName,
+                                                    'label'),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -398,7 +486,11 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                 borderRadius:
                                                     BorderRadius.circular(12.0),
                                                 border: Border.all(
-                                                  color: Color(0xFFD9D9D9),
+                                                  color: _model.showError
+                                                      ? FlutterFlowTheme.of(
+                                                              context)
+                                                          .error
+                                                      : Color(0xFFD9D9D9),
                                                   width: 1.0,
                                                 ),
                                               ),
@@ -431,6 +523,20 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                                 .usernameFocusNode,
                                                             autofocus: false,
                                                             enabled: true,
+                                                            onChanged: (_) =>
+                                                                EasyDebounce
+                                                                    .debounce(
+                                                              '_model.usernameTextController',
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      300),
+                                                              () async {
+                                                                _model.showError =
+                                                                    false;
+                                                                safeSetState(
+                                                                    () {});
+                                                              },
+                                                            ),
                                                             obscureText: false,
                                                             decoration:
                                                                 InputDecoration(
@@ -458,8 +564,13 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                                             .labelMedium
                                                                             .fontStyle,
                                                                       ),
-                                                              hintText:
-                                                                  'Enter the mobile number',
+                                                              hintText: functions
+                                                                  .billFlowText(
+                                                                      widget
+                                                                          .flow,
+                                                                      widget
+                                                                          .billerName,
+                                                                      'hint'),
                                                               hintStyle:
                                                                   FlutterFlowTheme.of(
                                                                           context)
@@ -577,10 +688,13 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .phone,
                                                             cursorColor:
                                                                 FlutterFlowTheme.of(
                                                                         context)
-                                                                    .primaryText,
+                                                                    .primaryBackground,
                                                             enableInteractiveSelection:
                                                                 true,
                                                             validator: _model
@@ -595,6 +709,40 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                                                 ),
                                               ),
                                             ),
+                                            if (_model.showError)
+                                              Text(
+                                                functions.billFlowText(
+                                                    widget.flow,
+                                                    widget.billerName,
+                                                    'error'),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      font: GoogleFonts.inter(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .error,
+                                                      fontSize: 12.0,
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontStyle,
+                                                    ),
+                                              ),
                                           ].divide(SizedBox(height: 9.0)),
                                         ),
                                       ),
@@ -615,7 +763,34 @@ class _PayYourWidgetState extends State<PayYourWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            context.pushNamed(TopupamountWidget.routeName);
+                            if (functions.isValidBillNumber(
+                                _model.usernameTextController.text,
+                                widget.flow)) {
+                              context.pushNamed(
+                                TopupamountWidget.routeName,
+                                queryParameters: {
+                                  'billerName': serializeParam(
+                                    widget.billerName,
+                                    ParamType.String,
+                                  ),
+                                  'flow': serializeParam(
+                                    widget.flow,
+                                    ParamType.String,
+                                  ),
+                                  'accountNumber': serializeParam(
+                                    _model.usernameTextController.text,
+                                    ParamType.String,
+                                  ),
+                                  'billType': serializeParam(
+                                    _model.billType,
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls,
+                              );
+                            } else {
+                              _model.showError = true;
+                              safeSetState(() {});
+                            }
                           },
                           child: Container(
                             width: double.infinity,

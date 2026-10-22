@@ -1,10 +1,15 @@
+import '/backend/api_requests/api_calls.dart';
+import '/components/product_card/product_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/new_order_flow/select_pay_out/select_pay_out_widget.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'add_amount_page_model.dart';
@@ -29,6 +34,25 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AddAmountPageModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.token = await actions.haatAccessToken();
+      _model.productsResult = await HaatAuthGroup.productsCall.call(
+        accessToken: _model.token,
+      );
+
+      if ((_model.productsResult?.succeeded ?? true)) {
+        _model.products = (HaatAuthGroup.productsCall.products(
+                  (_model.productsResult?.jsonBody ?? ''),
+                ) ??
+                [])
+            .toList()
+            .cast<dynamic>();
+      }
+      _model.productsLoaded = true;
+      safeSetState(() {});
+    });
   }
 
   @override
@@ -487,211 +511,193 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
                             15.0, 0.0, 15.0, 0.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(),
-                              child: Column(
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 55.0, 0.0, 0.0),
+                              child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 55.0, 0.0, 0.0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            context.safePop();
-                                          },
-                                          child: Icon(
-                                            Icons.arrow_back,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                            size: 24.0,
-                                          ),
-                                        ),
-                                      ],
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.safePop();
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      size: 24.0,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 25.0, 0.0, 0.0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            _model.switchTab = false;
-                                            safeSetState(() {});
-                                          },
-                                          child: Container(
-                                            width: 83.0,
-                                            height: 35.0,
-                                            decoration: BoxDecoration(
-                                              color: _model.switchTab == false
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .tertiary
-                                                  : FlutterFlowTheme.of(context)
-                                                      .accent3,
-                                              borderRadius:
-                                                  BorderRadius.circular(50.0),
-                                              border: Border.all(
-                                                color: _model.switchTab == false
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Colors.transparent,
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Quick Pay',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color: FlutterFlowTheme
-                                                                .of(context)
-                                                            .primaryBackground,
-                                                        fontSize: 12.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            _model.switchTab = true;
-                                            safeSetState(() {});
-                                          },
-                                          child: Container(
-                                            width: 93.6,
-                                            height: 35.0,
-                                            decoration: BoxDecoration(
-                                              color: _model.switchTab == true
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .tertiary
-                                                  : FlutterFlowTheme.of(context)
-                                                      .accent3,
-                                              borderRadius:
-                                                  BorderRadius.circular(50.0),
-                                              border: Border.all(
-                                                color: _model.switchTab == true
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Colors.transparent,
-                                                width: 0.3,
-                                              ),
-                                            ),
-                                            alignment:
-                                                AlignmentDirectional(0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Cashier',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color: Colors.black,
-                                                        fontSize: 12.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ].divide(SizedBox(width: 6.0)),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 120.0, 0.0, 0.0),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 25.0, 0.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      _model.switchTab = false;
+                                      safeSetState(() {});
+                                    },
                                     child: Container(
+                                      width: 83.0,
+                                      height: 35.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .accent3,
+                                        borderRadius:
+                                            BorderRadius.circular(50.0),
+                                        border: Border.all(
+                                          color: Colors.transparent,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Text(
+                                        'Quick Pay',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.inter(
+                                                fontWeight: FontWeight.normal,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryBackground,
+                                              fontSize: 12.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.normal,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 93.6,
+                                    height: 35.0,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          FlutterFlowTheme.of(context).tertiary,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        width: 0.3,
+                                      ),
+                                    ),
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Text(
+                                      'Cashier',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.inter(
+                                              fontWeight: FontWeight.normal,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                            color: Colors.black,
+                                            fontSize: 12.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.normal,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ].divide(SizedBox(width: 6.0)),
+                              ),
+                            ),
+                            Expanded(
+                              child: Builder(
+                                builder: (context) {
+                                  if (_model.productsLoaded == false) {
+                                    return Container(
                                       width: double.infinity,
                                       decoration: BoxDecoration(),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(0.0),
-                                            child: Image.asset(
-                                              'assets/images/no_products.png',
-                                              width: 200.0,
-                                              height: 200.0,
-                                              fit: BoxFit.cover,
-                                            ),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: SizedBox(
+                                        width: 28.0,
+                                        height: 28.0,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primaryBackground,
                                           ),
-                                          Text(
-                                            'No Products Yet',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.inter(
+                                        ),
+                                      ),
+                                    );
+                                  } else if (_model.products.isEmpty) {
+                                    return Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 90.0, 0.0, 0.0),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(0.0),
+                                              child: Image.asset(
+                                                'assets/images/no_products.png',
+                                                width: 200.0,
+                                                height: 200.0,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            Text(
+                                              'No Products Yet',
+                                              textAlign: TextAlign.center,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    font: GoogleFonts.inter(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontStyle,
+                                                    ),
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    fontSize: 24.0,
+                                                    letterSpacing: 0.0,
                                                     fontWeight: FontWeight.w500,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
@@ -699,78 +705,12 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
                                                             .bodyMedium
                                                             .fontStyle,
                                                   ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  fontSize: 24.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                          Text(
-                                            'Please Help us to secure your money more ! creat a passcode for your bank account',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  color: Color(0xF1000000),
-                                                  fontSize: 13.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                          Container(
-                                            width: 163.0,
-                                            height: 43.11,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
-                                              borderRadius:
-                                                  BorderRadius.circular(106.67),
                                             ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.add,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  size: 20.0,
-                                                ),
-                                                Text(
-                                                  'Add Product',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
+                                            Text(
+                                              'The products you sell will show here. Tap one to add it to a sale, then charge the whole cart at once.',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .override(
                                                         font: GoogleFonts.inter(
@@ -785,7 +725,9 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
-                                                        fontSize: 16.0,
+                                                        color:
+                                                            Color(0xF1000000),
+                                                        fontSize: 13.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
@@ -798,15 +740,176 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
                                                                 .bodyMedium
                                                                 .fontStyle,
                                                       ),
-                                                ),
-                                              ].divide(SizedBox(width: 8.0)),
                                             ),
-                                          ),
-                                        ].divide(SizedBox(height: 12.0)),
+                                            Container(
+                                              width: 163.0,
+                                              height: 43.11,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryBackground,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        106.67),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.add,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    size: 20.0,
+                                                  ),
+                                                  Text(
+                                                    'Add Product',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font:
+                                                              GoogleFonts.inter(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          fontSize: 16.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                ].divide(SizedBox(width: 8.0)),
+                                              ),
+                                            ),
+                                          ].divide(SizedBox(height: 12.0)),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ],
+                                    );
+                                  } else {
+                                    return Builder(
+                                      builder: (context) {
+                                        final product =
+                                            _model.products.toList();
+
+                                        return GridView.builder(
+                                          padding: EdgeInsets.fromLTRB(
+                                            0,
+                                            20.0,
+                                            0,
+                                            140.0,
+                                          ),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 10.0,
+                                            mainAxisSpacing: 10.0,
+                                            childAspectRatio: 0.79,
+                                          ),
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: product.length,
+                                          itemBuilder: (context, productIndex) {
+                                            final productItem =
+                                                product[productIndex];
+                                            return ProductCardWidget(
+                                              key: Key(
+                                                  'Keypc_${productIndex}_of_${product.length}'),
+                                              name: getJsonField(
+                                                productItem,
+                                                r'''$.name''',
+                                              ).toString(),
+                                              priceLabel: functions
+                                                  .moneyLabel(getJsonField(
+                                                productItem,
+                                                r'''$.priceMinor''',
+                                              ).toString()),
+                                              unit: getJsonField(
+                                                productItem,
+                                                r'''$.unit''',
+                                              ).toString(),
+                                              imageUrl:
+                                                  functions.bannerImageUrl(
+                                                getJsonField(
+                                                  productItem,
+                                                  r'''$.imagePath''',
+                                                )?.toString(),
+                                                FFDevEnvironmentValues()
+                                                    .baseURL,
+                                              ),
+                                              quantity: functions.cartQuantity(
+                                                  _model.cart.toList(),
+                                                  getJsonField(
+                                                    productItem,
+                                                    r'''$.id''',
+                                                  ).toString()),
+                                              selected: functions.productInCart(
+                                                  _model.cart.toList(),
+                                                  getJsonField(
+                                                    productItem,
+                                                    r'''$.id''',
+                                                  ).toString()),
+                                              onTap: () async {
+                                                _model.cart = functions
+                                                    .cartToggle(
+                                                        _model.cart.toList(),
+                                                        productItem,
+                                                        FFDevEnvironmentValues()
+                                                            .baseURL)
+                                                    .toList()
+                                                    .cast<dynamic>();
+                                                safeSetState(() {});
+                                              },
+                                              onIncrement: () async {
+                                                _model.cart = functions
+                                                    .cartChangeQuantity(
+                                                        _model.cart.toList(),
+                                                        getJsonField(
+                                                          productItem,
+                                                          r'''$.id''',
+                                                        ).toString(),
+                                                        1)
+                                                    .toList()
+                                                    .cast<dynamic>();
+                                                safeSetState(() {});
+                                              },
+                                              onDecrement: () async {
+                                                _model.cart = functions
+                                                    .cartChangeQuantity(
+                                                        _model.cart.toList(),
+                                                        getJsonField(
+                                                          productItem,
+                                                          r'''$.id''',
+                                                        ).toString(),
+                                                        -1)
+                                                    .toList()
+                                                    .cast<dynamic>();
+                                                safeSetState(() {});
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -816,6 +919,41 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
                   }
                 },
               ),
+              if (_model.switchTab == true)
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: custom_widgets.AddProductBar(
+                    width: double.infinity,
+                    height: double.infinity,
+                    cart: _model.cart,
+                    products: _model.products,
+                    currency: 'SDG',
+                    bottomGap: 35.0,
+                    onCharge: (totalMinor) async {
+                      await showModalBottomSheet(
+                        isScrollControlled: true,
+                        backgroundColor: Color(0x15000000),
+                        enableDrag: false,
+                        context: context,
+                        builder: (context) {
+                          return GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).unfocus();
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            child: Padding(
+                              padding: MediaQuery.viewInsetsOf(context),
+                              child: SelectPayOutWidget(
+                                amountPay: functions.moneyLabel(totalMinor),
+                              ),
+                            ),
+                          );
+                        },
+                      ).then((value) => safeSetState(() {}));
+                    },
+                  ),
+                ),
             ],
           ),
         ),

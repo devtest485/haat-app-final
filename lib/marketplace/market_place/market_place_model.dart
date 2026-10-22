@@ -25,12 +25,54 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   void updateBannersAtIndex(int index, Function(dynamic) updateFn) =>
       banners[index] = updateFn(banners[index]);
 
+  /// The "Picked For You" billers, from the back office.
+  List<dynamic> featured = [];
+  void addToFeatured(dynamic item) => featured.add(item);
+  void removeFromFeatured(dynamic item) => featured.remove(item);
+  void removeAtIndexFromFeatured(int index) => featured.removeAt(index);
+  void insertAtIndexInFeatured(int index, dynamic item) =>
+      featured.insert(index, item);
+  void updateFeaturedAtIndex(int index, Function(dynamic) updateFn) =>
+      featured[index] = updateFn(featured[index]);
+
+  /// Every live biller, for the "See all" sheet.
+  List<dynamic> billers = [];
+  void addToBillers(dynamic item) => billers.add(item);
+  void removeFromBillers(dynamic item) => billers.remove(item);
+  void removeAtIndexFromBillers(int index) => billers.removeAt(index);
+  void insertAtIndexInBillers(int index, dynamic item) =>
+      billers.insert(index, item);
+  void updateBillersAtIndex(int index, Function(dynamic) updateFn) =>
+      billers[index] = updateFn(billers[index]);
+
+  /// The "Explore Top Brands" cards.
+  List<dynamic> brands = [];
+  void addToBrands(dynamic item) => brands.add(item);
+  void removeFromBrands(dynamic item) => brands.remove(item);
+  void removeAtIndexFromBrands(int index) => brands.removeAt(index);
+  void insertAtIndexInBrands(int index, dynamic item) =>
+      brands.insert(index, item);
+  void updateBrandsAtIndex(int index, Function(dynamic) updateFn) =>
+      brands[index] = updateFn(brands[index]);
+
+  /// The category tiles and chips: `{key, label, labelAr}`.
+  List<dynamic> categories = [];
+  void addToCategories(dynamic item) => categories.add(item);
+  void removeFromCategories(dynamic item) => categories.remove(item);
+  void removeAtIndexFromCategories(int index) => categories.removeAt(index);
+  void insertAtIndexInCategories(int index, dynamic item) =>
+      categories.insert(index, item);
+  void updateCategoriesAtIndex(int index, Function(dynamic) updateFn) =>
+      categories[index] = updateFn(categories[index]);
+
   ///  State fields for stateful widgets in this component.
 
   // Stores action output result for [Custom Action - haatAccessToken] action in MarketPlace widget.
   String? token;
   // Stores action output result for [Backend Call - API (MarketplaceBanners)] action in MarketPlace widget.
   ApiCallResponse? bannersResult;
+  // Stores action output result for [Backend Call - API (Marketplace)] action in MarketPlace widget.
+  ApiCallResponse? marketplaceResult;
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;

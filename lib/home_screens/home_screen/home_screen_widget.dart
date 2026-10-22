@@ -1,16 +1,23 @@
+import '/backend/api_requests/api_calls.dart';
+import '/components/home_banner/home_banner_widget.dart';
 import '/components/log_out_widget.dart';
 import '/components/security_sheet_widget.dart';
+import '/components/transactions/transactions_widget.dart';
+import '/components/week_story_card/week_story_card_widget.dart';
+import '/home_screens/business_story/business_story_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/home_screens/business_story/business_story_widget.dart';
+import '/flutter_flow/instant_timer.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,6 +45,83 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HomeScreenModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.token = await actions.haatAccessToken();
+      _model.transactionsResult =
+          await HaatAuthGroup.recentTransactionsCall.call(
+        accessToken: _model.token,
+        limit: 3,
+      );
+
+      if ((_model.transactionsResult?.succeeded ?? true)) {
+        _model.transactions =
+            (HaatAuthGroup.recentTransactionsCall.transactions(
+                      (_model.transactionsResult?.jsonBody ?? ''),
+                    ) ??
+                    [])
+                .toList()
+                .cast<dynamic>();
+        _model.transactionsLoaded = true;
+        safeSetState(() {});
+      }
+      _model.notificationsResult = await HaatAuthGroup.notificationsCall.call(
+        accessToken: _model.token,
+      );
+
+      if ((_model.notificationsResult?.succeeded ?? true)) {
+        _model.notificationsUnread = valueOrDefault<int>(
+          HaatAuthGroup.notificationsCall.unreadCount(
+            (_model.notificationsResult?.jsonBody ?? ''),
+          ),
+          0,
+        );
+        safeSetState(() {});
+      }
+      _model.weekStoryResult = await HaatAuthGroup.weekStoryCall.call(
+        accessToken: _model.token,
+        language: FFAppState().languageCode,
+      );
+
+      if ((_model.weekStoryResult?.succeeded ?? true)) {
+        _model.weekStories = (HaatAuthGroup.weekStoryCall.stories(
+                  (_model.weekStoryResult?.jsonBody ?? ''),
+                ) ??
+                [])
+            .toList()
+            .cast<dynamic>();
+        safeSetState(() {});
+      }
+      _model.bannersResult = await HaatAuthGroup.marketplaceBannersCall.call(
+        accessToken: _model.token,
+        placement: 'home',
+      );
+
+      if ((_model.bannersResult?.succeeded ?? true)) {
+        _model.banners = (HaatAuthGroup.marketplaceBannersCall.banners(
+                  (_model.bannersResult?.jsonBody ?? ''),
+                ) ??
+                [])
+            .toList()
+            .cast<dynamic>();
+        safeSetState(() {});
+        _model.bannerTimer = InstantTimer.periodic(
+          duration: Duration(milliseconds: 4000),
+          callback: (timer) async {
+            if ((_model.switchd == false) && (_model.banners.length > 1)) {
+              await _model.bannerPageViewController?.animateToPage(
+                functions.bannerNextPage(
+                    _model.bannerPageViewCurrentIndex, _model.banners.length),
+                duration: Duration(milliseconds: 500),
+                curve: Curves.ease,
+              );
+            }
+          },
+          startImmediately: false,
+        );
+      }
+    });
   }
 
   @override
@@ -95,7 +179,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Container(
-                                            height: 45.0,
+                                            height: 40.0,
                                             decoration: BoxDecoration(),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
@@ -232,20 +316,55 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                           highlightColor: Colors
                                                               .transparent,
                                                           onTap: () async {
+                                                            // The list marks everything seen when it opens.
+                                                            _model.notificationsUnread =
+                                                                0;
+                                                            safeSetState(() {});
                                                             context.pushNamed(
                                                                 NotificationsWidget
                                                                     .routeName);
                                                           },
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        0.0),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/images/notification_icon.svg',
-                                                              fit: BoxFit.cover,
-                                                            ),
+                                                          child: Stack(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    1.0, -1.0),
+                                                            children: [
+                                                              ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            0.0),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/images/notification_icon.svg',
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                              if (_model
+                                                                      .notificationsUnread >
+                                                                  0)
+                                                                Container(
+                                                                  width: 8.0,
+                                                                  height: 8.0,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Color(
+                                                                        0xFFFF3128),
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      width:
+                                                                          1.5,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ),
@@ -1004,30 +1123,229 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                       ),
                                                     ],
                                                   ),
-                                                  Container(
-                                                    child: custom_widgets
-                                                        .RecentTransactions(
-                                                      width: double.infinity,
-                                                    ),
+                                                  Builder(
+                                                    builder: (context) {
+                                                      final transaction = _model
+                                                          .transactions
+                                                          .toList();
+
+                                                      return ListView.separated(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    8.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        primary: false,
+                                                        shrinkWrap: true,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemCount:
+                                                            transaction.length,
+                                                        separatorBuilder:
+                                                            (_, __) => SizedBox(
+                                                                height: 0.0),
+                                                        itemBuilder: (context,
+                                                            transactionIndex) {
+                                                          final transactionItem =
+                                                              transaction[
+                                                                  transactionIndex];
+                                                          return TransactionsWidget(
+                                                            key: Key(
+                                                                'Keyhtx_${transactionIndex}_of_${transaction.length}'),
+                                                            title: functions
+                                                                .transactionTitle(
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.description''',
+                                                              )?.toString(),
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.kind''',
+                                                              )?.toString(),
+                                                            ),
+                                                            subtitle: functions
+                                                                .transactionSubtitle(
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.description''',
+                                                              )?.toString(),
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.kind''',
+                                                              )?.toString(),
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.occurredAt''',
+                                                              )?.toString(),
+                                                            ),
+                                                            amount: functions
+                                                                .transactionAmount(
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.amountMinor''',
+                                                              )?.toString(),
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.currency''',
+                                                              )?.toString(),
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.direction''',
+                                                              )?.toString(),
+                                                            ),
+                                                            incoming: functions
+                                                                .transactionIsIncoming(
+                                                              getJsonField(
+                                                                transactionItem,
+                                                                r'''$.direction''',
+                                                              )?.toString(),
+                                                            ),
+                                                            paymentMethod:
+                                                                getJsonField(
+                                                              transactionItem,
+                                                              r'''$.paymentMethod''',
+                                                            )?.toString(),
+                                                            showDivider: functions
+                                                                .isNotLastItem(
+                                                                    transactionIndex,
+                                                                    transaction
+                                                                        .length),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
                                                   ),
+                                                  if (_model
+                                                          .transactionsLoaded &&
+                                                      (_model.transactions
+                                                              .length ==
+                                                          0))
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  16.0,
+                                                                  0.0,
+                                                                  8.0),
+                                                      child: Text(
+                                                        'No transactions yet',
+                                                        style: FlutterFlowTheme
+                                                                .of(context)
+                                                            .bodyMedium
+                                                            .override(
+                                                              font: GoogleFonts
+                                                                  .inter(),
+                                                              color: Color(
+                                                                  0xFF484848),
+                                                              fontSize: 12.0,
+                                                              letterSpacing:
+                                                                  0.0,
+                                                            ),
+                                                      ),
+                                                    ),
                                                 ],
                                               ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 30.0, 0.0, 0.0),
-                                            child: Container(
-                                              width: double.infinity,
-                                              height: 115.53,
-                                              decoration: BoxDecoration(),
-                                              child: Container(
-                                                child: custom_widgets
-                                                    .HomeBanners(),
+                                          if (_model.banners.isNotEmpty)
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 30.0, 0.0, 0.0),
+                                              child: Builder(
+                                                builder: (context) {
+                                                  final banner =
+                                                      _model.banners.toList();
+
+                                                  return Container(
+                                                    width: double.infinity,
+                                                    height: 107.0,
+                                                    child: PageView.builder(
+                                                      controller: _model
+                                                              .bannerPageViewController ??=
+                                                          PageController(
+                                                              initialPage: max(
+                                                                  0,
+                                                                  min(
+                                                                      0,
+                                                                      banner.length -
+                                                                          1))),
+                                                      onPageChanged: (_) =>
+                                                          safeSetState(() {}),
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      itemCount: banner.length,
+                                                      itemBuilder: (context,
+                                                          bannerIndex) {
+                                                        final bannerItem =
+                                                            banner[bannerIndex];
+                                                        return Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      10.0,
+                                                                      0.0,
+                                                                      10.0,
+                                                                      0.0),
+                                                          child:
+                                                              HomeBannerWidget(
+                                                            key: Key(
+                                                                'Keyhbn_${bannerIndex}_of_${banner.length}'),
+                                                            backgroundColor:
+                                                                functions
+                                                                    .bannerBackground(
+                                                              getJsonField(
+                                                                bannerItem,
+                                                                r'''$.backgroundColor''',
+                                                              )?.toString(),
+                                                            ),
+                                                            title:
+                                                                valueOrDefault<
+                                                                    String>(
+                                                              getJsonField(
+                                                                bannerItem,
+                                                                r'''$.title''',
+                                                              )?.toString(),
+                                                              '',
+                                                            ),
+                                                            imageUrl: functions
+                                                                .bannerImageUrl(
+                                                              getJsonField(
+                                                                bannerItem,
+                                                                r'''$.imagePath''',
+                                                              )?.toString(),
+                                                              FFDevEnvironmentValues()
+                                                                  .baseURL,
+                                                            ),
+                                                            dotCount:
+                                                                banner.length,
+                                                            activeIndex:
+                                                                bannerIndex,
+                                                            onTap: () async {
+                                                              await actions
+                                                                  .openBannerLink(
+                                                                context,
+                                                                getJsonField(
+                                                                  bannerItem,
+                                                                  r'''$.actionUrl''',
+                                                                )?.toString(),
+                                                                getJsonField(
+                                                                  bannerItem,
+                                                                  r'''$.actionRoute''',
+                                                                )?.toString(),
+                                                              );
+                                                            },
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                },
                                               ),
                                             ),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -1282,7 +1600,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  height: 681.36,
+                                  height: 665.17,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
                                         .primaryBackground,
@@ -1300,7 +1618,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     20.0, 0.0, 20.0, 0.0),
                                             child: Container(
-                                              height: 45.0,
+                                              height: 40.0,
                                               decoration: BoxDecoration(),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
@@ -1600,10 +1918,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 35.0, 0.0, 5.0),
+                                                    0.0, 35.0, 0.0, 0.0),
                                             child: Container(
                                               width: double.infinity,
-                                              height: 117.76,
+                                              height: 107.8,
                                               decoration: BoxDecoration(),
                                               child: Padding(
                                                 padding: EdgeInsetsDirectional
@@ -1829,7 +2147,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      12.0, 595.0, 12.0, 100.0),
+                                      12.0, 580.0, 12.0, 100.0),
                                   child: Container(
                                     width: double.infinity,
                                     decoration: BoxDecoration(
@@ -1997,7 +2315,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             8.0),
                                                                     child: Image
                                                                         .asset(
-                                                                      'assets/images/qr.png',
+                                                                      'assets/images/grid_view.svg',
                                                                       width:
                                                                           14.0,
                                                                       height:
@@ -2556,43 +2874,51 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                 textBaseline:
                                                     TextBaseline.alphabetic,
                                                 children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(8.0, 0.0,
-                                                                0.0, 0.0),
-                                                    child: Text(
-                                                      'How was your week in minutes 🤩 ',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
+                                                  if (_model
+                                                      .weekStories.isNotEmpty)
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  8.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Text(
+                                                        'How was your week in minutes 🤩 ',
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font:
+                                                                      GoogleFonts
+                                                                          .inter(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryBackground,
+                                                                  fontSize:
+                                                                      16.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
                                                                       .fontStyle,
-                                                            ),
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primaryBackground,
-                                                            fontSize: 16.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
+                                                                ),
+                                                      ),
                                                     ),
-                                                  ),
                                                   Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
@@ -2619,485 +2945,80 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   .infinity,
                                                               decoration:
                                                                   BoxDecoration(),
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                scrollDirection:
-                                                                    Axis.horizontal,
-                                                                child: Row(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
-                                                                  mainAxisAlignment:
-                                                                      (FFMainAxisAlignment
-                                                                              .spaceBetween)
-                                                                          .flutterValue,
-                                                                  children: [
-                                                                    InkWell(
-                                                                      splashColor:
-                                                                          Colors
-                                                                              .transparent,
-                                                                      focusColor:
-                                                                          Colors
-                                                                              .transparent,
-                                                                      hoverColor:
-                                                                          Colors
-                                                                              .transparent,
-                                                                      highlightColor:
-                                                                          Colors
-                                                                              .transparent,
-                                                                      onTap:
-                                                                          () async {
-                                                                        await showModalBottomSheet(
-                                                                          isScrollControlled:
-                                                                              true,
-                                                                          backgroundColor:
-                                                                              Colors.transparent,
-                                                                          enableDrag:
-                                                                              false,
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (context) {
-                                                                            return Padding(
-                                                                              padding: MediaQuery.viewInsetsOf(context),
-                                                                              child: BusinessStoryWidget(),
-                                                                            );
+                                                              child: Builder(
+                                                                builder:
+                                                                    (context) {
+                                                                  final weekStory = _model
+                                                                      .weekStories
+                                                                      .toList();
+
+                                                                  return SingleChildScrollView(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    child: Row(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .max,
+                                                                      children: List.generate(
+                                                                          weekStory
+                                                                              .length,
+                                                                          (weekStoryIndex) {
+                                                                        final weekStoryItem =
+                                                                            weekStory[weekStoryIndex];
+                                                                        return WeekStoryCardWidget(
+                                                                          key: Key(
+                                                                              'Keywsc_${weekStoryIndex}_of_${weekStory.length}'),
+                                                                          value: functions.notificationText(
+                                                                              weekStoryItem,
+                                                                              'value',
+                                                                              FFAppState().languageCode),
+                                                                          unit: functions.notificationText(
+                                                                              weekStoryItem,
+                                                                              'unit',
+                                                                              FFAppState().languageCode),
+                                                                          label: functions.notificationText(
+                                                                              weekStoryItem,
+                                                                              'label',
+                                                                              FFAppState().languageCode),
+                                                                          detail: functions.notificationText(
+                                                                              weekStoryItem,
+                                                                              'detail',
+                                                                              FFAppState().languageCode),
+                                                                          imageUrl: functions.bannerImageUrl(
+                                                                              getJsonField(
+                                                                                weekStoryItem,
+                                                                                r'''$.imagePath''',
+                                                                              )?.toString(),
+                                                                              FFDevEnvironmentValues().baseURL),
+                                                                          onTap:
+                                                                              () async {
+                                                                            await showModalBottomSheet(
+                                                                              isScrollControlled: true,
+                                                                              backgroundColor: Colors.transparent,
+                                                                              enableDrag: false,
+                                                                              context: context,
+                                                                              builder: (context) {
+                                                                                return Padding(
+                                                                                  padding: MediaQuery.viewInsetsOf(context),
+                                                                                  child: Container(
+                                                                                    height: MediaQuery.sizeOf(context).height * 1.0,
+                                                                                    child: BusinessStoryWidget(
+                                                                                      stories: _model.weekStories,
+                                                                                      initialIndex: weekStoryIndex,
+                                                                                    ),
+                                                                                  ),
+                                                                                );
+                                                                              },
+                                                                            ).then((value) =>
+                                                                                safeSetState(() {}));
                                                                           },
-                                                                        ).then((value) =>
-                                                                            safeSetState(() {}));
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            179.0,
-                                                                        height:
-                                                                            241.0,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          image:
-                                                                              DecorationImage(
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                            image:
-                                                                                Image.asset(
-                                                                              'assets/images/Story_tile.png',
-                                                                            ).image,
-                                                                          ),
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(12.0),
-                                                                        ),
-                                                                        child:
-                                                                            Column(
-                                                                          mainAxisSize:
-                                                                              MainAxisSize.max,
-                                                                          mainAxisAlignment:
-                                                                              (FFMainAxisAlignment.spaceBetween).flutterValue,
-                                                                          children: [
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 0.0, 0.0),
-                                                                              child: Row(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                children: [
-                                                                                  Column(
-                                                                                    mainAxisSize: MainAxisSize.max,
-                                                                                    crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
-                                                                                    textBaseline: TextBaseline.alphabetic,
-                                                                                    children: [
-                                                                                      Text(
-                                                                                        '1,284',
-                                                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                              font: GoogleFonts.inter(
-                                                                                                fontWeight: FontWeight.bold,
-                                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                              ),
-                                                                                              fontSize: 29.0,
-                                                                                              letterSpacing: 0.0,
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                      ),
-                                                                                      Padding(
-                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-                                                                                        child: Text(
-                                                                                          'Sold Products',
-                                                                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                                font: GoogleFonts.inter(
-                                                                                                  fontWeight: FontWeight.w600,
-                                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                                ),
-                                                                                                fontSize: 13.0,
-                                                                                                letterSpacing: 0.0,
-                                                                                                fontWeight: FontWeight.w600,
-                                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                              ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 5.0),
-                                                                              child: Column(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                children: [
-                                                                                  Padding(
-                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                                                                                    child: Text(
-                                                                                      'payments, 8% more than last week',
-                                                                                      maxLines: 2,
-                                                                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                            font: GoogleFonts.inter(
-                                                                                              fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                            fontSize: 12.0,
-                                                                                            letterSpacing: 0.0,
-                                                                                            fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            lineHeight: 1.2,
-                                                                                          ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
+                                                                        );
+                                                                      }).divide(SizedBox(
+                                                                          width:
+                                                                              10.0)),
                                                                     ),
-                                                                    Container(
-                                                                      width:
-                                                                          179.0,
-                                                                      height:
-                                                                          241.0,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        image:
-                                                                            DecorationImage(
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                          image:
-                                                                              Image.asset(
-                                                                            'assets/images/Story_tile_(1).png',
-                                                                          ).image,
-                                                                        ),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(12.0),
-                                                                      ),
-                                                                      child:
-                                                                          Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        mainAxisAlignment:
-                                                                            (FFMainAxisAlignment.spaceBetween).flutterValue,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                10.0,
-                                                                                5.0,
-                                                                                0.0,
-                                                                                0.0),
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: [
-                                                                                Column(
-                                                                                  mainAxisSize: MainAxisSize.max,
-                                                                                  crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
-                                                                                  textBaseline: TextBaseline.alphabetic,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      '1,42 M ',
-                                                                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                            font: GoogleFonts.inter(
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                            fontSize: 29.0,
-                                                                                            letterSpacing: 0.0,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          ),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-                                                                                      child: Text(
-                                                                                        'Sold Products',
-                                                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                              font: GoogleFonts.inter(
-                                                                                                fontWeight: FontWeight.w600,
-                                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                              ),
-                                                                                              fontSize: 13.0,
-                                                                                              letterSpacing: 0.0,
-                                                                                              fontWeight: FontWeight.w600,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                10.0,
-                                                                                0.0,
-                                                                                0.0,
-                                                                                5.0),
-                                                                            child:
-                                                                                Column(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                                                                                  child: Text(
-                                                                                    'payments, 8% more than last week',
-                                                                                    maxLines: 2,
-                                                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                          font: GoogleFonts.inter(
-                                                                                            fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          ),
-                                                                                          fontSize: 12.0,
-                                                                                          letterSpacing: 0.0,
-                                                                                          fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                          fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          lineHeight: 1.2,
-                                                                                        ),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    Container(
-                                                                      width:
-                                                                          179.0,
-                                                                      height:
-                                                                          241.0,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        image:
-                                                                            DecorationImage(
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                          image:
-                                                                              Image.asset(
-                                                                            'assets/images/Story_tile_(2).png',
-                                                                          ).image,
-                                                                        ),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(12.0),
-                                                                      ),
-                                                                      child:
-                                                                          Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        mainAxisAlignment:
-                                                                            (FFMainAxisAlignment.spaceBetween).flutterValue,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                10.0,
-                                                                                5.0,
-                                                                                0.0,
-                                                                                0.0),
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: [
-                                                                                Column(
-                                                                                  mainAxisSize: MainAxisSize.max,
-                                                                                  crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
-                                                                                  textBaseline: TextBaseline.alphabetic,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      '1,284',
-                                                                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                            font: GoogleFonts.inter(
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                            fontSize: 29.0,
-                                                                                            letterSpacing: 0.0,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          ),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-                                                                                      child: Text(
-                                                                                        'Sold Products',
-                                                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                              font: GoogleFonts.inter(
-                                                                                                fontWeight: FontWeight.w600,
-                                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                              ),
-                                                                                              fontSize: 13.0,
-                                                                                              letterSpacing: 0.0,
-                                                                                              fontWeight: FontWeight.w600,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                10.0,
-                                                                                0.0,
-                                                                                0.0,
-                                                                                5.0),
-                                                                            child:
-                                                                                Column(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                                                                                  child: Text(
-                                                                                    'payments, 8% more than last week',
-                                                                                    maxLines: 2,
-                                                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                          font: GoogleFonts.inter(
-                                                                                            fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          ),
-                                                                                          fontSize: 12.0,
-                                                                                          letterSpacing: 0.0,
-                                                                                          fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                          fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          lineHeight: 1.2,
-                                                                                        ),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    Container(
-                                                                      width:
-                                                                          179.0,
-                                                                      height:
-                                                                          241.0,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        image:
-                                                                            DecorationImage(
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                          image:
-                                                                              Image.asset(
-                                                                            'assets/images/Story_tile_(3).png',
-                                                                          ).image,
-                                                                        ),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(12.0),
-                                                                      ),
-                                                                      child:
-                                                                          Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        mainAxisAlignment:
-                                                                            (FFMainAxisAlignment.spaceBetween).flutterValue,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                10.0,
-                                                                                5.0,
-                                                                                0.0,
-                                                                                0.0),
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: [
-                                                                                Column(
-                                                                                  mainAxisSize: MainAxisSize.max,
-                                                                                  crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
-                                                                                  textBaseline: TextBaseline.alphabetic,
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      '1,284',
-                                                                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                            font: GoogleFonts.inter(
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                            fontSize: 29.0,
-                                                                                            letterSpacing: 0.0,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          ),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-                                                                                      child: Text(
-                                                                                        'Sold Products',
-                                                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                              font: GoogleFonts.inter(
-                                                                                                fontWeight: FontWeight.w600,
-                                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                              ),
-                                                                                              fontSize: 13.0,
-                                                                                              letterSpacing: 0.0,
-                                                                                              fontWeight: FontWeight.w600,
-                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                            ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                10.0,
-                                                                                0.0,
-                                                                                0.0,
-                                                                                5.0),
-                                                                            child:
-                                                                                Column(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                                                                                  child: Text(
-                                                                                    'payments, 8% more than last week',
-                                                                                    maxLines: 2,
-                                                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                          font: GoogleFonts.inter(
-                                                                                            fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          ),
-                                                                                          fontSize: 12.0,
-                                                                                          letterSpacing: 0.0,
-                                                                                          fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                          fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          lineHeight: 1.2,
-                                                                                        ),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ].divide(SizedBox(
-                                                                      width:
-                                                                          7.0)),
-                                                                ),
+                                                                  );
+                                                                },
                                                               ),
                                                             ),
                                                           ),

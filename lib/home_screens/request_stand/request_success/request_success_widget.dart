@@ -96,7 +96,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                             ),
                           ),
                           Text(
-                            'Success',
+                            'Request sent',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -120,7 +120,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 9.0, 0.0, 0.0),
                             child: Text(
-                              'Your stand request has been successfully created, expected delivery time is 7 working days',
+                              'MTN Sudan will call you on +249 ··· ··· 910 within 3 working days to set up your store.',
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium

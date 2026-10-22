@@ -11,6 +11,21 @@ import 'package:flutter/material.dart' hide RepeatMode;
 
 import 'package:google_fonts/google_fonts.dart';
 
+/// Step (seedhi seedhi sidhiyon wala) area chart + Day / Week / Month pills.
+/// Design size: 375 x 346, background #000000.
+///
+/// Day / Week / Month badalne par (ya values badalne par) green line left se
+/// shuru hokar upar-neeche steps banati hui poori draw hoti hai, aur uske
+/// peeche gradient fill bhi saath saath khulta hai.
+///
+/// FlutterFlow me parameters:
+///   width, height          -> double
+///   values                 -> List<double>   (har label ki value)
+///   labels                 -> List<String>   (Sat, Sun, Mon ...)
+///   selectedIndex          -> int            (bold + white label, default 5 = Thu)
+///   selectedPeriod         -> String         ("Day" / "Week" / "Month", default "Week")
+///   onPeriodChanged        -> Action(String period)
+///   onBarSelected          -> Action(int index)
 class StepAreaChart extends StatefulWidget {
   const StepAreaChart({
     super.key,
@@ -47,9 +62,7 @@ class _StepAreaChartState extends State<StepAreaChart>
   static const _pillBorder = Color(0xFF5A5A5A);
 
   // Layout fractions (375 x 346 design se nikale hue)
-  // Sab se unchi value yahan aati hai. Jitna chhota number, utni lambi lines
-  // (0.211 = pehle wali height, 0.10 = ab). Aur lambi chahiye to 0.06 try karo.
-  static const double _chartTopFrac = 0.10;
+  static const double _chartTopFrac = 0.211; // sab se unchi value yahan
   static const double _chartBottomFrac = 0.70; // fill yahan tak fade hota hai
   static const double _labelsTopFrac = 0.60;
   static const double _pillsTopFrac = 0.74;

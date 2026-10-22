@@ -44,3 +44,5 @@ export '/custom_code/actions/haat_sign_in_with_biometrics.dart'
     show haatSignInWithBiometrics;
 export '/custom_code/haat_marketplace_banners.dart' show haatMarketplaceBanners;
 export '/custom_code/actions/haat_access_token.dart' show haatAccessToken;
+export '/custom_code/actions/open_banner_link.dart' show openBannerLink;
+export '/custom_code/actions/open_marketplace_item.dart' show openMarketplaceItem;

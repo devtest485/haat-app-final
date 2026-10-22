@@ -53,6 +53,13 @@ class HaatAuthGroup {
   static KycProviderResultCall kycProviderResultCall = KycProviderResultCall();
   static MarketplaceBannersCall marketplaceBannersCall =
       MarketplaceBannersCall();
+  static WeekStoryCall weekStoryCall = WeekStoryCall();
+  static RecentTransactionsCall recentTransactionsCall =
+      RecentTransactionsCall();
+  static ProductsCall productsCall = ProductsCall();
+  static NotificationsCall notificationsCall = NotificationsCall();
+  static NotificationsSeenCall notificationsSeenCall = NotificationsSeenCall();
+  static MarketplaceCall marketplaceCall = MarketplaceCall();
 }
 
 class RegisterUserCall {
@@ -1585,6 +1592,304 @@ class MarketplaceBannersCall {
         r'''$.data''',
         true,
       ) as List?;
+}
+
+class WeekStoryCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'WeekStory',
+      apiUrl: '${baseUrl}/business/week-story',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? stories(dynamic response) => getJsonField(
+        response,
+        r'''$.data.stories''',
+        true,
+      ) as List?;
+}
+
+class ProductsCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Products',
+      apiUrl: '${baseUrl}/products',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${authToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? products(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
+}
+
+class RecentTransactionsCall {
+  Future<ApiCallResponse> call({
+    int? limit = 3,
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'RecentTransactions',
+      apiUrl: '${baseUrl}/transactions?limit=${limit}',
+      callType: ApiCallType.GET,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? transactions(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
+}
+
+class MarketplaceCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Marketplace',
+      apiUrl: '${baseUrl}/marketplace',
+      callType: ApiCallType.GET,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: true,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? featured(dynamic response) => getJsonField(
+        response,
+        r'''$.data.featured''',
+        true,
+      ) as List?;
+  List? billers(dynamic response) => getJsonField(
+        response,
+        r'''$.data.billers''',
+        true,
+      ) as List?;
+  List? brands(dynamic response) => getJsonField(
+        response,
+        r'''$.data.brands''',
+        true,
+      ) as List?;
+  List? categories(dynamic response) => getJsonField(
+        response,
+        r'''$.data.categories''',
+        true,
+      ) as List?;
+}
+
+class NotificationsCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Notifications',
+      apiUrl: '${baseUrl}/notifications',
+      callType: ApiCallType.GET,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: true,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? actions(dynamic response) => getJsonField(
+        response,
+        r'''$.data.actions''',
+        true,
+      ) as List?;
+  List? today(dynamic response) => getJsonField(
+        response,
+        r'''$.data.today''',
+        true,
+      ) as List?;
+  List? earlier(dynamic response) => getJsonField(
+        response,
+        r'''$.data.earlier''',
+        true,
+      ) as List?;
+  int? unreadCount(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data.unreadCount''',
+      ));
+}
+
+class NotificationsSeenCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'NotificationsSeen',
+      apiUrl: '${baseUrl}/notifications/seen',
+      callType: ApiCallType.POST,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      body: '{}',
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
 }
 
 /// End HaatAuth Group Code

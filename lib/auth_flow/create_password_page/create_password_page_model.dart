@@ -22,13 +22,11 @@ class CreatePasswordPageModel
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for newPassward widget.
-  late FocusNode newPasswardPasswordVisibilityFocusNode;
   FocusNode? newPasswardFocusNode;
   TextEditingController? newPasswardTextController;
   late bool newPasswardVisibility;
   String? Function(BuildContext, String?)? newPasswardTextControllerValidator;
   // State field(s) for ConfirmPassward widget.
-  late FocusNode confirmPasswardPasswordVisibilityFocusNode;
   FocusNode? confirmPasswardFocusNode;
   TextEditingController? confirmPasswardTextController;
   late bool confirmPasswardVisibility;
@@ -39,9 +37,7 @@ class CreatePasswordPageModel
 
   @override
   void initState(BuildContext context) {
-    newPasswardPasswordVisibilityFocusNode = FocusNode();
     newPasswardVisibility = false;
-    confirmPasswardPasswordVisibilityFocusNode = FocusNode();
     confirmPasswardVisibility = false;
   }
 
@@ -49,9 +45,8 @@ class CreatePasswordPageModel
   void dispose() {
     newPasswardFocusNode?.dispose();
     newPasswardTextController?.dispose();
-    newPasswardPasswordVisibilityFocusNode.dispose();
+
     confirmPasswardFocusNode?.dispose();
     confirmPasswardTextController?.dispose();
-    confirmPasswardPasswordVisibilityFocusNode.dispose();
   }
 }

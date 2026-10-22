@@ -305,12 +305,42 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: PayYourWidget.routeName,
           path: PayYourWidget.routePath,
-          builder: (context, params) => PayYourWidget(),
+          builder: (context, params) => PayYourWidget(
+            billerName: params.getParam(
+              'billerName',
+              ParamType.String,
+            ),
+            logoUrl: params.getParam(
+              'logoUrl',
+              ParamType.String,
+            ),
+            flow: params.getParam(
+              'flow',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: TopupamountWidget.routeName,
           path: TopupamountWidget.routePath,
-          builder: (context, params) => TopupamountWidget(),
+          builder: (context, params) => TopupamountWidget(
+            billerName: params.getParam(
+              'billerName',
+              ParamType.String,
+            ),
+            flow: params.getParam(
+              'flow',
+              ParamType.String,
+            ),
+            accountNumber: params.getParam(
+              'accountNumber',
+              ParamType.String,
+            ),
+            billType: params.getParam(
+              'billType',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: NotificationsWidget.routeName,
