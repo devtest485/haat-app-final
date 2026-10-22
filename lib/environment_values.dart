@@ -23,6 +23,7 @@ class FFDevEnvironmentValues {
       final data = await json.decode(response);
       _baseURL = data['baseURL'];
       _dataSource = data['dataSource'];
+      _bankCode = data['bankCode'];
     } catch (e) {
       print('Error loading environment values: $e');
     }
@@ -33,4 +34,7 @@ class FFDevEnvironmentValues {
 
   String _dataSource = '';
   String get dataSource => _dataSource;
+
+  String _bankCode = '';
+  String get bankCode => _bankCode;
 }

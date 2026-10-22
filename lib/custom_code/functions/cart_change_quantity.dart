@@ -18,7 +18,7 @@ import '/flutter_flow/ff_builtin_enums.dart';
 List<dynamic> cartChangeQuantity(
   List<dynamic>? cart,
   String? productId,
-  int delta,
+  int? delta,
 ) {
   final lines = List<dynamic>.from(cart ?? const []);
   final at =
@@ -26,7 +26,7 @@ List<dynamic> cartChangeQuantity(
   if (at == -1) return lines;
 
   final line = Map<String, dynamic>.from(lines[at] as Map);
-  final qty = (int.tryParse('${line['qty']}') ?? 1) + delta;
+  final qty = (int.tryParse('${line['qty']}') ?? 1) + (delta ?? 0);
 
   if (qty < 1) {
     lines.removeAt(at);

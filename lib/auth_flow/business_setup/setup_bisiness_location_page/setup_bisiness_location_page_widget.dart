@@ -154,7 +154,7 @@ class _SetupBisinessLocationPageWidgetState
                                 () async {
                                   _model.businessName = _model
                                       .businessNameFieldTextController.text;
-                                  _model.nameError = null;
+                                  _model.nameError = '';
                                   safeSetState(() {});
                                 },
                               ),
@@ -225,12 +225,30 @@ class _SetupBisinessLocationPageWidgetState
                                   .businessNameFieldTextControllerValidator
                                   .asValidator(context),
                             ),
-                            if (_model.nameError != null)
+                            if (_model.nameError != null &&
+                                _model.nameError != '')
                               Text(
                                 _model.nameError!,
-                                style: TextStyle(
-                                  color: FlutterFlowTheme.of(context).error,
-                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      color: FlutterFlowTheme.of(context).error,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
                               ),
                           ].divide(SizedBox(height: 16.0)),
                         ),
@@ -262,20 +280,23 @@ class _SetupBisinessLocationPageWidgetState
                                 if (_model.saved == '') {
                                   context.pushNamed(
                                       BusinessLocatePageWidget.routeName);
-                                } else if (await actions.haatBusinessNameWasTaken()) {
-                                  // Only the merchant can fix this one, so it stays
-                                  // beside the field they have to change.
-                                  _model.nameError = _model.saved;
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        _model.saved!,
-                                        style: TextStyle(),
+                                  _model.isTaken =
+                                      await actions.haatBusinessNameWasTaken();
+                                  if (_model.isTaken!) {
+                                    _model.nameError = _model.saved;
+                                    safeSetState(() {});
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          _model.saved!,
+                                          style: TextStyle(),
+                                        ),
+                                        duration: Duration(milliseconds: 4000),
                                       ),
-                                      duration: Duration(milliseconds: 4000),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 }
 
                                 safeSetState(() {});

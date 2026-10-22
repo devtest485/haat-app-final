@@ -17,6 +17,10 @@ class SetupBisinessLocationPageModel
 
   String? businessName;
 
+  /// Why the name was refused — another business already has it — shown under
+  /// the field until the merchant types a different one.
+  String? nameError;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for BusinessNameField widget.
@@ -26,10 +30,8 @@ class SetupBisinessLocationPageModel
       businessNameFieldTextControllerValidator;
   // Stores action output result for [Custom Action - haatSaveBusinessSetup] action in Container widget.
   String? saved;
-
-  /// Why the name was refused — another business already has it — shown under the
-  /// field until the merchant types a different one.
-  String? nameError;
+  // Stores action output result for [Custom Action - haatBusinessNameWasTaken] action in Container widget.
+  bool? isTaken;
 
   @override
   void initState(BuildContext context) {}

@@ -1,10 +1,6 @@
 // Export pages
-export '/auth_flow/on_bording_flow/on_boarding_page/on_boarding_page_widget.dart'
-    show OnBoardingPageWidget;
 export '/auth_flow/phone_number_page/phone_number_page_widget.dart'
     show PhoneNumberPageWidget;
-export '/auth_flow/otp_verify_page/otp_verify_page_widget.dart'
-    show OtpVerifyPageWidget;
 export '/auth_flow/create_password_page/create_password_page_widget.dart'
     show CreatePasswordPageWidget;
 export '/auth_flow/secure_page/secure_page_widget.dart' show SecurePageWidget;
@@ -12,8 +8,6 @@ export '/auth_flow/pass_code_page/pass_code_page_widget.dart'
     show PassCodePageWidget;
 export '/auth_flow/biomatric_page/biomatric_page_widget.dart'
     show BiomatricPageWidget;
-export '/auth_flow/verify/verify_page/verify_page_widget.dart'
-    show VerifyPageWidget;
 export '/auth_flow/verify/id_card_scan_page/id_card_scan_page_widget.dart'
     show IdCardScanPageWidget;
 export '/auth_flow/verify/face_scan_page/face_scan_page_widget.dart'
@@ -26,18 +20,10 @@ export '/auth_flow/business_setup/like_bus_page/like_bus_page_widget.dart'
     show LikeBusPageWidget;
 export '/auth_flow/business_setup/business_catagerious/business_catagerious_widget.dart'
     show BusinessCatageriousWidget;
-export '/auth_flow/business_setup/setup_bisiness_location_page/setup_bisiness_location_page_widget.dart'
-    show SetupBisinessLocationPageWidget;
-export '/auth_flow/business_setup/business_locate_page/business_locate_page_widget.dart'
-    show BusinessLocatePageWidget;
 export '/auth_flow/welcom_screens/username_page/username_page_widget.dart'
     show UsernamePageWidget;
 export '/auth_flow/welcom_screens/congrats_page/congrats_page_widget.dart'
     show CongratsPageWidget;
-export '/auth_flow/welcom_screens/docunment_info/docunment_info_widget.dart'
-    show DocunmentInfoWidget;
-export '/auth_flow/welcom_screens/upload_doc/upload_doc_widget.dart'
-    show UploadDocWidget;
 export '/home_screens/new_order_flow/add_amount_page/add_amount_page_widget.dart'
     show AddAmountPageWidget;
 export '/home_screens/new_order_flow/tap_pay_out/tap_pay_out_widget.dart'
@@ -82,10 +68,6 @@ export '/home_screens/add_transfer_funds/payment_review/payment_review_widget.da
     show PaymentReviewWidget;
 export '/auth_flow/login/on_bording_screen/on_bording_screen_widget.dart'
     show OnBordingScreenWidget;
-export '/auth_flow/login/passward_login/passward_login_widget.dart'
-    show PasswardLoginWidget;
-export '/auth_flow/login/pass_code_login/pass_code_login_widget.dart'
-    show PassCodeLoginWidget;
 export '/auth_flow/login/login_screen/login_screen_widget.dart'
     show LoginScreenWidget;
 export '/home_screens/new_order_flow/transactions_detials/transactions_detials_widget.dart'
@@ -95,3 +77,21 @@ export '/marketplace/topupamount/topupamount_widget.dart'
     show TopupamountWidget;
 export '/notification/notifications/notifications_widget.dart'
     show NotificationsWidget;
+export '/auth_flow/on_bording_flow/on_boarding_page/on_boarding_page_widget.dart'
+    show OnBoardingPageWidget;
+export '/auth_flow/otp_verify_page/otp_verify_page_widget.dart'
+    show OtpVerifyPageWidget;
+export '/auth_flow/verify/verify_page/verify_page_widget.dart'
+    show VerifyPageWidget;
+export '/auth_flow/welcom_screens/docunment_info/docunment_info_widget.dart'
+    show DocunmentInfoWidget;
+export '/auth_flow/welcom_screens/upload_doc/upload_doc_widget.dart'
+    show UploadDocWidget;
+export '/auth_flow/login/passward_login/passward_login_widget.dart'
+    show PasswardLoginWidget;
+export '/auth_flow/login/pass_code_login/pass_code_login_widget.dart'
+    show PassCodeLoginWidget;
+export '/auth_flow/business_setup/setup_bisiness_location_page/setup_bisiness_location_page_widget.dart'
+    show SetupBisinessLocationPageWidget;
+export '/auth_flow/business_setup/business_locate_page/business_locate_page_widget.dart'
+    show BusinessLocatePageWidget;

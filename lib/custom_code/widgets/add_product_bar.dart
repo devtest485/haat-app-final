@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
@@ -56,7 +56,7 @@ class AddProductBar extends StatefulWidget {
   final double? height;
   final List<dynamic>? cart;
 
-  /// The page's products; the first two peek over the open Checkout screen.
+  /// The page's products; they peek over the open Checkout screen, first row showing.
   final List<dynamic>? products;
 
   /// Written beside every amount; SDG when empty.
@@ -238,7 +238,9 @@ class _AddProductBarState extends State<AddProductBar>
     final t = Curves.easeInOutCubic.transform(_expand.value);
     final shown = Curves.easeOutCubic.transform(_presence.value);
     final gap = (widget.bottomGap ?? 35) + safe.bottom;
-    final peekBottom = safe.top + _peekBelowSafeArea;
+    final peekBottom = safe.top + _peekBelowSafeArea + size.height * 0.07;
+    // The cards keep their resting place; the extra height shows more of them.
+    final peekInset = math.max(0.0, safe.top + _peekBelowSafeArea - _peekShown);
     final peekIn = const Interval(0.35, 1, curve: Curves.easeOutCubic)
         .transform(_expand.value);
 
@@ -296,7 +298,7 @@ class _AddProductBarState extends State<AddProductBar>
             right: 0,
             top: -(peekBottom + 24) * (1 - peekIn),
             height: peekBottom,
-            child: _peek(size, peekBottom),
+            child: _peek(peekInset),
           ),
       ],
     );
@@ -471,11 +473,11 @@ class _AddProductBarState extends State<AddProductBar>
 
   // ── The open Checkout screen ──────────────────────────────────────────────────
 
-  /// The foot of the Cashier screen, held at the top: the first row of products, as
-  /// the grid draws them. Tapping it goes back.
-  Widget _peek(Size size, double height) {
+  /// The foot of the Cashier screen, held at the top: the product grid as the page
+  /// draws it, resting on its first row and scrolling up and down under a drag.
+  /// Tapping it goes back.
+  Widget _peek(double topInset) {
     const gutter = 10.0;
-    final cardWidth = (size.width - _sideGap * 2 - gutter) / 2;
     final cards = _peekCards();
 
     return Semantics(
@@ -489,20 +491,29 @@ class _AddProductBarState extends State<AddProductBar>
               const BorderRadius.vertical(bottom: Radius.circular(20)),
           child: ColoredBox(
             color: _pageColor,
-            child: IgnorePointer(
-              child: Stack(
-                children: [
-                  for (var i = 0; i < cards.length; i++)
-                    Positioned(
-                      left: _sideGap + i * (cardWidth + gutter),
-                      top: height - _peekShown,
-                      width: cardWidth,
-                      // The grid's own shape, so the cards read as the same cards.
-                      height: cardWidth / 0.79,
-                      child: cards[i],
-                    ),
-                ],
+            child: GridView.builder(
+              // Its own scroll, apart from the Cart list's.
+              primary: false,
+              padding: EdgeInsets.fromLTRB(
+                _sideGap,
+                topInset,
+                _sideGap,
+                gutter,
               ),
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              // The grid's own shape, so the cards read as the same cards.
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: gutter,
+                mainAxisSpacing: gutter,
+                childAspectRatio: 0.79,
+              ),
+              itemCount: cards.length,
+              // The cards only show; a tap on one goes back like the rest.
+              itemBuilder: (context, index) =>
+                  IgnorePointer(child: cards[index]),
             ),
           ),
         ),
@@ -510,10 +521,10 @@ class _AddProductBarState extends State<AddProductBar>
     );
   }
 
-  /// The grid's first two products; the cart's, when the page passes none.
+  /// The grid's products; the cart's, when the page passes none.
   List<Widget> _peekCards() {
     final cart = widget.cart?.toList() ?? [];
-    final products = (widget.products ?? const []).take(2).toList();
+    final products = (widget.products ?? const []).toList();
 
     if (products.isNotEmpty) {
       return [
@@ -533,7 +544,7 @@ class _AddProductBarState extends State<AddProductBar>
     }
 
     return [
-      for (final line in _lines.take(2))
+      for (final line in _lines)
         ProductCardWidget(
           name: '${line['name'] ?? ''}',
           priceLabel: moneyLabel('${line['priceMinor']}'),
