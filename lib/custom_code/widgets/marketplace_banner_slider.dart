@@ -10,8 +10,10 @@ import 'package:flutter/material.dart' hide RepeatMode;
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import 'dart:async';
+import 'dart:ui' show PointerDeviceKind;
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// The full-bleed slides at the top of the Marketplace tab.
 ///
@@ -26,6 +28,13 @@ import 'package:google_fonts/google_fonts.dart';
 ///
 /// A tap opens the slide's link in the browser, or else its app screen by
 /// route name.
+///
+/// Android aur iOS dono par chalne ke liye: * size kabhi infinite nahi hota
+/// (Column / ScrollView ke andar bhi safe), * PageController ko frame ke baad
+/// dispose karta hai, * JSON ka koi bhi item kharab ho to crash ke bajaye
+/// khaali dikhata hai, * text size system ke bade font se bigadta nahi (max
+/// 1.2x), * mouse / trackpad se bhi swipe hota hai (simulator me asaan
+/// testing).
 class MarketplaceBannerSlider extends StatefulWidget {
   const MarketplaceBannerSlider({
     super.key,
@@ -80,8 +89,10 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
   @override
   void didUpdateWidget(covariant MarketplaceBannerSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_banners.length != _count || widget.autoPlay != oldWidget.autoPlay) {
+    if (_banners.length != _count) {
       _prepare();
+    } else if (widget.autoPlay != oldWidget.autoPlay) {
+      _startSliding();
     }
   }
 
@@ -94,11 +105,21 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
 
   /// A fresh controller whenever the number of slides changes, started far enough in
   /// that the slides wrap both ways.
+  ///
+  /// The old controller is disposed AFTER the frame: the PageView is still attached
+  /// to it until it rebuilds, and disposing it earlier is what threw
+  /// "PageController was used after being disposed".
   void _prepare() {
+    final old = _pages;
     _count = _banners.length;
-    _pages?.dispose();
     _pages = _count > 1 ? PageController(initialPage: _count * 1000) : null;
+    debugPrint(
+        'MarketplaceBannerSlider: slides=$_count autoPlay=${widget.autoPlay}');
     _startSliding();
+
+    if (old != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => old.dispose());
+    }
   }
 
   /// Moves on every few seconds; restarted on every page change, so a slide just
@@ -119,57 +140,145 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
   }
 
   String _read(dynamic item, String? path, String fallback) {
-    var key = (path ?? '').trim();
-    if (key.isEmpty) key = fallback;
-    if (!key.startsWith(r'$')) key = '\$.$key';
+    try {
+      var key = (path ?? '').trim();
+      if (key.isEmpty) key = fallback;
+      if (!key.startsWith(r'$')) key = '\$.$key';
 
-    return getJsonField(item, key)?.toString().trim() ?? '';
+      return getJsonField(item, key)?.toString().trim() ?? '';
+    } catch (_) {
+      // Item ka shape alag ho to is hisse ko khaali maan lo, crash mat karo.
+      return '';
+    }
   }
 
   String _picture(dynamic item, String? path, String fallback) {
     final value = _read(item, path, fallback);
-    return value.startsWith('/')
-        ? '${FFDevEnvironmentValues().baseURL}$value'
-        : value;
+    if (!value.startsWith('/')) return value;
+
+    var base = '';
+    try {
+      base = FFDevEnvironmentValues().baseURL;
+    } catch (_) {}
+    if (base.endsWith('/')) base = base.substring(0, base.length - 1);
+    return '$base$value';
   }
 
+  /// Tap par: poora web link ho to browser me, warna app ki screen (route) me.
+  /// Console me "MarketplaceBannerSlider tap -> ..." line dikhti hai, jisse pata
+  /// chalta hai ke link / route asal me mila ya khaali raha.
   Future<void> _open(String link, String route) async {
-    if (link.isNotEmpty) {
-      await launchURL(link);
-    } else if (route.isNotEmpty) {
-      // A screen this build doesn't have yet is skipped rather than thrown.
-      try {
-        context.pushNamed(route);
-      } catch (_) {}
+    debugPrint('MarketplaceBannerSlider tap -> link="$link" route="$route"');
+    if (!mounted) return;
+
+    // 1) Poora web link (https://... ya haat.sd/abc)
+    if (link.isNotEmpty && !link.startsWith('/')) {
+      var uri = Uri.tryParse(link);
+      if (uri != null && !uri.hasScheme) uri = Uri.tryParse('https://$link');
+      if (uri != null) {
+        for (final mode in [
+          LaunchMode.externalApplication,
+          LaunchMode.platformDefault,
+        ]) {
+          try {
+            if (await launchUrl(uri, mode: mode)) return;
+          } catch (e) {
+            debugPrint('MarketplaceBannerSlider: launchUrl ($mode) fail: $e');
+          }
+        }
+      }
     }
+
+    if (!mounted) return;
+
+    // 2) App ke andar ki screen: route naam, ya "/" se shuru hone wala link
+    final target =
+        route.isNotEmpty ? route : (link.startsWith('/') ? link : '');
+    if (target.isEmpty) {
+      debugPrint('MarketplaceBannerSlider: is slide me link ya route nahi mila '
+          '(linkPath / routePath parameters check karo)');
+      return;
+    }
+
+    try {
+      final router = GoRouter.of(context);
+      if (target.startsWith('/')) {
+        router.push(target);
+      } else {
+        router.pushNamed(target);
+      }
+    } catch (e) {
+      debugPrint('MarketplaceBannerSlider: route "$target" nahi khula: $e');
+    }
+  }
+
+  /// Size kabhi infinite / NaN nahi: pehle diya hua size, phir parent ka, phir fallback.
+  double _size(double? given, bool bounded, double max, double fallback) {
+    if (given != null && given.isFinite && given > 0) return given;
+    if (bounded && max.isFinite) return max;
+    return fallback;
   }
 
   @override
   Widget build(BuildContext context) {
-    final Widget body;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screen = MediaQuery.of(context).size;
+        final w = _size(widget.width, constraints.hasBoundedWidth,
+            constraints.maxWidth, screen.width);
+        final h = _size(widget.height, constraints.hasBoundedHeight,
+            constraints.maxHeight, screen.height * 0.6);
 
-    if (_count == 0) {
-      // Still loading, or nothing live: dark, so the page's white header still reads.
-      body = Container(color: _dark);
-    } else if (_count == 1) {
-      body = _page(context, 0);
-    } else {
-      body = PageView.builder(
-        controller: _pages,
-        onPageChanged: (_) => _startSliding(),
-        itemBuilder: (context, page) => _page(context, page % _count),
-      );
-    }
+        final count = _banners.length;
+        final Widget body;
 
-    return SizedBox(
-      width: widget.width ?? double.infinity,
-      height: widget.height ?? double.infinity,
-      child: body,
+        if (count == 0) {
+          // Still loading, or nothing live: dark, so the page's white header still reads.
+          body = Container(color: _dark);
+        } else if (count == 1) {
+          body = _page(context, 0);
+        } else {
+          final pages = _pages ??= PageController(initialPage: count * 1000);
+          body = ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(
+              dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.trackpad,
+              },
+            ),
+            child: PageView.builder(
+              controller: pages,
+              physics: const PageScrollPhysics(),
+              onPageChanged: (_) => _startSliding(),
+              itemBuilder: (context, page) =>
+                  _page(context, page % _banners.length),
+            ),
+          );
+        }
+
+        return SizedBox(
+          width: w,
+          height: h,
+          child: ClipRect(
+            // iOS / Android ke bade system font se layout na bigde.
+            child: MediaQuery.withClampedTextScaling(
+              minScaleFactor: 1.0,
+              maxScaleFactor: 1.2,
+              child: body,
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _page(BuildContext context, int index) {
-    final item = _banners[index];
+    if (_banners.isEmpty) return Container(color: _dark);
+    final safeIndex = index.clamp(0, _banners.length - 1);
+    final total = _banners.length;
+
+    final item = _banners[safeIndex];
     final image = _picture(item, widget.imagePath, 'imagePath');
     final logo = _picture(item, widget.logoPath, 'logoPath');
     final title = _read(item, widget.titlePath, 'title');
@@ -226,7 +335,8 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
                         width: 44,
                         height: 44,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                        errorBuilder: (_, __, ___) =>
+                            const SizedBox(width: 44, height: 44),
                       ),
                     ),
                   ),
@@ -244,18 +354,18 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
                       letterSpacing: -0.3,
                     ),
                   ),
-                if (_count > 1)
+                if (total > 1)
                   Padding(
                     padding: const EdgeInsets.only(top: 14),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        for (var dot = 0; dot < _count; dot++)
+                        for (var dot = 0; dot < total; dot++)
                           Container(
                             width: 6,
                             height: 6,
                             margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                            color: dot == index
+                            color: dot == safeIndex
                                 ? Colors.white
                                 : const Color(0x80FFFFFF),
                           ),
@@ -308,6 +418,3 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
     );
   }
 }
-
-// Set your widget name, define your parameter, and then add the
-// boilerplate code using the `</>` button on the right!

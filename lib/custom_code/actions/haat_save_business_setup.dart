@@ -79,8 +79,8 @@ bool _nameTaken = false;
 
 /// Whether the last [haatSaveBusinessSetup] was refused because another business
 /// already uses that name — the one refusal only the merchant can fix, by typing a
-/// different one.
-bool haatBusinessNameWasTaken() => _nameTaken;
+/// different one. Screens ask through the [haatBusinessNameWasTaken] action.
+bool businessNameTakenOnLastSave() => _nameTaken;
 
 bool _isNameClash(ApiResult<Object?> result) =>
     result is ApiFailure<Object?> &&

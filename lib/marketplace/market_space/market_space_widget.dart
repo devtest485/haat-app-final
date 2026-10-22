@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -205,164 +206,167 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: 68.0,
-                    height: 35.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      'For You',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: 68.0,
+                      height: 35.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).primaryBackground,
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: Text(
+                        'For You',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              fontSize: 12.0,
+                              letterSpacing: 0.0,
                               fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            fontSize: 12.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                    ),
-                  ),
-                  Container(
-                    width: 78.05,
-                    height: 35.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(50.0),
-                      border: Border.all(
-                        color: Color(0x85262D34),
-                        width: 1.0,
                       ),
                     ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      'Telecom',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                    Container(
+                      width: 78.05,
+                      height: 35.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(50.0),
+                        border: Border.all(
+                          color: Color(0x85262D34),
+                          width: 1.0,
+                        ),
+                      ),
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: Text(
+                        'Telecom',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              fontSize: 12.0,
+                              letterSpacing: 0.0,
                               fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            fontSize: 12.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                    ),
-                  ),
-                  Container(
-                    width: 85.55,
-                    height: 35.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(50.0),
-                      border: Border.all(
-                        color: Color(0x85262D34),
-                        width: 1.0,
                       ),
                     ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      'Education',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                    Container(
+                      width: 85.55,
+                      height: 35.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(50.0),
+                        border: Border.all(
+                          color: Color(0x85262D34),
+                          width: 1.0,
+                        ),
+                      ),
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: Text(
+                        'Education',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              fontSize: 12.0,
+                              letterSpacing: 0.0,
                               fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            fontSize: 12.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                    ),
-                  ),
-                  Container(
-                    width: 85.5,
-                    height: 35.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(50.0),
-                      border: Border.all(
-                        color: Color(0x85262D34),
-                        width: 1.0,
                       ),
                     ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      'Gift Cards',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                    Container(
+                      width: 85.5,
+                      height: 35.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(50.0),
+                        border: Border.all(
+                          color: Color(0x85262D34),
+                          width: 1.0,
+                        ),
+                      ),
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: Text(
+                        'Gift Cards',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              fontSize: 12.0,
+                              letterSpacing: 0.0,
                               fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            fontSize: 12.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                    ),
-                  ),
-                  Container(
-                    width: 60.0,
-                    height: 35.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(50.0),
-                      border: Border.all(
-                        color: Color(0x85262D34),
-                        width: 1.0,
                       ),
                     ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      'E-SIM',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                    Container(
+                      width: 60.0,
+                      height: 35.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(50.0),
+                        border: Border.all(
+                          color: Color(0x85262D34),
+                          width: 1.0,
+                        ),
+                      ),
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: Text(
+                        'E-SIM',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              fontSize: 12.0,
+                              letterSpacing: 0.0,
                               fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            fontSize: 12.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
+                      ),
                     ),
-                  ),
-                ].divide(SizedBox(width: 5.0)),
+                  ].divide(SizedBox(width: 5.0)),
+                ),
               ),
             ),
           ),
@@ -376,66 +380,87 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(),
-                    child: Container(
-                      width: 100.0,
-                      decoration: BoxDecoration(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment:
-                            (FFMainAxisAlignment.spaceBetween).flutterValue,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 44.0,
-                                height: 44.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(PayYourWidget.routeName);
+                      },
+                      child: Container(
+                        width: 100.0,
+                        decoration: BoxDecoration(),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment:
+                              (FFMainAxisAlignment.spaceBetween).flutterValue,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Container(
+                                  width: 44.0,
+                                  height: 44.0,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset(
+                                    'assets/images/mk_mtn.png',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                child: Image.asset(
-                                  'assets/images/mk_mtn.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 0.0, 0.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      (FFCrossAxisAlignment.start).flutterValue,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Text(
-                                      'MTN Sudan',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      8.0, 0.0, 0.0, 0.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        (FFCrossAxisAlignment.start)
+                                            .flutterValue,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Text(
+                                        'MTN Sudan',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.inter(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryBackground,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                    Text(
-                                      'Pay your Postpaid or prepaid bills',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
+                                      ),
+                                      Text(
+                                        'Pay your Postpaid or prepaid bills',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.inter(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color: Color(0x85000000),
+                                              letterSpacing: 0.0,
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -445,30 +470,20 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                            color: Color(0x85000000),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(height: 6.0)),
+                                      ),
+                                    ].divide(SizedBox(height: 6.0)),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_right,
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            size: 24.0,
-                          ),
-                        ],
+                              ],
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_right,
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              size: 24.0,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -940,7 +955,7 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                           Container(
                             width: 152.0,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
+                              borderRadius: BorderRadius.circular(4.0),
                               border: Border.all(
                                 color: Color(0xFFF0F0F0),
                                 width: 1.0,
@@ -966,8 +981,8 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                           ).image,
                                         ),
                                         borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(12.0),
-                                          topRight: Radius.circular(12.0),
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
                                         ),
                                       ),
                                     ),
@@ -1123,7 +1138,7 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                           Container(
                             width: 152.0,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
+                              borderRadius: BorderRadius.circular(4.0),
                               border: Border.all(
                                 color: Color(0xFFF0F0F0),
                                 width: 1.0,
@@ -1149,8 +1164,8 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                           ).image,
                                         ),
                                         borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(12.0),
-                                          topRight: Radius.circular(12.0),
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
                                         ),
                                       ),
                                     ),
@@ -1306,7 +1321,7 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                           Container(
                             width: 152.0,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
+                              borderRadius: BorderRadius.circular(4.0),
                               border: Border.all(
                                 color: Color(0xFFF0F0F0),
                                 width: 1.0,
@@ -1332,8 +1347,8 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                           ).image,
                                         ),
                                         borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(12.0),
-                                          topRight: Radius.circular(12.0),
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
                                         ),
                                       ),
                                     ),

@@ -284,7 +284,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 290.0, 0.0, 40.0),
+                                  0.0, 290.0, 0.0, 110.0),
                               child: Container(
                                 width: 100.0,
                                 constraints: BoxConstraints(
@@ -1804,7 +1804,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(12.0),
+                                                                .circular(4.0),
                                                         border: Border.all(
                                                           color:
                                                               Color(0xFFF0F0F0),
@@ -1848,10 +1848,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                           .only(
                                                                     topLeft: Radius
                                                                         .circular(
-                                                                            12.0),
+                                                                            4.0),
                                                                     topRight: Radius
                                                                         .circular(
-                                                                            12.0),
+                                                                            4.0),
                                                                   ),
                                                                 ),
                                                               ),
@@ -2038,7 +2038,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(12.0),
+                                                                .circular(4.0),
                                                         border: Border.all(
                                                           color:
                                                               Color(0xFFF0F0F0),
@@ -2082,10 +2082,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                           .only(
                                                                     topLeft: Radius
                                                                         .circular(
-                                                                            12.0),
+                                                                            4.0),
                                                                     topRight: Radius
                                                                         .circular(
-                                                                            12.0),
+                                                                            4.0),
                                                                   ),
                                                                 ),
                                                               ),
@@ -2272,7 +2272,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(12.0),
+                                                                .circular(4.0),
                                                         border: Border.all(
                                                           color:
                                                               Color(0xFFF0F0F0),
@@ -2316,10 +2316,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                           .only(
                                                                     topLeft: Radius
                                                                         .circular(
-                                                                            12.0),
+                                                                            4.0),
                                                                     topRight: Radius
                                                                         .circular(
-                                                                            12.0),
+                                                                            4.0),
                                                                   ),
                                                                 ),
                                                               ),

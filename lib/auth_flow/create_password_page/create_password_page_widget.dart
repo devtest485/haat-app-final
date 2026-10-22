@@ -439,8 +439,10 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                           safeSetState(() =>
                                                                               _model.newPasswardVisibility = !_model.newPasswardVisibility);
                                                                         },
-                                                                        focusNode:
-                                                                            FocusNode(skipTraversal: true),
+                                                                        focusNode: _model
+                                                                            .newPasswardPasswordVisibilityFocusNode
+                                                                          ..skipTraversal =
+                                                                              !(false),
                                                                         child:
                                                                             Icon(
                                                                           _model.newPasswardVisibility
@@ -702,8 +704,10 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                           safeSetState(() =>
                                                                               _model.confirmPasswardVisibility = !_model.confirmPasswardVisibility);
                                                                         },
-                                                                        focusNode:
-                                                                            FocusNode(skipTraversal: true),
+                                                                        focusNode: _model
+                                                                            .confirmPasswardPasswordVisibilityFocusNode
+                                                                          ..skipTraversal =
+                                                                              !(false),
                                                                         child:
                                                                             Icon(
                                                                           _model.confirmPasswardVisibility

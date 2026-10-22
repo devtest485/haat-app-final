@@ -100,6 +100,9 @@ class _CustomBottombarState extends State<CustomBottombar> {
   static const double _kIconBox = 28.0;
   static const double _kIconLabelGap = 6.0;
 
+  /// mystore tab ka index — is tab par bottom bar hide hota hai.
+  static const int _kStoreIndex = 3;
+
   late int _currentIndex;
   final List<int> _pageKeys = [0, 0, 0, 0];
 
@@ -125,8 +128,11 @@ class _CustomBottombarState extends State<CustomBottombar> {
   }
 
   /// NavBar ki height — scroll ke liye bottom padding me use hoti hai
-  /// taake content NavBar ke peeche na chhuppe.
+  /// taake content NavBar ke peeche na chhupe.
   double get _navBarTotalHeight => _resolvedBarHeight;
+
+  /// mystore tab khula ho to bottom bar nahi dikhana.
+  bool get _hideBar => _currentIndex == _kStoreIndex;
 
   ScrollPhysics get _resolvedPhysics {
     switch (widget.scrollPhysics?.toLowerCase()) {
@@ -238,8 +244,12 @@ class _CustomBottombarState extends State<CustomBottombar> {
       builder: (context, constraints) {
         // MediaQuery se bottom padding — system navigation bar bhi include hoti hai
         final bottomPadding = MediaQuery.of(context).padding.bottom;
-        // NavBar height + system padding = total space jo scroll ke neeche chahiye
-        final extraBottom = _navBarTotalHeight + bottomPadding;
+        // NavBar height + system padding = total space jo scroll ke neeche chahiye.
+        // mystore tab par bar hide hota hai, is liye wahan bar ki height nahi
+        // jodni (warna neeche khaali jagah reh jati).
+        final extraBottom = index == _kStoreIndex
+            ? bottomPadding
+            : _navBarTotalHeight + bottomPadding;
 
         return SingleChildScrollView(
           controller: _scrollControllers[index],
@@ -290,6 +300,8 @@ class _CustomBottombarState extends State<CustomBottombar> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
+        // mystore (ya koi bhi doosra tab) se back karne par Home par jao —
+        // is se bottom bar wapas show ho jata hai.
         if (_currentIndex != 0) {
           navigateTo(0);
         } else {
@@ -323,7 +335,8 @@ class _CustomBottombarState extends State<CustomBottombar> {
             ],
           ),
         ),
-        bottomNavigationBar: _buildNavBar(context),
+        // mystore tab par bottom bar remove, baqi tabs par show.
+        bottomNavigationBar: _hideBar ? null : _buildNavBar(context),
       ),
     );
   }

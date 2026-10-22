@@ -101,7 +101,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                 .bodyMedium
                                 .override(
                                   font: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.bold,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
@@ -110,7 +110,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                       .primaryBackground,
                                   fontSize: 24.0,
                                   letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.bold,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
@@ -160,12 +160,12 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Reference',
+                                        'REFERENCE',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
                                               font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w500,
+                                                fontWeight: FontWeight.bold,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -176,7 +176,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                                       .primaryBackground,
                                               fontSize: 11.0,
                                               letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.bold,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -184,12 +184,12 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                             ),
                                       ),
                                       Text(
-                                        '11226178D',
+                                        'SW-2610-1709',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
                                               font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w500,
+                                                fontWeight: FontWeight.bold,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -198,9 +198,9 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryBackground,
-                                              fontSize: 24.0,
+                                              fontSize: 21.0,
                                               letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.bold,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -252,7 +252,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                         .bodyMedium
                                         .override(
                                           font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w600,
+                                            fontWeight: FontWeight.bold,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium
@@ -262,7 +262,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                               .primaryText,
                                           fontSize: 18.0,
                                           letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.bold,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium

@@ -262,7 +262,7 @@ class _SetupBisinessLocationPageWidgetState
                                 if (_model.saved == '') {
                                   context.pushNamed(
                                       BusinessLocatePageWidget.routeName);
-                                } else if (actions.haatBusinessNameWasTaken()) {
+                                } else if (await actions.haatBusinessNameWasTaken()) {
                                   // Only the merchant can fix this one, so it stays
                                   // beside the field they have to change.
                                   _model.nameError = _model.saved;

@@ -1,9 +1,9 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/home_screens/add_transfer_funds/payment_status/payment_error/payment_error_widget.dart';
-import '/home_screens/add_transfer_funds/payment_status/payment_pending/payment_pending_widget.dart';
-import '/home_screens/add_transfer_funds/payment_status/payment_success/payment_success_widget.dart';
+import '/payment_status/payment_error/payment_error_widget.dart';
+import '/payment_status/payment_pending/payment_pending_widget.dart';
+import '/payment_status/payment_success/payment_success_widget.dart';
 import 'payment_status_widget.dart' show PaymentStatusWidget;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

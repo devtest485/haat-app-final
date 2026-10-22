@@ -81,6 +81,73 @@ class _NoLeadingZeroFormatter extends TextInputFormatter {
   }
 }
 
+/// Thousands separator formatter.
+///   "1000"      → "1,000"
+///   "1234567"   → "1,234,567"
+///   "1234.56"   → "1,234.56" (decimal hissa same rehta hai)
+class _ThousandsSeparatorFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text;
+    if (text.isEmpty) return newValue;
+
+    // Cursor se pehle kitne asli characters (comma ke baghair) hain
+    final cursor = newValue.selection.end < 0
+        ? text.length
+        : newValue.selection.end.clamp(0, text.length);
+    int charsBeforeCursor = 0;
+    for (int i = 0; i < cursor; i++) {
+      if (text[i] != ',') charsBeforeCursor++;
+    }
+
+    // Purane commas hata do
+    String clean = text.replaceAll(',', '');
+
+    // Sirf ek decimal point allow karo
+    final firstDot = clean.indexOf('.');
+    if (firstDot != -1) {
+      clean = clean.substring(0, firstDot + 1) +
+          clean.substring(firstDot + 1).replaceAll('.', '');
+    }
+
+    final hasDot = clean.contains('.');
+    final parts = clean.split('.');
+    final intPart = parts[0];
+    final decPart = hasDot ? parts[1] : '';
+
+    // Integer hisse me har 3 digits ke baad comma lagao
+    final buffer = StringBuffer();
+    for (int i = 0; i < intPart.length; i++) {
+      if (i > 0 && (intPart.length - i) % 3 == 0) buffer.write(',');
+      buffer.write(intPart[i]);
+    }
+    final formatted = buffer.toString() + (hasDot ? '.$decPart' : '');
+
+    // Cursor sahi jagah par rakho
+    int newOffset = formatted.length;
+    if (charsBeforeCursor == 0) {
+      newOffset = 0;
+    } else {
+      int count = 0;
+      for (int i = 0; i < formatted.length; i++) {
+        if (formatted[i] != ',') count++;
+        if (count == charsBeforeCursor) {
+          newOffset = i + 1;
+          break;
+        }
+      }
+    }
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: newOffset),
+    );
+  }
+}
+
 class _AmountInputState extends State<AmountInput> {
   static const _numberColor = Color(0xFF111111);
   static const _currencyColor = Color(0xFFBBBBBB);
@@ -228,6 +295,8 @@ class _AmountInputState extends State<AmountInput> {
         FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
         // پھر iOS zero-prefix صاف کرو
         _NoLeadingZeroFormatter(),
+        // آخر میں thousands کے commas لگاؤ
+        _ThousandsSeparatorFormatter(),
       ],
       style: numberStyle,
       showCursor: false,

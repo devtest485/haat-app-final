@@ -22,3 +22,6 @@ export '/custom_code/widgets/biometric_sign_in_mark.dart'
     show BiometricSignInMark;
 export '/custom_code/widgets/marketplace_banner_slider.dart'
     show MarketplaceBannerSlider;
+export '/custom_code/widgets/segmented_bar.dart' show SegmentedBar;
+export '/custom_code/widgets/haat_ai_card.dart' show HaatAiCard;
+export '/custom_code/widgets/step_area_chart.dart' show StepAreaChart;

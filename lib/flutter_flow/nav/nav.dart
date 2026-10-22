@@ -301,6 +301,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: TransactionsDetialsWidget.routeName,
           path: TransactionsDetialsWidget.routePath,
           builder: (context, params) => TransactionsDetialsWidget(),
+        ),
+        FFRoute(
+          name: PayYourWidget.routeName,
+          path: PayYourWidget.routePath,
+          builder: (context, params) => PayYourWidget(),
+        ),
+        FFRoute(
+          name: TopupamountWidget.routeName,
+          path: TopupamountWidget.routePath,
+          builder: (context, params) => TopupamountWidget(),
+        ),
+        FFRoute(
+          name: NotificationsWidget.routeName,
+          path: NotificationsWidget.routePath,
+          builder: (context, params) => NotificationsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
