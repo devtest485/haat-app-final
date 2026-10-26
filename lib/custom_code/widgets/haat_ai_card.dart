@@ -14,24 +14,25 @@ import 'package:google_fonts/google_fonts.dart';
 /// HAAT AI card.
 ///
 /// Card me sirf: background image (poore card par), "Hi <name>," + subtitle,
-/// aur neeche "Ask HAAT Ai" field. Glow / logo / extra image is widget me
-/// nahi hai — jo bhi image aap `bgImageUrl` me doge wahi poore card ka bg
-/// banegi.
+/// aur neeche "Ask HAAT Ai" field. Glow / logo / extra image is widget me nahi hai —
+/// jo bhi image aap `bgImageUrl` me doge wahi poore card ka bg banegi.
 ///
 /// Enter ya send button dabane par poori screen ka BLACK chat page khulta hai
-/// (hamesha full height, parent ki height se koi farq nahi padta): * user ka
-/// message right side par top me, * AI ke jawab ka intezar dikhane wale dots,
-/// * `aiReply` badalte hi AI ka jawab left side par add.
+/// (hamesha full height, parent ki height se koi farq nahi padta):
+///   * user ka message right side par top me,
+///   * AI ke jawab ka intezar dikhane wale dots,
+///   * `aiReply` badalte hi AI ka jawab left side par add.
 ///
-/// FlutterFlow me parameters: width, height      -> double  (default 363 x
-/// 390) bgImageUrl         -> String  (image ka URL ya assets path; khali =
-/// black bg) logoUrl            -> String  (beech wala H logo; default
-/// Haat_Logo.png, khali = logo nahi) userName           -> String  (default
-/// "Ahmed") subtitle           -> String  (default "what should we grow
-/// today?") placeholder        -> String  (default "Ask HAAT Ai") aiReply
-///        -> String  (API ka jawab) onMessageSent      -> Action(String
-/// message)   (yahan API call lagao) onExpandedChanged  -> Action(bool
-/// isExpanded)  (chat khulne / band hone par)
+/// FlutterFlow me parameters:
+///   width, height      -> double  (default 363 x 390)
+///   bgImageUrl         -> String  (image ka URL ya assets path; khali = black bg)
+///   logoUrl            -> String  (beech wala H logo; default Haat_Logo.png, khali = logo nahi)
+///   userName           -> String  (default "Ahmed")
+///   subtitle           -> String  (default "what should we grow today?")
+///   placeholder        -> String  (default "Ask HAAT Ai")
+///   aiReply            -> String  (API ka jawab)
+///   onMessageSent      -> Action(String message)   (yahan API call lagao)
+///   onExpandedChanged  -> Action(bool isExpanded)  (chat khulne / band hone par)
 class HaatAiCard extends StatefulWidget {
   const HaatAiCard({
     super.key,

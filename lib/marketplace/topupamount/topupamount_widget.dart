@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/payment_status/payment_success/payment_success_widget.dart';
 import 'dart:ui';
-import '/flutter_flow/custom_functions.dart' as functions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,23 +12,7 @@ import 'topupamount_model.dart';
 export 'topupamount_model.dart';
 
 class TopupamountWidget extends StatefulWidget {
-  const TopupamountWidget({
-    super.key,
-    String? billerName,
-    String? flow,
-    String? accountNumber,
-    String? billType,
-  })  : this.billerName = billerName ?? 'MTN',
-        this.flow = flow ?? 'mobile',
-        this.accountNumber = accountNumber ?? '',
-        this.billType = billType ?? '';
-
-  /// What "Pay your … bill" was filled in with: the biller, its flow, the number typed
-  /// and the chip chosen (empty for a bill with none).
-  final String billerName;
-  final String flow;
-  final String accountNumber;
-  final String billType;
+  const TopupamountWidget({super.key});
 
   static String routeName = 'Topupamount';
   static String routePath = '/topupamount';
@@ -153,10 +136,7 @@ class _TopupamountWidgetState extends State<TopupamountWidget> {
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 Text(
-                                                  functions.billFlowText(
-                                                      widget.flow,
-                                                      widget.billerName,
-                                                      'amountTitle'),
+                                                  'Enter the top-up amount',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -187,7 +167,7 @@ class _TopupamountWidgetState extends State<TopupamountWidget> {
                                               ].divide(SizedBox(width: 9.0)),
                                             ),
                                             Text(
-                                              'How much do you want to pay ${widget.billerName}?',
+                                              'Select bill type and enter the MTN number to pay.',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -276,10 +256,7 @@ class _TopupamountWidgetState extends State<TopupamountWidget> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    functions.billFlowText(
-                                                        widget.flow,
-                                                        widget.billerName,
-                                                        'numberLabel'),
+                                                    'Mobile number',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -314,10 +291,7 @@ class _TopupamountWidgetState extends State<TopupamountWidget> {
                                                             .fromSTEB(0.0, 8.0,
                                                                 0.0, 0.0),
                                                     child: Text(
-                                                      widget.billType != ''
-                                                          ? '${widget.accountNumber} - ${widget.billType}'
-                                                          : widget
-                                                              .accountNumber,
+                                                      '+249 912 090 910 - Prepaid',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)

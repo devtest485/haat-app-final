@@ -54,12 +54,12 @@ class HaatAuthGroup {
   static MarketplaceBannersCall marketplaceBannersCall =
       MarketplaceBannersCall();
   static WeekStoryCall weekStoryCall = WeekStoryCall();
+  static ProductsCall productsCall = ProductsCall();
   static RecentTransactionsCall recentTransactionsCall =
       RecentTransactionsCall();
-  static ProductsCall productsCall = ProductsCall();
+  static MarketplaceCall marketplaceCall = MarketplaceCall();
   static NotificationsCall notificationsCall = NotificationsCall();
   static NotificationsSeenCall notificationsSeenCall = NotificationsSeenCall();
-  static MarketplaceCall marketplaceCall = MarketplaceCall();
 }
 
 class RegisterUserCall {
@@ -1613,7 +1613,7 @@ class WeekStoryCall {
     );
 
     return ApiManager.instance.makeApiCall(
-      callName: 'WeekStory',
+      callName: ' WeekStory',
       apiUrl: '${baseUrl}/business/week-story',
       callType: ApiCallType.GET,
       headers: {
@@ -1710,6 +1710,7 @@ class RecentTransactionsCall {
       apiUrl: '${baseUrl}/transactions?limit=${limit}',
       callType: ApiCallType.GET,
       headers: {
+        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1755,6 +1756,7 @@ class MarketplaceCall {
       apiUrl: '${baseUrl}/marketplace',
       callType: ApiCallType.GET,
       headers: {
+        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1815,6 +1817,7 @@ class NotificationsCall {
       apiUrl: '${baseUrl}/notifications',
       callType: ApiCallType.GET,
       headers: {
+        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1845,10 +1848,10 @@ class NotificationsCall {
         r'''$.data.earlier''',
         true,
       ) as List?;
-  int? unreadCount(dynamic response) => castToType<int>(getJsonField(
+  dynamic unreadCount(dynamic response) => getJsonField(
         response,
         r'''$.data.unreadCount''',
-      ));
+      );
 }
 
 class NotificationsSeenCall {
@@ -1869,18 +1872,21 @@ class NotificationsSeenCall {
       language: language,
     );
 
+    final ffApiRequestBody = '''
+{}''';
     return ApiManager.instance.makeApiCall(
       callName: 'NotificationsSeen',
       apiUrl: '${baseUrl}/notifications/seen',
       callType: ApiCallType.POST,
       headers: {
+        'Authorization': 'Bearer ${authToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
         'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
-      body: '{}',
+      body: ffApiRequestBody,
       bodyType: BodyType.JSON,
       returnBody: true,
       encodeBodyUtf8: false,

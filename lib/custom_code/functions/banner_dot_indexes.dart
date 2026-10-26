@@ -11,9 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// `0, 1, … count - 1`: one entry per banner, for the dots under a card's headline.
-///
-/// Empty for a single banner — one dot points at nothing.
 List<int> bannerDotIndexes(int? count) {
   final total = count ?? 0;
   return total < 2 ? <int>[] : List<int>.generate(total, (index) => index);

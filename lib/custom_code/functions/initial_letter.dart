@@ -11,8 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The first letter of a name, capitalised — drawn in place of a logo not uploaded yet.
-String initialLetter(String? name) {
+String? initialLetter(String? name) {
   final text = (name ?? '').trim();
   if (text.isEmpty) return '';
 

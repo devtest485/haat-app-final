@@ -11,16 +11,13 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// What the cart comes to, in minor units, as a string — `"600000"` is 6,000 SDG.
-///
-/// Added as whole piastres in a BigInt, never as doubles: twelve lines at 0.10 must
-/// come to 1.20 exactly.
-String cartTotalMinor(List<dynamic>? cart) {
+String? cartTotalMinor(List<dynamic>? cart) {
   var total = BigInt.zero;
 
   for (final line in cart ?? const []) {
     if (line is! Map) continue;
-    final price = BigInt.tryParse('${line['priceMinor']}'.trim()) ?? BigInt.zero;
+    final price =
+        BigInt.tryParse('${line['priceMinor']}'.trim()) ?? BigInt.zero;
     final qty = int.tryParse('${line['qty']}') ?? 0;
     total += price * BigInt.from(qty);
   }

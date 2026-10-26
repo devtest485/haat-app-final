@@ -14,21 +14,18 @@ export 'home_banner_model.dart';
 class HomeBannerWidget extends StatefulWidget {
   const HomeBannerWidget({
     super.key,
-    Color? backgroundColor,
-    String? title,
-    String? imageUrl,
+    this.backgroundColor,
+    this.title,
+    this.imageUrl,
     int? dotCount,
     int? activeIndex,
-    this.onTap,
-  })  : this.backgroundColor = backgroundColor ?? const Color(0xFF005A3B),
-        this.title = title ?? '',
-        this.imageUrl = imageUrl ?? '',
-        this.dotCount = dotCount ?? 1,
+    required this.onTap,
+  })  : this.dotCount = dotCount ?? 1,
         this.activeIndex = activeIndex ?? 0;
 
-  final Color backgroundColor;
-  final String title;
-  final String imageUrl;
+  final Color? backgroundColor;
+  final String? title;
+  final String? imageUrl;
   final int dotCount;
   final int activeIndex;
   final Future Function()? onTap;
@@ -71,120 +68,133 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
       },
       child: Container(
         width: double.infinity,
-        height: 107.0,
         decoration: BoxDecoration(
-          color: widget.backgroundColor,
+          color: widget!.backgroundColor,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: (FFMainAxisAlignment.spaceBetween).flutterValue,
           children: [
-            Expanded(
+            Container(
+              width: 159.46,
+              decoration: BoxDecoration(),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 8.0, 8.0),
+                padding: EdgeInsetsDirectional.fromSTEB(12.0, 6.0, 0.0, 0.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment:
                       (FFMainAxisAlignment.spaceBetween).flutterValue,
                   crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
-                    if (!functions.bannerDarkText(widget.backgroundColor))
+                    if (functions.bannerDarkText(widget!.backgroundColor) ==
+                        false)
                       ClipRRect(
                         borderRadius: BorderRadius.only(),
                         child: SvgPicture.asset(
                           'assets/images/hattLogo.svg',
                           width: 52.0,
                           height: 18.0,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    if (functions.bannerDarkText(widget.backgroundColor))
+                    if (functions.bannerDarkText(widget!.backgroundColor) ==
+                        true)
                       ClipRRect(
                         borderRadius: BorderRadius.only(),
                         child: SvgPicture.asset(
                           'assets/images/hattLogoDark.svg',
                           width: 52.0,
                           height: 18.0,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment:
-                          (FFCrossAxisAlignment.start).flutterValue,
-                      children: [
-                        Text(
-                          widget.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: functions
-                                        .bannerOnColor(widget.backgroundColor),
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.0,
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment:
+                            (FFCrossAxisAlignment.start).flutterValue,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text(
+                            valueOrDefault<String>(
+                              widget!.title,
+                              '.',
+                            ),
+                            maxLines: 2,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.inter(
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontWeight,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
-                                    lineHeight: 1.3,
                                   ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 8.0, 0.0, 0.0),
-                          child: Builder(
-                            builder: (context) {
-                              final dot = functions
-                                  .bannerDotIndexes(widget.dotCount)
-                                  .toList();
-
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    (FFMainAxisAlignment.start).flutterValue,
-                                children: List.generate(dot.length, (dotIndex) {
-                                  final dotItem = dot[dotIndex];
-                                  return Container(
-                                    width: 5.0,
-                                    height: 5.0,
-                                    decoration: BoxDecoration(
-                                      color: functions.bannerDotColor(
-                                          widget.backgroundColor,
-                                          dotItem,
-                                          widget.activeIndex),
-                                    ),
-                                  );
-                                }).divide(SizedBox(width: 4.0)),
-                              );
-                            },
+                                  color: functions
+                                      .bannerOnColor(widget!.backgroundColor),
+                                  fontSize: 16.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                  lineHeight: 1.3,
+                                ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 8.0, 0.0, 8.0),
+                            child: Builder(
+                              builder: (context) {
+                                final dot = functions
+                                    .bannerDotIndexes(widget!.dotCount)
+                                    .toList();
+
+                                return Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      (FFMainAxisAlignment.start).flutterValue,
+                                  children:
+                                      List.generate(dot.length, (dotIndex) {
+                                    final dotItem = dot[dotIndex];
+                                    return Container(
+                                      width: 5.0,
+                                      height: 5.0,
+                                      decoration: BoxDecoration(
+                                        color: functions.bannerDotColor(
+                                            widget!.backgroundColor,
+                                            dotItem,
+                                            widget!.activeIndex),
+                                      ),
+                                    );
+                                  }).divide(SizedBox(width: 4.0)),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-            if (widget.imageUrl != '')
+            if (widget!.imageUrl != null && widget!.imageUrl != '')
               ClipRRect(
                 borderRadius: BorderRadius.only(),
                 child: Image.network(
-                  widget.imageUrl,
+                  widget!.imageUrl!,
                   width: 99.0,
-                  height: 107.0,
+                  height: 111.0,
                   fit: BoxFit.contain,
-                  alignment: Alignment(1.0, 1.0),
                 ),
               ),
           ],

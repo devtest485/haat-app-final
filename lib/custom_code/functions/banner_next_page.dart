@@ -11,8 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The banner the home autoplay moves to next: the one after [current], or back
-/// to the first after the last.
 int bannerNextPage(
   int current,
   int count,

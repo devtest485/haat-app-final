@@ -11,11 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// A notification's `title` or `body` in the language the app is shown in.
-///
-/// The server sends both: `title` and `titleAr`. Arabic is used when the app is in
-/// Arabic and the back office wrote it; otherwise the English, so a row is never blank.
-String notificationText(
+String? notificationText(
   dynamic item,
   String field,
   String? languageCode,

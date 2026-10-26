@@ -11,10 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// Whether what was typed on "Pay your … bill" looks like a number for that bill.
-///
-/// A phone number is 9 to 12 digits, a meter 8 to 20; any other account needs at least
-/// three characters. Spaces, dashes and a leading + are ignored.
 bool isValidBillNumber(
   String? number,
   String? flow,

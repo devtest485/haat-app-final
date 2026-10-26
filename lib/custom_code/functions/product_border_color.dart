@@ -11,7 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// A product card's border: black while it is in the cart, a hairline otherwise.
 Color productBorderColor(bool? selected) {
   return selected == true ? const Color(0xFF111111) : const Color(0x1A000000);
 }

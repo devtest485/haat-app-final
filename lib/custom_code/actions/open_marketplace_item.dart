@@ -8,10 +8,6 @@ import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-/// Opens what a tapped Marketplace biller or brand is for.
-///
-/// A `link` item opens its web address. Every other flow — `mobile`, `electricity`,
-/// `account` — opens the "Pay your … bill" screen for it, with its name and logo.
 Future openMarketplaceItem(
   BuildContext context,
   dynamic item,

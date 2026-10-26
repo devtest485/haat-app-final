@@ -11,7 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// Whether a statement row is money coming in: `credit` is, anything else is out.
-bool transactionIsIncoming(String? direction) {
+bool? transactionIsIncoming(String? direction) {
   return (direction ?? '').trim() == 'credit';
 }

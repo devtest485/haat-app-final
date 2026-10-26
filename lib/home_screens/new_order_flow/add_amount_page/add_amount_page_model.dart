@@ -12,6 +12,7 @@ import 'add_amount_page_widget.dart' show AddAmountPageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class AddAmountPageModel extends FlutterFlowModel<AddAmountPageWidget> {
@@ -47,7 +48,7 @@ class AddAmountPageModel extends FlutterFlowModel<AddAmountPageWidget> {
   // Stores action output result for [Custom Action - haatAccessToken] action in AddAmountPage widget.
   String? token;
   // Stores action output result for [Backend Call - API (Products)] action in AddAmountPage widget.
-  ApiCallResponse? productsResult;
+  ApiCallResponse? apiResultp8j;
 
   @override
   void initState(BuildContext context) {}

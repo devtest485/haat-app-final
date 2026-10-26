@@ -11,10 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The bill types a Marketplace bill is paid as, the chips on "Pay your … bill".
-///
-/// A phone bill is prepaid or postpaid, electricity is bought for a meter's phase, and
-/// every other bill (`account`) has no type.
 List<String> billTypesFor(String? flow) {
   switch ((flow ?? '').trim()) {
     case 'mobile':

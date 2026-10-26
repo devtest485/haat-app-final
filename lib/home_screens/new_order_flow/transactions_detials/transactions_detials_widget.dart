@@ -1,10 +1,11 @@
+import '/backend/api_requests/api_calls.dart';
+import '/components/transactions/transactions_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
-import '/custom_code/widgets/index.dart' as custom_widgets;
-import '/index.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,6 +39,22 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
       _model.traded = await actions.haatHasTransactions();
       _model.transactions = _model.traded!;
       safeSetState(() {});
+      _model.token = await actions.haatAccessToken();
+      _model.transactionsResult =
+          await HaatAuthGroup.recentTransactionsCall.call(
+        accessToken: _model.token,
+        limit: 100,
+      );
+
+      if ((_model.transactionsResult?.succeeded ?? true)) {
+        _model.transactionList = HaatAuthGroup.recentTransactionsCall
+            .transactions(
+              (_model.transactionsResult?.jsonBody ?? ''),
+            )!
+            .toList()
+            .cast<dynamic>();
+        safeSetState(() {});
+      }
     });
   }
 
@@ -70,7 +87,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
             children: [
               Container(
                 width: double.infinity,
-                height: 148.63,
+                height: 0.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                   image: DecorationImage(
@@ -82,7 +99,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,7 +137,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                       ),
                                     ),
                                     Text(
-                                      'Transactions',
+                                      'All Transactions',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -142,33 +159,11 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
-                                      '.',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
+                                    Icon(
+                                      Icons.search_sharp,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      size: 24.0,
                                     ),
                                   ],
                                 ),
@@ -208,10 +203,10 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                                FontWeight.bold,
                                                             fontStyle:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -224,7 +219,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                           fontSize: 24.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.bold,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -233,112 +228,41 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'Payments will show here as soon as your first one comes in.',
+                                                'Payments will show here as soon as your \nfirst one comes in.',
                                                 textAlign: TextAlign.center,
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color: Color(0xF1000000),
-                                                      fontSize: 13.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                              ),
-                                              InkWell(
-                                                splashColor: Colors.transparent,
-                                                focusColor: Colors.transparent,
-                                                hoverColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
-                                                onTap: () async {
-                                                  context.pushNamed(
-                                                      AddEmpoleyNameWidget
-                                                          .routeName);
-                                                },
-                                                child: Container(
-                                                  width: 176.87,
-                                                  height: 43.1,
-                                                  decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            106.67),
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.add,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        size: 20.0,
-                                                      ),
-                                                      Text(
-                                                        'New Order',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .inter(
-                                                                fontWeight: FlutterFlowTheme.of(
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontStyle,
-                                                              ),
-                                                              fontSize: 16.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                            ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 8.0)),
-                                                  ),
-                                                ),
+                                                          ),
+                                                          color:
+                                                              Color(0xF1000000),
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                          lineHeight: 1.4,
+                                                        ),
                                               ),
                                             ].divide(SizedBox(height: 12.0)),
                                           ),
@@ -346,9 +270,123 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                       ),
                                     );
                                   } else {
-                                    return Container(
-                                      child:
-                                          custom_widgets.MerchantTransactions(),
+                                    return Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 25.0, 0.0, 0.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Builder(
+                                              builder: (context) {
+                                                final txItem = _model
+                                                    .transactionList
+                                                    .toList();
+
+                                                return ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  primary: false,
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  itemCount: txItem.length,
+                                                  itemBuilder:
+                                                      (context, txItemIndex) {
+                                                    final txItemItem =
+                                                        txItem[txItemIndex];
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16.0),
+                                                      ),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    5.0,
+                                                                    0.0,
+                                                                    5.0,
+                                                                    0.0),
+                                                        child:
+                                                            TransactionsWidget(
+                                                          key: Key(
+                                                              'Keyetz_${txItemIndex}_of_${txItem.length}'),
+                                                          title: functions
+                                                              .transactionTitle(
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.description''',
+                                                                  ).toString(),
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.kind''',
+                                                                  ).toString()),
+                                                          subtitle: functions
+                                                              .transactionSubtitle(
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.description''',
+                                                                  ).toString(),
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.kind''',
+                                                                  ).toString(),
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.occurredAt''',
+                                                                  ).toString()),
+                                                          amount: functions
+                                                              .transactionAmount(
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.amountMinor''',
+                                                                  ).toString(),
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.currency''',
+                                                                  ).toString(),
+                                                                  getJsonField(
+                                                                    txItemItem,
+                                                                    r'''$.direction''',
+                                                                  ).toString()),
+                                                          incoming: functions
+                                                              .transactionIsIncoming(
+                                                                  getJsonField(
+                                                            txItemItem,
+                                                            r'''$.direction''',
+                                                          ).toString()),
+                                                          paymentMethod:
+                                                              getJsonField(
+                                                            txItemItem,
+                                                            r'''$.paymentMethod''',
+                                                          ).toString(),
+                                                          showDivider: functions
+                                                              .showPairDivider(
+                                                                  txItemIndex,
+                                                                  _model
+                                                                      .transactionList
+                                                                      .length),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ].divide(SizedBox(height: 7.0)),
+                                        ),
+                                      ),
                                     );
                                   }
                                 },

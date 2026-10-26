@@ -11,10 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The cart after the stepper on a card: [delta] is `1` for + and `-1` for −.
-///
-/// Going below one takes the product out, as the second tap on its card does — a line
-/// of nought is not something a merchant can charge for. At most 999 of one thing.
 List<dynamic> cartChangeQuantity(
   List<dynamic>? cart,
   String? productId,

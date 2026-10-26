@@ -11,13 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The cart after a tap on a product card: in at one if it was not there, out if it was.
-///
-/// [product] is one row of `GET /products` as it came; the cart keeps only what the bar
-/// and the Cart screen draw — `id`, `name`, `unit`, `priceMinor`, `imageUrl` and `qty` —
-/// so it does not change shape if the API grows. [baseUrl] turns the relative
-/// `imagePath` into an address, as `bannerImageUrl` does for a banner.
-List<dynamic> cartToggle(
+List<dynamic>? cartToggle(
   List<dynamic>? cart,
   dynamic product,
   String? baseUrl,

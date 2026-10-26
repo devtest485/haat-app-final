@@ -31,7 +31,8 @@ int placesOf(String currency) => _places[currency.toUpperCase()] ?? 2;
   final whole = digits
       .substring(0, digits.length - places)
       .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]},');
-  final fraction = places == 0 ? '' : '.${digits.substring(digits.length - places)}';
+  final fraction =
+      places == 0 ? '' : '.${digits.substring(digits.length - places)}';
 
   return ('${negative ? '-' : ''}$whole', fraction);
 }
@@ -68,7 +69,8 @@ class WalletLine {
   final BigInt reserveMinor;
 
   // Strings on the wire: balances outgrow what a JSON number holds exactly.
-  static BigInt _minor(Object? value) => BigInt.tryParse('${value ?? '0'}') ?? BigInt.zero;
+  static BigInt _minor(Object? value) =>
+      BigInt.tryParse('${value ?? '0'}') ?? BigInt.zero;
 
   factory WalletLine.fromData(Map<String, dynamic> data) => WalletLine(
         institutionId: data['institutionId'] as String? ?? '',
@@ -124,7 +126,8 @@ class WalletApi {
         '/wallet',
         parse: (envelope) {
           final data = envelope.data;
-          final balances = data is Map<String, dynamic> ? data['balances'] : null;
+          final balances =
+              data is Map<String, dynamic> ? data['balances'] : null;
 
           return Wallet(
             (balances is List ? balances : const [])

@@ -11,8 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// Whether a product card is selected — drawn with the black border and the stepper.
-bool productInCart(
+bool? productInCart(
   List<dynamic>? cart,
   String? productId,
 ) {

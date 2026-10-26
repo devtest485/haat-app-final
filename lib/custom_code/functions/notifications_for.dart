@@ -11,12 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// What one section of the Notifications screen shows under the chosen tab.
-///
-/// `section` is `actions`, `today` or `earlier`. Pending actions show under All and
-/// Actions; offers and updates under All and their own tab. A section left with
-/// nothing is hidden, and with every section empty the screen says it is all caught up.
-List<dynamic> notificationsFor(
+List<dynamic>? notificationsFor(
   List<dynamic>? items,
   String? tab,
   String section,

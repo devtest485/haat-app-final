@@ -11,9 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// When a notification came, as its row shows it: the time for one from today
-/// (`09:41 AM`), `Yesterday`, or else the day (`18 Oct`, with the year when it is not
-/// this year's).
 String notificationTime(String? publishedAt) {
   final at = DateTime.tryParse(publishedAt ?? '')?.toLocal();
   if (at == null) return '';

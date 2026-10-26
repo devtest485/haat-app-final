@@ -10,22 +10,11 @@ import 'package:flutter/material.dart' hide RepeatMode;
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import 'dart:async';
+import 'dart:ui' show PointerDeviceKind;
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-/// The full-bleed slides at the top of the Marketplace tab.
-///
-/// Each slide is its picture with, over it: a round logo, the headline, one
-/// dot per slide (only when there is more than one) and a button as wide as
-/// its words. Any of the logo, headline and button is left out when the slide
-/// has none.
-///
-/// [banners] is the JSON list the page already holds; the paths say where in
-/// each item every part is, so the same widget reads whatever shape the list
-/// arrives in. A path may be written `$.imageUrl` or just `imageUrl`.
-///
-/// A tap opens the slide's link in the browser, or else its app screen by
-/// route name.
 class MarketplaceBannerSlider extends StatefulWidget {
   const MarketplaceBannerSlider({
     super.key,
@@ -52,7 +41,6 @@ class MarketplaceBannerSlider extends StatefulWidget {
   final String? linkPath;
   final String? routePath;
 
-  /// Room left under the words, for whatever the page lays over the slides' foot.
   final double? contentBottomPadding;
   final bool? autoPlay;
 
@@ -68,6 +56,7 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
   PageController? _pages;
   Timer? _slide;
   int _count = 0;
+  int _currentPageIndex = 0;
 
   List<dynamic> get _banners => widget.banners ?? const [];
 
@@ -80,8 +69,10 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
   @override
   void didUpdateWidget(covariant MarketplaceBannerSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_banners.length != _count || widget.autoPlay != oldWidget.autoPlay) {
+    if (_banners.length != _count) {
       _prepare();
+    } else if (widget.autoPlay != oldWidget.autoPlay) {
+      _startSliding();
     }
   }
 
@@ -92,17 +83,20 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
     super.dispose();
   }
 
-  /// A fresh controller whenever the number of slides changes, started far enough in
-  /// that the slides wrap both ways.
   void _prepare() {
+    final old = _pages;
     _count = _banners.length;
-    _pages?.dispose();
-    _pages = _count > 1 ? PageController(initialPage: _count * 1000) : null;
+    final initialPage = _count > 1 ? _count * 1000 : 0;
+    _currentPageIndex = 0;
+    _pages = _count > 1 ? PageController(initialPage: initialPage) : null;
+
     _startSliding();
+
+    if (old != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => old.dispose());
+    }
   }
 
-  /// Moves on every few seconds; restarted on every page change, so a slide just
-  /// swiped to gets its full time.
   void _startSliding() {
     _slide?.cancel();
     if (_count < 2 || widget.autoPlay == false) return;
@@ -118,189 +112,370 @@ class _MarketplaceBannerSliderState extends State<MarketplaceBannerSlider> {
     });
   }
 
-  String _read(dynamic item, String? path, String fallback) {
-    var key = (path ?? '').trim();
-    if (key.isEmpty) key = fallback;
-    if (!key.startsWith(r'$')) key = '\$.$key';
+  String _read(dynamic item, String? path, List<String> fallbackKeys) {
+    if (item == null) return '';
 
-    return getJsonField(item, key)?.toString().trim() ?? '';
+    // 1. JSON Path query
+    final rawPath = (path ?? '').trim();
+    if (rawPath.isNotEmpty) {
+      try {
+        final jsonPath = rawPath.startsWith(r'$') ? rawPath : '\$.$rawPath';
+        final val = getJsonField(item, jsonPath)?.toString().trim();
+        if (val != null &&
+            val.isNotEmpty &&
+            val != 'null' &&
+            val != 'undefined') {
+          return val;
+        }
+      } catch (_) {}
+    }
+
+    // 2. Direct map fallback keys
+    if (item is Map) {
+      for (final key in fallbackKeys) {
+        if (item.containsKey(key) && item[key] != null) {
+          final val = item[key].toString().trim();
+          if (val.isNotEmpty && val != 'null' && val != 'undefined') {
+            return val;
+          }
+        }
+      }
+    }
+
+    return '';
   }
 
-  String _picture(dynamic item, String? path, String fallback) {
-    final value = _read(item, path, fallback);
-    return value.startsWith('/')
-        ? '${FFDevEnvironmentValues().baseURL}$value'
-        : value;
+  String _picture(dynamic item, String? path, List<String> fallbackKeys) {
+    final value = _read(item, path, fallbackKeys);
+    if (value.isEmpty) return '';
+    if (!value.startsWith('/')) return value;
+
+    var base = '';
+    try {
+      base = FFDevEnvironmentValues().baseURL;
+    } catch (_) {}
+    if (base.endsWith('/')) base = base.substring(0, base.length - 1);
+    return '$base$value';
   }
 
-  /// The same opening the home cards use: a link in the browser, else a screen.
-  Future<void> _open(String link, String route) =>
-      openBannerLink(context, link, route);
+  Future<void> _open(String link, String route) async {
+    debugPrint('MarketplaceBannerSlider tap -> link="$link" route="$route"');
+    if (!mounted) return;
+
+    // 1. Open via openBannerLink action (handles RequestNFC sheet & standard routes)
+    try {
+      await openBannerLink(context, link, route);
+      return;
+    } catch (e) {
+      debugPrint('MarketplaceBannerSlider: openBannerLink delegated: $e');
+    }
+
+    if (!mounted) return;
+
+    // 2. Direct browser link fallback
+    if (link.isNotEmpty && link != 'null' && !link.startsWith('/')) {
+      var uri = Uri.tryParse(link.contains('://') ? link : 'https://$link');
+      if (uri != null) {
+        for (final mode in [
+          LaunchMode.externalApplication,
+          LaunchMode.platformDefault,
+        ]) {
+          try {
+            if (await launchUrl(uri, mode: mode)) return;
+          } catch (_) {}
+        }
+      }
+    }
+
+    if (!mounted) return;
+
+    // 3. Named route fallback
+    final target = route.isNotEmpty && route != 'null'
+        ? route
+        : (link.startsWith('/') ? link : '');
+    if (target.isEmpty) return;
+
+    try {
+      if (target.startsWith('/')) {
+        context.push(target);
+      } else {
+        context.pushNamed(target);
+      }
+    } catch (_) {
+      try {
+        final path = target.startsWith('/') ? target : '/$target';
+        context.push(path);
+      } catch (err) {
+        debugPrint('MarketplaceBannerSlider: route failed for "$target": $err');
+      }
+    }
+  }
+
+  double _size(double? given, bool bounded, double max, double fallback) {
+    if (given != null && given.isFinite && given > 0) return given;
+    if (bounded && max.isFinite) return max;
+    return fallback;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Widget body;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final screen = MediaQuery.of(context).size;
+        final w = _size(widget.width, constraints.hasBoundedWidth,
+            constraints.maxWidth, screen.width);
+        final h = _size(widget.height, constraints.hasBoundedHeight,
+            constraints.maxHeight, screen.height * 0.6);
 
-    if (_count == 0) {
-      // Still loading, or nothing live: dark, so the page's white header still reads.
-      body = Container(color: _dark);
-    } else if (_count == 1) {
-      body = _page(context, 0);
-    } else {
-      body = PageView.builder(
-        controller: _pages,
-        onPageChanged: (_) => _startSliding(),
-        itemBuilder: (context, page) => _page(context, page % _count),
-      );
-    }
+        final count = _banners.length;
+        final Widget body;
 
-    return SizedBox(
-      width: widget.width ?? double.infinity,
-      height: widget.height ?? double.infinity,
-      child: body,
+        if (count == 0) {
+          body = Container(color: _dark);
+        } else if (count == 1) {
+          body = _page(context, 0);
+        } else {
+          final initialPage = count * 1000;
+          final pages = _pages ??= PageController(initialPage: initialPage);
+
+          body = NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is ScrollStartNotification) {
+                // User drag / thumb scroll shuru ho to auto-slide pause karein
+                _slide?.cancel();
+              } else if (notification is ScrollEndNotification) {
+                // Drag khatam hone ke baad auto-slide dobara start karein
+                _startSliding();
+              }
+              return false;
+            },
+            child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                  PointerDeviceKind.trackpad,
+                  PointerDeviceKind.stylus,
+                  PointerDeviceKind.unknown,
+                },
+              ),
+              child: PageView.builder(
+                controller: pages,
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                onPageChanged: (page) {
+                  final safe = (page % count + count) % count;
+                  if (mounted && safe != _currentPageIndex) {
+                    setState(() => _currentPageIndex = safe);
+                  }
+                  _startSliding();
+                },
+                itemBuilder: (context, page) {
+                  final safeIndex = (page % count + count) % count;
+                  return _page(context, safeIndex);
+                },
+              ),
+            ),
+          );
+        }
+
+        return SizedBox(
+          width: w,
+          height: h,
+          child: ClipRect(
+            child: MediaQuery.withClampedTextScaling(
+              minScaleFactor: 1.0,
+              maxScaleFactor: 1.2,
+              child: body,
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _page(BuildContext context, int index) {
-    final item = _banners[index];
-    final image = _picture(item, widget.imagePath, 'imagePath');
-    final logo = _picture(item, widget.logoPath, 'logoPath');
-    final title = _read(item, widget.titlePath, 'title');
-    final button = _read(item, widget.buttonPath, 'ctaLabel');
-    final link = _read(item, widget.linkPath, 'actionUrl');
-    final route = _read(item, widget.routePath, 'actionRoute');
+    if (_banners.isEmpty) return Container(color: _dark);
+    final total = _banners.length;
+    final safeIndex = (index % total + total) % total;
+
+    final item = _banners[safeIndex];
+    final image = _picture(item, widget.imagePath, [
+      'imagePath',
+      'image_path',
+      'imageUrl',
+      'image_url',
+      'image',
+      'picture',
+    ]);
+    final logo = _picture(item, widget.logoPath, [
+      'logoPath',
+      'logo_path',
+      'logoUrl',
+      'logo_url',
+      'logo',
+    ]);
+    final title = _read(item, widget.titlePath, [
+      'title',
+      'titleEn',
+      'headline',
+      'name',
+    ]);
+    final button = _read(item, widget.buttonPath, [
+      'ctaLabel',
+      'cta_label',
+      'cta',
+      'button',
+      'buttonText',
+      'label',
+    ]);
+    final link = _read(item, widget.linkPath, [
+      'actionUrl',
+      'action_url',
+      'linkUrl',
+      'link_url',
+      'url',
+      'link',
+    ]);
+    final route = _read(item, widget.routePath, [
+      'actionRoute',
+      'action_route',
+      'route',
+      'targetRoute',
+      'screen',
+    ]);
 
     void open() => _open(link, route);
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: open,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          image.isEmpty
-              ? Container(color: _dark)
-              : Image.network(
-                  image,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(color: _dark),
-                ),
-          // Keeps the header above and the words below readable on any picture.
-          const IgnorePointer(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.0, 0.3, 0.45, 0.85],
-                  colors: [
-                    Color(0x59000000),
-                    Color(0x00000000),
-                    Color(0x00000000),
-                    Color(0xE6000000),
-                  ],
-                ),
+    // Navigation sirf button se hoga (poore banner par tap se nahi)
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        image.isEmpty
+            ? Container(color: _dark)
+            : Image.network(
+                image,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(color: _dark),
+              ),
+        const IgnorePointer(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.0, 0.3, 0.45, 0.85],
+                colors: [
+                  Color(0x59000000),
+                  Color(0x00000000),
+                  Color(0x00000000),
+                  Color(0xE6000000),
+                ],
               ),
             ),
           ),
-          Positioned(
-            left: 24,
-            right: 24,
-            bottom: widget.contentBottomPadding ?? 56,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (logo.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: ClipOval(
-                      child: Image.network(
-                        logo,
-                        width: 44,
-                        height: 44,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                      ),
+        ),
+        Positioned(
+          left: 24,
+          right: 24,
+          bottom: widget.contentBottomPadding ?? 56,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (logo.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: ClipOval(
+                    child: Image.network(
+                      logo,
+                      width: 44,
+                      height: 44,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          const SizedBox(width: 44, height: 44),
                     ),
                   ),
-                if (title.isNotEmpty)
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      height: 1.2,
-                      letterSpacing: -0.3,
-                    ),
+                ),
+              if (title.isNotEmpty)
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    height: 1.2,
+                    letterSpacing: -0.3,
                   ),
-                if (_count > 1)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 14),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (var dot = 0; dot < _count; dot++)
-                          Container(
-                            width: 6,
-                            height: 6,
-                            margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                            color: dot == index
+                ),
+              if (total > 1)
+                Padding(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var dot = 0; dot < total; dot++)
+                        Container(
+                          width: 6,
+                          height: 6,
+                          margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                          decoration: BoxDecoration(
+                            color: dot == _currentPageIndex
                                 ? Colors.white
                                 : const Color(0x80FFFFFF),
+                            // Square dots (circle nahi)
+                            borderRadius: BorderRadius.zero,
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
-                if (button.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Material(
-                      color: const Color(0x82000000),
-                      shape: const StadiumBorder(
-                        side: BorderSide(color: Color(0x45FFFFFF)),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: InkWell(
-                        onTap: open,
-                        child: Container(
-                          height: 44,
-                          constraints: const BoxConstraints(minWidth: 116),
-                          padding: const EdgeInsets.symmetric(horizontal: 22),
-                          // A Row, not an alignment, so the button hugs its words.
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  button,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.inter(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                ),
+              if (button.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Material(
+                    color: const Color(0x82000000),
+                    shape: const StadiumBorder(
+                      side: BorderSide(color: Color(0x45FFFFFF)),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: InkWell(
+                      onTap: open,
+                      splashColor: Colors.white24,
+                      highlightColor: Colors.white10,
+                      child: Container(
+                        height: 44,
+                        constraints: const BoxConstraints(minWidth: 116),
+                        padding: const EdgeInsets.symmetric(horizontal: 22),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                button,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
-
-// Set your widget name, define your parameter, and then add the
-// boilerplate code using the `</>` button on the right!

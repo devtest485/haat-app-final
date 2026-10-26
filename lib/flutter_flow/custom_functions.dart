@@ -42,3 +42,6 @@ export '/custom_code/functions/is_valid_bill_number.dart';
 export '/custom_code/functions/money_label.dart';
 export '/custom_code/functions/cart_change_quantity.dart';
 export '/custom_code/functions/product_border_color.dart';
+export '/custom_code/functions/show_pair_divider.dart';
+export '/custom_code/functions/group_pair_divider.dart';
+export '/custom_code/functions/transaction_day_groups.dart';

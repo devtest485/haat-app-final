@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/index.dart';
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -214,20 +213,17 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                // A payout: the business's available money to its own
-                                // bank account, with the amount already typed.
-                                // The navigator is taken before the sheet closes: once
-                                // it has, this sheet's context is gone.
-                                final amount = widget!.fundsAmount;
-                                final navigator = Navigator.of(context);
-                                navigator.pop();
-                                await navigator.push(
-                                  MaterialPageRoute(
-                                    builder: (_) => custom_widgets.PayoutScreen(
-                                      initialAmount: amount,
+                                context.pushNamed(
+                                  TransfermethodWidget.routeName,
+                                  queryParameters: {
+                                    'transferMode': serializeParam(
+                                      'BBAN',
+                                      ParamType.String,
                                     ),
-                                  ),
+                                  }.withoutNulls,
                                 );
+
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: double.infinity,
@@ -276,7 +272,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'To my bank account',
+                                                'From my bank account',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -306,7 +302,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'HAAT sends it from your wallet',
+                                                'CIF : •••7812',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
@@ -958,9 +954,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            FFAppState().bban.isEmpty
-                                                ? 'Opens once HAAT approves your business'
-                                                : FFAppState().bban,
+                                            'SA 8891 8891 8812 1990',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(

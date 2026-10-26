@@ -11,8 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The colour of a banner's headline on its card: near-black on a light card,
-/// white on the rest.
 Color bannerOnColor(Color? background) {
   final dark = (background ?? const Color(0xFF005A3B)).computeLuminance() > 0.4;
 

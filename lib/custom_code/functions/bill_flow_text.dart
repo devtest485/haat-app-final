@@ -11,11 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The words on the bill screens that change with what is being paid.
-///
-/// `flow` is the biller's (`mobile`, `electricity`, `account`), `name` its name, and
-/// `field` one of `subtitle`, `label`, `hint`, `error`, `amountTitle` and
-/// `numberLabel`.
 String billFlowText(
   String? flow,
   String? name,

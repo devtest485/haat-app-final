@@ -11,9 +11,11 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// One of the dots under a banner's headline: the headline's colour for the card
-/// on show, the same at a fifth of its strength for the others.
-Color bannerDotColor(Color? background, int? dot, int? activeIndex) {
+Color? bannerDotColor(
+  Color? background,
+  int? dot,
+  int? activeIndex,
+) {
   final dark = (background ?? const Color(0xFF005A3B)).computeLuminance() > 0.4;
   final on = dark ? const Color(0xFF111111) : Colors.white;
 

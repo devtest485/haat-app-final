@@ -100,15 +100,7 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                       hoverColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        // Opened from the sign-in screen, Back returns there. Opened as
-                                        // the lock on a restored session there is nothing underneath, and
-                                        // Back offers the other ways in rather than the sign-up flow.
-                                        if (Navigator.of(context).canPop()) {
-                                          context.pop();
-                                        } else {
-                                          context.goNamed(
-                                              LoginScreenWidget.routeName);
-                                        }
+                                        context.safePop();
                                       },
                                       child: Icon(
                                         Icons.arrow_back,
@@ -364,7 +356,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignInaamy74vi ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -445,7 +439,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignInow8ohec3 ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -526,7 +522,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignIn3ew0os73 ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -614,7 +612,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignIn743xths0 ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -695,7 +695,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignInwbfh2jjb ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -776,7 +778,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignInb7p8p1a9 ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -864,7 +868,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignIn51ajygc9 ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -945,7 +951,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignInitbkegeb ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -1026,7 +1034,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                             safeSetState(() {});
                                             if (_model.passcodeSignIn9vhvvnct ==
                                                 '') {
-                                              context.goNamed(BottomBarPagesWidget.routeName);
+                                              context.goNamed(
+                                                  BottomBarPagesWidget
+                                                      .routeName);
                                             } else {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -1124,7 +1134,9 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                                                   if (_model
                                                           .passcodeSignInfhzn9ofb ==
                                                       '') {
-                                                    context.goNamed(BottomBarPagesWidget.routeName);
+                                                    context.goNamed(
+                                                        BottomBarPagesWidget
+                                                            .routeName);
                                                   } else {
                                                     ScaffoldMessenger.of(
                                                             context)

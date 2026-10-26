@@ -508,7 +508,6 @@ class AuthSession extends ChangeNotifier {
       publicKey: enrolment.publicKey,
     );
 
-   
     if (!registered.isSuccess) {
       await biometrics.remove();
 
@@ -533,7 +532,8 @@ class AuthSession extends ChangeNotifier {
     String passcode, {
     String? password,
   }) async {
-    final result = await api.setPasscode(passcode: passcode, password: password);
+    final result =
+        await api.setPasscode(passcode: passcode, password: password);
     if (result.isSuccess) {
       await refreshCredentials();
       // A new passcode is the moment passcode sign-in becomes possible on this handset.

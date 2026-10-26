@@ -13,29 +13,20 @@ class TransactionsWidget extends StatefulWidget {
   const TransactionsWidget({
     super.key,
     String? title,
-    String? subtitle,
-    String? amount,
+    this.subtitle,
+    this.amount,
     bool? incoming,
-    String? paymentMethod,
-    bool? showDivider,
+    this.paymentMethod,
+    this.showDivider,
   })  : this.title = title ?? 'Transaction',
-        this.subtitle = subtitle ?? '',
-        this.amount = amount ?? '',
-        this.incoming = incoming ?? true,
-        this.paymentMethod = paymentMethod ?? '',
-        this.showDivider = showDivider ?? false;
+        this.incoming = incoming ?? true;
 
   final String title;
-  final String subtitle;
-  final String amount;
+  final String? subtitle;
+  final String? amount;
   final bool incoming;
-
-  /// How the customer paid — `tap`, `link` or `qr` — drawn as a badge on the icon.
-  /// Empty for anything that is not a customer payment.
-  final String paymentMethod;
-
-  /// The grey line under the row; off for the last row of a list.
-  final bool showDivider;
+  final String? paymentMethod;
+  final bool? showDivider;
 
   @override
   State<TransactionsWidget> createState() => _TransactionsWidgetState();
@@ -78,67 +69,76 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
               children: [
                 Container(
                   width: 32.0,
-                  height: 35.0,
-                  decoration: BoxDecoration(),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional(-1.0, -1.0),
-                        child: Container(
-                          width: 32.0,
-                          height: 32.0,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF1F1F1),
-                            shape: BoxShape.circle,
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Icon(
-                            widget.incoming
-                                ? Icons.south_west
-                                : Icons.arrow_outward,
+                  height: 32.0,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF1F1F1),
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: AlignmentDirectional(0.0, 0.0),
+                  child: Align(
+                    alignment: AlignmentDirectional(0.0, 0.0),
+                    child: Stack(
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      children: [
+                        if (widget!.incoming)
+                          Icon(
+                            Icons.south_west,
                             color: Colors.black,
                             size: 16.0,
                           ),
-                        ),
-                      ),
-                      if (widget.paymentMethod != '')
-                        Align(
-                          alignment: AlignmentDirectional(0.67, 1.0),
-                          child: Container(
-                            width: 14.0,
-                            height: 14.0,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFC1ECD8),
-                              borderRadius: BorderRadius.circular(40.0),
-                            ),
-                            alignment: AlignmentDirectional(0.0, 0.0),
-                            child: Stack(
+                        if (widget!.incoming == false)
+                          Icon(
+                            Icons.arrow_outward,
+                            color: Colors.black,
+                            size: 16.0,
+                          ),
+                        if ((widget!.paymentMethod == 'tap') ||
+                            (widget!.paymentMethod == 'qr') ||
+                            (widget!.paymentMethod == 'link'))
+                          Align(
+                            alignment: AlignmentDirectional(1.0, 1.0),
+                            child: Container(
+                              width: 14.0,
+                              height: 14.0,
+                              decoration: BoxDecoration(
+                                color: Color(0xFFC1ECD8),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(40.0),
+                                  topRight: Radius.circular(40.0),
+                                  bottomLeft: Radius.circular(40.0),
+                                  bottomRight: Radius.circular(40.0),
+                                ),
+                              ),
                               alignment: AlignmentDirectional(0.0, 0.0),
-                              children: [
-                                if (widget.paymentMethod == 'tap')
-                                  Icon(
-                                    Icons.contactless_rounded,
-                                    color: Color(0xFF002011),
-                                    size: 8.0,
-                                  ),
-                                if (widget.paymentMethod == 'link')
-                                  Icon(
-                                    Icons.link_rounded,
-                                    color: Color(0xFF002011),
-                                    size: 8.0,
-                                  ),
-                                if (widget.paymentMethod == 'qr')
-                                  Icon(
-                                    Icons.qr_code_2_rounded,
-                                    color: Color(0xFF002011),
-                                    size: 8.0,
-                                  ),
-                              ],
+                              child: Align(
+                                alignment: AlignmentDirectional(0.0, 0.0),
+                                child: Stack(
+                                  children: [
+                                    if (widget!.paymentMethod == 'tap')
+                                      Icon(
+                                        Icons.contactless_outlined,
+                                        color: Color(0xFF002011),
+                                        size: 8.0,
+                                      ),
+                                    if (widget!.paymentMethod == 'qr')
+                                      Icon(
+                                        Icons.qr_code_2_rounded,
+                                        color: Color(0xFF002011),
+                                        size: 8.0,
+                                      ),
+                                    if (widget!.paymentMethod == 'link')
+                                      Icon(
+                                        Icons.link_rounded,
+                                        color: Color(0xFF002011),
+                                        size: 8.0,
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -153,13 +153,12 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                         children: [
                           Expanded(
                             child: Text(
-                              widget.title,
+                              widget!.title,
                               maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -174,14 +173,14 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                         .fontStyle,
                                     lineHeight: 1.54,
                                   ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ].divide(SizedBox(width: 8.0)),
                       ),
                       Text(
-                        widget.subtitle,
+                        widget!.subtitle!,
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -202,12 +201,13 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                   .fontStyle,
                               lineHeight: 1.5,
                             ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ].divide(SizedBox(height: 2.0)),
                   ),
                 ),
                 Text(
-                  widget.amount,
+                  widget!.amount!,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
@@ -225,7 +225,7 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
               ].divide(SizedBox(width: 12.0)),
             ),
           ),
-          if (widget.showDivider)
+          if (widget!.showDivider ?? true)
             Divider(
               height: 1.0,
               thickness: 1.0,

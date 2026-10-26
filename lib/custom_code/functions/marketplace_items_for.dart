@@ -11,11 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The billers to list for the chip and the search box on the Marketplace sheet.
-///
-/// `for_you` is the featured ones, a category key is that category's, and nothing
-/// chosen is all of them. The search matches the English or Arabic name, any case.
-List<dynamic> marketplaceItemsFor(
+List<dynamic>? marketplaceItemsFor(
   List<dynamic>? items,
   String? category,
   String? query,

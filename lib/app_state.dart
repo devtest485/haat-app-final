@@ -313,9 +313,10 @@ class FFAppState extends ChangeNotifier {
     _businessLogoUrl = value;
   }
 
-  /// The business's wallet number, as a value — the line it is written in is made
-  /// from it by the bbanLine function. Empty until the wallet has been read; it was a
-  /// placeholder number from the design, the same for every merchant, before.
+  /// The business's wallet number, as a value — the line it is written in is
+  /// made from it by the bbanLine function.
+  ///
+  /// Empty until the wallet has been read; never a shared design placeholder.
   String _bban = '';
   String get bban => _bban;
   set bban(String value) {

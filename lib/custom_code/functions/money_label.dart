@@ -11,8 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// An amount in minor units as the cards write it: `"300000"` is `3,000`, `"125050"`
-/// is `1,250.50`. No currency — the card sets "SDG" beside it in its own size.
 String moneyLabel(String? minor) {
   final value = BigInt.tryParse((minor ?? '').trim()) ?? BigInt.zero;
   final hundred = BigInt.from(100);

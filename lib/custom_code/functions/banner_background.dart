@@ -11,8 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// A home banner's card colour from the back office's `#rrggbb`, or HAAT green
-/// when the value is missing or not a colour.
 Color bannerBackground(String? hex) {
   final digits = (hex ?? '').trim().replaceFirst('#', '');
   final value = digits.length == 6 ? int.tryParse(digits, radix: 16) : null;

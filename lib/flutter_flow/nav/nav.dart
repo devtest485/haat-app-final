@@ -48,24 +48,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, _) => OnBoardingPageWidget(),
         ),
         FFRoute(
-          name: OnBoardingPageWidget.routeName,
-          path: OnBoardingPageWidget.routePath,
-          builder: (context, params) => OnBoardingPageWidget(),
-        ),
-        FFRoute(
           name: PhoneNumberPageWidget.routeName,
           path: PhoneNumberPageWidget.routePath,
           builder: (context, params) => PhoneNumberPageWidget(),
-        ),
-        FFRoute(
-          name: OtpVerifyPageWidget.routeName,
-          path: OtpVerifyPageWidget.routePath,
-          builder: (context, params) => OtpVerifyPageWidget(
-            phoneNum: params.getParam(
-              'phoneNum',
-              ParamType.String,
-            ),
-          ),
         ),
         FFRoute(
           name: CreatePasswordPageWidget.routeName,
@@ -86,11 +71,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: BiomatricPageWidget.routeName,
           path: BiomatricPageWidget.routePath,
           builder: (context, params) => BiomatricPageWidget(),
-        ),
-        FFRoute(
-          name: VerifyPageWidget.routeName,
-          path: VerifyPageWidget.routePath,
-          builder: (context, params) => VerifyPageWidget(),
         ),
         FFRoute(
           name: IdCardScanPageWidget.routeName,
@@ -123,16 +103,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => BusinessCatageriousWidget(),
         ),
         FFRoute(
-          name: SetupBisinessLocationPageWidget.routeName,
-          path: SetupBisinessLocationPageWidget.routePath,
-          builder: (context, params) => SetupBisinessLocationPageWidget(),
-        ),
-        FFRoute(
-          name: BusinessLocatePageWidget.routeName,
-          path: BusinessLocatePageWidget.routePath,
-          builder: (context, params) => BusinessLocatePageWidget(),
-        ),
-        FFRoute(
           name: UsernamePageWidget.routeName,
           path: UsernamePageWidget.routePath,
           builder: (context, params) => UsernamePageWidget(),
@@ -146,16 +116,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ParamType.String,
             ),
           ),
-        ),
-        FFRoute(
-          name: DocunmentInfoWidget.routeName,
-          path: DocunmentInfoWidget.routePath,
-          builder: (context, params) => DocunmentInfoWidget(),
-        ),
-        FFRoute(
-          name: UploadDocWidget.routeName,
-          path: UploadDocWidget.routePath,
-          builder: (context, params) => UploadDocWidget(),
         ),
         FFRoute(
           name: AddAmountPageWidget.routeName,
@@ -283,16 +243,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => OnBordingScreenWidget(),
         ),
         FFRoute(
-          name: PasswardLoginWidget.routeName,
-          path: PasswardLoginWidget.routePath,
-          builder: (context, params) => PasswardLoginWidget(),
-        ),
-        FFRoute(
-          name: PassCodeLoginWidget.routeName,
-          path: PassCodeLoginWidget.routePath,
-          builder: (context, params) => PassCodeLoginWidget(),
-        ),
-        FFRoute(
           name: LoginScreenWidget.routeName,
           path: LoginScreenWidget.routePath,
           builder: (context, params) => LoginScreenWidget(),
@@ -305,47 +255,117 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: PayYourWidget.routeName,
           path: PayYourWidget.routePath,
-          builder: (context, params) => PayYourWidget(
-            billerName: params.getParam(
-              'billerName',
-              ParamType.String,
-            ),
-            logoUrl: params.getParam(
-              'logoUrl',
-              ParamType.String,
-            ),
-            flow: params.getParam(
-              'flow',
-              ParamType.String,
-            ),
-          ),
+          builder: (context, params) => PayYourWidget(),
         ),
         FFRoute(
           name: TopupamountWidget.routeName,
           path: TopupamountWidget.routePath,
-          builder: (context, params) => TopupamountWidget(
-            billerName: params.getParam(
-              'billerName',
-              ParamType.String,
-            ),
-            flow: params.getParam(
-              'flow',
-              ParamType.String,
-            ),
-            accountNumber: params.getParam(
-              'accountNumber',
-              ParamType.String,
-            ),
-            billType: params.getParam(
-              'billType',
-              ParamType.String,
-            ),
-          ),
+          builder: (context, params) => TopupamountWidget(),
         ),
         FFRoute(
           name: NotificationsWidget.routeName,
           path: NotificationsWidget.routePath,
           builder: (context, params) => NotificationsWidget(),
+        ),
+        FFRoute(
+          name: OnBoardingPageWidget.routeName,
+          path: OnBoardingPageWidget.routePath,
+          builder: (context, params) => OnBoardingPageWidget(),
+        ),
+        FFRoute(
+          name: OtpVerifyPageWidget.routeName,
+          path: OtpVerifyPageWidget.routePath,
+          builder: (context, params) => OtpVerifyPageWidget(
+            phoneNum: params.getParam(
+              'phoneNum',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: VerifyPageWidget.routeName,
+          path: VerifyPageWidget.routePath,
+          builder: (context, params) => VerifyPageWidget(),
+        ),
+        FFRoute(
+          name: DocunmentInfoWidget.routeName,
+          path: DocunmentInfoWidget.routePath,
+          builder: (context, params) => DocunmentInfoWidget(),
+        ),
+        FFRoute(
+          name: UploadDocWidget.routeName,
+          path: UploadDocWidget.routePath,
+          builder: (context, params) => UploadDocWidget(),
+        ),
+        FFRoute(
+          name: PasswardLoginWidget.routeName,
+          path: PasswardLoginWidget.routePath,
+          builder: (context, params) => PasswardLoginWidget(),
+        ),
+        FFRoute(
+          name: PassCodeLoginWidget.routeName,
+          path: PassCodeLoginWidget.routePath,
+          builder: (context, params) => PassCodeLoginWidget(),
+        ),
+        FFRoute(
+          name: SetupBisinessLocationPageWidget.routeName,
+          path: SetupBisinessLocationPageWidget.routePath,
+          builder: (context, params) => SetupBisinessLocationPageWidget(),
+        ),
+        FFRoute(
+          name: BusinessLocatePageWidget.routeName,
+          path: BusinessLocatePageWidget.routePath,
+          builder: (context, params) => BusinessLocatePageWidget(),
+        ),
+        FFRoute(
+          name: StaffWidget.routeName,
+          path: StaffWidget.routePath,
+          builder: (context, params) => StaffWidget(),
+        ),
+        FFRoute(
+          name: StaffMembersWidget.routeName,
+          path: StaffMembersWidget.routePath,
+          builder: (context, params) => StaffMembersWidget(),
+        ),
+        FFRoute(
+          name: TestWidget.routeName,
+          path: TestWidget.routePath,
+          builder: (context, params) => TestWidget(),
+        ),
+        FFRoute(
+          name: ProductsWidget.routeName,
+          path: ProductsWidget.routePath,
+          builder: (context, params) => ProductsWidget(),
+        ),
+        FFRoute(
+          name: SuccessWidget.routeName,
+          path: SuccessWidget.routePath,
+          builder: (context, params) => SuccessWidget(
+            type: params.getParam(
+              'type',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: AddProductWidget.routeName,
+          path: AddProductWidget.routePath,
+          builder: (context, params) => AddProductWidget(),
+        ),
+        FFRoute(
+          name: BranchIesListWidget.routeName,
+          path: BranchIesListWidget.routePath,
+          builder: (context, params) => BranchIesListWidget(),
+        ),
+        FFRoute(
+          name: BranchDetailWidget.routeName,
+          path: BranchDetailWidget.routePath,
+          builder: (context, params) => BranchDetailWidget(),
+        ),
+        FFRoute(
+          name: AddBranchWidget.routeName,
+          path: AddBranchWidget.routePath,
+          builder: (context, params) => AddBranchWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

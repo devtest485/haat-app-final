@@ -11,10 +11,6 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// A banner's `imagePath` as an address the phone can load.
-///
-/// The server sends it relative (`/banners/<id>/image?v=…`) — it names the route, the
-/// app knows which server it talks to. Empty for a card without artwork.
 String bannerImageUrl(
   String? imagePath,
   String? baseUrl,

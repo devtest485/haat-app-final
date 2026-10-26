@@ -11,9 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// Whether a row in a list has another one under it — the line between rows is drawn
-/// under every row but the last, so the card never ends on a divider.
-bool isNotLastItem(
+bool? isNotLastItem(
   int index,
   int count,
 ) {

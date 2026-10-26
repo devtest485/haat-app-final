@@ -11,8 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// How many of one product are in the cart; nought when it is not in it.
-int cartQuantity(
+int? cartQuantity(
   List<dynamic>? cart,
   String? productId,
 ) {

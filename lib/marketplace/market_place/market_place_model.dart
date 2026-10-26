@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/market_biller_tile/market_biller_tile_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -7,6 +8,7 @@ import '/marketplace/market_space/market_space_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'market_place_widget.dart' show MarketPlaceWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -25,7 +27,6 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   void updateBannersAtIndex(int index, Function(dynamic) updateFn) =>
       banners[index] = updateFn(banners[index]);
 
-  /// The "Picked For You" billers, from the back office.
   List<dynamic> featured = [];
   void addToFeatured(dynamic item) => featured.add(item);
   void removeFromFeatured(dynamic item) => featured.remove(item);
@@ -35,7 +36,6 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   void updateFeaturedAtIndex(int index, Function(dynamic) updateFn) =>
       featured[index] = updateFn(featured[index]);
 
-  /// Every live biller, for the "See all" sheet.
   List<dynamic> billers = [];
   void addToBillers(dynamic item) => billers.add(item);
   void removeFromBillers(dynamic item) => billers.remove(item);
@@ -45,7 +45,6 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   void updateBillersAtIndex(int index, Function(dynamic) updateFn) =>
       billers[index] = updateFn(billers[index]);
 
-  /// The "Explore Top Brands" cards.
   List<dynamic> brands = [];
   void addToBrands(dynamic item) => brands.add(item);
   void removeFromBrands(dynamic item) => brands.remove(item);
@@ -55,7 +54,6 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   void updateBrandsAtIndex(int index, Function(dynamic) updateFn) =>
       brands[index] = updateFn(brands[index]);
 
-  /// The category tiles and chips: `{key, label, labelAr}`.
   List<dynamic> categories = [];
   void addToCategories(dynamic item) => categories.add(item);
   void removeFromCategories(dynamic item) => categories.remove(item);

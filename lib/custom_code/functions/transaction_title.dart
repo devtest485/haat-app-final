@@ -11,9 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// A statement line's headline: its own description, or what kind of movement it was
-/// when the posting carried none.
-String transactionTitle(
+String? transactionTitle(
   String? description,
   String? kind,
 ) {

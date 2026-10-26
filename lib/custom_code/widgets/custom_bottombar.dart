@@ -9,8 +9,6 @@ import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'dart:ui' show ImageFilter;
-
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -19,9 +17,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// alag custom action file zaroori nahi.
 void Function(int index)? _bottomTabNavigator;
 
-/// Kisi bhi page ya custom action se bottom bar ka tab switch karne ke liye
-/// (0 = Home, 1 = Cashier, 2 = Services, 3 = mystore). Bar mounted na ho to
-/// kuch nahi hota.
 void callNavigateTab(int index) {
   _bottomTabNavigator?.call(index);
 }
@@ -69,9 +64,14 @@ class CustomBottombar extends StatefulWidget {
 
   final Color? selectedColor;
   final Color? unselectedColor;
+
+  /// Ab use nahi hota — bar hamesha solid white hai. Parameter sirf isliye
+  /// rakha hai ke FlutterFlow ki existing settings na toote.
   final Color? barColor;
   final Color? borderColor;
   final double? labelSize;
+
+  /// Ab use nahi hota (blur hata diya gaya). FlutterFlow compatibility ke liye rakha hai.
   final double? blurAmount;
   final int? initialIndex;
   final bool? extendBodyBehindBar;
@@ -96,12 +96,8 @@ class _CustomBottombarState extends State<CustomBottombar> {
   static const Color _kBorderColor = Color(0xFFF3F3F3);
   static const Color _kSelectedColor = Color(0xFF111111);
   static const Color _kUnselectedColor = Color(0xFFC4C4C4);
-  static const double _kBlur = 11.1;
   static const double _kIconBox = 28.0;
   static const double _kIconLabelGap = 6.0;
-
-  /// mystore tab ka index — is tab par bottom bar hide hota hai.
-  static const int _kStoreIndex = 3;
 
   late int _currentIndex;
   final List<int> _pageKeys = [0, 0, 0, 0];
@@ -130,9 +126,6 @@ class _CustomBottombarState extends State<CustomBottombar> {
   /// NavBar ki height — scroll ke liye bottom padding me use hoti hai
   /// taake content NavBar ke peeche na chhupe.
   double get _navBarTotalHeight => _resolvedBarHeight;
-
-  /// mystore tab khula ho to bottom bar nahi dikhana.
-  bool get _hideBar => _currentIndex == _kStoreIndex;
 
   ScrollPhysics get _resolvedPhysics {
     switch (widget.scrollPhysics?.toLowerCase()) {
@@ -245,11 +238,9 @@ class _CustomBottombarState extends State<CustomBottombar> {
         // MediaQuery se bottom padding — system navigation bar bhi include hoti hai
         final bottomPadding = MediaQuery.of(context).padding.bottom;
         // NavBar height + system padding = total space jo scroll ke neeche chahiye.
-        // mystore tab par bar hide hota hai, is liye wahan bar ki height nahi
-        // jodni (warna neeche khaali jagah reh jati).
-        final extraBottom = index == _kStoreIndex
-            ? bottomPadding
-            : _navBarTotalHeight + bottomPadding;
+        // Bar ab har tab par (mystore par bhi) dikhta hai, is liye sab tabs ke
+        // liye same padding.
+        final extraBottom = _navBarTotalHeight + bottomPadding;
 
         return SingleChildScrollView(
           controller: _scrollControllers[index],
@@ -300,8 +291,7 @@ class _CustomBottombarState extends State<CustomBottombar> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        // mystore (ya koi bhi doosra tab) se back karne par Home par jao —
-        // is se bottom bar wapas show ho jata hai.
+        // Kisi bhi doosre tab se back karne par Home par jao.
         if (_currentIndex != 0) {
           navigateTo(0);
         } else {
@@ -335,8 +325,8 @@ class _CustomBottombarState extends State<CustomBottombar> {
             ],
           ),
         ),
-        // mystore tab par bottom bar remove, baqi tabs par show.
-        bottomNavigationBar: _hideBar ? null : _buildNavBar(context),
+        // Bottom bar ab har tab par hamesha show hota hai.
+        bottomNavigationBar: _buildNavBar(context),
       ),
     );
   }
@@ -344,79 +334,69 @@ class _CustomBottombarState extends State<CustomBottombar> {
   Widget _buildNavBar(BuildContext context) {
     final barHeight = _resolvedBarHeight;
     final barWidth = _resolvedBarWidth;
-    final blur = widget.blurAmount ?? _kBlur;
-    final barColor = widget.barColor ??
-        FlutterFlowTheme.of(context)
-            .secondaryBackground
-            .withValues(alpha: 0.85);
 
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-        child: Container(
-          width: barWidth,
-          decoration: BoxDecoration(
-            color: barColor,
-            border: Border(
-              top: BorderSide(
-                color: widget.borderColor ?? _kBorderColor,
-                width: _kBorderWidth,
-              ),
-            ),
+    return Container(
+      width: barWidth,
+      decoration: BoxDecoration(
+        color: Colors.white, // solid white, bilkul transparent nahi
+        border: Border(
+          top: BorderSide(
+            color: widget.borderColor ?? _kBorderColor,
+            width: _kBorderWidth,
           ),
-          child: SafeArea(
-            top: false,
-            child: SizedBox(
-              height: barHeight - _kBorderWidth,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(
-                    0.0, _kTopPadding, 0.0, 0.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildNavItem(
-                      index: 0,
-                      label: widget.homeLabel ?? 'Home',
-                      selectedIcon: '',
-                      unselectedIcon: '',
-                      useColorFilter: true,
-                      iconSize: 28,
-                      fallbackIcon: Icons.home_rounded,
-                    ),
-                    _buildNavItem(
-                      index: 1,
-                      label: widget.cashierLabel ?? 'Cashier',
-                      selectedIcon: 'assets/images/local_mall.svg',
-                      unselectedIcon: 'assets/images/local_mall.svg',
-                      useColorFilter: true,
-                      iconSize: 28,
-                      fallbackIcon: Icons.shopping_bag_outlined,
-                    ),
-                    _buildNavItem(
-                      index: 2,
-                      label: widget.servicesLabel ?? 'Services',
-                      selectedIcon: '',
-                      unselectedIcon: '',
-                      useColorFilter: true,
-                      iconSize: 28,
-                      fallbackIcon: Icons.storefront_outlined,
-                    ),
-                    _buildNavItem(
-                      index: 3,
-                      label: widget.storeLabel ?? 'mystore',
-                      // add_business.svg went with a FlutterFlow export.
-                      // add_business_white.svg is the same mark and is still
-                      // bundled; useColorFilter tints it either way, so "white"
-                      // describes the file rather than what appears on screen.
-                      selectedIcon: 'assets/images/add_business_white.svg',
-                      unselectedIcon: 'assets/images/add_business_white.svg',
-                      useColorFilter: true,
-                      iconSize: 28,
-                      fallbackIcon: Icons.add_business_outlined,
-                    ),
-                  ],
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: barHeight - _kBorderWidth,
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(
+                0.0, _kTopPadding, 0.0, 0.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNavItem(
+                  index: 0,
+                  label: widget.homeLabel ?? 'Home',
+                  selectedIcon: '',
+                  unselectedIcon: '',
+                  useColorFilter: true,
+                  iconSize: 28,
+                  fallbackIcon: Icons.home_rounded,
                 ),
-              ),
+                _buildNavItem(
+                  index: 1,
+                  label: widget.cashierLabel ?? 'Cashier',
+                  selectedIcon: 'assets/images/local_mall.svg',
+                  unselectedIcon: 'assets/images/local_mall.svg',
+                  useColorFilter: true,
+                  iconSize: 28,
+                  fallbackIcon: Icons.shopping_bag_outlined,
+                ),
+                _buildNavItem(
+                  index: 2,
+                  label: widget.servicesLabel ?? 'Services',
+                  selectedIcon: '',
+                  unselectedIcon: '',
+                  useColorFilter: true,
+                  iconSize: 28,
+                  fallbackIcon: Icons.storefront_outlined,
+                ),
+                _buildNavItem(
+                  index: 3,
+                  label: widget.storeLabel ?? 'mystore',
+                  // add_business.svg went with a FlutterFlow export.
+                  // add_business_white.svg is the same mark and is still
+                  // bundled; useColorFilter tints it either way, so "white"
+                  // describes the file rather than what appears on screen.
+                  selectedIcon: 'assets/images/add_business_white.svg',
+                  unselectedIcon: 'assets/images/add_business_white.svg',
+                  useColorFilter: true,
+                  iconSize: 28,
+                  fallbackIcon: Icons.add_business_outlined,
+                ),
+              ],
             ),
           ),
         ),

@@ -11,11 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// The grey line under a statement row: `Payment received · Today`.
-///
-/// The kind is left out when the headline already is the kind (a posting with no
-/// description), so the row never says the same thing twice.
-String transactionSubtitle(
+String? transactionSubtitle(
   String? description,
   String? kind,
   String? occurredAt,

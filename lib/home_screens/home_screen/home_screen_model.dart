@@ -1,15 +1,13 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/home_banner/home_banner_widget.dart';
-import '/components/log_out_widget.dart';
 import '/components/security_sheet_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/components/week_story_card/week_story_card_widget.dart';
-import '/home_screens/business_story/business_story_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/instant_timer.dart';
+import '/home_screens/business_story/business_story_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -67,28 +65,27 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   // Stores action output result for [Custom Action - haatAccessToken] action in HomeScreen widget.
   String? token;
   // Stores action output result for [Backend Call - API (Notifications)] action in HomeScreen widget.
-  ApiCallResponse? notificationsResult;
+  ApiCallResponse? apiResultid3;
+  // Stores action output result for [Backend Call - API (MarketplaceBanners)] action in HomeScreen widget.
+  ApiCallResponse? apiResultxlj;
+  // Stores action output result for [Backend Call - API ( WeekStory)] action in HomeScreen widget.
+  ApiCallResponse? apiResultatl;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? transactionsResult;
-  // Stores action output result for [Backend Call - API (MarketplaceBanners)] action in HomeScreen widget.
-  ApiCallResponse? bannersResult;
-  // Stores action output result for [Backend Call - API (WeekStory)] action in HomeScreen widget.
-  ApiCallResponse? weekStoryResult;
-  InstantTimer? bannerTimer;
-  // State field(s) for BannerPageView widget.
-  PageController? bannerPageViewController;
+  // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
+  ApiCallResponse? apiResult1ib;
+  // State field(s) for PageView widget.
+  PageController? pageViewController;
 
-  int get bannerPageViewCurrentIndex => bannerPageViewController != null &&
-          bannerPageViewController!.hasClients &&
-          bannerPageViewController!.page != null
-      ? bannerPageViewController!.page!.round()
+  int get pageViewCurrentIndex => pageViewController != null &&
+          pageViewController!.hasClients &&
+          pageViewController!.page != null
+      ? pageViewController!.page!.round()
       : 0;
 
   @override
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {
-    bannerTimer?.cancel();
-  }
+  void dispose() {}
 }

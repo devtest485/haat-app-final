@@ -3,7 +3,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/home_screen/home_screen_widget.dart';
 import '/marketplace/market_place/market_place_widget.dart';
-import '/my_store/store/store_widget.dart';
+import '/my_store/store_profile/store_profile_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
@@ -86,7 +86,7 @@ class _BottomBarPagesWidgetState extends State<BottomBarPagesWidget> {
                 homePage: () => HomeScreenWidget(),
                 cashierPage: () => HomeScreenWidget(),
                 servicesPage: () => MarketPlaceWidget(),
-                storePage: () => StoreWidget(),
+                storePage: () => StoreProfileWidget(),
               ),
             ),
           ),

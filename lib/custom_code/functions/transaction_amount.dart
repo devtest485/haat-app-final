@@ -11,12 +11,7 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// A statement row's amount as a person reads it: `+ SDG 4,200`.
-///
-/// [amountMinor] is a string on the wire (balances outgrow what a JSON number holds
-/// exactly) and always positive; [direction] carries the sign — `credit` in, anything
-/// else out.
-String transactionAmount(
+String? transactionAmount(
   String? amountMinor,
   String? currency,
   String? direction,

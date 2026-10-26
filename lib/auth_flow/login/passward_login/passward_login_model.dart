@@ -26,6 +26,7 @@ class PasswardLoginModel extends FlutterFlowModel<PasswardLoginWidget> {
   String? Function(BuildContext, String?)?
       usernameMobilenumberTextControllerValidator;
   // State field(s) for Password widget.
+  late FocusNode passwordPasswordVisibilityFocusNode;
   FocusNode? passwordFocusNode;
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
@@ -35,6 +36,7 @@ class PasswardLoginModel extends FlutterFlowModel<PasswardLoginWidget> {
 
   @override
   void initState(BuildContext context) {
+    passwordPasswordVisibilityFocusNode = FocusNode();
     passwordVisibility = false;
   }
 
@@ -45,5 +47,6 @@ class PasswardLoginModel extends FlutterFlowModel<PasswardLoginWidget> {
 
     passwordFocusNode?.dispose();
     passwordTextController?.dispose();
+    passwordPasswordVisibilityFocusNode.dispose();
   }
 }
