@@ -19,5 +19,5 @@ Color? bannerDotColor(
   final dark = (background ?? const Color(0xFF005A3B)).computeLuminance() > 0.4;
   final on = dark ? const Color(0xFF111111) : Colors.white;
 
-  return dot == activeIndex ? on : on.withOpacity(0.2);
+  return dot == activeIndex ? on : on.withOpacity(0.4);
 }

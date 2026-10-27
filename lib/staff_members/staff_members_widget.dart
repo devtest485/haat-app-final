@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/components/remove_member_widget.dart';
 import '/components/role_access_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
@@ -5,14 +6,22 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'staff_members_model.dart';
 export 'staff_members_model.dart';
 
 class StaffMembersWidget extends StatefulWidget {
-  const StaffMembersWidget({super.key});
+  const StaffMembersWidget({
+    super.key,
+    this.member,
+  });
+
+  final dynamic member;
 
   static String routeName = 'StaffMembers';
   static String routePath = '/staffMembers';
@@ -30,6 +39,8 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => StaffMembersModel());
+
+    _model.member = widget!.member;
   }
 
   @override
@@ -188,7 +199,11 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                           alignment:
                                               AlignmentDirectional(0.0, 0.0),
                                           child: Text(
-                                            'MK',
+                                            functions
+                                                .staffInitials(getJsonField(
+                                              _model.member,
+                                              r'''$.fullName''',
+                                            ).toString()),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -228,7 +243,11 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Text(
-                                                'Mohammed Khalid',
+                                                functions.staffDisplayName(
+                                                    _model.member),
+                                                textAlign: TextAlign.center,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -262,7 +281,9 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                     .fromSTEB(
                                                         0.0, 8.0, 0.0, 0.0),
                                                 child: Text(
-                                                  'Cashier · Main branch',
+                                                  functions.staffSubtitle(
+                                                      _model.member),
+                                                  textAlign: TextAlign.center,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -370,6 +391,13 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                         highlightColor:
                                                             Colors.transparent,
                                                         onTap: () async {
+                                                          if (functions
+                                                                  .staffIsOwner(
+                                                                      _model
+                                                                          .member) ||
+                                                              _model.saving) {
+                                                            return;
+                                                          }
                                                           await showModalBottomSheet(
                                                             isScrollControlled:
                                                                 true,
@@ -399,21 +427,175 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                                             .height *
                                                                         0.65,
                                                                     child:
-                                                                        RoleAccessWidget(),
+                                                                        RoleAccessWidget(
+                                                                      currentRoleName:
+                                                                          functions
+                                                                              .staffRoleName(_model.member),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               );
                                                             },
                                                           ).then((value) =>
-                                                              safeSetState(
-                                                                  () {}));
+                                                              safeSetState(() =>
+                                                                  _model.newRole =
+                                                                      value));
+
+                                                          if (_model.newRole ==
+                                                                  null ||
+                                                              getJsonField(
+                                                                    _model
+                                                                        .newRole,
+                                                                    r'''$.name''',
+                                                                  )
+                                                                      .toString() ==
+                                                                  functions
+                                                                      .staffRoleName(
+                                                                          _model
+                                                                              .member)) {
+                                                            return;
+                                                          }
+                                                          _model.saving = true;
+                                                          safeSetState(() {});
+                                                          _model.token =
+                                                              await actions
+                                                                  .haatAccessToken();
+                                                          _model.assignResult =
+                                                              await HaatAuthGroup
+                                                                  .assignRoleCall
+                                                                  .call(
+                                                            bodyJson: functions
+                                                                .assignRoleBody(
+                                                                    _model
+                                                                        .member,
+                                                                    _model
+                                                                        .newRole),
+                                                            accessToken:
+                                                                _model.token,
+                                                          );
+
+                                                          if (!(_model
+                                                                  .assignResult
+                                                                  ?.succeeded ??
+                                                              true)) {
+                                                            _model.saving =
+                                                                false;
+                                                            safeSetState(() {});
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                              SnackBar(
+                                                                content: Text(
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    HaatAuthGroup
+                                                                        .assignRoleCall
+                                                                        .message(
+                                                                      (_model.assignResult
+                                                                              ?.jsonBody ??
+                                                                          ''),
+                                                                    ),
+                                                                    'The role could not be changed. Check your connection and try again.',
+                                                                  ),
+                                                                  style:
+                                                                      TextStyle(),
+                                                                ),
+                                                                duration: Duration(
+                                                                    milliseconds:
+                                                                        4000),
+                                                              ),
+                                                            );
+                                                            return;
+                                                          }
+// The new grant is in place; now retire the old one at this branch.
+                                                          _model.revokeIds = functions
+                                                              .staffRevokeIds(
+                                                                  _model.member,
+                                                                  _model
+                                                                      .newRole)
+                                                              .toList()
+                                                              .cast<String>();
+                                                          _model.loopIndex = 0;
+                                                          while (
+                                                              _model.loopIndex <
+                                                                  _model
+                                                                      .revokeIds
+                                                                      .length) {
+                                                            _model.revokeResult =
+                                                                await HaatAuthGroup
+                                                                    .revokeRoleCall
+                                                                    .call(
+                                                              assignmentId: _model
+                                                                  .revokeIds
+                                                                  .elementAtOrNull(
+                                                                      _model
+                                                                          .loopIndex),
+                                                              userId:
+                                                                  getJsonField(
+                                                                _model.member,
+                                                                r'''$.userId''',
+                                                              ).toString(),
+                                                              accessToken:
+                                                                  _model.token,
+                                                            );
+
+                                                            _model.loopIndex =
+                                                                _model.loopIndex +
+                                                                    1;
+                                                          }
+                                                          _model.staffResult =
+                                                              await HaatAuthGroup
+                                                                  .staffCall
+                                                                  .call(
+                                                            accessToken:
+                                                                _model.token,
+                                                          );
+
+                                                          if ((_model
+                                                                  .staffResult
+                                                                  ?.succeeded ??
+                                                              true)) {
+                                                            _model
+                                                                .member = functions.staffById(
+                                                                    HaatAuthGroup.staffCall
+                                                                        .staff(
+                                                                          (_model.staffResult?.jsonBody ??
+                                                                              ''),
+                                                                        )
+                                                                        ?.toList(),
+                                                                    getJsonField(
+                                                                      _model
+                                                                          .member,
+                                                                      r'''$.userId''',
+                                                                    ).toString()) ??
+                                                                _model.member;
+                                                          }
+                                                          _model.saving = false;
+                                                          safeSetState(() {});
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                'Role changed to ${functions.staffRoleName(_model.member)}',
+                                                                style:
+                                                                    TextStyle(),
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      4000),
+                                                            ),
+                                                          );
                                                         },
                                                         child: Row(
                                                           mainAxisSize:
                                                               MainAxisSize.max,
                                                           children: [
                                                             Text(
-                                                              'Cashier',
+                                                              functions
+                                                                  .staffRoleName(
+                                                                      _model
+                                                                          .member),
                                                               style: FlutterFlowTheme
                                                                       .of(context)
                                                                   .bodyMedium
@@ -444,13 +626,36 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                                         .fontStyle,
                                                                   ),
                                                             ),
-                                                            Icon(
-                                                              Icons
-                                                                  .keyboard_arrow_right,
-                                                              color: Color(
-                                                                  0x72000000),
-                                                              size: 22.0,
-                                                            ),
+                                                            if (_model.saving)
+                                                              SizedBox(
+                                                                width: 16.0,
+                                                                height: 16.0,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  strokeWidth:
+                                                                      2.0,
+                                                                  valueColor:
+                                                                      AlwaysStoppedAnimation<
+                                                                          Color>(
+                                                                    FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .tertiary,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            if (!_model
+                                                                    .saving &&
+                                                                !functions
+                                                                    .staffIsOwner(
+                                                                        _model
+                                                                            .member))
+                                                              Icon(
+                                                                Icons
+                                                                    .keyboard_arrow_right,
+                                                                color: Color(
+                                                                    0x72000000),
+                                                                size: 22.0,
+                                                              ),
                                                           ].divide(SizedBox(
                                                               width: 5.0)),
                                                         ),
@@ -512,7 +717,10 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                             MainAxisSize.max,
                                                         children: [
                                                           Text(
-                                                            'Main branch',
+                                                            functions
+                                                                .staffBranchName(
+                                                                    _model
+                                                                        .member),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -542,13 +750,6 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                          ),
-                                                          Icon(
-                                                            Icons
-                                                                .keyboard_arrow_right,
-                                                            color: Color(
-                                                                0x72000000),
-                                                            size: 22.0,
                                                           ),
                                                         ].divide(SizedBox(
                                                             width: 5.0)),
@@ -605,18 +806,68 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                                       .fontStyle,
                                                                 ),
                                                       ),
-                                                      Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            'mohammed.lipper',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font: GoogleFonts
-                                                                      .montserrat(
+                                                      InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          await Clipboard.setData(
+                                                              ClipboardData(
+                                                                  text:
+                                                                      getJsonField(
+                                                            _model.member,
+                                                            r'''$.username''',
+                                                          ).toString()));
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                'Username copied',
+                                                                style:
+                                                                    TextStyle(),
+                                                              ),
+                                                              duration: Duration(
+                                                                  milliseconds:
+                                                                      2000),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Text(
+                                                              getJsonField(
+                                                                _model.member,
+                                                                r'''$.username''',
+                                                              ).toString(),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .montserrat(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primaryBackground,
+                                                                    fontSize:
+                                                                        13.0,
+                                                                    letterSpacing:
+                                                                        0.0,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
@@ -625,31 +876,17 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryBackground,
-                                                                  fontSize:
-                                                                      13.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                          ),
-                                                          Icon(
-                                                            Icons
-                                                                .content_copy_rounded,
-                                                            color: Color(
-                                                                0x72000000),
-                                                            size: 18.0,
-                                                          ),
-                                                        ].divide(SizedBox(
-                                                            width: 5.0)),
+                                                            ),
+                                                            Icon(
+                                                              Icons
+                                                                  .content_copy_rounded,
+                                                              color: Color(
+                                                                  0x72000000),
+                                                              size: 18.0,
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              width: 5.0)),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -659,80 +896,90 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                           ),
                                         ),
                                       ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 63.95,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              (FFMainAxisAlignment.center)
-                                                  .flutterValue,
-                                          children: [
-                                            InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        FocusScope.of(context)
-                                                            .unfocus();
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            ?.unfocus();
-                                                      },
-                                                      child: Padding(
-                                                        padding: MediaQuery
-                                                            .viewInsetsOf(
-                                                                context),
-                                                        child: Container(
-                                                          height:
-                                                              MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .height *
-                                                                  0.25,
-                                                          child:
-                                                              RemoveMemberWidget(),
+                                      if (!functions
+                                          .staffIsOwner(_model.member))
+                                        Container(
+                                          width: double.infinity,
+                                          height: 63.95,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                          ),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                (FFMainAxisAlignment.center)
+                                                    .flutterValue,
+                                            children: [
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(context)
+                                                              .unfocus();
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
+                                                        child: Padding(
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
+                                                          child: Container(
+                                                            height: MediaQuery
+                                                                        .sizeOf(
+                                                                            context)
+                                                                    .height *
+                                                                0.25,
+                                                            child:
+                                                                RemoveMemberWidget(
+                                                              member:
+                                                                  _model.member,
+                                                            ),
+                                                          ),
                                                         ),
+                                                      );
+                                                    },
+                                                  ).then((value) =>
+                                                      safeSetState(() => _model
+                                                          .removed = value));
+
+                                                  if (_model.removed == true) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          '${functions.staffDisplayName(_model.member)} removed from your store',
+                                                          style: TextStyle(),
+                                                        ),
+                                                        duration: Duration(
+                                                            milliseconds: 4000),
                                                       ),
                                                     );
-                                                  },
-                                                ).then((value) =>
-                                                    safeSetState(() {}));
-                                              },
-                                              child: Text(
-                                                'Remove from store',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color:
-                                                              Color(0xFFFF3128),
-                                                          fontSize: 13.0,
-                                                          letterSpacing: 0.0,
+                                                    context.safePop();
+                                                  }
+                                                },
+                                                child: Text(
+                                                  'Remove from store',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontStyle:
@@ -741,11 +988,23 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
+                                                        color:
+                                                            Color(0xFFFF3128),
+                                                        fontSize: 13.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                     ],
                                   ),
                                 ),

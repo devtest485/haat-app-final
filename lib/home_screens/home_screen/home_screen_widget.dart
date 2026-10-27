@@ -7,6 +7,7 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/instant_timer.dart';
 import '/home_screens/business_story/business_story_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
@@ -74,7 +75,23 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                 )!
                 .toList()
                 .cast<dynamic>();
+            _model.bannerIndex = 0;
             safeSetState(() {});
+            _model.bannerTimer?.cancel();
+            _model.bannerTimer = InstantTimer.periodic(
+              duration: Duration(milliseconds: 4000),
+              callback: (timer) async {
+                if ((_model.switchd == false) && (_model.banners.length > 1)) {
+                  await _model.pageViewController?.animateToPage(
+                    functions.bannerNextPage(
+                        _model.pageViewCurrentIndex, _model.banners.length),
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
+                }
+              },
+              startImmediately: false,
+            );
           }
         }),
         Future(() async {
@@ -564,116 +581,53 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
                                                               children: [
-                                                                Builder(
-                                                                  builder:
-                                                                      (context) {
-                                                                    if (_model
-                                                                            .isBalanceVisible ==
-                                                                        false) {
-                                                                      return RichText(
-                                                                        textScaler:
-                                                                            MediaQuery.of(context).textScaler,
-                                                                        text:
-                                                                            TextSpan(
-                                                                          children: [
-                                                                            TextSpan(
-                                                                              text: '24,580',
-                                                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                    font: GoogleFonts.inter(
-                                                                                      fontWeight: FontWeight.w300,
-                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                    ),
-                                                                                    color: FlutterFlowTheme.of(context).primaryText,
-                                                                                    fontSize: 42.0,
-                                                                                    letterSpacing: 0.0,
-                                                                                    fontWeight: FontWeight.w300,
-                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                  ),
-                                                                            ),
-                                                                            TextSpan(
-                                                                              text: '.00 SDG',
-                                                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                    font: GoogleFonts.inter(
-                                                                                      fontWeight: FontWeight.w300,
-                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                    ),
-                                                                                    color: FlutterFlowTheme.of(context).primaryText,
-                                                                                    fontSize: 18.0,
-                                                                                    letterSpacing: 0.0,
-                                                                                    fontWeight: FontWeight.w300,
-                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                  ),
-                                                                            )
-                                                                          ],
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .override(
-                                                                                font: GoogleFonts.inter(
-                                                                                  fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                ),
-                                                                                letterSpacing: 0.0,
-                                                                                fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                              ),
-                                                                        ),
-                                                                      );
-                                                                    } else {
-                                                                      return Container(
-                                                                        decoration:
-                                                                            BoxDecoration(),
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisSize:
-                                                                              MainAxisSize.max,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          children: [
-                                                                            RichText(
-                                                                              textScaler: MediaQuery.of(context).textScaler,
-                                                                              text: TextSpan(
-                                                                                children: [
-                                                                                  TextSpan(
-                                                                                    text: '******',
-                                                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                          font: GoogleFonts.inter(
-                                                                                            fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                          ),
-                                                                                          fontSize: 42.0,
-                                                                                          letterSpacing: 0.0,
-                                                                                          fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                          fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                        ),
-                                                                                  ),
-                                                                                  TextSpan(
-                                                                                    text: ' SDG',
-                                                                                    style: TextStyle(
-                                                                                      color: FlutterFlowTheme.of(context).primaryText,
-                                                                                      fontWeight: FontWeight.w300,
-                                                                                      fontSize: 18.0,
-                                                                                    ),
-                                                                                  )
-                                                                                ],
-                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                      font: GoogleFonts.inter(
-                                                                                        fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                        fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                      ),
-                                                                                      fontSize: 42.0,
-                                                                                      letterSpacing: 0.0,
-                                                                                      fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      );
-                                                                    }
-                                                                  },
+                                                                Expanded(
+                                                                  child:
+                                                                      Container(
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height:
+                                                                        52.0,
+                                                                    child: custom_widgets
+                                                                        .WalletBalance(
+                                                                      width: double
+                                                                          .infinity,
+                                                                      height:
+                                                                          52.0,
+                                                                      hidden: _model
+                                                                          .isBalanceVisible,
+                                                                      refreshSeconds:
+                                                                          15,
+                                                                      onBalanceChanged:
+                                                                          () async {
+                                                                        _model.token =
+                                                                            await actions.haatAccessToken();
+                                                                        _model.refreshResult = await HaatAuthGroup
+                                                                            .recentTransactionsCall
+                                                                            .call(
+                                                                          accessToken:
+                                                                              _model.token,
+                                                                          limit:
+                                                                              3,
+                                                                        );
+
+                                                                        if ((_model.refreshResult?.succeeded ??
+                                                                            true)) {
+                                                                          _model.transactions = HaatAuthGroup
+                                                                              .recentTransactionsCall
+                                                                              .transactions(
+                                                                                (_model.refreshResult?.jsonBody ?? ''),
+                                                                              )!
+                                                                              .toList()
+                                                                              .cast<dynamic>();
+                                                                          _model.transactionsLoaded =
+                                                                              true;
+                                                                          safeSetState(
+                                                                              () {});
+                                                                        }
+                                                                      },
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                                 InkWell(
                                                                   splashColor:
@@ -1229,6 +1183,33 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                       ),
                                                     ),
                                                   ),
+                                                  if (!_model
+                                                      .transactionsLoaded)
+                                                    Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    24.0,
+                                                                    0.0,
+                                                                    24.0),
+                                                        child: SizedBox(
+                                                          width: 32.0,
+                                                          height: 32.0,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .tertiary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   if (_model
                                                           .transactionsLoaded &&
                                                       (_model.transactions
@@ -1294,78 +1275,165 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   0.0,
                                                                   0.0,
                                                                   40.0),
-                                                      child: PageView.builder(
-                                                        controller: _model
-                                                                .pageViewController ??=
-                                                            PageController(
-                                                                initialPage: max(
-                                                                    0,
-                                                                    min(
+                                                      child: Stack(
+                                                        children: [
+                                                          PageView.builder(
+                                                            controller: _model
+                                                                    .pageViewController ??=
+                                                                PageController(
+                                                                    initialPage: max(
                                                                         0,
-                                                                        bannerItem.length -
-                                                                            1))),
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        itemCount:
-                                                            bannerItem.length,
-                                                        itemBuilder: (context,
-                                                            bannerItemIndex) {
-                                                          final bannerItemItem =
-                                                              bannerItem[
-                                                                  bannerItemIndex];
-                                                          return Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              HomeBannerWidget(
-                                                                key: Key(
-                                                                    'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
-                                                                backgroundColor:
-                                                                    functions
-                                                                        .bannerBackground(
-                                                                            getJsonField(
-                                                                  bannerItemItem,
-                                                                  r'''$.backgroundColor''',
-                                                                ).toString()),
-                                                                title:
-                                                                    getJsonField(
-                                                                  bannerItemItem,
-                                                                  r'''$.title''',
-                                                                ).toString(),
-                                                                imageUrl: functions
-                                                                    .bannerImageUrl(
+                                                                        min(
+                                                                            0,
+                                                                            bannerItem.length -
+                                                                                1))),
+                                                            onPageChanged:
+                                                                (_) async {
+                                                              _model.bannerIndex =
+                                                                  _model
+                                                                      .pageViewCurrentIndex;
+                                                              safeSetState(
+                                                                  () {});
+                                                            },
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            itemCount:
+                                                                bannerItem
+                                                                    .length,
+                                                            itemBuilder: (context,
+                                                                bannerItemIndex) {
+                                                              final bannerItemItem =
+                                                                  bannerItem[
+                                                                      bannerItemIndex];
+                                                              return Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                children: [
+                                                                  HomeBannerWidget(
+                                                                    key: Key(
+                                                                        'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
+                                                                    backgroundColor:
+                                                                        functions
+                                                                            .bannerBackground(getJsonField(
+                                                                      bannerItemItem,
+                                                                      r'''$.backgroundColor''',
+                                                                    ).toString()),
+                                                                    title:
+                                                                        getJsonField(
+                                                                      bannerItemItem,
+                                                                      r'''$.title''',
+                                                                    ).toString(),
+                                                                    imageUrl: functions.bannerImageUrl(
                                                                         getJsonField(
                                                                           bannerItemItem,
                                                                           r'''$.imagePath''',
-                                                                        )
-                                                                            .toString(),
-                                                                        FFDevEnvironmentValues()
-                                                                            .baseURL),
-                                                                dotCount: _model
-                                                                    .banners
-                                                                    .length,
-                                                                activeIndex: _model
-                                                                    .pageViewCurrentIndex,
-                                                                onTap:
-                                                                    () async {
-                                                                  await actions
-                                                                      .openBannerLink(
-                                                                    context,
-                                                                    getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.actionUrl''',
-                                                                    ).toString(),
-                                                                    getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.actionRoute''',
-                                                                    ).toString(),
+                                                                        ).toString(),
+                                                                        FFDevEnvironmentValues().baseURL),
+                                                                    onTap:
+                                                                        () async {
+                                                                      await actions
+                                                                          .openBannerLink(
+                                                                        context,
+                                                                        getJsonField(
+                                                                          bannerItemItem,
+                                                                          r'''$.actionUrl''',
+                                                                        ).toString(),
+                                                                        getJsonField(
+                                                                          bannerItemItem,
+                                                                          r'''$.actionRoute''',
+                                                                        ).toString(),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          ),
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    -1.0, 1.0),
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          12.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          8.0),
+                                                              child: Builder(
+                                                                builder:
+                                                                    (context) {
+                                                                  final dot = functions
+                                                                      .bannerDotIndexes(
+                                                                          bannerItem
+                                                                              .length)
+                                                                      .toList();
+
+                                                                  return Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: List.generate(
+                                                                        dot.length,
+                                                                        (dotIndex) {
+                                                                      final dotItem =
+                                                                          dot[dotIndex];
+                                                                      return InkWell(
+                                                                        splashColor:
+                                                                            Colors.transparent,
+                                                                        focusColor:
+                                                                            Colors.transparent,
+                                                                        hoverColor:
+                                                                            Colors.transparent,
+                                                                        highlightColor:
+                                                                            Colors.transparent,
+                                                                        onTap:
+                                                                            () async {
+                                                                          await _model
+                                                                              .pageViewController
+                                                                              ?.animateToPage(
+                                                                            dotItem,
+                                                                            duration:
+                                                                                Duration(milliseconds: 500),
+                                                                            curve:
+                                                                                Curves.ease,
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            AnimatedContainer(
+                                                                          duration:
+                                                                              Duration(milliseconds: 200),
+                                                                          curve:
+                                                                              Curves.easeInOut,
+                                                                          width:
+                                                                              6.0,
+                                                                          height:
+                                                                              6.0,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color: functions.bannerDotColor(
+                                                                                functions.bannerBackground(getJsonField(
+                                                                                  bannerItem.elementAtOrNull(_model.bannerIndex),
+                                                                                  r'''$.backgroundColor''',
+                                                                                ).toString()),
+                                                                                dotItem,
+                                                                                _model.bannerIndex),
+                                                                            shape:
+                                                                                BoxShape.circle,
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    }).divide(SizedBox(
+                                                                        width:
+                                                                            4.0)),
                                                                   );
                                                                 },
                                                               ),
-                                                            ],
-                                                          );
-                                                        },
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                   );

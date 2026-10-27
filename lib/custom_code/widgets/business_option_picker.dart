@@ -208,14 +208,17 @@ class _BusinessOptionPickerState extends State<BusinessOptionPicker> {
       width: widget.width,
       height: widget.height,
       child: _loading
-          ? const Align(
-              alignment: AlignmentDirectional(-1, -1),
-              // Sized explicitly: an unsized indicator inside a Wrap's parent
-              // takes whatever it is given, which here is the whole column.
-              child: SizedBox(
-                width: 40,
-                height: 40,
-                child: CircularProgressIndicator(strokeWidth: 4),
+          ? const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             )
           : _problem != null

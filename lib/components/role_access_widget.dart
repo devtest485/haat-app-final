@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -5,14 +6,22 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'role_access_model.dart';
 export 'role_access_model.dart';
 
 class RoleAccessWidget extends StatefulWidget {
-  const RoleAccessWidget({super.key});
+  const RoleAccessWidget({
+    super.key,
+    this.currentRoleName,
+  });
+
+  final String? currentRoleName;
 
   @override
   State<RoleAccessWidget> createState() => _RoleAccessWidgetState();
@@ -32,12 +41,44 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
     super.initState();
     _model = createModel(context, () => RoleAccessModel());
 
-    _model.switchValue1 = true;
-    _model.switchValue2 = true;
-    _model.switchValue3 = false;
-    _model.switchValue4 = false;
-    _model.switchValue5 = false;
-    _model.switchValue6 = false;
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.token = await actions.haatAccessToken();
+      _model.rolesResult = await HaatAuthGroup.rolesCall.call(
+        accessToken: _model.token,
+      );
+
+      if ((_model.rolesResult?.succeeded ?? true)) {
+        _model.roles = functions
+            .staffRoles(HaatAuthGroup.rolesCall.roles(
+              (_model.rolesResult?.jsonBody ?? ''),
+            ))
+            .toList()
+            .cast<dynamic>();
+        _model.selectedRole = functions.roleByName(
+                _model.roles.toList(), widget!.currentRoleName) ??
+            _model.roles.firstOrNull;
+        _model.loadError = null;
+        _model.loaded = true;
+        safeSetState(() {
+          _model.choiceChipsValueController?.value = [
+            getJsonField(
+              _model.selectedRole,
+              r'''$.name''',
+            ).toString()
+          ];
+        });
+      } else {
+        _model.loadError = valueOrDefault<String>(
+          HaatAuthGroup.rolesCall.message(
+            (_model.rolesResult?.jsonBody ?? ''),
+          ),
+          'Roles could not be loaded. Close this and try again.',
+        );
+        _model.loaded = true;
+        safeSetState(() {});
+      }
+    });
   }
 
   @override
@@ -133,7 +174,10 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                       ],
                     ),
                     Text(
-                      'Pick a role, or set each one.',
+                      valueOrDefault<String>(
+                        _model.loadError,
+                        'Pick a role. What each role can do is set in the HAAT dashboard.',
+                      ),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.montserrat(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -166,15 +210,30 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    if (!_model.loaded)
+                      SizedBox(
+                        width: 22.0,
+                        height: 22.0,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            FlutterFlowTheme.of(context).tertiary,
+                          ),
+                        ),
+                      ),
                     Expanded(
                       child: FlutterFlowChoiceChips(
-                        options: [
-                          ChipData('Cashier'),
-                          ChipData('Manager'),
-                          ChipData('Offers')
-                        ],
-                        onChanged: (val) => safeSetState(
-                            () => _model.choiceChipsValue = val?.firstOrNull),
+                        options: functions
+                            .roleNames(_model.roles.toList())
+                            .map((label) => ChipData(label))
+                            .toList(),
+                        onChanged: (val) async {
+                          safeSetState(
+                              () => _model.choiceChipsValue = val?.firstOrNull);
+                          _model.selectedRole = functions.roleByName(
+                              _model.roles.toList(), _model.choiceChipsValue);
+                          safeSetState(() {});
+                        },
                         selectedChipStyle: ChipStyle(
                           backgroundColor: Color(0xFF00DA76),
                           textStyle:
@@ -238,9 +297,9 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                         alignment: WrapAlignment.start,
                         controller: _model.choiceChipsValueController ??=
                             FormFieldController<List<String>>(
-                          ['Cashier'],
+                          [],
                         ),
-                        wrapped: true,
+                        wrapped: false,
                       ),
                     ),
                   ],
@@ -316,11 +375,9 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                             ].divide(SizedBox(height: 4.0)),
                           ),
                           Switch.adaptive(
-                            value: _model.switchValue1!,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.switchValue1 = newValue!);
-                            },
+                            value: functions.roleHasPermission(
+                                _model.selectedRole, 'payment:create'),
+                            onChanged: (newValue) async {},
                             activeColor:
                                 FlutterFlowTheme.of(context).primaryText,
                             activeTrackColor:
@@ -406,11 +463,9 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                             ].divide(SizedBox(height: 4.0)),
                           ),
                           Switch.adaptive(
-                            value: _model.switchValue2!,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.switchValue2 = newValue!);
-                            },
+                            value: functions.roleHasPermission(
+                                _model.selectedRole, 'product:read'),
+                            onChanged: (newValue) async {},
                             activeColor:
                                 FlutterFlowTheme.of(context).primaryText,
                             activeTrackColor:
@@ -496,11 +551,9 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                             ].divide(SizedBox(height: 4.0)),
                           ),
                           Switch.adaptive(
-                            value: _model.switchValue3!,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.switchValue3 = newValue!);
-                            },
+                            value: functions.roleHasPermission(
+                                _model.selectedRole, 'payment:update'),
+                            onChanged: (newValue) async {},
                             activeColor:
                                 FlutterFlowTheme.of(context).primaryText,
                             activeTrackColor:
@@ -586,11 +639,9 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                             ].divide(SizedBox(height: 4.0)),
                           ),
                           Switch.adaptive(
-                            value: _model.switchValue4!,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.switchValue4 = newValue!);
-                            },
+                            value: functions.roleHasPermission(
+                                _model.selectedRole, 'report:read'),
+                            onChanged: (newValue) async {},
                             activeColor:
                                 FlutterFlowTheme.of(context).primaryText,
                             activeTrackColor:
@@ -676,11 +727,9 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                             ].divide(SizedBox(height: 4.0)),
                           ),
                           Switch.adaptive(
-                            value: _model.switchValue5!,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.switchValue5 = newValue!);
-                            },
+                            value: functions.roleHasPermission(
+                                _model.selectedRole, 'product:create'),
+                            onChanged: (newValue) async {},
                             activeColor:
                                 FlutterFlowTheme.of(context).primaryText,
                             activeTrackColor:
@@ -766,11 +815,9 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                             ].divide(SizedBox(height: 4.0)),
                           ),
                           Switch.adaptive(
-                            value: _model.switchValue6!,
-                            onChanged: (newValue) async {
-                              safeSetState(
-                                  () => _model.switchValue6 = newValue!);
-                            },
+                            value: functions.roleHasPermission(
+                                _model.selectedRole, 'staff:create'),
+                            onChanged: (newValue) async {},
                             activeColor:
                                 FlutterFlowTheme.of(context).primaryText,
                             activeTrackColor:
@@ -795,7 +842,7 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  Navigator.pop(context);
+                  Navigator.pop(context, _model.selectedRole);
                 },
                 child: Container(
                   width: double.infinity,

@@ -249,10 +249,17 @@ class _SecuritySettingsState extends State<SecuritySettings> {
       child: SafeArea(
         top: false,
         child: _loading
-            ? const SizedBox(
-                height: 120,
-                child: Center(
-                  child: CircularProgressIndicator(color: Colors.black),
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      color: FlutterFlowTheme.of(context).tertiary,
+                    ),
+                  ),
                 ),
               )
             : Column(

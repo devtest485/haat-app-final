@@ -2,15 +2,23 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'employe_details_model.dart';
 export 'employe_details_model.dart';
 
 class EmployeDetailsWidget extends StatefulWidget {
-  const EmployeDetailsWidget({super.key});
+  const EmployeDetailsWidget({
+    super.key,
+    required this.staff,
+  });
+
+  final dynamic staff;
 
   static String routeName = 'EmployeDetails';
   static String routePath = '/employeDetails';
@@ -58,13 +66,27 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
               Container(
                 width: double.infinity,
                 height: 516.4,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: Image.asset(
-                      'assets/images/al.png',
-                    ).image,
-                  ),
+                child: custom_widgets.NamePatternBackground(
+                  width: double.infinity,
+                  height: 516.4,
+                  name: functions.staffFirstName(getJsonField(
+                    widget!.staff,
+                    r'''$.fullName''',
+                  ).toString()),
+                  fallbackName: 'haat',
+                  textColor: FlutterFlowTheme.of(context).tertiary,
+                  backgroundColor:
+                      FlutterFlowTheme.of(context).secondaryBackground,
+                  fadeColor: FlutterFlowTheme.of(context).secondaryBackground,
+                  fontSize: 48.0,
+                  fontWeight: 800,
+                  mirrorAlternate: true,
+                  lowercase: true,
+                  fadeStart: 0.05,
+                  fadeEnd: 0.6,
+                  animate: false,
+                  patternHeight: 516.4,
+                  showContent: false,
                 ),
               ),
               Container(
@@ -107,7 +129,10 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                                       ),
                                       alignment: AlignmentDirectional(0.0, 0.0),
                                       child: Text(
-                                        'MA',
+                                        functions.staffInitials(getJsonField(
+                                          widget!.staff,
+                                          r'''$.fullName''',
+                                        ).toString()),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -215,101 +240,10 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                                                             .fromSTEB(0.0, 8.0,
                                                                 0.0, 0.0),
                                                     child: Text(
-                                                      'Mohammed Khalid',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                                color: Color(
-                                                                    0xFF484848),
-                                                                fontSize: 12.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 65.0,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFFAFAFA),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Branch Assigned',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryBackground,
-                                                          fontSize: 15.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 8.0,
-                                                                0.0, 0.0),
-                                                    child: Text(
-                                                      'Main Branch ',
+                                                      getJsonField(
+                                                        widget!.staff,
+                                                        r'''$.fullName''',
+                                                      ).toString(),
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -403,7 +337,7 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                                                             .fromSTEB(0.0, 8.0,
                                                                 0.0, 0.0),
                                                     child: Text(
-                                                      '{{Role}',
+                                                      '${getJsonField(widget!.staff, r'''$.roleName''').toString()} · ${getJsonField(widget!.staff, r'''$.branchName''').toString()}',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -462,7 +396,7 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Date and time',
+                                                    'Username',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -497,7 +431,104 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                                                             .fromSTEB(0.0, 8.0,
                                                                 0.0, 0.0),
                                                     child: Text(
-                                                      '{{Nearby}',
+                                                      '@${getJsonField(widget!.staff, r'''$.username''').toString()}',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: Color(
+                                                                    0xFF484848),
+                                                                fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: double.infinity,
+                                        height: 65.0,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFFAFAFA),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Temporary password',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font:
+                                                              GoogleFonts.inter(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryBackground,
+                                                          fontSize: 15.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 8.0,
+                                                                0.0, 0.0),
+                                                    child: Text(
+                                                      getJsonField(
+                                                        widget!.staff,
+                                                        r'''$.temporaryPassword''',
+                                                      ).toString(),
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -547,14 +578,27 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 0.0, 15.0, 35.0),
-                        child: InkWell(
+                            15.0, 0.0, 15.0, 20.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                        InkWell(
                           splashColor: Colors.transparent,
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            context.pushNamed(BottomBarPagesWidget.routeName);
+                            await Clipboard.setData(ClipboardData(
+                                text: functions.staffShareText(widget!.staff)));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Details copied. Paste them to the employee in any chat.',
+                                  style: TextStyle(),
+                                ),
+                                duration: Duration(milliseconds: 3000),
+                              ),
+                            );
                           },
                           child: Container(
                             width: double.infinity,
@@ -599,6 +643,43 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                               ].divide(SizedBox(width: 12.0)),
                             ),
                           ),
+                        ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.goNamed(BottomBarPagesWidget.routeName);
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 44.0,
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Text(
+                              'Done',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
+                                    fontSize: 15.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ),
+                        ),
+                          ].divide(SizedBox(height: 8.0)),
                         ),
                       ),
                     ],

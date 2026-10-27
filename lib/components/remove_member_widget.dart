@@ -1,8 +1,11 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +14,12 @@ import 'remove_member_model.dart';
 export 'remove_member_model.dart';
 
 class RemoveMemberWidget extends StatefulWidget {
-  const RemoveMemberWidget({super.key});
+  const RemoveMemberWidget({
+    super.key,
+    this.member,
+  });
+
+  final dynamic member;
 
   @override
   State<RemoveMemberWidget> createState() => _RemoveMemberWidgetState();
@@ -89,7 +97,9 @@ class _RemoveMemberWidgetState extends State<RemoveMemberWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
                     child: Text(
-                      'Remove Mohammed Khalid?',
+                      'Remove ${functions.staffDisplayName(widget!.member)}?',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.montserrat(
                               fontWeight: FontWeight.bold,
@@ -112,7 +122,16 @@ class _RemoveMemberWidgetState extends State<RemoveMemberWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                     child: Text(
-                      'Mohammed can’t sign in any more. Past sales stay in your records.',
+                      valueOrDefault<String>(
+                        _model.error,
+                        '${valueOrDefault<String>(
+                          functions.staffFirstName(getJsonField(
+                            widget!.member,
+                            r'''$.fullName''',
+                          ).toString()),
+                          'They',
+                        )} will lose access to your store. Past sales stay in your records.',
+                      ),
                       textAlign: TextAlign.start,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.montserrat(
@@ -121,8 +140,10 @@ class _RemoveMemberWidgetState extends State<RemoveMemberWidget> {
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            color: _model.error != null
+                                ? FlutterFlowTheme.of(context).error
+                                : FlutterFlowTheme.of(context)
+                                    .primaryBackground,
                             letterSpacing: 0.0,
                             fontWeight: FontWeight.normal,
                             fontStyle: FlutterFlowTheme.of(context)
@@ -152,15 +173,44 @@ class _RemoveMemberWidgetState extends State<RemoveMemberWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(
-                          SuccessWidget.routeName,
-                          queryParameters: {
-                            'type': serializeParam(
-                              '.',
-                              ParamType.String,
-                            ),
-                          }.withoutNulls,
-                        );
+                        if (_model.removing) {
+                          return;
+                        }
+                        _model.removing = true;
+                        _model.error = null;
+                        safeSetState(() {});
+                        _model.token = await actions.haatAccessToken();
+                        _model.revokeIds = functions
+                            .staffRevokeIds(widget!.member, null)
+                            .toList()
+                            .cast<String>();
+                        _model.loopIndex = 0;
+                        while (_model.loopIndex < _model.revokeIds.length) {
+                          _model.revokeResult =
+                              await HaatAuthGroup.revokeRoleCall.call(
+                            assignmentId: _model.revokeIds
+                                .elementAtOrNull(_model.loopIndex),
+                            userId: getJsonField(
+                              widget!.member,
+                              r'''$.userId''',
+                            ).toString(),
+                            accessToken: _model.token,
+                          );
+
+                          if (!(_model.revokeResult?.succeeded ?? true)) {
+                            _model.error = valueOrDefault<String>(
+                              HaatAuthGroup.revokeRoleCall.message(
+                                (_model.revokeResult?.jsonBody ?? ''),
+                              ),
+                              'This person could not be removed. Check your connection and try again.',
+                            );
+                            _model.removing = false;
+                            safeSetState(() {});
+                            return;
+                          }
+                          _model.loopIndex = _model.loopIndex + 1;
+                        }
+                        Navigator.pop(context, true);
                       },
                       child: Container(
                         width: double.infinity,
@@ -170,24 +220,36 @@ class _RemoveMemberWidgetState extends State<RemoveMemberWidget> {
                           borderRadius: BorderRadius.circular(24.0),
                         ),
                         alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Text(
-                          'Remove',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.montserrat(
+                        child: _model.removing
+                            ? SizedBox(
+                                width: 22.0,
+                                height: 22.0,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                'Remove',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      fontSize: 18.0,
+                                      letterSpacing: 0.0,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    fontSize: 18.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
+                              ),
                       ),
                     ),
                   ],

@@ -13,9 +13,11 @@ class SuccessWidget extends StatefulWidget {
   const SuccessWidget({
     super.key,
     required this.type,
+    this.name,
   });
 
   final String? type;
+  final String? name;
 
   static String routeName = 'Success';
   static String routePath = '/success';
@@ -137,7 +139,7 @@ class _SuccessWidgetState extends State<SuccessWidget> {
                             child: Text(
                               () {
                                 if (widget!.type == 'Product') {
-                                  return 'Jebena coffee is now in your Cashier.';
+                                  return '${valueOrDefault<String>(widget!.name, 'Your product')} is now in your Cashier.';
                                 } else if (widget!.type == 'BranchRemove') {
                                   return 'Bahri branch has been removed successfully';
                                 } else if (widget!.type == 'Branch Add') {
@@ -187,8 +189,12 @@ class _SuccessWidgetState extends State<SuccessWidget> {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  context.pushNamed(
-                                      BottomBarPagesWidget.routeName);
+                                  if (widget!.type == 'Product') {
+                                    context.safePop();
+                                  } else {
+                                    context.pushNamed(
+                                        BottomBarPagesWidget.routeName);
+                                  }
                                 },
                                 child: Container(
                                   width: double.infinity,

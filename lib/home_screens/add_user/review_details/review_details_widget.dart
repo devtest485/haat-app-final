@@ -10,7 +10,20 @@ import 'review_details_model.dart';
 export 'review_details_model.dart';
 
 class ReviewDetailsWidget extends StatefulWidget {
-  const ReviewDetailsWidget({super.key});
+  const ReviewDetailsWidget({
+    super.key,
+    required this.fullName,
+    required this.roleId,
+    required this.roleName,
+    required this.branchId,
+    required this.branchName,
+  });
+
+  final String? fullName;
+  final String? roleId;
+  final String? roleName;
+  final String? branchId;
+  final String? branchName;
 
   static String routeName = 'ReviewDetails';
   static String routePath = '/reviewDetails';
@@ -98,7 +111,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                   children: [
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.17,
+                                          0.29,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
@@ -109,7 +122,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.17,
+                                          0.29,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
@@ -120,32 +133,11 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.17,
+                                          0.29,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .primaryBackground,
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.17,
-                                      height: 3.0,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.17,
-                                      height: 3.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0x26000000),
                                         borderRadius:
                                             BorderRadius.circular(2.0),
                                       ),
@@ -292,7 +284,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    'Mohammed Khalid',
+                                                    valueOrDefault<String>(
+                                                      widget!.fullName,
+                                                      '-',
+                                                    ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -385,7 +380,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    'Main Branch ',
+                                                    valueOrDefault<String>(
+                                                      widget!.branchName,
+                                                      '-',
+                                                    ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -478,7 +476,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    '{{Role}',
+                                                    valueOrDefault<String>(
+                                                      widget!.roleName,
+                                                      '-',
+                                                    ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -571,7 +572,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    '{{Nearby}',
+                                                    dateTimeFormat(
+                                                      "d/M/y · h:mm a",
+                                                      getCurrentTimestamp,
+                                                    ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -628,7 +632,31 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            context.pushNamed(CreatingProfileWidget.routeName);
+                            context.pushNamed(
+                              CreatingProfileWidget.routeName,
+                              queryParameters: {
+                                'fullName': serializeParam(
+                                  widget!.fullName,
+                                  ParamType.String,
+                                ),
+                                'roleId': serializeParam(
+                                  widget!.roleId,
+                                  ParamType.String,
+                                ),
+                                'roleName': serializeParam(
+                                  widget!.roleName,
+                                  ParamType.String,
+                                ),
+                                'branchId': serializeParam(
+                                  widget!.branchId,
+                                  ParamType.String,
+                                ),
+                                'branchName': serializeParam(
+                                  widget!.branchName,
+                                  ParamType.String,
+                                ),
+                              }.withoutNulls,
+                            );
                           },
                           child: Container(
                             width: double.infinity,

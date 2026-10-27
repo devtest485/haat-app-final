@@ -60,6 +60,18 @@ class HaatAuthGroup {
   static MarketplaceCall marketplaceCall = MarketplaceCall();
   static NotificationsCall notificationsCall = NotificationsCall();
   static NotificationsSeenCall notificationsSeenCall = NotificationsSeenCall();
+  static CreateProductCall createProductCall = CreateProductCall();
+  static UpdateProductCall updateProductCall = UpdateProductCall();
+  static DeleteProductCall deleteProductCall = DeleteProductCall();
+  static UploadProductImageCall uploadProductImageCall =
+      UploadProductImageCall();
+  static BranchesCall branchesCall = BranchesCall();
+  static StaffCall staffCall = StaffCall();
+  static RolesCall rolesCall = RolesCall();
+  static CreateStaffCall createStaffCall = CreateStaffCall();
+  static AssignRoleCall assignRoleCall = AssignRoleCall();
+  static RevokeRoleCall revokeRoleCall = RevokeRoleCall();
+  static CloseBranchCall closeBranchCall = CloseBranchCall();
 }
 
 class RegisterUserCall {
@@ -1896,6 +1908,556 @@ class NotificationsSeenCall {
       alwaysAllowBody: false,
     );
   }
+}
+
+class CreateProductCall {
+  Future<ApiCallResponse> call({
+    String? name = '',
+    String? unit = '',
+    String? priceMinor = '',
+    int? quantity,
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    final ffApiRequestBody = '''
+{
+  "name": "${escapeStringForJson(name)}",
+  "unit": "${escapeStringForJson(unit)}",
+  "priceMinor": "${escapeStringForJson(priceMinor)}",
+  "quantity": ${quantity}
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'CreateProduct',
+      apiUrl: '${baseUrl}/products',
+      callType: ApiCallType.POST,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  bool? isSuccess(dynamic response) =>
+      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+  String? id(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.data.id'''));
+}
+
+class UpdateProductCall {
+  Future<ApiCallResponse> call({
+    String? productId = '',
+    String? name = '',
+    String? unit = '',
+    String? priceMinor = '',
+    int? quantity,
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    final ffApiRequestBody = '''
+{
+  "name": "${escapeStringForJson(name)}",
+  "unit": "${escapeStringForJson(unit)}",
+  "priceMinor": "${escapeStringForJson(priceMinor)}",
+  "quantity": ${quantity}
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'UpdateProduct',
+      apiUrl: '${baseUrl}/products/${productId}',
+      callType: ApiCallType.PATCH,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  bool? isSuccess(dynamic response) =>
+      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class DeleteProductCall {
+  Future<ApiCallResponse> call({
+    String? productId = '',
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'DeleteProduct',
+      apiUrl: '${baseUrl}/products/${productId}',
+      callType: ApiCallType.DELETE,
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  bool? isSuccess(dynamic response) =>
+      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class UploadProductImageCall {
+  Future<ApiCallResponse> call({
+    String? productId = '',
+    FFUploadedFile? file,
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'UploadProductImage',
+      apiUrl: '${baseUrl}/products/${productId}/image',
+      callType: ApiCallType.POST,
+      headers: {
+        'Accept': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {'file': file},
+      bodyType: BodyType.MULTIPART,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  bool? isSuccess(dynamic response) =>
+      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class BranchesCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Branches',
+      apiUrl: '${baseUrl}/organizations/branches',
+      callType: ApiCallType.GET,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? branches(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class StaffCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Staff',
+      apiUrl: '${baseUrl}/organizations/staff',
+      callType: ApiCallType.GET,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? staff(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class RolesCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Roles',
+      apiUrl: '${baseUrl}/rbac/roles',
+      callType: ApiCallType.GET,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? roles(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class CreateStaffCall {
+  Future<ApiCallResponse> call({
+    String? fullName = '',
+    String? username = '',
+    String? branchId = '',
+    String? roleId = '',
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    final ffApiRequestBody = '''
+{
+  "fullName": "${escapeStringForJson(fullName)}",
+  "username": "${escapeStringForJson(username)}",
+  "branchId": "${escapeStringForJson(branchId)}",
+  "roleId": "${escapeStringForJson(roleId)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'CreateStaff',
+      apiUrl: '${baseUrl}/organizations/staff',
+      callType: ApiCallType.POST,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  dynamic staff(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+      );
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+  String? errorField(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.data.field'''));
+}
+
+class AssignRoleCall {
+  Future<ApiCallResponse> call({
+    dynamic bodyJson,
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    final body = _serializeJson(bodyJson);
+    final ffApiRequestBody = '''
+${body}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'AssignRole',
+      apiUrl: '${baseUrl}/rbac/assignments',
+      callType: ApiCallType.POST,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class RevokeRoleCall {
+  Future<ApiCallResponse> call({
+    String? assignmentId = '',
+    String? userId = '',
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    final ffApiRequestBody = '''
+{
+  "userId": "${escapeStringForJson(userId)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'RevokeRole',
+      apiUrl: '${baseUrl}/rbac/assignments/${assignmentId}',
+      callType: ApiCallType.DELETE,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: true,
+    );
+  }
+
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
+}
+
+class CloseBranchCall {
+  Future<ApiCallResponse> call({
+    String? branchId = '',
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'CloseBranch',
+      apiUrl: '${baseUrl}/organizations/branches/${branchId}',
+      callType: ApiCallType.DELETE,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Authorization': 'Bearer ${accessToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  String? message(dynamic response) =>
+      castToType<String>(getJsonField(response, r'''$.message'''));
 }
 
 /// End HaatAuth Group Code

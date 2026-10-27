@@ -63,6 +63,8 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   void updateCategoriesAtIndex(int index, Function(dynamic) updateFn) =>
       categories[index] = updateFn(categories[index]);
 
+  bool loaded = false;
+
   ///  State fields for stateful widgets in this component.
 
   // Stores action output result for [Custom Action - haatAccessToken] action in MarketPlace widget.

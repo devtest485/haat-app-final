@@ -163,29 +163,76 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => AddEmpoleyNameWidget(),
         ),
         FFRoute(
-          name: SelectBranchWidget.routeName,
-          path: SelectBranchWidget.routePath,
-          builder: (context, params) => SelectBranchWidget(),
-        ),
-        FFRoute(
           name: EmpoleyRoleWidget.routeName,
           path: EmpoleyRoleWidget.routePath,
-          builder: (context, params) => EmpoleyRoleWidget(),
+          builder: (context, params) => EmpoleyRoleWidget(
+            fullName: params.getParam(
+              'fullName',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: ReviewDetailsWidget.routeName,
           path: ReviewDetailsWidget.routePath,
-          builder: (context, params) => ReviewDetailsWidget(),
+          builder: (context, params) => ReviewDetailsWidget(
+            fullName: params.getParam(
+              'fullName',
+              ParamType.String,
+            ),
+            roleId: params.getParam(
+              'roleId',
+              ParamType.String,
+            ),
+            roleName: params.getParam(
+              'roleName',
+              ParamType.String,
+            ),
+            branchId: params.getParam(
+              'branchId',
+              ParamType.String,
+            ),
+            branchName: params.getParam(
+              'branchName',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: CreatingProfileWidget.routeName,
           path: CreatingProfileWidget.routePath,
-          builder: (context, params) => CreatingProfileWidget(),
+          builder: (context, params) => CreatingProfileWidget(
+            fullName: params.getParam(
+              'fullName',
+              ParamType.String,
+            ),
+            roleId: params.getParam(
+              'roleId',
+              ParamType.String,
+            ),
+            roleName: params.getParam(
+              'roleName',
+              ParamType.String,
+            ),
+            branchId: params.getParam(
+              'branchId',
+              ParamType.String,
+            ),
+            branchName: params.getParam(
+              'branchName',
+              ParamType.String,
+            ),
+          ),
         ),
         FFRoute(
           name: EmployeDetailsWidget.routeName,
           path: EmployeDetailsWidget.routePath,
-          builder: (context, params) => EmployeDetailsWidget(),
+          builder: (context, params) => EmployeDetailsWidget(
+            staff: params.getParam(
+              'staff',
+              ParamType.JSON,
+            ),
+          ),
         ),
         FFRoute(
           name: AddFundWidget.routeName,
@@ -325,7 +372,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: StaffMembersWidget.routeName,
           path: StaffMembersWidget.routePath,
-          builder: (context, params) => StaffMembersWidget(),
+          builder: (context, params) => StaffMembersWidget(
+            member: params.getParam(
+              'member',
+              ParamType.JSON,
+            ),
+          ),
         ),
         FFRoute(
           name: TestWidget.routeName,
@@ -345,12 +397,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               'type',
               ParamType.String,
             ),
+            name: params.getParam(
+              'name',
+              ParamType.String,
+            ),
           ),
         ),
         FFRoute(
           name: AddProductWidget.routeName,
           path: AddProductWidget.routePath,
           builder: (context, params) => AddProductWidget(),
+        ),
+        FFRoute(
+          name: EditProductWidget.routeName,
+          path: EditProductWidget.routePath,
+          builder: (context, params) => EditProductWidget(
+            product: params.getParam(
+              'product',
+              ParamType.JSON,
+            ),
+          ),
         ),
         FFRoute(
           name: BranchIesListWidget.routeName,
@@ -360,7 +426,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: BranchDetailWidget.routeName,
           path: BranchDetailWidget.routePath,
-          builder: (context, params) => BranchDetailWidget(),
+          builder: (context, params) => BranchDetailWidget(
+            branch: params.getParam(
+              'branch',
+              ParamType.JSON,
+            ),
+          ),
         ),
         FFRoute(
           name: AddBranchWidget.routeName,

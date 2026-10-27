@@ -85,6 +85,8 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
             .cast<dynamic>();
         safeSetState(() {});
       }
+      _model.loaded = true;
+      safeSetState(() {});
     });
 
     _model.textController ??= TextEditingController();
@@ -354,6 +356,24 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
+                                if (!_model.loaded)
+                                  Center(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 24.0, 0.0, 24.0),
+                                      child: SizedBox(
+                                        width: 32.0,
+                                        height: 32.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .tertiary,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 Container(
                                   decoration: BoxDecoration(),
                                   child: Visibility(

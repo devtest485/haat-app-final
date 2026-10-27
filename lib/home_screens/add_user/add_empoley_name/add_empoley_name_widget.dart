@@ -103,7 +103,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                   children: [
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.17,
+                                          0.29,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
@@ -114,7 +114,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.17,
+                                          0.29,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: Color(0x26000000),
@@ -124,27 +124,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.17,
-                                      height: 3.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0x26000000),
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.17,
-                                      height: 3.0,
-                                      decoration: BoxDecoration(
-                                        color: Color(0x26000000),
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.17,
+                                          0.29,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: Color(0x26000000),
@@ -198,7 +178,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Book Store username',
+                                            'Employee Information',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -224,7 +204,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'Enter your phone number. We\'ll send you a confirmation code there.',
+                                            'Enter the employee\'s personal and work details to create their profile.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -338,7 +318,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                             '_model.usernameTextController',
                                                             Duration(
                                                                 milliseconds:
-                                                                    2000),
+                                                                    300),
                                                             () async {
                                                               _model.addEmployee =
                                                                   functions.isValidname(
@@ -542,7 +522,15 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             if (_model.addEmployee == true) {
-                              context.pushNamed(SelectBranchWidget.routeName);
+                              context.pushNamed(
+                                EmpoleyRoleWidget.routeName,
+                                queryParameters: {
+                                  'fullName': serializeParam(
+                                    _model.usernameTextController.text.trim(),
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls,
+                              );
                             }
                           },
                           child: Container(

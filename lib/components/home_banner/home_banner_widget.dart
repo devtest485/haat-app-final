@@ -17,17 +17,12 @@ class HomeBannerWidget extends StatefulWidget {
     this.backgroundColor,
     this.title,
     this.imageUrl,
-    int? dotCount,
-    int? activeIndex,
     required this.onTap,
-  })  : this.dotCount = dotCount ?? 1,
-        this.activeIndex = activeIndex ?? 0;
+  });
 
   final Color? backgroundColor;
   final String? title;
   final String? imageUrl;
-  final int dotCount;
-  final int activeIndex;
   final Future Function()? onTap;
 
   @override
@@ -111,7 +106,7 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
                       ),
                     Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 21.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment:
@@ -148,37 +143,6 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
                                   lineHeight: 1.3,
                                 ),
                             overflow: TextOverflow.ellipsis,
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 8.0),
-                            child: Builder(
-                              builder: (context) {
-                                final dot = functions
-                                    .bannerDotIndexes(widget!.dotCount)
-                                    .toList();
-
-                                return Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      (FFMainAxisAlignment.start).flutterValue,
-                                  children:
-                                      List.generate(dot.length, (dotIndex) {
-                                    final dotItem = dot[dotIndex];
-                                    return Container(
-                                      width: 5.0,
-                                      height: 5.0,
-                                      decoration: BoxDecoration(
-                                        color: functions.bannerDotColor(
-                                            widget!.backgroundColor,
-                                            dotItem,
-                                            widget!.activeIndex),
-                                      ),
-                                    );
-                                  }).divide(SizedBox(width: 4.0)),
-                                );
-                              },
-                            ),
                           ),
                         ],
                       ),

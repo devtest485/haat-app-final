@@ -42,8 +42,6 @@ export '/home_screens/add_user/add_employees/add_employees_widget.dart'
     show AddEmployeesWidget;
 export '/home_screens/add_user/add_empoley_name/add_empoley_name_widget.dart'
     show AddEmpoleyNameWidget;
-export '/home_screens/add_user/select_branch/select_branch_widget.dart'
-    show SelectBranchWidget;
 export '/home_screens/add_user/empoley_role/empoley_role_widget.dart'
     show EmpoleyRoleWidget;
 export '/home_screens/add_user/review_details/review_details_widget.dart'
@@ -101,6 +99,7 @@ export '/test/test_widget.dart' show TestWidget;
 export '/products/products_widget.dart' show ProductsWidget;
 export '/success/success_widget.dart' show SuccessWidget;
 export '/add_product/add_product_widget.dart' show AddProductWidget;
+export '/edit_product/edit_product_widget.dart' show EditProductWidget;
 export '/branch_ies_list/branch_ies_list_widget.dart' show BranchIesListWidget;
 export '/branch_detail/branch_detail_widget.dart' show BranchDetailWidget;
 export '/add_branch/add_branch_widget.dart' show AddBranchWidget;

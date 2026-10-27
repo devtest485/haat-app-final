@@ -1,10 +1,10 @@
 import '/components/remove_branch_widget.dart';
-import '/components/role_access_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,12 @@ import 'branch_detail_model.dart';
 export 'branch_detail_model.dart';
 
 class BranchDetailWidget extends StatefulWidget {
-  const BranchDetailWidget({super.key});
+  const BranchDetailWidget({
+    super.key,
+    this.branch,
+  });
+
+  final dynamic branch;
 
   static String routeName = 'BranchDetail';
   static String routePath = '/branchDetail';
@@ -159,7 +164,13 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Text(
-                                                'Bahri branch',
+                                                getJsonField(
+                                                  widget!.branch,
+                                                  r'''$.name''',
+                                                ).toString(),
+                                                textAlign: TextAlign.center,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -193,7 +204,12 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                                     .fromSTEB(
                                                         0.0, 8.0, 0.0, 0.0),
                                                 child: Text(
-                                                  'Al Mazad, Bahri · Open 7 am – 11 pm',
+                                                  valueOrDefault<String>(
+                                                    functions.branchSubtitle(
+                                                        widget!.branch),
+                                                    'Branch',
+                                                  ),
+                                                  textAlign: TextAlign.center,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -291,81 +307,25 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                                                       .fontStyle,
                                                                 ),
                                                       ),
-                                                      InkWell(
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        focusColor:
-                                                            Colors.transparent,
-                                                        hoverColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            Colors.transparent,
-                                                        onTap: () async {
-                                                          await showModalBottomSheet(
-                                                            isScrollControlled:
-                                                                true,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            enableDrag: false,
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return GestureDetector(
-                                                                onTap: () {
-                                                                  FocusScope.of(
-                                                                          context)
-                                                                      .unfocus();
-                                                                  FocusManager
-                                                                      .instance
-                                                                      .primaryFocus
-                                                                      ?.unfocus();
-                                                                },
-                                                                child: Padding(
-                                                                  padding: MediaQuery
-                                                                      .viewInsetsOf(
-                                                                          context),
-                                                                  child:
-                                                                      Container(
-                                                                    height: MediaQuery.sizeOf(context)
-                                                                            .height *
-                                                                        0.65,
-                                                                    child:
-                                                                        RoleAccessWidget(),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ).then((value) =>
-                                                              safeSetState(
-                                                                  () {}));
-                                                        },
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Text(
-                                                              'Bahri branch',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .montserrat(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primaryBackground,
-                                                                    fontSize:
-                                                                        13.0,
-                                                                    letterSpacing:
-                                                                        0.0,
+                                                      Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          Text(
+                                                            getJsonField(
+                                                              widget!.branch,
+                                                              r'''$.name''',
+                                                            ).toString(),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
@@ -374,17 +334,24 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                            ),
-                                                            Icon(
-                                                              Icons
-                                                                  .keyboard_arrow_right,
-                                                              color: Color(
-                                                                  0x72000000),
-                                                              size: 22.0,
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              width: 5.0)),
-                                                        ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryBackground,
+                                                                  fontSize:
+                                                                      13.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                          ),
+                                                        ].divide(SizedBox(
+                                                            width: 5.0)),
                                                       ),
                                                     ],
                                                   ),
@@ -443,7 +410,14 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                                             MainAxisSize.max,
                                                         children: [
                                                           Text(
-                                                            'Al Mazad, Bahri',
+                                                            valueOrDefault<
+                                                                String>(
+                                                              getJsonField(
+                                                                widget!.branch,
+                                                                r'''$.address''',
+                                                              )?.toString(),
+                                                              'Not set',
+                                                            ),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -474,13 +448,6 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                                                       .fontStyle,
                                                                 ),
                                                           ),
-                                                          Icon(
-                                                            Icons
-                                                                .keyboard_arrow_right,
-                                                            color: Color(
-                                                                0x72000000),
-                                                            size: 22.0,
-                                                          ),
                                                         ].divide(SizedBox(
                                                             width: 5.0)),
                                                       ),
@@ -492,80 +459,96 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                           ),
                                         ),
                                       ),
-                                      Container(
-                                        width: double.infinity,
-                                        height: 63.95,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              (FFMainAxisAlignment.center)
-                                                  .flutterValue,
-                                          children: [
-                                            InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        FocusScope.of(context)
-                                                            .unfocus();
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            ?.unfocus();
-                                                      },
-                                                      child: Padding(
-                                                        padding: MediaQuery
-                                                            .viewInsetsOf(
-                                                                context),
-                                                        child: Container(
-                                                          height:
-                                                              MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .height *
-                                                                  0.25,
-                                                          child:
-                                                              RemoveBranchWidget(),
+                                      if (getJsonField(
+                                            widget!.branch,
+                                            r'''$.isPrimary''',
+                                          ) !=
+                                          true)
+                                        Container(
+                                          width: double.infinity,
+                                          height: 63.95,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                          ),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                (FFMainAxisAlignment.center)
+                                                    .flutterValue,
+                                            children: [
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    enableDrag: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(context)
+                                                              .unfocus();
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
+                                                        child: Padding(
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
+                                                          child: Container(
+                                                            height: MediaQuery
+                                                                        .sizeOf(
+                                                                            context)
+                                                                    .height *
+                                                                0.25,
+                                                            child:
+                                                                RemoveBranchWidget(
+                                                              branch: widget!
+                                                                  .branch,
+                                                            ),
+                                                          ),
                                                         ),
+                                                      );
+                                                    },
+                                                  ).then((value) =>
+                                                      safeSetState(() => _model
+                                                          .removed = value));
+
+                                                  if (_model.removed == true) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          '${getJsonField(
+                                                            widget!.branch,
+                                                            r'''$.name''',
+                                                          ).toString()} removed',
+                                                          style: TextStyle(),
+                                                        ),
+                                                        duration: Duration(
+                                                            milliseconds: 4000),
                                                       ),
                                                     );
-                                                  },
-                                                ).then((value) =>
-                                                    safeSetState(() {}));
-                                              },
-                                              child: Text(
-                                                'Remove branch',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color:
-                                                              Color(0xFFFF3128),
-                                                          fontSize: 13.0,
-                                                          letterSpacing: 0.0,
+                                                    context.safePop();
+                                                  }
+                                                },
+                                                child: Text(
+                                                  'Remove branch',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontStyle:
@@ -574,11 +557,23 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
+                                                        color:
+                                                            Color(0xFFFF3128),
+                                                        fontSize: 13.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                     ].divide(SizedBox(height: 8.0)),
                                   ),
                                 ),

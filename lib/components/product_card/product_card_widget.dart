@@ -93,14 +93,31 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                   crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.only(),
-                      child: Image.network(
-                        widget!.imageUrl!,
-                        width: double.infinity,
-                        height: 130.23,
-                        fit: BoxFit.contain,
-                      ),
+                    Builder(
+                      builder: (context) {
+                        if (functions.productHasPhoto(widget!.imageUrl)) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.only(),
+                            child: Image.network(
+                              widget!.imageUrl!,
+                              width: double.infinity,
+                              height: 130.23,
+                              fit: BoxFit.contain,
+                            ),
+                          );
+                        } else {
+                          return Container(
+                            width: double.infinity,
+                            height: 130.23,
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Icon(
+                              Icons.image_outlined,
+                              color: Color(0x40000000),
+                              size: 36.0,
+                            ),
+                          );
+                        }
+                      },
                     ),
                     Padding(
                       padding:

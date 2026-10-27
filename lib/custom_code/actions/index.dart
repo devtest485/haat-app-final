@@ -48,3 +48,5 @@ export '/custom_code/actions/haat_startup_route.dart' show haatStartupRoute;
 export '/custom_code/actions/open_banner_link.dart' show openBannerLink;
 export '/custom_code/actions/open_marketplace_item.dart'
     show openMarketplaceItem;
+export '/custom_code/actions/haat_pick_product_photo.dart'
+    show haatPickProductPhoto;
