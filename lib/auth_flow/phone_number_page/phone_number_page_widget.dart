@@ -203,8 +203,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight: FontWeight.w500,
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w600,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -216,7 +216,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                       .primaryText,
                                                   fontSize: 30.0,
                                                   letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -229,7 +229,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
+                                                  font: GoogleFonts.montserrat(
                                                     fontWeight:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -241,9 +241,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                             .bodyMedium
                                                             .fontStyle,
                                                   ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
+                                                  color: Color(0xFFEBEBEB),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight:
@@ -300,9 +298,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                                     context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -429,7 +426,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                                     .labelMedium
                                                                     .override(
                                                                       font: GoogleFonts
-                                                                          .inter(
+                                                                          .montserrat(
                                                                         fontWeight: FlutterFlowTheme.of(context)
                                                                             .labelMedium
                                                                             .fontWeight,
@@ -516,7 +513,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -637,8 +634,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
+                                    font: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
@@ -649,7 +646,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                         : FlutterFlowTheme.of(context).primary,
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,

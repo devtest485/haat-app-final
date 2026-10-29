@@ -7,7 +7,6 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/instant_timer.dart';
 import '/home_screens/business_story/business_story_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
@@ -75,23 +74,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                 )!
                 .toList()
                 .cast<dynamic>();
-            _model.bannerIndex = 0;
             safeSetState(() {});
-            _model.bannerTimer?.cancel();
-            _model.bannerTimer = InstantTimer.periodic(
-              duration: Duration(milliseconds: 4000),
-              callback: (timer) async {
-                if ((_model.switchd == false) && (_model.banners.length > 1)) {
-                  await _model.pageViewController?.animateToPage(
-                    functions.bannerNextPage(
-                        _model.pageViewCurrentIndex, _model.banners.length),
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  );
-                }
-              },
-              startImmediately: false,
-            );
           }
         }),
         Future(() async {
@@ -600,31 +583,32 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           15,
                                                                       onBalanceChanged:
                                                                           () async {
-                                                                        _model.token =
+                                                                        _model.balanceToken =
                                                                             await actions.haatAccessToken();
-                                                                        _model.refreshResult = await HaatAuthGroup
+                                                                        _model.balanceTransactions = await HaatAuthGroup
                                                                             .recentTransactionsCall
                                                                             .call(
                                                                           accessToken:
-                                                                              _model.token,
+                                                                              _model.balanceToken,
                                                                           limit:
                                                                               3,
                                                                         );
 
-                                                                        if ((_model.refreshResult?.succeeded ??
+                                                                        if ((_model.balanceTransactions?.succeeded ??
                                                                             true)) {
                                                                           _model.transactions = HaatAuthGroup
                                                                               .recentTransactionsCall
                                                                               .transactions(
-                                                                                (_model.refreshResult?.jsonBody ?? ''),
+                                                                                (_model.balanceTransactions?.jsonBody ?? ''),
                                                                               )!
                                                                               .toList()
                                                                               .cast<dynamic>();
-                                                                          _model.transactionsLoaded =
-                                                                              true;
                                                                           safeSetState(
                                                                               () {});
                                                                         }
+
+                                                                        safeSetState(
+                                                                            () {});
                                                                       },
                                                                     ),
                                                                   ),
@@ -1091,125 +1075,202 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                     ],
                                                   ),
                                                   Container(
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  8.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: Builder(
-                                                        builder: (context) {
-                                                          final transactionItem =
-                                                              _model
-                                                                  .transactions
-                                                                  .toList();
-
-                                                          return ListView
-                                                              .builder(
-                                                            padding:
-                                                                EdgeInsets.zero,
-                                                            primary: false,
-                                                            shrinkWrap: true,
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            itemCount:
-                                                                transactionItem
-                                                                    .length,
-                                                            itemBuilder: (context,
-                                                                transactionItemIndex) {
-                                                              final transactionItemItem =
-                                                                  transactionItem[
-                                                                      transactionItemIndex];
-                                                              return TransactionsWidget(
-                                                                key: Key(
-                                                                    'Keyu1j_${transactionItemIndex}_of_${transactionItem.length}'),
-                                                                title: functions.transactionTitle(
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.description''',
-                                                                    ).toString(),
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.kind''',
-                                                                    ).toString()),
-                                                                subtitle: functions.transactionSubtitle(
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.description''',
-                                                                    ).toString(),
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.kind''',
-                                                                    ).toString(),
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.occurredAt''',
-                                                                    ).toString()),
-                                                                amount: functions.transactionAmount(
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.amountMinor''',
-                                                                    ).toString(),
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.currency''',
-                                                                    ).toString(),
-                                                                    getJsonField(
-                                                                      transactionItemItem,
-                                                                      r'''$.direction''',
-                                                                    ).toString()),
-                                                                incoming: functions
-                                                                    .transactionIsIncoming(
-                                                                        getJsonField(
-                                                                  transactionItemItem,
-                                                                  r'''$.direction''',
-                                                                ).toString()),
-                                                                paymentMethod:
-                                                                    getJsonField(
-                                                                  transactionItemItem,
-                                                                  r'''$.paymentMethod''',
-                                                                ).toString(),
-                                                                showDivider: functions.isNotLastItem(
-                                                                    transactionItemIndex,
-                                                                    _model
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Builder(
+                                                          builder: (context) {
+                                                            if (_model
+                                                                    .transactions
+                                                                    .length >
+                                                                0) {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child: Builder(
+                                                                  builder:
+                                                                      (context) {
+                                                                    final transactionItem = _model
                                                                         .transactions
-                                                                        .length),
+                                                                        .toList();
+
+                                                                    return ListView
+                                                                        .builder(
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .zero,
+                                                                      primary:
+                                                                          false,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      scrollDirection:
+                                                                          Axis.vertical,
+                                                                      itemCount:
+                                                                          transactionItem
+                                                                              .length,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              transactionItemIndex) {
+                                                                        final transactionItemItem =
+                                                                            transactionItem[transactionItemIndex];
+                                                                        return TransactionsWidget(
+                                                                          key: Key(
+                                                                              'Keyu1j_${transactionItemIndex}_of_${transactionItem.length}'),
+                                                                          title: functions.transactionTitle(
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.description''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.kind''',
+                                                                              ).toString()),
+                                                                          subtitle: functions.transactionSubtitle(
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.description''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.kind''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.occurredAt''',
+                                                                              ).toString()),
+                                                                          amount: functions.transactionAmount(
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.amountMinor''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.currency''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString()),
+                                                                          incoming:
+                                                                              functions.transactionIsIncoming(getJsonField(
+                                                                            transactionItemItem,
+                                                                            r'''$.direction''',
+                                                                          ).toString()),
+                                                                          paymentMethod:
+                                                                              getJsonField(
+                                                                            transactionItemItem,
+                                                                            r'''$.paymentMethod''',
+                                                                          ).toString(),
+                                                                          showDivider: functions.isNotLastItem(
+                                                                              transactionItemIndex,
+                                                                              _model.transactions.length),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                ),
                                                               );
-                                                            },
-                                                          );
-                                                        },
-                                                      ),
+                                                            } else {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            15.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child:
+                                                                    Container(
+                                                                  width: double
+                                                                      .infinity,
+                                                                  decoration:
+                                                                      BoxDecoration(),
+                                                                  child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    children: [
+                                                                      ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(),
+                                                                        child: Image
+                                                                            .asset(
+                                                                          'assets/images/Coin.png',
+                                                                          width:
+                                                                              113.4,
+                                                                          height:
+                                                                              98.87,
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                        child:
+                                                                            Text(
+                                                                          'No Transactions',
+                                                                          style: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .override(
+                                                                                font: GoogleFonts.montserrat(
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                ),
+                                                                                color: FlutterFlowTheme.of(context).primaryBackground,
+                                                                                fontSize: 15.0,
+                                                                                letterSpacing: 0.0,
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            0.0,
+                                                                            6.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                        child:
+                                                                            Text(
+                                                                          'Start by adding your first employee to keep your team information organized and up to date.',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .override(
+                                                                                font: GoogleFonts.montserrat(
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                ),
+                                                                                color: Color(0xA4000000),
+                                                                                fontSize: 12.0,
+                                                                                letterSpacing: 0.0,
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                lineHeight: 1.4,
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }
+                                                          },
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  if (!_model
-                                                      .transactionsLoaded)
-                                                    Center(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    24.0,
-                                                                    0.0,
-                                                                    24.0),
-                                                        child: SizedBox(
-                                                          width: 32.0,
-                                                          height: 32.0,
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            valueColor:
-                                                                AlwaysStoppedAnimation<
-                                                                    Color>(
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .tertiary,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
                                                   if (_model
                                                           .transactionsLoaded &&
                                                       (_model.transactions
@@ -1275,165 +1336,78 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   0.0,
                                                                   0.0,
                                                                   40.0),
-                                                      child: Stack(
-                                                        children: [
-                                                          PageView.builder(
-                                                            controller: _model
-                                                                    .pageViewController ??=
-                                                                PageController(
-                                                                    initialPage: max(
+                                                      child: PageView.builder(
+                                                        controller: _model
+                                                                .pageViewController ??=
+                                                            PageController(
+                                                                initialPage: max(
+                                                                    0,
+                                                                    min(
                                                                         0,
-                                                                        min(
-                                                                            0,
-                                                                            bannerItem.length -
-                                                                                1))),
-                                                            onPageChanged:
-                                                                (_) async {
-                                                              _model.bannerIndex =
-                                                                  _model
-                                                                      .pageViewCurrentIndex;
-                                                              safeSetState(
-                                                                  () {});
-                                                            },
-                                                            scrollDirection:
-                                                                Axis.horizontal,
-                                                            itemCount:
-                                                                bannerItem
-                                                                    .length,
-                                                            itemBuilder: (context,
-                                                                bannerItemIndex) {
-                                                              final bannerItemItem =
-                                                                  bannerItem[
-                                                                      bannerItemIndex];
-                                                              return Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                children: [
-                                                                  HomeBannerWidget(
-                                                                    key: Key(
-                                                                        'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
-                                                                    backgroundColor:
-                                                                        functions
-                                                                            .bannerBackground(getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.backgroundColor''',
-                                                                    ).toString()),
-                                                                    title:
-                                                                        getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.title''',
-                                                                    ).toString(),
-                                                                    imageUrl: functions.bannerImageUrl(
+                                                                        bannerItem.length -
+                                                                            1))),
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemCount:
+                                                            bannerItem.length,
+                                                        itemBuilder: (context,
+                                                            bannerItemIndex) {
+                                                          final bannerItemItem =
+                                                              bannerItem[
+                                                                  bannerItemIndex];
+                                                          return Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: [
+                                                              HomeBannerWidget(
+                                                                key: Key(
+                                                                    'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
+                                                                backgroundColor:
+                                                                    functions
+                                                                        .bannerBackground(
+                                                                            getJsonField(
+                                                                  bannerItemItem,
+                                                                  r'''$.backgroundColor''',
+                                                                ).toString()),
+                                                                title:
+                                                                    getJsonField(
+                                                                  bannerItemItem,
+                                                                  r'''$.title''',
+                                                                ).toString(),
+                                                                imageUrl: functions
+                                                                    .bannerImageUrl(
                                                                         getJsonField(
                                                                           bannerItemItem,
                                                                           r'''$.imagePath''',
-                                                                        ).toString(),
-                                                                        FFDevEnvironmentValues().baseURL),
-                                                                    onTap:
-                                                                        () async {
-                                                                      await actions
-                                                                          .openBannerLink(
-                                                                        context,
-                                                                        getJsonField(
-                                                                          bannerItemItem,
-                                                                          r'''$.actionUrl''',
-                                                                        ).toString(),
-                                                                        getJsonField(
-                                                                          bannerItemItem,
-                                                                          r'''$.actionRoute''',
-                                                                        ).toString(),
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            },
-                                                          ),
-                                                          Align(
-                                                            alignment:
-                                                                AlignmentDirectional(
-                                                                    -1.0, 1.0),
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          12.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          8.0),
-                                                              child: Builder(
-                                                                builder:
-                                                                    (context) {
-                                                                  final dot = functions
-                                                                      .bannerDotIndexes(
-                                                                          bannerItem
-                                                                              .length)
-                                                                      .toList();
-
-                                                                  return Row(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: List.generate(
-                                                                        dot.length,
-                                                                        (dotIndex) {
-                                                                      final dotItem =
-                                                                          dot[dotIndex];
-                                                                      return InkWell(
-                                                                        splashColor:
-                                                                            Colors.transparent,
-                                                                        focusColor:
-                                                                            Colors.transparent,
-                                                                        hoverColor:
-                                                                            Colors.transparent,
-                                                                        highlightColor:
-                                                                            Colors.transparent,
-                                                                        onTap:
-                                                                            () async {
-                                                                          await _model
-                                                                              .pageViewController
-                                                                              ?.animateToPage(
-                                                                            dotItem,
-                                                                            duration:
-                                                                                Duration(milliseconds: 500),
-                                                                            curve:
-                                                                                Curves.ease,
-                                                                          );
-                                                                        },
-                                                                        child:
-                                                                            AnimatedContainer(
-                                                                          duration:
-                                                                              Duration(milliseconds: 200),
-                                                                          curve:
-                                                                              Curves.easeInOut,
-                                                                          width:
-                                                                              6.0,
-                                                                          height:
-                                                                              6.0,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color: functions.bannerDotColor(
-                                                                                functions.bannerBackground(getJsonField(
-                                                                                  bannerItem.elementAtOrNull(_model.bannerIndex),
-                                                                                  r'''$.backgroundColor''',
-                                                                                ).toString()),
-                                                                                dotItem,
-                                                                                _model.bannerIndex),
-                                                                            shape:
-                                                                                BoxShape.circle,
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    }).divide(SizedBox(
-                                                                        width:
-                                                                            4.0)),
+                                                                        )
+                                                                            .toString(),
+                                                                        FFDevEnvironmentValues()
+                                                                            .baseURL),
+                                                                dotCount: _model
+                                                                    .banners
+                                                                    .length,
+                                                                activeIndex: _model
+                                                                    .pageViewCurrentIndex,
+                                                                onTap:
+                                                                    () async {
+                                                                  await actions
+                                                                      .openBannerLink(
+                                                                    context,
+                                                                    getJsonField(
+                                                                      bannerItemItem,
+                                                                      r'''$.actionUrl''',
+                                                                    ).toString(),
+                                                                    getJsonField(
+                                                                      bannerItemItem,
+                                                                      r'''$.actionRoute''',
+                                                                    ).toString(),
                                                                   );
                                                                 },
                                                               ),
-                                                            ),
-                                                          ),
-                                                        ],
+                                                            ],
+                                                          );
+                                                        },
                                                       ),
                                                     ),
                                                   );
@@ -1675,9 +1649,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     .of(context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500,
@@ -1709,9 +1682,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     .of(context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500,
@@ -1843,12 +1815,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .normal,
+                                                                          .w600,
                                                                   fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -1862,7 +1833,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     0.0,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .normal,
+                                                                        .w600,
                                                                 fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
@@ -1905,12 +1876,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -1925,7 +1895,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       0.0,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w500,
+                                                                          .w600,
                                                                   fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -1972,9 +1942,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
@@ -2023,11 +1992,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       children: [
                                                                         TextSpan(
                                                                           text:
-                                                                              '+30,000,82,4',
+                                                                              '+30,000',
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
-                                                                                font: GoogleFonts.inter(
+                                                                                font: GoogleFonts.montserrat(
                                                                                   fontWeight: FontWeight.w300,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 ),
@@ -2044,7 +2013,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
-                                                                                font: GoogleFonts.inter(
+                                                                                font: GoogleFonts.montserrat(
                                                                                   fontWeight: FontWeight.w300,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 ),
@@ -2061,7 +2030,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           .bodyMedium
                                                                           .override(
                                                                             font:
-                                                                                GoogleFonts.inter(
+                                                                                GoogleFonts.montserrat(
                                                                               fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                               fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                             ),
@@ -2116,7 +2085,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           Text(
                                                                             '+ 12% vs last week',
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  font: GoogleFonts.inter(
+                                                                                  font: GoogleFonts.montserrat(
                                                                                     fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                     fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                   ),
@@ -2213,10 +2182,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                 .bodyMedium
                                                                 .override(
                                                                   font: GoogleFonts
-                                                                      .roboto(
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -2231,7 +2200,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       0.0,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w500,
+                                                                          .w600,
                                                                   fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -2375,14 +2344,14 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
-                                                                                font: GoogleFonts.inter(
-                                                                                  fontWeight: FontWeight.bold,
+                                                                                font: GoogleFonts.montserrat(
+                                                                                  fontWeight: FontWeight.w600,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 ),
                                                                                 color: Color(0xFF111111),
                                                                                 fontSize: 13.0,
                                                                                 letterSpacing: 0.0,
-                                                                                fontWeight: FontWeight.bold,
+                                                                                fontWeight: FontWeight.w600,
                                                                                 fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 lineHeight: 1.54,
                                                                               ),
@@ -2450,7 +2419,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
                                                                               FontWeight.w500,
                                                                           fontStyle: FlutterFlowTheme.of(context)
@@ -2573,14 +2542,14 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
-                                                                                font: GoogleFonts.inter(
-                                                                                  fontWeight: FontWeight.bold,
+                                                                                font: GoogleFonts.montserrat(
+                                                                                  fontWeight: FontWeight.w600,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 ),
                                                                                 color: Color(0xFF111111),
                                                                                 fontSize: 13.0,
                                                                                 letterSpacing: 0.0,
-                                                                                fontWeight: FontWeight.bold,
+                                                                                fontWeight: FontWeight.w600,
                                                                                 fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 lineHeight: 1.54,
                                                                               ),
@@ -2597,7 +2566,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                         .bodyMedium
                                                                         .override(
                                                                           font:
-                                                                              GoogleFonts.inter(
+                                                                              GoogleFonts.montserrat(
                                                                             fontWeight:
                                                                                 FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                             fontStyle:
@@ -2648,7 +2617,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
                                                                               FontWeight.w500,
                                                                           fontStyle: FlutterFlowTheme.of(context)
@@ -2771,14 +2740,14 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
-                                                                                font: GoogleFonts.inter(
-                                                                                  fontWeight: FontWeight.bold,
+                                                                                font: GoogleFonts.montserrat(
+                                                                                  fontWeight: FontWeight.w600,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 ),
                                                                                 color: Color(0xFF111111),
                                                                                 fontSize: 13.0,
                                                                                 letterSpacing: 0.0,
-                                                                                fontWeight: FontWeight.bold,
+                                                                                fontWeight: FontWeight.w600,
                                                                                 fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 lineHeight: 1.54,
                                                                               ),
@@ -2795,7 +2764,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                         .bodyMedium
                                                                         .override(
                                                                           font:
-                                                                              GoogleFonts.inter(
+                                                                              GoogleFonts.montserrat(
                                                                             fontWeight:
                                                                                 FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                             fontStyle:
@@ -2845,7 +2814,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
                                                                               FontWeight.w500,
                                                                           fontStyle: FlutterFlowTheme.of(context)
@@ -2904,34 +2873,35 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                 0.0, 0.0),
                                                     child: Text(
                                                       'How was your week in minutes 🤩 ',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
                                                                       .fontStyle,
-                                                            ),
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primaryBackground,
-                                                            fontSize: 16.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBackground,
+                                                                fontSize: 16.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontStyle,
-                                                          ),
+                                                              ),
                                                     ),
                                                   ),
                                                   Padding(
@@ -3111,12 +3081,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w500,
+                                                                          .w600,
                                                                   fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -3130,7 +3099,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     0.0,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w500,
+                                                                        .w600,
                                                                 fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
@@ -3184,9 +3153,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     .of(context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500,
@@ -3234,10 +3202,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .bold,
+                                                                              .w600,
                                                                       fontStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -3249,7 +3217,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                         0.0,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .bold,
+                                                                            .w600,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -3306,9 +3274,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     .of(context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500,
@@ -3356,10 +3323,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .bold,
+                                                                              .w600,
                                                                       fontStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -3371,7 +3338,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                         0.0,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .bold,
+                                                                            .w600,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium

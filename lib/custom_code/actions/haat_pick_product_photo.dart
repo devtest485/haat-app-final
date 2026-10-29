@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart'; // Imports other custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
-
 import 'package:flutter/material.dart' hide RepeatMode;
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
@@ -13,17 +12,6 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 
-/// Lets the merchant choose a product photo — a PNG, and nothing else.
-///
-/// The server only takes a PNG of at most 512 KB and at least 300 × 300 pixels, read
-/// from the bytes. The same checks run here first, so a merchant hears why straight
-/// away rather than after the product is saved without its photo.
-///
-/// The file picker, not the image picker: the image picker re-encodes what it returns,
-/// which would turn the PNG into a JPEG.
-///
-/// Null means the merchant closed the picker or the file was refused (a message has
-/// already been shown).
 Future<FFUploadedFile?> haatPickProductPhoto(BuildContext context) async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
@@ -46,9 +34,8 @@ Future<FFUploadedFile?> haatPickProductPhoto(BuildContext context) async {
   }
 
   // The upload's type is taken from the name, so it has to end in .png.
-  final name = file.name.toLowerCase().endsWith('.png')
-      ? file.name
-      : '${file.name}.png';
+  final name =
+      file.name.toLowerCase().endsWith('.png') ? file.name : '${file.name}.png';
   return FFUploadedFile(name: name, bytes: bytes);
 }
 

@@ -14,17 +14,6 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// The search on All Transactions: a magnifier in the header that opens into a field.
-///
-/// Closed it is only the icon, right-aligned, and lets taps through everywhere else —
-/// so it can sit in a Stack over the page title. Opening grows a pill leftward from the
-/// icon across the full width, carrying the icon with it to the field's leading edge,
-/// then fades the text in and pops the close button. Closing runs it backwards and
-/// clears the query.
-///
-/// It only reports what was typed, through [onChanged]; what that matches is the
-/// page's business (`filterTransactions`). Typing is debounced so a fast typist
-/// filters once a word, not once a key.
 class TransactionSearchBar extends StatefulWidget {
   const TransactionSearchBar({
     super.key,

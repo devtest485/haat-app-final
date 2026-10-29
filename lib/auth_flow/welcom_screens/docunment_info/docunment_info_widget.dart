@@ -89,8 +89,8 @@ class _DocunmentInfoWidgetState extends State<DocunmentInfoWidget> {
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
-                                font: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w500,
+                                font: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
@@ -98,7 +98,7 @@ class _DocunmentInfoWidgetState extends State<DocunmentInfoWidget> {
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 fontSize: 24.0,
                                 letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontStyle,
@@ -113,19 +113,20 @@ class _DocunmentInfoWidgetState extends State<DocunmentInfoWidget> {
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  font: GoogleFonts.inter(
+                                  font: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.normal,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                                  color: Color(0xF2FFFFFF),
+                                  color: Color(0xFFEBEBEB),
                                   fontSize: 13.0,
                                   letterSpacing: 0.0,
                                   fontWeight: FontWeight.normal,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
+                                  lineHeight: 1.4,
                                 ),
                           ),
                         ),
@@ -161,7 +162,7 @@ class _DocunmentInfoWidgetState extends State<DocunmentInfoWidget> {
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      font: GoogleFonts.inter(
+                                      font: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
@@ -204,7 +205,7 @@ class _DocunmentInfoWidgetState extends State<DocunmentInfoWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        font: GoogleFonts.inter(
+                                        font: GoogleFonts.montserrat(
                                           fontWeight: FontWeight.w600,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)

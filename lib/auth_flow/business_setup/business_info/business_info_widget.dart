@@ -89,8 +89,8 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
-                                font: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w500,
+                                font: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
@@ -98,7 +98,7 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 fontSize: 24.0,
                                 letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontStyle,
@@ -108,12 +108,12 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Set up your business account and digital store.',
+                            'Your business account and digital store has been successfully created',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  font: GoogleFonts.inter(
+                                  font: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.normal,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -126,6 +126,7 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
+                                  lineHeight: 1.4,
                                 ),
                           ),
                         ),

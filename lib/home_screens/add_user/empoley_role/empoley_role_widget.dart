@@ -1,5 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
-import '/components/select_role_sheet/select_role_sheet_widget.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -17,7 +17,7 @@ export 'empoley_role_model.dart';
 class EmpoleyRoleWidget extends StatefulWidget {
   const EmpoleyRoleWidget({
     super.key,
-    required this.fullName,
+    this.fullName,
   });
 
   final String? fullName;
@@ -45,39 +45,49 @@ class _EmpoleyRoleWidgetState extends State<EmpoleyRoleWidget> {
       _model.branchesResult = await HaatAuthGroup.branchesCall.call(
         accessToken: _model.token,
       );
+
       _model.rolesResult = await HaatAuthGroup.rolesCall.call(
         accessToken: _model.token,
       );
 
-      if ((_model.branchesResult?.succeeded ?? true) &&
-          (_model.rolesResult?.succeeded ?? true)) {
-        _model.branches = functions
-            .activeBranches(HaatAuthGroup.branchesCall.branches(
-              (_model.branchesResult?.jsonBody ?? ''),
-            ))
-            .toList()
-            .cast<dynamic>();
-        _model.roles = functions
-            .staffRoles(HaatAuthGroup.rolesCall.roles(
-              (_model.rolesResult?.jsonBody ?? ''),
-            ))
-            .toList()
-            .cast<dynamic>();
-        _model.branchId = functions.defaultBranchId(_model.branches.toList());
-        _model.branchName =
-            functions.branchNameFor(_model.branches.toList(), _model.branchId);
-        _model.loadError = null;
+      if ((_model.branchesResult?.succeeded ?? true)) {
+        if ((_model.rolesResult?.succeeded ?? true)) {
+          _model.branches = functions
+              .activeBranches(HaatAuthGroup.branchesCall
+                  .branches(
+                    (_model.branchesResult?.jsonBody ?? ''),
+                  )
+                  ?.toList())
+              .toList()
+              .cast<dynamic>();
+          _model.roles = functions
+              .staffRoles(HaatAuthGroup.rolesCall
+                  .roles(
+                    (_model.rolesResult?.jsonBody ?? ''),
+                  )
+                  ?.toList())
+              .toList()
+              .cast<dynamic>();
+          _model.branchId = functions.defaultBranchId(_model.branches.toList());
+          _model.branchName = functions.branchNameFor(
+              _model.branches.toList(), _model.branchId);
+          _model.loadError = null;
+          safeSetState(() {});
+        } else {
+          _model.loadError = HaatAuthGroup.rolesCall
+              .message(
+                (_model.rolesResult?.jsonBody ?? ''),
+              )
+              .toString();
+          safeSetState(() {});
+        }
       } else {
-        _model.loadError = valueOrDefault<String>(
-          (_model.branchesResult?.succeeded ?? true)
-              ? HaatAuthGroup.rolesCall.message(
-                  (_model.rolesResult?.jsonBody ?? ''),
-                )
-              : HaatAuthGroup.branchesCall.message(
-                  (_model.branchesResult?.jsonBody ?? ''),
-                ),
-          'Roles and branches could not be loaded. Go back and try again.',
-        );
+        _model.loadError = HaatAuthGroup.branchesCall
+            .message(
+              (_model.branchesResult?.jsonBody ?? ''),
+            )
+            .toString();
+        safeSetState(() {});
       }
 
       _model.loaded = true;
@@ -127,316 +137,114 @@ class _EmpoleyRoleWidgetState extends State<EmpoleyRoleWidget> {
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 67.0, 0.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.29,
-                            height: 3.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderRadius: BorderRadius.circular(2.0),
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.29,
-                            height: 3.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderRadius: BorderRadius.circular(2.0),
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 0.29,
-                            height: 3.0,
-                            decoration: BoxDecoration(
-                              color: Color(0x26000000),
-                              borderRadius: BorderRadius.circular(2.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 19.0, 0.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              context.safePop();
-                            },
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              size: 24.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            0.0, 19.0, 0.0, 24.0),
+              Container(
+                decoration: BoxDecoration(),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Employee Role',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    fontSize: 30.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                            Text(
-                              'Choose a role from the available roles list.',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    fontSize: 15.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                    lineHeight: 1.4,
-                                  ),
-                            ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 8.0, 0.0, 0.0),
-                              child: Text(
-                                'Select role',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      fontSize: 13.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                            ),
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                if (!_model.loaded) {
-                                  return;
-                                }
-                                await showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  enableDrag: true,
-                                  context: context,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding: MediaQuery.viewInsetsOf(context),
-                                      child: SelectRoleSheetWidget(
-                                        roles: _model.roles,
-                                        selectedRoleId: _model.roleId,
-                                      ),
-                                    );
-                                  },
-                                ).then((value) => safeSetState(() {
-                                      if (value != null) {
-                                        _model.roleId = getJsonField(
-                                          value,
-                                          r'''$.id''',
-                                        ).toString();
-                                        _model.roleName = getJsonField(
-                                          value,
-                                          r'''$.name''',
-                                        ).toString();
-                                      }
-                                    }));
-                              },
+                                  0.0, 67.0, 0.0, 0.0),
                               child: Container(
                                 width: double.infinity,
-                                height: 52.0,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  border: Border.all(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      15.0, 0.0, 12.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          valueOrDefault<String>(
-                                            _model.roleName,
-                                            'Choose a role',
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                fontSize: 16.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.keyboard_arrow_down_rounded,
+                                decoration: BoxDecoration(),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.3,
+                                      height: 3.0,
+                                      decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .primaryBackground,
-                                        size: 24.0,
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.3,
+                                      height: 3.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.3,
+                                      height: 3.0,
+                                      decoration: BoxDecoration(
+                                        color: Color(0x26000000),
+                                        borderRadius:
+                                            BorderRadius.circular(2.0),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 15.0, 0.0, 0.0),
-                              child: Text(
-                                'Select branch',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
+                                  0.0, 19.0, 0.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.safePop();
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_back,
                                       color: FlutterFlowTheme.of(context)
                                           .primaryBackground,
-                                      fontSize: 13.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
+                                      size: 24.0,
                                     ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(12.0),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 19.0, 0.0, 0.0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Builder(
-                                      builder: (context) {
-                                        if (!_model.loaded) {
-                                          return Center(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      0.0, 24.0, 0.0, 24.0),
-                                              child: SizedBox(
-                                                width: 32.0,
-                                                height: 32.0,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                          Color>(
-                                                    FlutterFlowTheme.of(context)
-                                                        .tertiary,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        } else if (_model.loadError != null &&
-                                            _model.loadError != '') {
-                                          return Text(
-                                            _model.loadError!,
+                                    Container(
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Employee Role',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.bold,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -445,298 +253,77 @@ class _EmpoleyRoleWidgetState extends State<EmpoleyRoleWidget> {
                                                   ),
                                                   color: FlutterFlowTheme.of(
                                                           context)
-                                                      .error,
-                                                  fontSize: 13.0,
+                                                      .primaryBackground,
+                                                  fontSize: 30.0,
                                                   letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.normal,
+                                                  fontWeight: FontWeight.bold,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
                                                           .bodyMedium
                                                           .fontStyle,
                                                 ),
-                                          );
-                                        } else if (_model.branches.isEmpty) {
-                                          return Text(
-                                            'No branches yet. Add one from the HAAT dashboard.',
+                                          ),
+                                          Text(
+                                            'Enter the employee’s personal and work details to create their profile.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
+                                                  font: GoogleFonts.montserrat(
                                                     fontWeight:
-                                                        FontWeight.normal,
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontWeight,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
                                                             .bodyMedium
                                                             .fontStyle,
                                                   ),
-                                                  color: Color(0xC257636C),
-                                                  fontSize: 13.0,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  fontSize: 15.0,
                                                   letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.normal,
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
                                                           .bodyMedium
                                                           .fontStyle,
+                                                  lineHeight: 1.4,
                                                 ),
-                                          );
-                                        } else {
-                                          return Builder(
-                                            builder: (context) {
-                                              final branchItems =
-                                                  _model.branches.toList();
-
-                                              return Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: List.generate(
-                                                    branchItems.length,
-                                                    (branchItemsIndex) {
-                                                  final branchItemsItem =
-                                                      branchItems[
-                                                          branchItemsIndex];
-                                                  return InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    highlightColor:
-                                                        Colors.transparent,
-                                                    onTap: () async {
-                                                      _model.branchId =
-                                                          getJsonField(
-                                                        branchItemsItem,
-                                                        r'''$.branchId''',
-                                                      ).toString();
-                                                      _model.branchName =
-                                                          getJsonField(
-                                                        branchItemsItem,
-                                                        r'''$.name''',
-                                                      ).toString();
-                                                      safeSetState(() {});
-                                                    },
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        Container(
-                                                          width: 32.0,
-                                                          height: 32.0,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Color(
-                                                                0xFFF1F1F1),
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  0.0, 0.0),
-                                                          child: Image.asset(
-                                                            'assets/images/add_business.png',
-                                                            width: 15.0,
-                                                            height: 15.0,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                getJsonField(
-                                                                  branchItemsItem,
-                                                                  r'''$.name''',
-                                                                ).toString(),
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      font: GoogleFonts
-                                                                          .inter(
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .fontStyle,
-                                                                      ),
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primaryBackground,
-                                                                      fontSize:
-                                                                          13.0,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                              ),
-                                                              Text(
-                                                                functions
-                                                                    .branchSubtitle(
-                                                                        branchItemsItem),
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      font: GoogleFonts
-                                                                          .inter(
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .fontStyle,
-                                                                      ),
-                                                                      color: Color(
-                                                                          0xC257636C),
-                                                                      fontSize:
-                                                                          10.0,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                              ),
-                                                            ].divide(SizedBox(
-                                                                height: 2.0)),
-                                                          ),
-                                                        ),
-                                                        Builder(
-                                                          builder: (context) {
-                                                            if (getJsonField(
-                                                                  branchItemsItem,
-                                                                  r'''$.branchId''',
-                                                                ).toString() ==
-                                                                _model
-                                                                    .branchId) {
-                                                              return Container(
-                                                                width: 20.0,
-                                                                height: 20.0,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryBackground,
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                ),
-                                                                alignment:
-                                                                    AlignmentDirectional(
-                                                                        0.0,
-                                                                        0.0),
-                                                                child: Icon(
-                                                                  Icons.check,
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryText,
-                                                                  size: 12.0,
-                                                                ),
-                                                              );
-                                                            } else {
-                                                              return Container(
-                                                                width: 20.0,
-                                                                height: 20.0,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  border: Border
-                                                                      .all(
-                                                                    color: Color(
-                                                                        0x26000000),
-                                                                    width: 1.0,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            }
-                                                          },
-                                                        ),
-                                                      ].divide(SizedBox(
-                                                          width: 10.0)),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 8.0, 0.0, 0.0),
+                                            child: Text(
+                                              'Select role',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    font:
+                                                        GoogleFonts.montserrat(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontStyle,
                                                     ),
-                                                  );
-                                                }).divide(Divider(
-                                                  height: 20.0,
-                                                  thickness: 0.9,
-                                                  color: Color(0x0F000000),
-                                                )),
-                                              );
-                                            },
-                                          );
-                                        }
-                                      },
-                                    ),
-                                    Divider(
-                                      height: 20.0,
-                                      thickness: 0.9,
-                                      color: Color(0x0F000000),
-                                    ),
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Branches are added from the HAAT dashboard for now.',
-                                              style: TextStyle(),
-                                            ),
-                                            duration:
-                                                Duration(milliseconds: 3000),
-                                          ),
-                                        );
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Container(
-                                            width: 32.0,
-                                            height: 32.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFFF1F1F1),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            alignment:
-                                                AlignmentDirectional(0.0, 0.0),
-                                            child: Icon(
-                                              Icons.add,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
-                                              size: 14.0,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Add new Branch',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.inter(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    fontSize: 13.0,
+                                                    letterSpacing: 0.0,
                                                     fontWeight: FontWeight.w500,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
@@ -744,107 +331,809 @@ class _EmpoleyRoleWidgetState extends State<EmpoleyRoleWidget> {
                                                             .bodyMedium
                                                             .fontStyle,
                                                   ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  fontSize: 13.0,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
+                                            ),
                                           ),
-                                        ].divide(SizedBox(width: 10.0)),
+                                          if (_model.loaded == false)
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 8.0, 0.0, 0.0),
+                                              child: Text(
+                                                'Loading roles and branches…',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryBackground,
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          if ((_model.loaded == true) &&
+                                              !(_model.roles.isNotEmpty) &&
+                                              (_model.loadError == null ||
+                                                  _model.loadError == ''))
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 8.0, 0.0, 0.0),
+                                              child: Text(
+                                                'No roles yet. Add one in the HAAT dashboard under Roles, then come back.',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryBackground,
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          if ((_model.loadError != null &&
+                                                  _model.loadError != '') &&
+                                              (_model.loaded == true))
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 8.0, 0.0, 0.0),
+                                              child: Text(
+                                                valueOrDefault<String>(
+                                                  _model.loadError,
+                                                  'Could not load roles and branches.',
+                                                ),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .error,
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 8.0, 0.0, 0.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                borderRadius:
+                                                    BorderRadius.circular(16.0),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Container(
+                                                      decoration:
+                                                          BoxDecoration(),
+                                                      child: Builder(
+                                                        builder: (context) {
+                                                          final roleItems =
+                                                              _model.roles
+                                                                  .toList();
+
+                                                          return Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: List.generate(
+                                                                roleItems
+                                                                    .length,
+                                                                (roleItemsIndex) {
+                                                              final roleItemsItem =
+                                                                  roleItems[
+                                                                      roleItemsIndex];
+                                                              return InkWell(
+                                                                splashColor: Colors
+                                                                    .transparent,
+                                                                focusColor: Colors
+                                                                    .transparent,
+                                                                hoverColor: Colors
+                                                                    .transparent,
+                                                                highlightColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                                onTap:
+                                                                    () async {
+                                                                  _model.roleId =
+                                                                      getJsonField(
+                                                                    roleItemsItem,
+                                                                    r'''$.id''',
+                                                                  ).toString();
+                                                                  _model.roleName =
+                                                                      getJsonField(
+                                                                    roleItemsItem,
+                                                                    r'''$.name''',
+                                                                  ).toString();
+                                                                  safeSetState(
+                                                                      () {});
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  height: 53.0,
+                                                                  decoration:
+                                                                      BoxDecoration(),
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        children:
+                                                                            [
+                                                                          Container(
+                                                                            width:
+                                                                                32.0,
+                                                                            height:
+                                                                                32.0,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Color(0xFFF1F1F1),
+                                                                              shape: BoxShape.circle,
+                                                                            ),
+                                                                            alignment:
+                                                                                AlignmentDirectional(0.0, 0.0),
+                                                                            child:
+                                                                                ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(0.0),
+                                                                              child: Image.asset(
+                                                                                'assets/images/store.png',
+                                                                                width: 18.0,
+                                                                                height: 18.0,
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Column(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            mainAxisAlignment:
+                                                                                (FFMainAxisAlignment.center).flutterValue,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children:
+                                                                                [
+                                                                              Text(
+                                                                                valueOrDefault<String>(
+                                                                                  getJsonField(
+                                                                                    roleItemsItem,
+                                                                                    r'''$.name''',
+                                                                                  )?.toString(),
+                                                                                  'Role',
+                                                                                ),
+                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                      font: GoogleFonts.montserrat(
+                                                                                        fontWeight: FontWeight.w500,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                      ),
+                                                                                      color: FlutterFlowTheme.of(context).primaryBackground,
+                                                                                      fontSize: 13.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                              Text(
+                                                                                functions.roleSubtitle(roleItemsItem),
+                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                      font: GoogleFonts.montserrat(
+                                                                                        fontWeight: FontWeight.w500,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                      ),
+                                                                                      color: Color(0xC257636C),
+                                                                                      fontSize: 10.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                            ].divide(SizedBox(height: 2.0)),
+                                                                          ),
+                                                                        ].divide(SizedBox(width: 10.0)),
+                                                                      ),
+                                                                      Container(
+                                                                        width:
+                                                                            20.0,
+                                                                        height:
+                                                                            20.0,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: functions.notificationText(roleItemsItem, 'id', '') == _model.roleId
+                                                                              ? FlutterFlowTheme.of(context).primaryBackground
+                                                                              : Colors.transparent,
+                                                                          shape:
+                                                                              BoxShape.circle,
+                                                                          border:
+                                                                              Border.all(
+                                                                            color:
+                                                                                Color(0x26000000),
+                                                                            width:
+                                                                                1.0,
+                                                                          ),
+                                                                        ),
+                                                                        alignment: AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0),
+                                                                        child:
+                                                                            Visibility(
+                                                                          visible:
+                                                                              functions.notificationText(roleItemsItem, 'id', '') == _model.roleId,
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryText,
+                                                                            size:
+                                                                                12.0,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }).divide(SizedBox(
+                                                                height: 20.0)),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 12.0, 0.0, 0.0),
+                                            child: Text(
+                                              'Select branch',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    font:
+                                                        GoogleFonts.montserrat(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontStyle,
+                                                    ),
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    fontSize: 13.0,
+                                                    letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 8.0, 0.0, 0.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                borderRadius:
+                                                    BorderRadius.circular(16.0),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Container(
+                                                      decoration:
+                                                          BoxDecoration(),
+                                                      child: Builder(
+                                                        builder: (context) {
+                                                          final branchItems =
+                                                              _model.branches
+                                                                  .toList();
+
+                                                          return Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: List.generate(
+                                                                branchItems
+                                                                    .length,
+                                                                (branchItemsIndex) {
+                                                              final branchItemsItem =
+                                                                  branchItems[
+                                                                      branchItemsIndex];
+                                                              return InkWell(
+                                                                splashColor: Colors
+                                                                    .transparent,
+                                                                focusColor: Colors
+                                                                    .transparent,
+                                                                hoverColor: Colors
+                                                                    .transparent,
+                                                                highlightColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                                onTap:
+                                                                    () async {
+                                                                  _model.branchId =
+                                                                      getJsonField(
+                                                                    branchItemsItem,
+                                                                    r'''$.branchId''',
+                                                                  ).toString();
+                                                                  _model.branchName =
+                                                                      getJsonField(
+                                                                    branchItemsItem,
+                                                                    r'''$.name''',
+                                                                  ).toString();
+                                                                  safeSetState(
+                                                                      () {});
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  height: 53.0,
+                                                                  decoration:
+                                                                      BoxDecoration(),
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        children:
+                                                                            [
+                                                                          Container(
+                                                                            width:
+                                                                                32.0,
+                                                                            height:
+                                                                                32.0,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Color(0xFFF1F1F1),
+                                                                              shape: BoxShape.circle,
+                                                                            ),
+                                                                            alignment:
+                                                                                AlignmentDirectional(0.0, 0.0),
+                                                                            child:
+                                                                                ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(0.0),
+                                                                              child: Image.asset(
+                                                                                'assets/images/store.png',
+                                                                                width: 18.0,
+                                                                                height: 18.0,
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Column(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            mainAxisAlignment:
+                                                                                (FFMainAxisAlignment.center).flutterValue,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children:
+                                                                                [
+                                                                              Text(
+                                                                                getJsonField(
+                                                                                  branchItemsItem,
+                                                                                  r'''$.name''',
+                                                                                ).toString(),
+                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                      font: GoogleFonts.montserrat(
+                                                                                        fontWeight: FontWeight.w500,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                      ),
+                                                                                      color: FlutterFlowTheme.of(context).primaryBackground,
+                                                                                      fontSize: 13.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                              Text(
+                                                                                functions.branchSubtitle(branchItemsItem),
+                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                      font: GoogleFonts.montserrat(
+                                                                                        fontWeight: FontWeight.w500,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                      ),
+                                                                                      color: Color(0xC257636C),
+                                                                                      fontSize: 10.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                            ].divide(SizedBox(height: 2.0)),
+                                                                          ),
+                                                                        ].divide(SizedBox(width: 10.0)),
+                                                                      ),
+                                                                      Container(
+                                                                        width:
+                                                                            20.0,
+                                                                        height:
+                                                                            20.0,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: functions.notificationText(branchItemsItem, 'branchId', '') == _model.branchId
+                                                                              ? FlutterFlowTheme.of(context).primaryBackground
+                                                                              : Colors.transparent,
+                                                                          shape:
+                                                                              BoxShape.circle,
+                                                                          border:
+                                                                              Border.all(
+                                                                            color:
+                                                                                Color(0x26000000),
+                                                                            width:
+                                                                                1.0,
+                                                                          ),
+                                                                        ),
+                                                                        alignment: AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0),
+                                                                        child:
+                                                                            Visibility(
+                                                                          visible:
+                                                                              functions.notificationText(branchItemsItem, 'branchId', '') == _model.branchId,
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.check,
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryText,
+                                                                            size:
+                                                                                12.0,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }).divide(SizedBox(
+                                                                height: 20.0)),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Divider(
+                                                      thickness: 0.9,
+                                                      color: Color(0x0F000000),
+                                                    ),
+                                                    Container(
+                                                      height: 49.0,
+                                                      decoration:
+                                                          BoxDecoration(),
+                                                      child: InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          await actions
+                                                              .haatOpenAndWait(
+                                                            context,
+                                                            'AddBranch',
+                                                            '',
+                                                            <String, dynamic>{},
+                                                          );
+                                                          _model.apiResult02f =
+                                                              await HaatAuthGroup
+                                                                  .branchesCall
+                                                                  .call(
+                                                            accessToken:
+                                                                _model.token,
+                                                          );
+
+                                                          if ((_model
+                                                                  .apiResult02f
+                                                                  ?.succeeded ??
+                                                              true)) {
+                                                            _model.branches =
+                                                                functions
+                                                                    .activeBranches(HaatAuthGroup
+                                                                        .branchesCall
+                                                                        .branches(
+                                                                          (_model.apiResult02f?.jsonBody ??
+                                                                              ''),
+                                                                        )
+                                                                        ?.toList())
+                                                                    .toList()
+                                                                    .cast<
+                                                                        dynamic>();
+                                                            _model.branchName =
+                                                                functions.branchNameFor(
+                                                                    _model
+                                                                        .branches
+                                                                        .toList(),
+                                                                    _model
+                                                                        .branchId);
+                                                            safeSetState(() {});
+                                                            if (!(_model.branchName !=
+                                                                    null &&
+                                                                _model.branchName !=
+                                                                    '')) {
+                                                              _model.branchId =
+                                                                  functions.defaultBranchId(_model
+                                                                      .branches
+                                                                      .toList());
+                                                              _model.branchName =
+                                                                  functions.branchNameFor(
+                                                                      _model
+                                                                          .branches
+                                                                          .toList(),
+                                                                      _model
+                                                                          .branchId);
+                                                              safeSetState(
+                                                                  () {});
+                                                            }
+                                                          }
+
+                                                          safeSetState(() {});
+                                                        },
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              children: [
+                                                                Container(
+                                                                  width: 32.0,
+                                                                  height: 32.0,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Color(
+                                                                        0xFFF1F1F1),
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                  ),
+                                                                  alignment:
+                                                                      AlignmentDirectional(
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Icon(
+                                                                    Icons.add,
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primaryBackground,
+                                                                    size: 16.0,
+                                                                  ),
+                                                                ),
+                                                                Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  mainAxisAlignment:
+                                                                      (FFMainAxisAlignment
+                                                                              .center)
+                                                                          .flutterValue,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      'Add new Branch',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.montserrat(
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryBackground,
+                                                                            fontSize:
+                                                                                13.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                    ),
+                                                                  ].divide(SizedBox(
+                                                                      height:
+                                                                          2.0)),
+                                                                ),
+                                                              ].divide(SizedBox(
+                                                                  width: 10.0)),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ].divide(SizedBox(height: 9.0)),
                                       ),
                                     ),
-                                  ],
+                                  ].divide(SizedBox(height: 24.0)),
                                 ),
                               ),
                             ),
-                          ].divide(SizedBox(height: 9.0)),
+                          ],
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 35.0),
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          if ((_model.roleId != null && _model.roleId != '') &&
-                              (_model.branchId != null &&
-                                  _model.branchId != '')) {
-                            context.pushNamed(
-                              ReviewDetailsWidget.routeName,
-                              queryParameters: {
-                                'fullName': serializeParam(
-                                  widget!.fullName,
-                                  ParamType.String,
-                                ),
-                                'roleId': serializeParam(
-                                  _model.roleId,
-                                  ParamType.String,
-                                ),
-                                'roleName': serializeParam(
-                                  _model.roleName,
-                                  ParamType.String,
-                                ),
-                                'branchId': serializeParam(
-                                  _model.branchId,
-                                  ParamType.String,
-                                ),
-                                'branchName': serializeParam(
-                                  _model.branchName,
-                                  ParamType.String,
-                                ),
-                              }.withoutNulls,
-                            );
-                          }
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: 50.0,
-                          decoration: BoxDecoration(
-                            color: (_model.roleId != null &&
-                                        _model.roleId != '') &&
-                                    (_model.branchId != null &&
-                                        _model.branchId != '')
-                                ? FlutterFlowTheme.of(context).primaryBackground
-                                : Color(0xFFD9D9D9),
-                            borderRadius: BorderRadius.circular(106.67),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            'Continue',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  font: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w600,
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            15.0, 0.0, 15.0, 35.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            if ((_model.roleId != null &&
+                                    _model.roleId != '') &&
+                                (_model.branchId != null &&
+                                    _model.branchId != '')) {
+                              context.pushNamed(
+                                ReviewDetailsWidget.routeName,
+                                queryParameters: {
+                                  'fullName': serializeParam(
+                                    widget!.fullName,
+                                    ParamType.String,
+                                  ),
+                                  'roleId': serializeParam(
+                                    _model.roleId,
+                                    ParamType.String,
+                                  ),
+                                  'roleName': serializeParam(
+                                    _model.roleName,
+                                    ParamType.String,
+                                  ),
+                                  'branchId': serializeParam(
+                                    _model.branchId,
+                                    ParamType.String,
+                                  ),
+                                  'branchName': serializeParam(
+                                    _model.branchName,
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls,
+                              );
+                            }
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 50.0,
+                            decoration: BoxDecoration(
+                              color: (_model.roleId != null &&
+                                          _model.roleId != '') &&
+                                      (_model.branchId != null &&
+                                          _model.branchId != '')
+                                  ? FlutterFlowTheme.of(context)
+                                      .primaryBackground
+                                  : Color(0xFFD9D9D9),
+                              borderRadius: BorderRadius.circular(106.67),
+                            ),
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Text(
+                              'Continue',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    fontSize: 18.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.bold,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 18.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontStyle,
-                                ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

@@ -18,20 +18,24 @@ import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/wallet_api.dart';
 
-/// The home screen's balance, from the books, kept current while the screen is open.
+/// The home screen's balance, from the books, kept current while the screen
+/// is open.
 ///
-/// It was `24,580.00 SDG`, drawn into the app — the same figure on every merchant's home
-/// screen, including one who had never taken a payment. This is what the business can
-/// actually spend: the available balance across its banks.
+/// It was `24,580.00 SDG`, drawn into the app — the same figure on every
+/// merchant's home screen, including one who had never taken a payment. This
+/// is what the business can actually spend: the available balance across its
+/// banks.
 ///
-/// The app has no push channel for the books, so the wallet is read again every
-/// [refreshSeconds] and whenever the app comes back to the foreground. When the figure
-/// moves, it counts from the old balance to the new one rather than jumping, and money
-/// coming in is called out beside it for a few seconds. [onBalanceChanged] lets the page
-/// reload what depends on the balance — the last transactions under it.
+/// The app has no push channel for the books, so the wallet is read again
+/// every [refreshSeconds] and whenever the app comes back to the foreground.
+/// When the figure moves, it counts from the old balance to the new one
+/// rather than jumping. Money coming in is called out beside it for a few
+/// seconds in green (Received), and money going out in yellow (Sent).
+/// [onBalanceChanged] lets the page reload what depends on the balance — the
+/// last transactions under it.
 ///
-/// Until the figure arrives it shows a dash rather than a zero, because a zero is a
-/// balance and a dash is not yet knowing one.
+/// Until the figure arrives it shows a dash rather than a zero, because a
+/// zero is a balance and a dash is not yet knowing one.
 class WalletBalance extends StatefulWidget {
   const WalletBalance({
     super.key,
@@ -56,15 +60,22 @@ class WalletBalance extends StatefulWidget {
 
 class _WalletBalanceState extends State<WalletBalance>
     with TickerProviderStateMixin, WidgetsBindingObserver {
+  /// Paise aaye (receive) to green.
   static const _received = Color(0xFF00DA76);
+
+  /// Paise gaye (send) to yellow.
+  static const _sent = Color(0xFFFFC21A);
 
   Wallet? _wallet;
 
   /// Where the count starts from; the end is always the wallet's own figure.
   BigInt _from = BigInt.zero;
 
-  /// What came in on the last rise, for the note beside the figure.
-  BigInt? _arrived;
+  /// Amount of the last change (always positive), for the note beside the figure.
+  BigInt? _noteAmount;
+
+  /// true = received (green), false = sent (yellow).
+  bool _noteIncoming = true;
 
   Timer? _poll;
   Timer? _noteTimer;
@@ -146,15 +157,23 @@ class _WalletBalanceState extends State<WalletBalance>
         return;
       }
 
-      final rise = next.available - previous.available;
+      final change = next.available - previous.available;
+      final sameCurrency = previous.currency == next.currency;
+
+      // Pehle note ki direction set karo taake count ke dauran rang sahi ho.
+      if (sameCurrency && change != BigInt.zero) {
+        _noteIncoming = change > BigInt.zero;
+        _noteAmount = change.abs();
+      }
+
       setState(() {
         _from = _shown(previous);
         _wallet = next;
       });
       _count.forward(from: 0);
 
-      if (rise > BigInt.zero && previous.currency == next.currency) {
-        _announce(rise);
+      if (sameCurrency && change != BigInt.zero) {
+        _announce(change.abs(), incoming: change > BigInt.zero);
       }
 
       await widget.onBalanceChanged?.call();
@@ -163,9 +182,12 @@ class _WalletBalanceState extends State<WalletBalance>
     }
   }
 
-  void _announce(BigInt amount) {
+  void _announce(BigInt amount, {required bool incoming}) {
     HapticFeedback.lightImpact();
-    setState(() => _arrived = amount);
+    setState(() {
+      _noteAmount = amount;
+      _noteIncoming = incoming;
+    });
     _note.forward(from: 0);
 
     _noteTimer?.cancel();
@@ -218,10 +240,12 @@ class _WalletBalanceState extends State<WalletBalance>
       builder: (context, _) {
         final (whole, fraction) = splitMinor(_shown(wallet), wallet.currency);
 
-        // Tinted green while a rise is counting up, easing back to the usual ink.
-        final rising = _arrived != null && _count.isAnimating;
-        final color = rising
-            ? Color.lerp(_received, ink, Curves.easeIn.transform(_count.value))!
+        // Count chalte waqt rang: receive par green, send par yellow, phir
+        // dheere dheere normal ink par wapis.
+        final changing = _noteAmount != null && _count.isAnimating;
+        final tint = _noteIncoming ? _received : _sent;
+        final color = changing
+            ? Color.lerp(tint, ink, Curves.easeIn.transform(_count.value))!
             : ink;
 
         return RichText(
@@ -240,14 +264,20 @@ class _WalletBalanceState extends State<WalletBalance>
     );
   }
 
-  Widget _receivedNote(BuildContext context, Wallet? wallet) {
-    final amount = _arrived;
+  /// Balance ke bagal ka pill: Received (green, neeche-left arrow) ya
+  /// Sent (yellow, upar-right arrow).
+  Widget _changeNote(BuildContext context, Wallet? wallet) {
+    final amount = _noteAmount;
     if (wallet == null || amount == null) return const SizedBox.shrink();
 
+    final incoming = _noteIncoming;
+    final tone = incoming ? _received : _sent;
+
     final (whole, fraction) = splitMinor(amount, wallet.currency);
+    final sign = incoming ? '+' : '-';
     final label = (widget.hidden ?? false)
-        ? 'Received'
-        : '+$whole${fraction == '.00' ? '' : fraction}';
+        ? (incoming ? 'Received' : 'Sent')
+        : '$sign$whole${fraction == '.00' ? '' : fraction}';
 
     final curve = CurvedAnimation(
       parent: _note,
@@ -271,20 +301,25 @@ class _WalletBalanceState extends State<WalletBalance>
             child: Container(
               padding: const EdgeInsetsDirectional.fromSTEB(7, 4, 9, 4),
               decoration: BoxDecoration(
-                color: _received.withValues(alpha: 0.16),
+                color: tone.withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(100),
-                border: Border.all(color: _received.withValues(alpha: 0.35)),
+                border: Border.all(color: tone.withValues(alpha: 0.35)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.south_west_rounded,
-                      size: 12, color: _received),
+                  Icon(
+                    incoming
+                        ? Icons.south_west_rounded
+                        : Icons.north_east_rounded,
+                    size: 12,
+                    color: tone,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     label,
                     maxLines: 1,
-                    style: _style(context, 12, _received, FontWeight.w600),
+                    style: _style(context, 12, tone, FontWeight.w600),
                   ),
                 ],
               ),
@@ -313,7 +348,7 @@ class _WalletBalanceState extends State<WalletBalance>
               child: _figure(context, wallet),
             ),
           ),
-          _receivedNote(context, wallet),
+          _changeNote(context, wallet),
         ],
       ),
     );

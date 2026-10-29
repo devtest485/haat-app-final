@@ -21,8 +21,6 @@ List<String> staffRevokeIds(
   if (assignments.isEmpty) {
     return [];
   }
-  // No role means the person is leaving the store: every grant goes.
-  // With a role, only the old grants at the same branch are replaced.
   final branchId = assignments.first["branchId"];
   final roleId = role is Map ? role["id"] : null;
   return assignments

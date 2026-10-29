@@ -90,7 +90,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                   Text(
                     widget!.fundMode == 'transfer' ? 'Transferring' : 'Adding',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.inter(
+                          font: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w500,
                             fontStyle: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -139,7 +139,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                     TextSpan(
                       text: widget!.fundsAmount!,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w600,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -161,7 +161,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                     TextSpan(
                       text: 'SDG',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.montserrat(
                               fontWeight: FontWeight.bold,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -177,7 +177,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                     )
                   ],
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.montserrat(
                           fontWeight: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .fontWeight,
@@ -819,7 +819,8 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                       context)
                                                   .bodyMedium
                                                   .override(
-                                                    font: GoogleFonts.inter(
+                                                    font:
+                                                        GoogleFonts.montserrat(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontStyle:
@@ -847,7 +848,8 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                       context)
                                                   .bodyMedium
                                                   .override(
-                                                    font: GoogleFonts.inter(
+                                                    font:
+                                                        GoogleFonts.montserrat(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontStyle:
@@ -932,7 +934,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
+                                                  font: GoogleFonts.montserrat(
                                                     fontWeight: FontWeight.w500,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
@@ -958,7 +960,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
+                                                  font: GoogleFonts.montserrat(
                                                     fontWeight: FontWeight.w500,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
@@ -1051,7 +1053,8 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                       context)
                                                   .bodyMedium
                                                   .override(
-                                                    font: GoogleFonts.inter(
+                                                    font:
+                                                        GoogleFonts.montserrat(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontStyle:
@@ -1079,7 +1082,8 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                       context)
                                                   .bodyMedium
                                                   .override(
-                                                    font: GoogleFonts.inter(
+                                                    font:
+                                                        GoogleFonts.montserrat(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontStyle:

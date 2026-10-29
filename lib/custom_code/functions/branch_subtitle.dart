@@ -17,7 +17,8 @@ String branchSubtitle(dynamic branch) {
   }
   final address = (branch["address"] ?? "").toString().trim();
   final code = (branch["code"] ?? "").toString().trim();
-  final detail = address.isNotEmpty ? address : (code.isNotEmpty ? "Code $code" : "");
+  final detail =
+      address.isNotEmpty ? address : (code.isNotEmpty ? "Code $code" : "");
   if (branch["isPrimary"] == true) {
     return detail.isEmpty ? "Main branch" : "Main branch · $detail";
   }

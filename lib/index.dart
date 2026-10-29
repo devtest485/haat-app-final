@@ -93,13 +93,15 @@ export '/auth_flow/business_setup/setup_bisiness_location_page/setup_bisiness_lo
     show SetupBisinessLocationPageWidget;
 export '/auth_flow/business_setup/business_locate_page/business_locate_page_widget.dart'
     show BusinessLocatePageWidget;
-export '/staff/staff_widget.dart' show StaffWidget;
-export '/staff_members/staff_members_widget.dart' show StaffMembersWidget;
+export '/staff/staff/staff_widget.dart' show StaffWidget;
+export '/staff/staff_members/staff_members_widget.dart' show StaffMembersWidget;
 export '/test/test_widget.dart' show TestWidget;
-export '/products/products_widget.dart' show ProductsWidget;
-export '/success/success_widget.dart' show SuccessWidget;
-export '/add_product/add_product_widget.dart' show AddProductWidget;
+export '/product/products/products_widget.dart' show ProductsWidget;
+export '/payment_status/success/success_widget.dart' show SuccessWidget;
+export '/product/add_product/add_product_widget.dart' show AddProductWidget;
+export '/add_branch/branch_ies_list/branch_ies_list_widget.dart'
+    show BranchIesListWidget;
+export '/add_branch/branch_detail/branch_detail_widget.dart'
+    show BranchDetailWidget;
+export '/add_branch/add_branch/add_branch_widget.dart' show AddBranchWidget;
 export '/edit_product/edit_product_widget.dart' show EditProductWidget;
-export '/branch_ies_list/branch_ies_list_widget.dart' show BranchIesListWidget;
-export '/branch_detail/branch_detail_widget.dart' show BranchDetailWidget;
-export '/add_branch/add_branch_widget.dart' show AddBranchWidget;

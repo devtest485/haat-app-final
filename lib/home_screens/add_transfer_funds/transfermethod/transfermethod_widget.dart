@@ -1113,9 +1113,10 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -1128,7 +1129,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                         fontSize: 30.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1142,12 +1143,10 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
+                                                              FontWeight.w500,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -1160,10 +1159,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                         fontSize: 12.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
+                                                            FontWeight.w500,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1207,7 +1203,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                     .bodyMedium
                                                                     .override(
                                                                       font: GoogleFonts
-                                                                          .inter(
+                                                                          .montserrat(
                                                                         fontWeight:
                                                                             FontWeight.w500,
                                                                         fontStyle: FlutterFlowTheme.of(context)
@@ -1274,7 +1270,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                           .bodyMedium
                                                                           .override(
                                                                             font:
-                                                                                GoogleFonts.inter(
+                                                                                GoogleFonts.montserrat(
                                                                               fontWeight: FontWeight.w500,
                                                                               fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                             ),
@@ -1372,7 +1368,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                             hintText:
                                                                                 'Enter your phone',
                                                                             hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                                                                                  font: GoogleFonts.inter(
+                                                                                  font: GoogleFonts.montserrat(
                                                                                     fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
                                                                                     fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                                   ),
@@ -1423,7 +1419,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
-                                                                                font: GoogleFonts.inter(
+                                                                                font: GoogleFonts.montserrat(
                                                                                   fontWeight: FontWeight.w600,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 ),
@@ -1524,8 +1520,8 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w500,
+                                          font: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w600,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium
@@ -1535,7 +1531,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                               .primaryText,
                                           fontSize: 18.0,
                                           letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium

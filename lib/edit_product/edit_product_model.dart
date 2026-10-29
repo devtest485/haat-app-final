@@ -1,17 +1,14 @@
-import '/backend/api_requests/api_calls.dart';
+import '/components/delet_product_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-
 import 'dart:ui';
-
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
 import 'edit_product_widget.dart' show EditProductWidget;
-
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -22,11 +19,11 @@ class EditProductModel extends FlutterFlowModel<EditProductWidget> {
 
   bool saving = false;
 
-  String formError = '';
+  String? formError;
 
   bool outOfStock = false;
 
-  bool? deleted;
+  bool deleted = false;
 
   ///  State fields for stateful widgets in this page.
 
@@ -48,12 +45,6 @@ class EditProductModel extends FlutterFlowModel<EditProductWidget> {
   FocusNode? textFieldFocusNode4;
   TextEditingController? textController4;
   String? Function(BuildContext, String?)? textController4Validator;
-  // Stores action output result for [Custom Action - haatAccessToken] action in Container widget.
-  String? token;
-  // Stores action output result for [Backend Call - API (UpdateProduct)] action in Container widget.
-  ApiCallResponse? updateResult;
-  // Stores action output result for [Backend Call - API (UploadProductImage)] action in Container widget.
-  ApiCallResponse? uploadResult;
 
   @override
   void initState(BuildContext context) {}

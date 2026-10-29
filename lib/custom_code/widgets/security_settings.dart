@@ -17,13 +17,14 @@ import '/custom_code/auth_session.dart';
 
 /// The passcode and the fingerprint, from inside the app.
 ///
-/// Both used to be offered once, during onboarding, and nowhere after it. A merchant
-/// who tapped "Not now", or who signed in to an existing account on a new phone, had
-/// no way to turn either on — and so never saw "Login with Passcode" or the
-/// fingerprint on the sign-in screen, however long they used the app.
+/// Both used to be offered once, during onboarding, and nowhere after it. A
+/// merchant who tapped "Not now", or who signed in to an existing account on
+/// a new phone, had no way to turn either on — and so never saw "Login with
+/// Passcode" or the fingerprint on the sign-in screen, however long they used
+/// the app.
 ///
-/// Shown as a bottom sheet from the home screen, in the same style as the sign-out
-/// sheet beside it.
+/// Shown as a bottom sheet from the home screen, in the same style as the
+/// sign-out sheet beside it.
 class SecuritySettings extends StatefulWidget {
   const SecuritySettings({
     super.key,

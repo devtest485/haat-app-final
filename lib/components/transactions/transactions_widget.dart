@@ -182,7 +182,7 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                         widget!.subtitle!,
                         maxLines: 1,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.inter(
+                              font: GoogleFonts.montserrat(
                                 fontWeight: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontWeight,
@@ -209,7 +209,7 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                 Text(
                   widget!.amount!,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        font: GoogleFonts.inter(
+                        font: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,

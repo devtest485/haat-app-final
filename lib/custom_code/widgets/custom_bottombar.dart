@@ -11,6 +11,7 @@ import 'package:flutter/material.dart' hide RepeatMode;
 
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 /// Live CustomBottombar ka tab switcher. Bar khud isay initState me set karta
 /// hai aur dispose par clear kar deta hai. Widget self-contained hai — koi
@@ -121,6 +122,18 @@ class _CustomBottombarState extends State<CustomBottombar> {
     final w = widget.width;
     if (w == null || !w.isFinite || w <= 0) return null;
     return w;
+  }
+
+  /// 4th tab ka label. FlutterFlow ke `storeLabel` parameter me purani value
+  /// ("myStore" / "mystore") bhari ho to wo code ke default ko override kar
+  /// deti hai — isliye yahan khali ya purani "mystore" value ko hamesha
+  /// 'Profile' bana dete hain. Koi aur custom label ho to wahi dikhta hai.
+  String get _storeTabLabel {
+    final given = (widget.storeLabel ?? '').trim();
+    if (given.isEmpty || given.toLowerCase() == 'mystore') {
+      return 'Profile';
+    }
+    return given;
   }
 
   /// NavBar ki height — scroll ke liye bottom padding me use hoti hai
@@ -238,7 +251,7 @@ class _CustomBottombarState extends State<CustomBottombar> {
         // MediaQuery se bottom padding — system navigation bar bhi include hoti hai
         final bottomPadding = MediaQuery.of(context).padding.bottom;
         // NavBar height + system padding = total space jo scroll ke neeche chahiye.
-        // Bar ab har tab par (mystore par bhi) dikhta hai, is liye sab tabs ke
+        // Bar ab har tab par (profile par bhi) dikhta hai, is liye sab tabs ke
         // liye same padding.
         final extraBottom = _navBarTotalHeight + bottomPadding;
 
@@ -385,7 +398,7 @@ class _CustomBottombarState extends State<CustomBottombar> {
                 ),
                 _buildNavItem(
                   index: 3,
-                  label: widget.storeLabel ?? 'mystore',
+                  label: _storeTabLabel,
                   // add_business.svg went with a FlutterFlow export.
                   // add_business_white.svg is the same mark and is still
                   // bundled; useColorFilter tints it either way, so "white"
@@ -418,6 +431,8 @@ class _CustomBottombarState extends State<CustomBottombar> {
     final unselectedColor = widget.unselectedColor ?? _kUnselectedColor;
     final color = isSelected ? selectedColor : unselectedColor;
     final iconPath = isSelected ? selectedIcon : unselectedIcon;
+    final logoUrl = context.watch<FFAppState>().businessLogoUrl;
+    final showLogo = index == 3 && logoUrl.isNotEmpty;
 
     return Expanded(
       child: GestureDetector(
@@ -431,15 +446,21 @@ class _CustomBottombarState extends State<CustomBottombar> {
               width: _kIconBox,
               height: _kIconBox,
               child: Center(
-                child: _buildIcon(
-                  iconPath: iconPath,
-                  fallbackIcon: fallbackIcon,
-                  iconSize: iconSize,
-                  isSelected: isSelected,
-                  useColorFilter: useColorFilter,
-                  color: color,
-                  unselectedColor: unselectedColor,
-                ),
+                child: showLogo
+                    ? _buildBusinessLogo(
+                        url: logoUrl,
+                        isSelected: isSelected,
+                        selectedColor: selectedColor,
+                        unselectedColor: unselectedColor)
+                    : _buildIcon(
+                        iconPath: iconPath,
+                        fallbackIcon: fallbackIcon,
+                        iconSize: iconSize,
+                        isSelected: isSelected,
+                        useColorFilter: useColorFilter,
+                        color: color,
+                        unselectedColor: unselectedColor,
+                      ),
               ),
             ),
             const SizedBox(height: _kIconLabelGap),
@@ -467,6 +488,36 @@ class _CustomBottombarState extends State<CustomBottombar> {
         ),
       ),
     );
+  }
+
+  Widget _buildBusinessLogo(
+      {required String url,
+      required bool isSelected,
+      required Color selectedColor,
+      required Color unselectedColor}) {
+    final fallback = Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Image.asset('assets/images/button_company_icon.png',
+            fit: BoxFit.contain));
+    return AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        width: _kIconBox,
+        height: _kIconBox,
+        padding: const EdgeInsets.all(1.5),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+                color: isSelected ? selectedColor : unselectedColor,
+                width: isSelected ? 2.0 : 1.0)),
+        child: ClipOval(
+            child: Container(
+                color: Colors.white,
+                child: Image.network(url,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    errorBuilder: (_, __, ___) => fallback))));
   }
 
   Widget _buildIcon({

@@ -89,7 +89,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                   Text(
                     'Collect',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.inter(
+                          font: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w500,
                             fontStyle: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -140,7 +140,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                     TextSpan(
                       text: widget!.amountPay!,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w600,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -162,7 +162,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                     TextSpan(
                       text: 'SDG',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.inter(
+                            font: GoogleFonts.montserrat(
                               fontWeight: FontWeight.bold,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -260,8 +260,8 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w500,
+                                              font: GoogleFonts.montserrat(
+                                                fontWeight: FontWeight.w600,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -272,7 +272,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                                       .primaryBackground,
                                               fontSize: 15.0,
                                               letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -284,14 +284,14 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              font: GoogleFonts.inter(
+                                              font: GoogleFonts.montserrat(
                                                 fontWeight: FontWeight.w500,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color: Color(0xFFAAAAAA),
+                                              color: Color(0x66000000),
                                               fontSize: 12.0,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
@@ -372,8 +372,8 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w500,
+                                              font: GoogleFonts.montserrat(
+                                                fontWeight: FontWeight.w600,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -384,7 +384,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                                       .primaryBackground,
                                               fontSize: 15.0,
                                               letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -396,17 +396,17 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w500,
+                                              font: GoogleFonts.montserrat(
+                                                fontWeight: FontWeight.normal,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color: Color(0xFFAAAAAA),
+                                              color: Color(0x65000000),
                                               fontSize: 12.0,
                                               letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.normal,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -484,8 +484,8 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w500,
+                                              font: GoogleFonts.montserrat(
+                                                fontWeight: FontWeight.w600,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -496,7 +496,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                                       .primaryBackground,
                                               fontSize: 15.0,
                                               letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -515,7 +515,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color: Color(0xFFAAAAAA),
+                                              color: Color(0x67000000),
                                               fontSize: 12.0,
                                               letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,

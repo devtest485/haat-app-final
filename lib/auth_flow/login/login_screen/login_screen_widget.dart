@@ -105,6 +105,12 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
           height: double.infinity,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).primaryBackground,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: Image.asset(
+                'assets/images/Login_Bg.png',
+              ).image,
+            ),
           ),
           child: Stack(
             children: [
@@ -114,14 +120,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                   Container(
                     width: double.infinity,
                     height: 570.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: Image.asset(
-                          'assets/images/BG.png',
-                        ).image,
-                      ),
-                    ),
+                    decoration: BoxDecoration(),
                   ),
                 ],
               ),
@@ -152,7 +151,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w500,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -171,15 +170,15 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  font: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500,
+                                  font: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
                                   ),
                                   fontSize: 42.0,
                                   letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
@@ -193,7 +192,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontWeight,
@@ -265,8 +264,8 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .titleMedium
                                         .override(
-                                          font: GoogleFonts.interTight(
-                                            fontWeight: FontWeight.w500,
+                                          font: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w600,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .titleMedium
@@ -275,7 +274,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                                           color: Colors.white,
                                           fontSize: 18.0,
                                           letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .titleMedium
@@ -328,8 +327,8 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .titleMedium
                                           .override(
-                                            font: GoogleFonts.interTight(
-                                              fontWeight: FontWeight.w500,
+                                            font: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .titleMedium
@@ -339,7 +338,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                                                 .primaryBackground,
                                             fontSize: 18.0,
                                             letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w600,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .titleMedium

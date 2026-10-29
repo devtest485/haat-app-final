@@ -51,6 +51,10 @@ class FFAppState extends ChangeNotifier {
     _safeInit(() {
       _userPasscode = prefs.getString('ff_userPasscode') ?? _userPasscode;
     });
+    _safeInit(() {
+      _businessLogoUrl =
+          prefs.getString('ff_businessLogoUrl') ?? _businessLogoUrl;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -311,6 +315,7 @@ class FFAppState extends ChangeNotifier {
   String get businessLogoUrl => _businessLogoUrl;
   set businessLogoUrl(String value) {
     _businessLogoUrl = value;
+    prefs.setString('ff_businessLogoUrl', value);
   }
 
   /// The business's wallet number, as a value — the line it is written in is

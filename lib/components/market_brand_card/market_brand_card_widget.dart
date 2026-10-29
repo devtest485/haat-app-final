@@ -1,6 +1,7 @@
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
@@ -9,28 +10,20 @@ import 'package:provider/provider.dart';
 import 'market_brand_card_model.dart';
 export 'market_brand_card_model.dart';
 
-/// A card under "Explore Top Brands": the cover, the round logo over its edge, the
-/// name, a line of text and "Visit".
-///
-/// With no cover uploaded the top is a plain grey band; with no logo, the first letter
-/// of the name.
 class MarketBrandCardWidget extends StatefulWidget {
   const MarketBrandCardWidget({
     super.key,
-    String? name,
-    String? description,
-    String? logoUrl,
-    String? coverUrl,
-    this.onTap,
-  })  : this.name = name ?? '',
-        this.description = description ?? '',
-        this.logoUrl = logoUrl ?? '',
-        this.coverUrl = coverUrl ?? '';
+    this.name,
+    this.description,
+    this.logoUrl,
+    this.coverUrl,
+    required this.onTap,
+  });
 
-  final String name;
-  final String description;
-  final String logoUrl;
-  final String coverUrl;
+  final String? name;
+  final String? description;
+  final String? logoUrl;
+  final String? coverUrl;
   final Future Function()? onTap;
 
   @override
@@ -80,46 +73,48 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
           ),
         ),
         child: Stack(
+          alignment: AlignmentDirectional(-1.0, 0.0),
           children: [
             Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 67.55,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(4.0),
-                      topRight: Radius.circular(4.0),
-                    ),
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(4.0),
+                    topRight: Radius.circular(4.0),
                   ),
-                  child: Stack(
-                    children: [
-                      if (widget.coverUrl != '')
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(4.0),
-                            topRight: Radius.circular(4.0),
-                          ),
-                          child: Image.network(
-                            widget.coverUrl,
-                            width: double.infinity,
-                            height: 67.55,
-                            fit: BoxFit.cover,
-                          ),
+                  child: Container(
+                    width: double.infinity,
+                    height: 67.5,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4.0),
+                        topRight: Radius.circular(4.0),
+                      ),
+                    ),
+                    child: Visibility(
+                      visible:
+                          widget!.coverUrl != null && widget!.coverUrl != '',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(0.0),
+                        child: Image.network(
+                          widget!.coverUrl!,
+                          width: double.infinity,
+                          height: 67.55,
+                          fit: BoxFit.cover,
                         ),
-                    ],
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(6.0, 24.0, 5.0, 0.0),
                   child: Text(
-                    widget.name,
+                    widget!.name!,
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FontWeight.w500,
@@ -133,17 +128,17 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(6.0, 4.0, 5.0, 0.0),
-                  child: Container(
-                    height: 30.0,
-                    decoration: BoxDecoration(),
+                Container(
+                  height: 34.0,
+                  decoration: BoxDecoration(),
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(6.0, 4.0, 5.0, 0.0),
                     child: Text(
-                      widget.description,
+                      widget!.description!,
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -164,6 +159,7 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
                                 .bodyMedium
                                 .fontStyle,
                           ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
@@ -207,60 +203,73 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 46.5, 0.0, 0.0),
-              child: Container(
-                width: 42.0,
-                height: 42.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  shape: BoxShape.circle,
-                ),
-                alignment: AlignmentDirectional(0.0, 0.0),
+            Align(
+              alignment: AlignmentDirectional(-1.0, -1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 46.5, 0.0, 0.0),
                 child: Container(
-                  width: 35.0,
-                  height: 35.0,
-                  clipBehavior: Clip.antiAlias,
+                  width: 42.0,
+                  height: 42.0,
                   decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    color: FlutterFlowTheme.of(context).primaryText,
                     shape: BoxShape.circle,
                   ),
                   alignment: AlignmentDirectional(0.0, 0.0),
-                  child: Stack(
+                  child: Align(
                     alignment: AlignmentDirectional(0.0, 0.0),
-                    children: [
-                      if (widget.logoUrl == '')
-                        Text(
-                          functions.initialLetter(widget.name),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
+                    child: ClipOval(
+                      child: Container(
+                        width: 35.0,
+                        height: 35.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Stack(
+                          alignment: AlignmentDirectional(0.0, 0.0),
+                          children: [
+                            if (widget!.logoUrl != null &&
+                                widget!.logoUrl != '')
+                              Container(
+                                width: 35.0,
+                                height: 35.0,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Image.network(
+                                  widget!.logoUrl!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            if (widget!.logoUrl == null ||
+                                widget!.logoUrl == '')
+                              Text(
+                                functions.initialLetter(widget!.name)!,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w600,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      fontSize: 15.0,
+                                      letterSpacing: 0.0,
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    fontSize: 15.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
+                              ),
+                          ],
                         ),
-                      if (widget.logoUrl != '')
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(17.5),
-                          child: Image.network(
-                            widget.logoUrl,
-                            width: 35.0,
-                            height: 35.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                    ],
+                      ),
+                    ),
                   ),
                 ),
               ),

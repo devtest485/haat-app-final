@@ -1,3 +1,4 @@
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -82,167 +83,154 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
                             15.0, 0.0, 15.0, 0.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 67.0, 0.0, 0.0),
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.17,
-                                              height: 3.0,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                borderRadius:
-                                                    BorderRadius.circular(2.0),
-                                              ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    (FFMainAxisAlignment.spaceBetween)
+                                        .flutterValue,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 67.0, 0.0, 0.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.17,
+                                            height: 3.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.0),
                                             ),
-                                            Container(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.17,
-                                              height: 3.0,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                borderRadius:
-                                                    BorderRadius.circular(2.0),
-                                              ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.17,
+                                            height: 3.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.0),
                                             ),
-                                            Container(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.17,
-                                              height: 3.0,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                borderRadius:
-                                                    BorderRadius.circular(2.0),
-                                              ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.17,
+                                            height: 3.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              borderRadius:
+                                                  BorderRadius.circular(2.0),
                                             ),
-                                            Container(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.17,
-                                              height: 3.0,
-                                              decoration: BoxDecoration(
-                                                color: Color(0x4CFFFFFF),
-                                                borderRadius:
-                                                    BorderRadius.circular(2.0),
-                                              ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.17,
+                                            height: 3.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x4CFFFFFF),
+                                              borderRadius:
+                                                  BorderRadius.circular(2.0),
                                             ),
-                                            Container(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.17,
-                                              height: 3.0,
-                                              decoration: BoxDecoration(
-                                                color: Color(0x4DFFFFFF),
-                                                borderRadius:
-                                                    BorderRadius.circular(2.0),
-                                              ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.17,
+                                            height: 3.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0x4DFFFFFF),
+                                              borderRadius:
+                                                  BorderRadius.circular(2.0),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 19.0, 0.0, 0.0),
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      0.0, 10.0, 0.0, 0.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Create a password',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                            ),
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primaryText,
-                                                            fontSize: 30.0,
-                                                            letterSpacing: 0.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 19.0, 0.0, 0.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 10.0, 0.0, 0.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Create a password',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                                FontWeight.w600,
                                                             fontStyle:
                                                                 FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
-                                                    ),
-                                                    Text(
-                                                      'Please create a 6-digit passcode to use when logging in and approving actions.',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                            ),
-                                                            color: Color(
-                                                                0xF1FFFFFF),
-                                                            fontSize: 15.0,
-                                                            letterSpacing: 0.0,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 30.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    'Please create a 6-digit passcode to use when logging in and approving actions.',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FontWeight
                                                                     .normal,
@@ -251,1395 +239,1345 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontStyle,
-                                                            lineHeight: 1.3,
                                                           ),
-                                                    ),
-                                                  ].divide(
-                                                      SizedBox(height: 9.0)),
-                                                ),
+                                                          color:
+                                                              Color(0xFFEBEBEB),
+                                                          fontSize: 15.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                          lineHeight: 1.3,
+                                                        ),
+                                                  ),
+                                                ].divide(SizedBox(height: 9.0)),
                                               ),
                                             ),
-                                          ].divide(SizedBox(height: 24.0)),
-                                        ),
+                                          ),
+                                        ].divide(SizedBox(height: 24.0)),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 135.0, 0.0, 0.0),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.8,
-                                        height: 100.0,
-                                        decoration: BoxDecoration(),
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 16.0,
-                                              height: 16.0,
-                                              decoration: BoxDecoration(
-                                                color: functions.isPinDotFilled(
-                                                        _model.pinCode, 0)
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Color(0x00000000),
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xFFE7E7E7),
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 16.0,
-                                              height: 16.0,
-                                              decoration: BoxDecoration(
-                                                color: functions.isPinDotFilled(
-                                                        _model.pinCode, 1)
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Color(0x00000000),
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xFFE7E7E7),
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 16.0,
-                                              height: 16.0,
-                                              decoration: BoxDecoration(
-                                                color: functions.isPinDotFilled(
-                                                        _model.pinCode, 2)
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Color(0x00000000),
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xFFE7E7E7),
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 16.0,
-                                              height: 16.0,
-                                              decoration: BoxDecoration(
-                                                color: functions.isPinDotFilled(
-                                                        _model.pinCode, 3)
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Color(0x00000000),
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xFFE7E7E7),
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 16.0,
-                                              height: 16.0,
-                                              decoration: BoxDecoration(
-                                                color: functions.isPinDotFilled(
-                                                        _model.pinCode, 4)
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Color(0x00000000),
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xFFE7E7E7),
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 16.0,
-                                              height: 16.0,
-                                              decoration: BoxDecoration(
-                                                color: functions.isPinDotFilled(
-                                                        _model.pinCode, 5)
-                                                    ? FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText
-                                                    : Color(0x00000000),
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xFFE7E7E7),
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ].divide(SizedBox(width: 10.0)),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 50.0),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 399.3,
-                                  decoration: BoxDecoration(),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Row(
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 135.0, 0.0, 0.0),
+                                    child: Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.8,
+                                      height: 100.0,
+                                      decoration: BoxDecoration(),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '1',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '1',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '1',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '1', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSetpy7860vq =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSetpy7860vq ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSetpy7860vq!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '1',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '2',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '2',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '2',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '2', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSetqp8u6zhy =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSetqp8u6zhy ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSetqp8u6zhy!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '2',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '3',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '3',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '3',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '3', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSetcy4acqxr =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSetcy4acqxr ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSetcy4acqxr!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '3',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '4',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '4',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '4',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '4', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSetiodh71kn =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSetiodh71kn ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSetiodh71kn!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '4',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '5',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '5',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '5',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '5', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSete48eyjb4 =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSete48eyjb4 ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSete48eyjb4!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '5',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '6',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '6',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '6',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '6', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSetkxo8m5pl =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSetkxo8m5pl ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSetkxo8m5pl!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '6',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '7',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '7',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '7',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '7', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSetlxqdb44t =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSetlxqdb44t ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSetlxqdb44t!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '7',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '8',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '8',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '8',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '8', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSetttmgmox4 =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSetttmgmox4 ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSetttmgmox4!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '8',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.passcodeResult =
-                                                  functions.passcodeStepResult(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '9',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.createdPasscode =
-                                                  functions.nextCreatedPasscode(
-                                                      _model.pinCode,
-                                                      _model.createdPasscode,
-                                                      _model.reenterPin,
-                                                      '9',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.reenterPin =
-                                                  functions.nextReenterPin(
-                                                      _model.pinCode,
-                                                      _model.reenterPin,
-                                                      '9',
-                                                      6);
-                                              safeSetState(() {});
-                                              _model.pinCode =
-                                                  functions.nextPinCode(
-                                                      _model.pinCode, '9', 6);
-                                              safeSetState(() {});
-                                              if (_model.passcodeResult == 2) {
-                                                _model.passcodeSeteowv7u1j =
-                                                    await actions
-                                                        .haatSetPasscode(
-                                                  _model.createdPasscode,
-                                                );
-                                                if (_model
-                                                        .passcodeSeteowv7u1j ==
-                                                    '') {
-                                                  context.pushNamed(
-                                                      BiomatricPageWidget
-                                                          .routeName);
-
-                                                  if (_model.passcodeResult ==
-                                                      3) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                          'Passcode does not match. Please try again.',
-                                                          style: TextStyle(),
-                                                        ),
-                                                        duration: Duration(
-                                                            milliseconds: 4000),
-                                                      ),
-                                                    );
-                                                  }
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSeteowv7u1j!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
-                                                    ),
-                                                  );
-                                                  _model.pinCode = '';
-                                                  safeSetState(() {});
-                                                  _model.createdPasscode = '';
-                                                  safeSetState(() {});
-                                                  _model.reenterPin = false;
-                                                  safeSetState(() {});
-                                                }
-                                              }
-
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        15.0, 0.0, 15.0, 0.0),
-                                                child: Text(
-                                                  '9',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 32.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.center,
                                         children: [
                                           Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.526,
-                                            decoration: BoxDecoration(),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                InkWell(
-                                                  splashColor:
-                                                      Colors.transparent,
-                                                  focusColor:
-                                                      Colors.transparent,
-                                                  hoverColor:
-                                                      Colors.transparent,
-                                                  highlightColor:
-                                                      Colors.transparent,
-                                                  onTap: () async {
-                                                    _model.passcodeResult =
-                                                        functions
-                                                            .passcodeStepResult(
-                                                                _model.pinCode,
-                                                                _model
-                                                                    .createdPasscode,
-                                                                _model
-                                                                    .reenterPin,
-                                                                '0',
-                                                                6);
-                                                    safeSetState(() {});
-                                                    _model.createdPasscode =
-                                                        functions
-                                                            .nextCreatedPasscode(
-                                                                _model.pinCode,
-                                                                _model
-                                                                    .createdPasscode,
-                                                                _model
-                                                                    .reenterPin,
-                                                                '0',
-                                                                6);
-                                                    safeSetState(() {});
-                                                    _model.reenterPin =
-                                                        functions
-                                                            .nextReenterPin(
-                                                                _model.pinCode,
-                                                                _model
-                                                                    .reenterPin,
-                                                                '0',
-                                                                6);
-                                                    safeSetState(() {});
-                                                    _model.pinCode =
-                                                        functions.nextPinCode(
-                                                            _model.pinCode,
-                                                            '0',
-                                                            6);
-                                                    safeSetState(() {});
-                                                    if (_model.passcodeResult ==
-                                                        2) {
-                                                      _model.passcodeSetm6hat50e =
-                                                          await actions
-                                                              .haatSetPasscode(
-                                                        _model.createdPasscode,
-                                                      );
-                                                      if (_model
-                                                              .passcodeSetm6hat50e ==
-                                                          '') {
-                                                        context.pushNamed(
-                                                            BiomatricPageWidget
-                                                                .routeName);
+                                            width: 16.0,
+                                            height: 16.0,
+                                            decoration: BoxDecoration(
+                                              color: functions.isPinDotFilled(
+                                                      _model.pinCode, 0)
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primaryText
+                                                  : Color(0x00000000),
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Color(0xFFE7E7E7),
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 16.0,
+                                            height: 16.0,
+                                            decoration: BoxDecoration(
+                                              color: functions.isPinDotFilled(
+                                                      _model.pinCode, 1)
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primaryText
+                                                  : Color(0x00000000),
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Color(0xFFE7E7E7),
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 16.0,
+                                            height: 16.0,
+                                            decoration: BoxDecoration(
+                                              color: functions.isPinDotFilled(
+                                                      _model.pinCode, 2)
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primaryText
+                                                  : Color(0x00000000),
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Color(0xFFE7E7E7),
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 16.0,
+                                            height: 16.0,
+                                            decoration: BoxDecoration(
+                                              color: functions.isPinDotFilled(
+                                                      _model.pinCode, 3)
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primaryText
+                                                  : Color(0x00000000),
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Color(0xFFE7E7E7),
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 16.0,
+                                            height: 16.0,
+                                            decoration: BoxDecoration(
+                                              color: functions.isPinDotFilled(
+                                                      _model.pinCode, 4)
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primaryText
+                                                  : Color(0x00000000),
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Color(0xFFE7E7E7),
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 16.0,
+                                            height: 16.0,
+                                            decoration: BoxDecoration(
+                                              color: functions.isPinDotFilled(
+                                                      _model.pinCode, 5)
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primaryText
+                                                  : Color(0x00000000),
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Color(0xFFE7E7E7),
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ].divide(SizedBox(width: 10.0)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 50.0),
+                              child: Container(
+                                width: double.infinity,
+                                height: 399.3,
+                                decoration: BoxDecoration(),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      (FFMainAxisAlignment.spaceEvenly)
+                                          .flutterValue,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '1',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '1', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetpy7860vq =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetpy7860vq ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
 
-                                                        if (_model
-                                                                .passcodeResult ==
-                                                            3) {
-                                                          ScaffoldMessenger.of(
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetpy7860vq!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '1',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '2',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '2', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetqp8u6zhy =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetqp8u6zhy ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetqp8u6zhy!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '2',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '3',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '3', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetcy4acqxr =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetcy4acqxr ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetcy4acqxr!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '3',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '4',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '4', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetiodh71kn =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetiodh71kn ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetiodh71kn!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '4',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '5',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '5', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSete48eyjb4 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSete48eyjb4 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSete48eyjb4!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '5',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '6',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '6', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetkxo8m5pl =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetkxo8m5pl ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetkxo8m5pl!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '6',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '7',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '7', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetlxqdb44t =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetlxqdb44t ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetlxqdb44t!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '7',
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      font: GoogleFonts.inter(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                      color:
+                                                          FlutterFlowTheme.of(
                                                                   context)
-                                                              .showSnackBar(
-                                                            SnackBar(
-                                                              content: Text(
-                                                                'Passcode does not match. Please try again.',
-                                                                style:
-                                                                    TextStyle(),
-                                                              ),
-                                                              duration: Duration(
-                                                                  milliseconds:
-                                                                      4000),
-                                                            ),
-                                                          );
-                                                        }
-                                                      } else {
+                                                              .primaryText,
+                                                      fontSize: 32.0,
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .fontStyle,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '8',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '8', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSetttmgmox4 =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSetttmgmox4 ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSetttmgmox4!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '8',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.passcodeResult =
+                                                functions.passcodeStepResult(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.createdPasscode =
+                                                functions.nextCreatedPasscode(
+                                                    _model.pinCode,
+                                                    _model.createdPasscode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.reenterPin =
+                                                functions.nextReenterPin(
+                                                    _model.pinCode,
+                                                    _model.reenterPin,
+                                                    '9',
+                                                    6);
+                                            safeSetState(() {});
+                                            _model.pinCode =
+                                                functions.nextPinCode(
+                                                    _model.pinCode, '9', 6);
+                                            safeSetState(() {});
+                                            if (_model.passcodeResult == 2) {
+                                              _model.passcodeSeteowv7u1j =
+                                                  await actions.haatSetPasscode(
+                                                _model.createdPasscode,
+                                              );
+                                              if (_model.passcodeSeteowv7u1j ==
+                                                  '') {
+                                                context.pushNamed(
+                                                    BiomatricPageWidget
+                                                        .routeName);
+
+                                                if (_model.passcodeResult ==
+                                                    3) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Passcode does not match. Please try again.',
+                                                        style: TextStyle(),
+                                                      ),
+                                                      duration: Duration(
+                                                          milliseconds: 4000),
+                                                    ),
+                                                  );
+                                                }
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSeteowv7u1j!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                                _model.pinCode = '';
+                                                safeSetState(() {});
+                                                _model.createdPasscode = '';
+                                                safeSetState(() {});
+                                                _model.reenterPin = false;
+                                                safeSetState(() {});
+                                              }
+                                            }
+
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      15.0, 0.0, 15.0, 0.0),
+                                              child: Text(
+                                                '9',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.526,
+                                          decoration: BoxDecoration(),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  _model.passcodeResult =
+                                                      functions.passcodeStepResult(
+                                                          _model.pinCode,
+                                                          _model
+                                                              .createdPasscode,
+                                                          _model.reenterPin,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  _model.createdPasscode =
+                                                      functions
+                                                          .nextCreatedPasscode(
+                                                              _model.pinCode,
+                                                              _model
+                                                                  .createdPasscode,
+                                                              _model.reenterPin,
+                                                              '0',
+                                                              6);
+                                                  safeSetState(() {});
+                                                  _model.reenterPin =
+                                                      functions.nextReenterPin(
+                                                          _model.pinCode,
+                                                          _model.reenterPin,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  _model.pinCode =
+                                                      functions.nextPinCode(
+                                                          _model.pinCode,
+                                                          '0',
+                                                          6);
+                                                  safeSetState(() {});
+                                                  if (_model.passcodeResult ==
+                                                      2) {
+                                                    _model.passcodeSetm6hat50e =
+                                                        await actions
+                                                            .haatSetPasscode(
+                                                      _model.createdPasscode,
+                                                    );
+                                                    if (_model
+                                                            .passcodeSetm6hat50e ==
+                                                        '') {
+                                                      context.pushNamed(
+                                                          BiomatricPageWidget
+                                                              .routeName);
+
+                                                      if (_model
+                                                              .passcodeResult ==
+                                                          3) {
                                                         ScaffoldMessenger.of(
                                                                 context)
                                                             .showSnackBar(
                                                           SnackBar(
                                                             content: Text(
-                                                              _model
-                                                                  .passcodeSetm6hat50e!,
+                                                              'Passcode does not match. Please try again.',
                                                               style:
                                                                   TextStyle(),
                                                             ),
@@ -1648,54 +1586,50 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                                     4000),
                                                           ),
                                                         );
-                                                        _model.pinCode = '';
-                                                        safeSetState(() {});
-                                                        _model.createdPasscode =
-                                                            '';
-                                                        safeSetState(() {});
-                                                        _model.reenterPin =
-                                                            false;
-                                                        safeSetState(() {});
                                                       }
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                            _model
+                                                                .passcodeSetm6hat50e!,
+                                                            style: TextStyle(),
+                                                          ),
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  4000),
+                                                        ),
+                                                      );
+                                                      _model.pinCode = '';
+                                                      safeSetState(() {});
+                                                      _model.createdPasscode =
+                                                          '';
+                                                      safeSetState(() {});
+                                                      _model.reenterPin = false;
+                                                      safeSetState(() {});
                                                     }
+                                                  }
 
-                                                    safeSetState(() {});
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  15.0,
-                                                                  0.0,
-                                                                  15.0,
-                                                                  0.0),
-                                                      child: Text(
-                                                        '0',
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryText,
-                                                                  fontSize:
-                                                                      32.0,
-                                                                  letterSpacing:
-                                                                      0.0,
+                                                  safeSetState(() {});
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(15.0, 0.0,
+                                                                15.0, 0.0),
+                                                    child: Text(
+                                                      '0',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
@@ -1704,58 +1638,64 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                      ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
+                                                                fontSize: 32.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
                                                     ),
                                                   ),
                                                 ),
-                                                InkWell(
-                                                  splashColor:
-                                                      Colors.transparent,
-                                                  focusColor:
-                                                      Colors.transparent,
-                                                  hoverColor:
-                                                      Colors.transparent,
-                                                  highlightColor:
-                                                      Colors.transparent,
-                                                  onTap: () async {
-                                                    _model.pinCode = functions
-                                                        .removeLastPinDigit(
-                                                            _model.pinCode);
-                                                    safeSetState(() {});
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  15.0,
-                                                                  0.0,
-                                                                  15.0,
-                                                                  0.0),
-                                                      child: Icon(
-                                                        Icons
-                                                            .backspace_outlined,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        size: 24.0,
-                                                      ),
+                                              ),
+                                              InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  _model.pinCode = functions
+                                                      .removeLastPinDigit(
+                                                          _model.pinCode);
+                                                  safeSetState(() {});
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(15.0, 0.0,
+                                                                15.0, 0.0),
+                                                    child: Icon(
+                                                      Icons.backspace_outlined,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      size: 24.0,
                                                     ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -1943,10 +1883,10 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                                FontWeight.w600,
                                                             fontStyle:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -1959,7 +1899,7 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                           fontSize: 30.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -2199,33 +2139,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '1',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -2320,33 +2260,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '2',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -2441,33 +2381,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '3',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -2569,33 +2509,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '4',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -2690,33 +2630,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '5',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -2811,33 +2751,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '6',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -2939,33 +2879,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '7',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -3060,33 +3000,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '8',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -3181,33 +3121,33 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                       15.0, 0.0, 15.0, 0.0),
                                               child: Text(
                                                 '9',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      fontSize: 32.0,
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
+                                                          fontSize: 32.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
                                               ),
                                             ),
                                           ),
@@ -3335,34 +3275,35 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                                                                 15.0, 0.0),
                                                     child: Text(
                                                       '0',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
                                                                       .fontStyle,
-                                                            ),
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primaryText,
-                                                            fontSize: 32.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
+                                                                fontSize: 32.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
                                                                     .fontStyle,
-                                                          ),
+                                                              ),
                                                     ),
                                                   ),
                                                 ),

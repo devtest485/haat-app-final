@@ -89,7 +89,7 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                   (FFMainAxisAlignment.spaceBetween).flutterValue,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 0.0, 0.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 5.0, 0.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -104,12 +104,12 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                             children: [
                               AutoSizeText(
                                 widget!.value!,
-                                maxLines: 1,
+                                maxLines: 2,
                                 minFontSize: 16.0,
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      font: GoogleFonts.inter(
+                                      font: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.bold,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
@@ -121,7 +121,9 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
+                                      lineHeight: 1.2,
                                     ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                               if (widget!.unit != null && widget!.unit != '')
                                 Text(
@@ -155,7 +157,7 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -189,7 +191,7 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                           maxLines: 2,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontWeight,

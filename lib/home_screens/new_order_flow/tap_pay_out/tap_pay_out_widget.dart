@@ -124,7 +124,7 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              font: GoogleFonts.inter(
+                                              font: GoogleFonts.montserrat(
                                                 fontWeight: FontWeight.w500,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
@@ -189,8 +189,8 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w500,
+                                                font: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -202,7 +202,7 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                                         .primaryBackground,
                                                 fontSize: 11.0,
                                                 letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
+                                                fontWeight: FontWeight.w600,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -214,8 +214,8 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w500,
+                                                font: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -227,7 +227,7 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                                         .primaryBackground,
                                                 fontSize: 24.0,
                                                 letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
+                                                fontWeight: FontWeight.w600,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -261,7 +261,7 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
-                                                font: GoogleFonts.inter(
+                                                font: GoogleFonts.montserrat(
                                                   fontWeight: FontWeight.w500,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
@@ -281,7 +281,7 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                         ),
                                         TextSpan(
                                           text: 'SDG',
-                                          style: TextStyle(
+                                          style: GoogleFonts.montserrat(
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryBackground,
                                             fontWeight: FontWeight.w600,
@@ -320,7 +320,7 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          font: GoogleFonts.inter(
+                                          font: GoogleFonts.montserrat(
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium

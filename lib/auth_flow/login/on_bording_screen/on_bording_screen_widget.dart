@@ -95,7 +95,7 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                         style: FlutterFlowTheme.of(context)
                             .headlineMedium
                             .override(
-                              font: GoogleFonts.interTight(
+                              font: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .headlineMedium
@@ -108,7 +108,7 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                               fontStyle: FlutterFlowTheme.of(context)
                                   .headlineMedium
                                   .fontStyle,
-                              lineHeight: 1.0,
+                              lineHeight: 1.2,
                             ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -148,7 +148,7 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                           width: double.infinity,
                           height: 52.0,
                           decoration: BoxDecoration(
-                            color: Color(0x63000000),
+                            color: FlutterFlowTheme.of(context).primaryText,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 18.4,
@@ -174,16 +174,17 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                             style: FlutterFlowTheme.of(context)
                                 .titleMedium
                                 .override(
-                                  font: GoogleFonts.interTight(
-                                    fontWeight: FontWeight.w500,
+                                  font: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .titleMedium
                                         .fontStyle,
                                   ),
-                                  color: Colors.white,
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
                                   fontSize: 18.0,
                                   letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .titleMedium
                                       .fontStyle,
@@ -231,8 +232,8 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                             style: FlutterFlowTheme.of(context)
                                 .titleMedium
                                 .override(
-                                  font: GoogleFonts.interTight(
-                                    fontWeight: FontWeight.w500,
+                                  font: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .titleMedium
                                         .fontStyle,
@@ -240,7 +241,7 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                                   color: Colors.white,
                                   fontSize: 18.0,
                                   letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .titleMedium
                                       .fontStyle,

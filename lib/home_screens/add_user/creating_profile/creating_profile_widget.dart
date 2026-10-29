@@ -6,10 +6,7 @@ import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
-import '/flutter_flow/flutter_flow_animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,11 +16,11 @@ export 'creating_profile_model.dart';
 class CreatingProfileWidget extends StatefulWidget {
   const CreatingProfileWidget({
     super.key,
-    required this.fullName,
-    required this.roleId,
-    required this.roleName,
-    required this.branchId,
-    required this.branchName,
+    this.fullName,
+    this.roleId,
+    this.roleName,
+    this.branchId,
+    this.branchName,
   });
 
   final String? fullName;
@@ -39,34 +36,15 @@ class CreatingProfileWidget extends StatefulWidget {
   State<CreatingProfileWidget> createState() => _CreatingProfileWidgetState();
 }
 
-class _CreatingProfileWidgetState extends State<CreatingProfileWidget>
-    with TickerProviderStateMixin {
+class _CreatingProfileWidgetState extends State<CreatingProfileWidget> {
   late CreatingProfileModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => CreatingProfileModel());
-
-    animationsMap.addAll({
-      'progressBarOnPageLoadAnimation': AnimationInfo(
-        loop: true,
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          RotateEffect(
-            curve: Curves.linear,
-            delay: 0.0.ms,
-            duration: 1100.0.ms,
-            begin: 0.0,
-            end: 1.0,
-          ),
-        ],
-      ),
-    });
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -83,19 +61,28 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget>
 
         if ((_model.createResult?.succeeded ?? true)) {
           _model.attempt = 99;
+          safeSetState(() {});
         } else {
-          if (HaatAuthGroup.createStaffCall.errorField(
-                (_model.createResult?.jsonBody ?? ''),
-              ) ==
+          if (functions.notificationText(
+                  HaatAuthGroup.createStaffCall.staff(
+                    (_model.createResult?.jsonBody ?? ''),
+                  ),
+                  'field',
+                  '') ==
               'username') {
             _model.attempt = _model.attempt + 1;
+            safeSetState(() {});
           } else {
             _model.attempt = 99;
+            safeSetState(() {});
           }
         }
       }
       if ((_model.createResult?.succeeded ?? true)) {
-        context.pushReplacementNamed(
+        if (Navigator.of(context).canPop()) {
+          context.pop();
+        }
+        context.pushNamed(
           EmployeDetailsWidget.routeName,
           queryParameters: {
             'staff': serializeParam(
@@ -111,14 +98,16 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget>
           SnackBar(
             content: Text(
               valueOrDefault<String>(
-                HaatAuthGroup.createStaffCall.message(
-                  (_model.createResult?.jsonBody ?? ''),
-                ),
+                functions.notificationText(
+                    (_model.createResult?.jsonBody ?? ''), 'message', ''),
                 'The employee could not be added. Try again.',
               ),
-              style: TextStyle(),
+              style: TextStyle(
+                color: FlutterFlowTheme.of(context).primaryText,
+              ),
             ),
             duration: Duration(milliseconds: 4000),
+            backgroundColor: FlutterFlowTheme.of(context).secondary,
           ),
         );
         context.safePop();
@@ -177,40 +166,29 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 160.0,
-                      height: 160.0,
-                      decoration: BoxDecoration(),
-                      child: Stack(
+                      width: 150.0,
+                      height: 150.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: FlutterFlowTheme.of(context).secondary,
+                          width: 4.0,
+                        ),
+                      ),
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: Container(
+                        width: 150.0,
+                        height: 150.0,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF01C552),
+                          shape: BoxShape.circle,
+                        ),
                         alignment: AlignmentDirectional(0.0, 0.0),
-                        children: [
-                          // The track, with a rounded arc running around it while
-                          // the account is being made.
-                          CircularPercentIndicator(
-                            percent: 0.28,
-                            radius: 80.0,
-                            lineWidth: 6.0,
-                            animation: true,
-                            animateFromLastPercent: true,
-                            progressColor:
-                                FlutterFlowTheme.of(context).tertiary,
-                            backgroundColor: Color(0x1A000000),
-                            circularStrokeCap: CircularStrokeCap.round,
-                          ).animateOnPageLoad(
-                              animationsMap['progressBarOnPageLoadAnimation']!),
-                          Container(
-                            width: 140.0,
-                            height: 140.0,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF01C552),
-                              shape: BoxShape.circle,
-                            ),
-                            alignment: AlignmentDirectional(0.0, 0.0),
-                            child: Text(
-                              functions.staffInitials(widget!.fullName),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
+                        child: Text(
+                          functions.staffInitials(widget!.fullName),
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w500,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -225,20 +203,18 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget>
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                     Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+                          EdgeInsetsDirectional.fromSTEB(15.0, 15.0, 15.0, 0.0),
                       child: Text(
-                        'Creating user profile. We are generating a username\nand password...',
+                        'Creating user Profile, We are generating username and password...',
                         textAlign: TextAlign.center,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FontWeight.normal,
+                              font: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontStyle,
@@ -246,10 +222,11 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget>
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
                               letterSpacing: 0.0,
-                              fontWeight: FontWeight.normal,
+                              fontWeight: FontWeight.w500,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
+                              lineHeight: 1.4,
                             ),
                       ),
                     ),

@@ -7,7 +7,6 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/instant_timer.dart';
 import '/home_screens/business_story/business_story_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
@@ -52,8 +51,6 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
 
   int notificationsUnread = 0;
 
-  int bannerIndex = 0;
-
   List<dynamic> weekStories = [];
   void addToWeekStories(dynamic item) => weekStories.add(item);
   void removeFromWeekStories(dynamic item) => weekStories.remove(item);
@@ -63,6 +60,8 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   void updateWeekStoriesAtIndex(int index, Function(dynamic) updateFn) =>
       weekStories[index] = updateFn(weekStories[index]);
 
+  int? bannerIndex = 0;
+
   ///  State fields for stateful widgets in this component.
 
   // Stores action output result for [Custom Action - haatAccessToken] action in HomeScreen widget.
@@ -71,15 +70,16 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   ApiCallResponse? apiResultid3;
   // Stores action output result for [Backend Call - API (MarketplaceBanners)] action in HomeScreen widget.
   ApiCallResponse? apiResultxlj;
-  InstantTimer? bannerTimer;
   // Stores action output result for [Backend Call - API ( WeekStory)] action in HomeScreen widget.
   ApiCallResponse? apiResultatl;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? transactionsResult;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? apiResult1ib;
+  // Stores action output result for [Custom Action - haatAccessToken] action in WalletBalance widget.
+  String? balanceToken;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in WalletBalance widget.
-  ApiCallResponse? refreshResult;
+  ApiCallResponse? balanceTransactions;
   // State field(s) for PageView widget.
   PageController? pageViewController;
 
@@ -93,7 +93,5 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {
-    bannerTimer?.cancel();
-  }
+  void dispose() {}
 }

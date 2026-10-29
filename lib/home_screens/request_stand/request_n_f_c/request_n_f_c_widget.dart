@@ -120,15 +120,15 @@ class _RequestNFCWidgetState extends State<RequestNFCWidget> {
                 'Request Your QR and\nNFC Stand ',
                 textAlign: TextAlign.center,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.inter(
-                        fontWeight: FontWeight.w500,
+                      font: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
                       color: FlutterFlowTheme.of(context).primaryBackground,
                       fontSize: 19.0,
                       letterSpacing: 0.0,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontStyle:
                           FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                     ),
@@ -161,8 +161,8 @@ class _RequestNFCWidgetState extends State<RequestNFCWidget> {
                       child: Text(
                         'Ask me later',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              font: GoogleFonts.inter(
-                                fontWeight: FontWeight.w500,
+                              font: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontStyle,
@@ -171,7 +171,7 @@ class _RequestNFCWidgetState extends State<RequestNFCWidget> {
                                   .primaryBackground,
                               fontSize: 18.0,
                               letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
@@ -203,8 +203,8 @@ class _RequestNFCWidgetState extends State<RequestNFCWidget> {
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  font: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500,
+                                  font: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
@@ -213,7 +213,7 @@ class _RequestNFCWidgetState extends State<RequestNFCWidget> {
                                       FlutterFlowTheme.of(context).primaryText,
                                   fontSize: 18.0,
                                   letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,

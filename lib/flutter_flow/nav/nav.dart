@@ -409,16 +409,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => AddProductWidget(),
         ),
         FFRoute(
-          name: EditProductWidget.routeName,
-          path: EditProductWidget.routePath,
-          builder: (context, params) => EditProductWidget(
-            product: params.getParam(
-              'product',
-              ParamType.JSON,
-            ),
-          ),
-        ),
-        FFRoute(
           name: BranchIesListWidget.routeName,
           path: BranchIesListWidget.routePath,
           builder: (context, params) => BranchIesListWidget(),
@@ -437,6 +427,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: AddBranchWidget.routeName,
           path: AddBranchWidget.routePath,
           builder: (context, params) => AddBranchWidget(),
+        ),
+        FFRoute(
+          name: EditProductWidget.routeName,
+          path: EditProductWidget.routePath,
+          builder: (context, params) => EditProductWidget(
+            product: params.getParam(
+              'product',
+              ParamType.JSON,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

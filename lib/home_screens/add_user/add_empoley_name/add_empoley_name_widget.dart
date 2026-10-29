@@ -103,7 +103,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                   children: [
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.29,
+                                          0.3,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
@@ -114,7 +114,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.29,
+                                          0.3,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: Color(0x26000000),
@@ -124,7 +124,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.29,
+                                          0.3,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: Color(0x26000000),
@@ -182,8 +182,8 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight: FontWeight.w500,
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w600,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -195,7 +195,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                       .primaryBackground,
                                                   fontSize: 30.0,
                                                   letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -204,32 +204,23 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'Enter the employee\'s personal and work details to create their profile.',
+                                            'Enter the employee’s personal and work details to create their profile.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
+                                                  font: GoogleFonts.montserrat(
                                                     fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
+                                                        FontWeight.normal,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
                                                             .bodyMedium
                                                             .fontStyle,
                                                   ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
+                                                  color: Color(0x67000000),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
+                                                  fontWeight: FontWeight.normal,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -248,7 +239,8 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                       context)
                                                   .bodyMedium
                                                   .override(
-                                                    font: GoogleFonts.inter(
+                                                    font:
+                                                        GoogleFonts.montserrat(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontStyle:
@@ -318,7 +310,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                             '_model.usernameTextController',
                                                             Duration(
                                                                 milliseconds:
-                                                                    300),
+                                                                    2000),
                                                             () async {
                                                               _model.addEmployee =
                                                                   functions.isValidname(
@@ -373,7 +365,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                                     .labelMedium
                                                                     .override(
                                                                       font: GoogleFonts
-                                                                          .inter(
+                                                                          .montserrat(
                                                                         fontWeight: FlutterFlowTheme.of(context)
                                                                             .labelMedium
                                                                             .fontWeight,
@@ -459,9 +451,8 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
@@ -526,7 +517,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                                 EmpoleyRoleWidget.routeName,
                                 queryParameters: {
                                   'fullName': serializeParam(
-                                    _model.usernameTextController.text.trim(),
+                                    _model.usernameTextController.text,
                                     ParamType.String,
                                   ),
                                 }.withoutNulls,
@@ -549,7 +540,7 @@ class _AddEmpoleyNameWidgetState extends State<AddEmpoleyNameWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium

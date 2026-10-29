@@ -13,13 +13,6 @@ import 'package:flutter/material.dart' hide RepeatMode;
 // custom widget has to ask for.
 import 'package:provider/provider.dart';
 
-/// HAAT's green, used for the badge that says the mark can be changed.
-///
-/// Written out rather than taken from the theme: this app's `primary` is
-/// `0x4CFFFFFF` — a translucent white — and `alternate` is the same green at nine
-/// per cent, so neither reads as the brand's green.
-const _haatGreen = Color(0xFF00DA76);
-
 /// What a business looks like before it has a logo of its own.
 ///
 /// The brand's company mark, inside the same circle an uploaded logo gets, set in
@@ -27,30 +20,18 @@ const _haatGreen = Color(0xFF00DA76);
 /// white because the artwork is green on transparency — on the brand's own green it
 /// would disappear.
 Widget _defaultMark(double size) => Padding(
-      padding: EdgeInsets.all(size * 0.22),
+      padding: EdgeInsets.all(size * 0.10),
       child: Image.asset(
         'assets/images/button_company_icon.png',
         fit: BoxFit.contain,
       ),
     );
 
-/// The business's own logo, which the merchant can tap to change.
+/// The business's logo, from App State businessLogoUrl, with a storefront
+/// placeholder until there is one.
 ///
-/// This replaced two copies of a pizza shop's logo that the design had put in the
-/// corner of the home screen — a placeholder, bundled into the app and shown to every
-/// merchant as though it were theirs.
-///
-/// ## What it shows
-///
-/// The logo at `businessLogoUrl` once there is one. Until then, a storefront mark and
-/// an add badge — something that is obviously *not* a logo, so a merchant reads it as
-/// a place to put one rather than mistaking it for somebody else's.
-///
-/// ## Why it is a custom widget
-///
-/// FlutterFlow's image takes a fixed path. This needs an address that changes when the
-/// merchant uploads, a fallback when there is none, and a tap that opens the picker —
-/// three things the designed image could not do between them.
+/// Tapping it opens the picker and uploads the choice through
+/// haatPickBusinessLogo.
 class BusinessLogoAvatar extends StatefulWidget {
   const BusinessLogoAvatar({
     super.key,
@@ -112,19 +93,32 @@ class _BusinessLogoAvatarState extends State<BusinessLogoAvatar> {
   }
 
   Widget _mark(BuildContext context, String url, double size) {
+    // Logo ke ird-gird safed ring ki motai.
+    final ringWidth = size * 0.03;
+    // Badge (pencil wala circle) ka size aur uska mota black border.
+    final badgeSize = size * 0.34;
+    final badgeBorder = size * 0.03;
+
     return SizedBox(
-        width: size,
-        height: size,
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: _change,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              ClipOval(
+      width: size,
+      height: size,
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: _change,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // Logo + safed ring.
+            Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(color: Colors.white, width: ringWidth),
+              ),
+              child: ClipOval(
                 child: Container(
-                  width: size,
-                  height: size,
                   color: Colors.white,
                   child: url.isEmpty
                       ? _defaultMark(size)
@@ -138,45 +132,47 @@ class _BusinessLogoAvatarState extends State<BusinessLogoAvatar> {
                         ),
                 ),
               ),
-              if (_uploading)
-                Positioned.fill(
-                  child: ClipOval(
-                    child: Container(
-                      color: Colors.black45,
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: size * 0.4,
-                        height: size * 0.4,
-                        child: const CircularProgressIndicator(strokeWidth: 2),
-                      ),
+            ),
+            if (_uploading)
+              Positioned.fill(
+                child: ClipOval(
+                  child: Container(
+                    color: Colors.black45,
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: size * 0.4,
+                      height: size * 0.4,
+                      child: const CircularProgressIndicator(strokeWidth: 2),
                     ),
                   ),
                 ),
-              // The badge says "this can be changed" without a word of copy. Kept once
-              // a logo is set, smaller, so the way to change it stays discoverable.
-              Positioned(
-                right: -2,
-                bottom: -2,
-                child: Container(
-                  width: size * 0.34,
-                  height: size * 0.34,
-                  decoration: BoxDecoration(
-                    // White on the badge, not the theme's `primary` — which in this
-                    // app is a translucent white and left the badge a grey smudge on
-                    // whatever was behind it.
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black12, width: 1),
-                  ),
-                  child: Icon(
-                    url.isEmpty ? Icons.add : Icons.edit,
-                    size: size * 0.2,
-                    color: _haatGreen,
+              ),
+            // Badge: safed circle, mota black border, andar black pencil.
+            // Logo set hone ke baad bhi rehta hai taake badalne ka raasta nazar aaye.
+            Positioned(
+              right: -2,
+              bottom: -2,
+              child: Container(
+                width: badgeSize,
+                height: badgeSize,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.black,
+                    width: badgeBorder,
                   ),
                 ),
+                child: Icon(
+                  url.isEmpty ? Icons.add : Icons.edit,
+                  size: size * 0.2,
+                  color: Colors.black,
+                ),
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

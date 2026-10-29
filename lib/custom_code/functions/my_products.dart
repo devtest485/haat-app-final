@@ -12,8 +12,6 @@ import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
 List<dynamic> myProducts(List<dynamic>? products) {
-  // The catalogue also carries the products HAAT shares with every merchant; those
-  // belong on the Cashier, not on the list of what this business has added.
   return (products ?? [])
       .where((p) => p is Map && p["isMine"] == true)
       .toList();

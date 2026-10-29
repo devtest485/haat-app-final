@@ -204,9 +204,8 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                                     context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500,
@@ -298,7 +297,7 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                           .bodyMedium
                                                           .override(
                                                             font: GoogleFonts
-                                                                .inter(
+                                                                .montserrat(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
@@ -338,7 +337,7 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                             .bodyMedium
                                                             .override(
                                                               font: GoogleFonts
-                                                                  .inter(
+                                                                  .montserrat(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -373,7 +372,8 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontStyle:
@@ -407,8 +407,8 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -535,8 +535,8 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.bold,
+                                              font: GoogleFonts.montserrat(
+                                                fontWeight: FontWeight.w600,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -547,7 +547,7 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                       .primaryBackground,
                                               fontSize: 18.0,
                                               letterSpacing: 0.0,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium

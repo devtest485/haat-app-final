@@ -85,8 +85,6 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
             .cast<dynamic>();
         safeSetState(() {});
       }
-      _model.loaded = true;
-      safeSetState(() {});
     });
 
     _model.textController ??= TextEditingController();
@@ -160,7 +158,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
-                                            font: GoogleFonts.inter(
+                                            font: GoogleFonts.montserrat(
                                               fontWeight: FontWeight.w500,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
@@ -239,7 +237,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                     context)
                                                 .labelMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
+                                                  font: GoogleFonts.montserrat(
                                                     fontWeight: FontWeight.w500,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
@@ -304,7 +302,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
-                                                font: GoogleFonts.inter(
+                                                font: GoogleFonts.montserrat(
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -356,24 +354,6 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                if (!_model.loaded)
-                                  Center(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 24.0, 0.0, 24.0),
-                                      child: SizedBox(
-                                        width: 32.0,
-                                        height: 32.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .tertiary,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                 Container(
                                   decoration: BoxDecoration(),
                                   child: Visibility(
@@ -405,9 +385,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -419,7 +400,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                             .primaryBackground,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -461,8 +442,8 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontStyle:
@@ -611,10 +592,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                                FontWeight.w600,
                                                             fontStyle:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -626,7 +607,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                               .primaryBackground,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -716,9 +697,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
-                                                                              FontWeight.w500,
+                                                                              FontWeight.w600,
                                                                           fontStyle: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontStyle,
@@ -728,7 +709,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         letterSpacing:
                                                                             0.0,
                                                                         fontWeight:
-                                                                            FontWeight.w500,
+                                                                            FontWeight.w600,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .bodyMedium
                                                                             .fontStyle,
@@ -797,9 +778,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
-                                                                              FontWeight.w500,
+                                                                              FontWeight.w600,
                                                                           fontStyle: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontStyle,
@@ -809,7 +790,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         letterSpacing:
                                                                             0.0,
                                                                         fontWeight:
-                                                                            FontWeight.w500,
+                                                                            FontWeight.w600,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .bodyMedium
                                                                             .fontStyle,
@@ -892,9 +873,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
-                                                                              FontWeight.w500,
+                                                                              FontWeight.w600,
                                                                           fontStyle: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontStyle,
@@ -904,7 +885,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         letterSpacing:
                                                                             0.0,
                                                                         fontWeight:
-                                                                            FontWeight.w500,
+                                                                            FontWeight.w600,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .bodyMedium
                                                                             .fontStyle,
@@ -973,9 +954,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
-                                                                              FontWeight.w500,
+                                                                              FontWeight.w600,
                                                                           fontStyle: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontStyle,
@@ -985,7 +966,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         letterSpacing:
                                                                             0.0,
                                                                         fontWeight:
-                                                                            FontWeight.w500,
+                                                                            FontWeight.w600,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .bodyMedium
                                                                             .fontStyle,
@@ -1069,9 +1050,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
-                                                                              FontWeight.w500,
+                                                                              FontWeight.w600,
                                                                           fontStyle: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontStyle,
@@ -1081,7 +1062,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         letterSpacing:
                                                                             0.0,
                                                                         fontWeight:
-                                                                            FontWeight.w500,
+                                                                            FontWeight.w600,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .bodyMedium
                                                                             .fontStyle,
@@ -1150,9 +1131,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight:
-                                                                              FontWeight.w500,
+                                                                              FontWeight.w600,
                                                                           fontStyle: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontStyle,
@@ -1162,7 +1143,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         letterSpacing:
                                                                             0.0,
                                                                         fontWeight:
-                                                                            FontWeight.w500,
+                                                                            FontWeight.w600,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .bodyMedium
                                                                             .fontStyle,
@@ -1225,10 +1206,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
-                                                                FontWeight.w500,
+                                                                FontWeight.w600,
                                                             fontStyle:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -1240,7 +1221,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                               .primaryBackground,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -1279,7 +1260,8 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontStyle:
@@ -1385,10 +1367,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .w500,
+                                                                              .w600,
                                                                       fontStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -1401,7 +1383,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         0.0,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -1424,7 +1406,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -1472,7 +1454,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontWeight,
@@ -1631,10 +1613,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .w500,
+                                                                              .w600,
                                                                       fontStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -1647,7 +1629,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         0.0,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -1670,7 +1652,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -1718,7 +1700,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontWeight,
@@ -1877,10 +1859,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .w500,
+                                                                              .w600,
                                                                       fontStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -1893,7 +1875,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                         0.0,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w500,
+                                                                            .w600,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -1916,7 +1898,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -1964,7 +1946,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                       .bodyMedium
                                                                       .override(
                                                                         font: GoogleFonts
-                                                                            .inter(
+                                                                            .montserrat(
                                                                           fontWeight: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .fontWeight,

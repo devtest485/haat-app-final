@@ -208,8 +208,8 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight: FontWeight.w500,
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w600,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -221,7 +221,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                       .primaryText,
                                                   fontSize: 30.0,
                                                   letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -234,7 +234,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
+                                                  font: GoogleFonts.montserrat(
                                                     fontWeight:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -246,7 +246,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                             .bodyMedium
                                                             .fontStyle,
                                                   ),
-                                                  color: Color(0xF2FFFFFF),
+                                                  color: Color(0xFFEBEBEB),
                                                   fontSize: 15.0,
                                                   letterSpacing: 0.0,
                                                   fontWeight:
@@ -433,7 +433,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                                   .bodyMedium
                                                                   .override(
                                                                     font: GoogleFonts
-                                                                        .inter(
+                                                                        .montserrat(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w500,
@@ -480,7 +480,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                           if (!(_model.availability == ''))
                                             Text(
                                               _model.availability!,
-                                              style: TextStyle(
+                                              style: GoogleFonts.montserrat(
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .error,
@@ -547,7 +547,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
+                                    font: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium

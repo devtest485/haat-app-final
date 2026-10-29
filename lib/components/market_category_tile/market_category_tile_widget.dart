@@ -1,6 +1,7 @@
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,23 +9,18 @@ import 'package:provider/provider.dart';
 import 'market_category_tile_model.dart';
 export 'market_category_tile_model.dart';
 
-/// A tile under "Categories" on the Marketplace tab.
-///
-/// The icon follows the category's key — `for_you`, `telecom`, `utilities` and the rest
-/// the back office files billers under; an unknown key gets the star.
 class MarketCategoryTileWidget extends StatefulWidget {
   const MarketCategoryTileWidget({
     super.key,
     String? categoryKey,
-    String? label,
+    this.label,
     double? width,
     this.onTap,
   })  : this.categoryKey = categoryKey ?? 'for_you',
-        this.label = label ?? '',
         this.width = width ?? 160.0;
 
   final String categoryKey;
-  final String label;
+  final String? label;
   final double width;
   final Future Function()? onTap;
 
@@ -66,7 +62,7 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
         await widget.onTap?.call();
       },
       child: Container(
-        width: widget.width,
+        width: widget!.width,
         height: 50.0,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -76,70 +72,71 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
           padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: (FFMainAxisAlignment.start).flutterValue,
             children: [
-              if (widget.categoryKey == 'telecom')
+              if (widget!.categoryKey == 'telecom')
                 Icon(
                   Icons.cell_tower_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'utilities')
+              if (widget!.categoryKey == 'utilities')
                 Icon(
                   Icons.bolt_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'government')
+              if (widget!.categoryKey == 'government')
                 Icon(
                   Icons.account_balance_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'travel')
+              if (widget!.categoryKey == 'travel')
                 Icon(
                   Icons.directions_car_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'education')
+              if (widget!.categoryKey == 'education')
                 Icon(
                   Icons.school_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'gift_cards')
+              if (widget!.categoryKey == 'gift_cards')
                 Icon(
                   Icons.card_giftcard_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'esim')
+              if (widget!.categoryKey == 'esim')
                 Icon(
                   Icons.sim_card_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'shopping')
+              if (widget!.categoryKey == 'shopping')
                 Icon(
                   Icons.shopping_bag_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if (widget.categoryKey == 'international')
+              if (widget!.categoryKey == 'international')
                 Icon(
                   Icons.public_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
                   size: 19.0,
                 ),
-              if ((widget.categoryKey != 'telecom') &&
-                  (widget.categoryKey != 'utilities') &&
-                  (widget.categoryKey != 'government') &&
-                  (widget.categoryKey != 'travel') &&
-                  (widget.categoryKey != 'education') &&
-                  (widget.categoryKey != 'gift_cards') &&
-                  (widget.categoryKey != 'esim') &&
-                  (widget.categoryKey != 'shopping') &&
-                  (widget.categoryKey != 'international'))
+              if ((widget!.categoryKey != 'telecom') &&
+                  (widget!.categoryKey != 'utilities') &&
+                  (widget!.categoryKey != 'government') &&
+                  ((widget!.categoryKey != 'travel') &&
+                      (widget!.categoryKey != 'education') &&
+                      (widget!.categoryKey != 'gift_cards') &&
+                      ((widget!.categoryKey != 'esim') &&
+                          (widget!.categoryKey != 'shopping') &&
+                          (widget!.categoryKey != 'international'))))
                 Icon(
                   Icons.star_border,
                   color: FlutterFlowTheme.of(context).primaryBackground,
@@ -147,9 +144,8 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
                 ),
               Expanded(
                 child: Text(
-                  widget.label,
+                  widget!.label!,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
@@ -162,6 +158,7 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ].divide(SizedBox(width: 12.0)),

@@ -12,11 +12,11 @@ export 'review_details_model.dart';
 class ReviewDetailsWidget extends StatefulWidget {
   const ReviewDetailsWidget({
     super.key,
-    required this.fullName,
-    required this.roleId,
-    required this.roleName,
-    required this.branchId,
-    required this.branchName,
+    this.fullName,
+    this.roleId,
+    this.roleName,
+    this.branchId,
+    this.branchName,
   });
 
   final String? fullName;
@@ -111,7 +111,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                   children: [
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.29,
+                                          0.3,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
@@ -122,7 +122,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.29,
+                                          0.3,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
@@ -133,7 +133,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                     ),
                                     Container(
                                       width: MediaQuery.sizeOf(context).width *
-                                          0.29,
+                                          0.3,
                                       height: 3.0,
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
@@ -192,8 +192,8 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight: FontWeight.w500,
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.bold,
                                                     fontStyle:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -205,7 +205,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                       .primaryBackground,
                                                   fontSize: 30.0,
                                                   letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontWeight: FontWeight.bold,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -256,9 +256,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -271,7 +272,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                         fontSize: 15.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -292,8 +293,8 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -352,9 +353,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -367,7 +369,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                         fontSize: 15.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -388,8 +390,8 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -448,9 +450,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -463,7 +466,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                         fontSize: 15.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -484,8 +487,8 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -544,9 +547,10 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
-                                                              FontWeight.w500,
+                                                              FontWeight.w600,
                                                           fontStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -559,7 +563,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                         fontSize: 15.0,
                                                         letterSpacing: 0.0,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                         fontStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -573,15 +577,14 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
                                                     dateTimeFormat(
-                                                      "d/M/y · h:mm a",
-                                                      getCurrentTimestamp,
-                                                    ),
+                                                        "d/M/y · h:mm a",
+                                                        getCurrentTimestamp),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -672,8 +675,8 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w600,
+                                    font: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.bold,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
@@ -682,7 +685,7 @@ class _ReviewDetailsWidgetState extends State<ReviewDetailsWidget> {
                                         .primaryText,
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.bold,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,

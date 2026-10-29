@@ -706,24 +706,26 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
                                       child: Builder(
                                         builder: (context) {
                                           if (_model.productsLoaded == false) {
-                                            return Center(
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 24.0, 0.0, 24.0),
-                                                child: SizedBox(
-                                                  width: 32.0,
-                                                  height: 32.0,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    valueColor:
-                                                        AlwaysStoppedAnimation<
-                                                            Color>(
+                                            return Align(
+                                              alignment: AlignmentDirectional(
+                                                  0.0, 0.0),
+                                              child: Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(),
+                                                child: CircularPercentIndicator(
+                                                  percent: 0.75,
+                                                  radius: 14.0,
+                                                  lineWidth: 2.5,
+                                                  animation: true,
+                                                  animateFromLastPercent: true,
+                                                  progressColor:
                                                       FlutterFlowTheme.of(
                                                               context)
-                                                          .tertiary,
-                                                    ),
-                                                  ),
+                                                          .primaryBackground,
+                                                  backgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .accent4,
                                                 ),
                                               ),
                                             );
@@ -962,20 +964,29 @@ class _AddAmountPageWidgetState extends State<AddAmountPageWidget> {
                                                                 ).toString()),
                                                         onTap: () async {
                                                           if (getJsonField(
-                                                                productItemItem,
-                                                                r'''$.outOfStock''',
-                                                              ) ==
-                                                              true) {
+                                                            productItemItem,
+                                                            r'''$.outOfStock''',
+                                                          )) {
                                                             ScaffoldMessenger
                                                                     .of(context)
                                                                 .showSnackBar(
                                                               SnackBar(
                                                                 content: Text(
-                                                                  '${getJsonField(productItemItem, r'''$.name''').toString()} is out of stock. Change its quantity in Products to sell it again.',
+                                                                  '${functions.notificationText(productItemItem, 'name', '')} is out of stock. Change its quantity in Products to sell it again.',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primaryText,
+                                                                  ),
                                                                 ),
                                                                 duration: Duration(
                                                                     milliseconds:
                                                                         4000),
+                                                                backgroundColor:
+                                                                    FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .secondary,
                                                               ),
                                                             );
                                                             return;

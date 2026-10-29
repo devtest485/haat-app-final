@@ -13,4 +13,5 @@ import '/custom_code/auth_session.dart';
 /// Ends the session and clears the keystore.
 Future<void> haatSignOut() async {
   await AuthSession.instance.signOut();
+  FFAppState().update(() => FFAppState().businessLogoUrl = '');
 }

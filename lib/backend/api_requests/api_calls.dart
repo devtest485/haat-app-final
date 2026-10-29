@@ -25,7 +25,7 @@ class HaatAuthGroup {
   }
 
   static Map<String, String> headers = {
-    'Authorization': 'Bearer [auth_token]',
+    'Authorization': 'Bearer [accessToken]',
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'Accept-Language': '[language]',
@@ -102,7 +102,7 @@ ${body}''';
       apiUrl: '${baseUrl}/auth/register',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -192,7 +192,7 @@ class ResendOtpCall {
       apiUrl: '${baseUrl}/auth/resend-otp',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -287,7 +287,7 @@ class VerifyOtpCall {
       apiUrl: '${baseUrl}/auth/verify-otp',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -388,7 +388,7 @@ class SignInCall {
       apiUrl: '${baseUrl}/auth/sign-in',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -493,7 +493,7 @@ class VerifyMfaCall {
       apiUrl: '${baseUrl}/auth/mfa/verify',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -590,7 +590,7 @@ class BiometricChallengeCall {
       apiUrl: '${baseUrl}/auth/biometric/challenge',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -664,7 +664,7 @@ class BiometricVerifyCall {
       apiUrl: '${baseUrl}/auth/biometric/verify',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -761,7 +761,7 @@ class RefreshTokenCall {
       apiUrl: '${baseUrl}/auth/refresh',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -842,11 +842,10 @@ class SetPasswordCall {
       apiUrl: '${baseUrl}/auth/password',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -920,11 +919,10 @@ class SetPasscodeCall {
       apiUrl: '${baseUrl}/auth/passcode',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -992,11 +990,10 @@ class CheckUsernameCall {
       apiUrl: '${baseUrl}/auth/username/available?username=${username}',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1081,11 +1078,10 @@ class ClaimUsernameCall {
       apiUrl: '${baseUrl}/auth/username',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -1152,11 +1148,10 @@ class CredentialStatusCall {
       apiUrl: '${baseUrl}/auth/credentials',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1252,11 +1247,10 @@ class SignInWithPasscodeCall {
       apiUrl: '${baseUrl}/auth/passcode/verify',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -1352,11 +1346,10 @@ class LogoutCall {
       apiUrl: '${baseUrl}/auth/logout',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -1423,11 +1416,10 @@ class RegisterBiometricCall {
       apiUrl: '${baseUrl}/auth/biometric',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -1495,7 +1487,7 @@ class KycProviderSessionCall {
       apiUrl: '${baseUrl}/kyc/user/provider-session',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1541,7 +1533,7 @@ class KycProviderResultCall {
       apiUrl: '${baseUrl}/kyc/user/provider-result',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
@@ -1583,11 +1575,10 @@ class MarketplaceBannersCall {
       apiUrl: '${baseUrl}/banners?placement=${placement}',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1629,11 +1620,10 @@ class WeekStoryCall {
       apiUrl: '${baseUrl}/business/week-story',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1675,11 +1665,10 @@ class ProductsCall {
       apiUrl: '${baseUrl}/products',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1722,11 +1711,10 @@ class RecentTransactionsCall {
       apiUrl: '${baseUrl}/transactions?limit=${limit}',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1768,11 +1756,10 @@ class MarketplaceCall {
       apiUrl: '${baseUrl}/marketplace',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1829,11 +1816,10 @@ class NotificationsCall {
       apiUrl: '${baseUrl}/notifications',
       callType: ApiCallType.GET,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -1891,11 +1877,10 @@ class NotificationsSeenCall {
       apiUrl: '${baseUrl}/notifications/seen',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer ${authToken}',
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -1934,9 +1919,9 @@ class CreateProductCall {
 
     final ffApiRequestBody = '''
 {
-  "name": "${escapeStringForJson(name)}",
-  "unit": "${escapeStringForJson(unit)}",
-  "priceMinor": "${escapeStringForJson(priceMinor)}",
+  "name": ${name == null ? 'null' : '"${escapeStringForJson(name)}"'},
+  "unit": ${unit == null ? 'null' : '"${escapeStringForJson(unit)}"'},
+  "priceMinor": ${priceMinor == null ? 'null' : '"${escapeStringForJson(priceMinor)}"'},
   "quantity": ${quantity}
 }''';
     return ApiManager.instance.makeApiCall(
@@ -1944,10 +1929,10 @@ class CreateProductCall {
       apiUrl: '${baseUrl}/products',
       callType: ApiCallType.POST,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -1961,12 +1946,18 @@ class CreateProductCall {
     );
   }
 
-  bool? isSuccess(dynamic response) =>
-      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
-  String? id(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.data.id'''));
+  dynamic isSuccess(dynamic response) => getJsonField(
+        response,
+        r'''$.isSuccess''',
+      );
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
+  dynamic id(dynamic response) => getJsonField(
+        response,
+        r'''$.data.id''',
+      );
 }
 
 class UpdateProductCall {
@@ -1994,9 +1985,9 @@ class UpdateProductCall {
 
     final ffApiRequestBody = '''
 {
-  "name": "${escapeStringForJson(name)}",
-  "unit": "${escapeStringForJson(unit)}",
-  "priceMinor": "${escapeStringForJson(priceMinor)}",
+  "name": ${name == null ? 'null' : '"${escapeStringForJson(name)}"'},
+  "unit": ${unit == null ? 'null' : '"${escapeStringForJson(unit)}"'},
+  "priceMinor": ${priceMinor == null ? 'null' : '"${escapeStringForJson(priceMinor)}"'},
   "quantity": ${quantity}
 }''';
     return ApiManager.instance.makeApiCall(
@@ -2004,10 +1995,10 @@ class UpdateProductCall {
       apiUrl: '${baseUrl}/products/${productId}',
       callType: ApiCallType.PATCH,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -2021,10 +2012,14 @@ class UpdateProductCall {
     );
   }
 
-  bool? isSuccess(dynamic response) =>
-      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic isSuccess(dynamic response) => getJsonField(
+        response,
+        r'''$.isSuccess''',
+      );
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class DeleteProductCall {
@@ -2051,9 +2046,10 @@ class DeleteProductCall {
       apiUrl: '${baseUrl}/products/${productId}',
       callType: ApiCallType.DELETE,
       headers: {
-        'Accept': 'application/json',
-        'Accept-Language': '${language}',
         'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
       },
       params: {},
       returnBody: true,
@@ -2065,10 +2061,14 @@ class DeleteProductCall {
     );
   }
 
-  bool? isSuccess(dynamic response) =>
-      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic isSuccess(dynamic response) => getJsonField(
+        response,
+        r'''$.isSuccess''',
+      );
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class UploadProductImageCall {
@@ -2096,11 +2096,14 @@ class UploadProductImageCall {
       apiUrl: '${baseUrl}/products/${productId}/image',
       callType: ApiCallType.POST,
       headers: {
-        'Accept': 'application/json',
-        'Accept-Language': '${language}',
         'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
       },
-      params: {'file': file},
+      params: {
+        'file': file,
+      },
       bodyType: BodyType.MULTIPART,
       returnBody: true,
       encodeBodyUtf8: false,
@@ -2111,10 +2114,14 @@ class UploadProductImageCall {
     );
   }
 
-  bool? isSuccess(dynamic response) =>
-      castToType<bool>(getJsonField(response, r'''$.isSuccess'''));
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic isSuccess(dynamic response) => getJsonField(
+        response,
+        r'''$.isSuccess''',
+      );
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class BranchesCall {
@@ -2140,10 +2147,10 @@ class BranchesCall {
       apiUrl: '${baseUrl}/organizations/branches',
       callType: ApiCallType.GET,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -2160,8 +2167,10 @@ class BranchesCall {
         r'''$.data''',
         true,
       ) as List?;
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class StaffCall {
@@ -2187,10 +2196,10 @@ class StaffCall {
       apiUrl: '${baseUrl}/organizations/staff',
       callType: ApiCallType.GET,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -2207,8 +2216,10 @@ class StaffCall {
         r'''$.data''',
         true,
       ) as List?;
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class RolesCall {
@@ -2234,10 +2245,10 @@ class RolesCall {
       apiUrl: '${baseUrl}/rbac/roles',
       callType: ApiCallType.GET,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -2254,8 +2265,10 @@ class RolesCall {
         r'''$.data''',
         true,
       ) as List?;
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class CreateStaffCall {
@@ -2282,20 +2295,20 @@ class CreateStaffCall {
 
     final ffApiRequestBody = '''
 {
-  "fullName": "${escapeStringForJson(fullName)}",
-  "username": "${escapeStringForJson(username)}",
-  "branchId": "${escapeStringForJson(branchId)}",
-  "roleId": "${escapeStringForJson(roleId)}"
+  "fullName": ${fullName == null ? 'null' : '"${escapeStringForJson(fullName)}"'},
+  "username": ${username == null ? 'null' : '"${escapeStringForJson(username)}"'},
+  "branchId": ${branchId == null ? 'null' : '"${escapeStringForJson(branchId)}"'},
+  "roleId": ${roleId == null ? 'null' : '"${escapeStringForJson(roleId)}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'CreateStaff',
       apiUrl: '${baseUrl}/organizations/staff',
       callType: ApiCallType.POST,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -2313,15 +2326,19 @@ class CreateStaffCall {
         response,
         r'''$.data''',
       );
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
-  String? errorField(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.data.field'''));
+  dynamic errorField(dynamic response) => getJsonField(
+        response,
+        r'''$.data.field''',
+      );
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class AssignRoleCall {
   Future<ApiCallResponse> call({
-    dynamic bodyJson,
+    dynamic? bodyJsonJson,
     String? baseURL,
     String? authToken = '',
     String? dataSource,
@@ -2338,18 +2355,18 @@ class AssignRoleCall {
       language: language,
     );
 
-    final body = _serializeJson(bodyJson);
+    final bodyJson = _serializeJson(bodyJsonJson);
     final ffApiRequestBody = '''
-${body}''';
+${bodyJson}''';
     return ApiManager.instance.makeApiCall(
       callName: 'AssignRole',
       apiUrl: '${baseUrl}/rbac/assignments',
       callType: ApiCallType.POST,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -2363,8 +2380,10 @@ ${body}''';
     );
   }
 
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class RevokeRoleCall {
@@ -2389,17 +2408,17 @@ class RevokeRoleCall {
 
     final ffApiRequestBody = '''
 {
-  "userId": "${escapeStringForJson(userId)}"
+  "userId": ${userId == null ? 'null' : '"${escapeStringForJson(userId)}"'}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'RevokeRole',
       apiUrl: '${baseUrl}/rbac/assignments/${assignmentId}',
       callType: ApiCallType.DELETE,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       body: ffApiRequestBody,
@@ -2413,8 +2432,10 @@ class RevokeRoleCall {
     );
   }
 
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 class CloseBranchCall {
@@ -2441,10 +2462,10 @@ class CloseBranchCall {
       apiUrl: '${baseUrl}/organizations/branches/${branchId}',
       callType: ApiCallType.DELETE,
       headers: {
+        'Authorization': 'Bearer ${accessToken}',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': '${language}',
-        'Authorization': 'Bearer ${accessToken}',
       },
       params: {},
       returnBody: true,
@@ -2456,8 +2477,10 @@ class CloseBranchCall {
     );
   }
 
-  String? message(dynamic response) =>
-      castToType<String>(getJsonField(response, r'''$.message'''));
+  dynamic message(dynamic response) => getJsonField(
+        response,
+        r'''$.message''',
+      );
 }
 
 /// End HaatAuth Group Code

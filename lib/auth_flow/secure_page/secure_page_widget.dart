@@ -90,8 +90,8 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
-                                font: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w500,
+                                font: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
@@ -99,7 +99,7 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 fontSize: 24.0,
                                 letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontStyle,
@@ -114,7 +114,7 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  font: GoogleFonts.inter(
+                                  font: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.normal,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -128,6 +128,7 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
+                                  lineHeight: 1.4,
                                 ),
                           ),
                         ),
@@ -163,8 +164,8 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w500,
+                                      font: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .fontStyle,
@@ -173,7 +174,7 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                                           .primaryText,
                                       fontSize: 18.0,
                                       letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
@@ -206,7 +207,7 @@ class _SecurePageWidgetState extends State<SecurePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        font: GoogleFonts.inter(
+                                        font: GoogleFonts.montserrat(
                                           fontWeight: FontWeight.w600,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)

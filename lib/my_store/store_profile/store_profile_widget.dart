@@ -1,4 +1,4 @@
-import '/components/log_out_widget.dart';
+import '/components/log_out/log_out_widget.dart';
 import '/components/privacypolicy/privacypolicy_widget.dart';
 import '/components/terms_of_uses/terms_of_uses_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
@@ -6,10 +6,10 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'store_profile_model.dart';
@@ -248,63 +248,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
-                                          Stack(
-                                            alignment:
-                                                AlignmentDirectional(1.0, 1.0),
-                                            children: [
-                                              Container(
-                                                width: 113.4,
-                                                height: 113.4,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
-                                                child: Container(
-                                                  width: 110.0,
-                                                  height: 110.0,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: Image.asset(
-                                                        'assets/images/Store_logo_(content).png',
-                                                      ).image,
-                                                    ),
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 35.0,
-                                                height: 35.0,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryBackground,
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
-                                                    width: 2.0,
-                                                  ),
-                                                ),
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.0),
-                                                child: FaIcon(
-                                                  FaIconData(const IconData(
-                                                      /* pen */ 0xf304,
-                                                      fontFamily:
-                                                          'FontAwesomeSolid',
-                                                      fontPackage:
-                                                          'font_awesome_flutter')),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  size: 12.0,
-                                                ),
-                                              ),
-                                            ],
+                                          Container(
+                                            width: 113.4,
+                                            height: 113.4,
+                                            child: custom_widgets
+                                                .BusinessLogoAvatar(
+                                              width: 113.4,
+                                              height: 113.4,
+                                            ),
                                           ),
                                           Padding(
                                             padding:

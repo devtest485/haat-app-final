@@ -196,7 +196,7 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           font: GoogleFonts
-                                                              .interTight(
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             fontStyle:
@@ -275,9 +275,8 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -340,9 +339,8 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                                                                   .of(context)
                                                               .bodyMedium
                                                               .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -375,8 +373,8 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                                                             context)
                                                         .bodyMedium
                                                         .override(
-                                                          font:
-                                                              GoogleFonts.inter(
+                                                          font: GoogleFonts
+                                                              .montserrat(
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             fontStyle:
@@ -429,7 +427,8 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                                                           context)
                                                       .bodyMedium
                                                       .override(
-                                                        font: GoogleFonts.inter(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -489,7 +488,7 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                                                       .headlineSmall
                                                       .override(
                                                         font: GoogleFonts
-                                                            .interTight(
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontStyle:
@@ -562,8 +561,8 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
+                                    font: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
@@ -572,7 +571,7 @@ class _BankOTPVerificationWidgetState extends State<BankOTPVerificationWidget> {
                                         .primaryText,
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,

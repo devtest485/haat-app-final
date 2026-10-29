@@ -91,8 +91,8 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
-                                font: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w500,
+                                font: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
@@ -100,7 +100,7 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 fontSize: 24.0,
                                 letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontStyle,
@@ -110,12 +110,12 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Use biometrics to securely access your \nbank account.',
+                            'Use biometrics to securely access your bank account.',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  font: GoogleFonts.inter(
+                                  font: GoogleFonts.montserrat(
                                     fontWeight: FontWeight.normal,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -128,7 +128,7 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
-                                  lineHeight: 1.2,
+                                  lineHeight: 1.4,
                                 ),
                           ),
                         ),
@@ -164,8 +164,8 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w500,
+                                      font: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .fontStyle,
@@ -174,7 +174,7 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                                           .primaryText,
                                       fontSize: 18.0,
                                       letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
@@ -231,8 +231,8 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        font: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w500,
+                                        font: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w600,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
@@ -242,7 +242,7 @@ class _BiomatricPageWidgetState extends State<BiomatricPageWidget> {
                                             .primaryBackground,
                                         fontSize: 18.0,
                                         letterSpacing: 0.0,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .fontStyle,

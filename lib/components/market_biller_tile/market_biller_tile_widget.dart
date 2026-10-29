@@ -86,15 +86,15 @@ class _MarketBillerTileWidgetState extends State<MarketBillerTileWidget> {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.inter(
-                        fontWeight: FontWeight.w500,
+                      font: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w600,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
                       color: FlutterFlowTheme.of(context).primaryBackground,
                       fontSize: 12.0,
                       letterSpacing: 0.0,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontStyle:
                           FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                     ),
