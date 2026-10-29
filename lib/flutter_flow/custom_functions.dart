@@ -82,3 +82,4 @@ export '/custom_code/functions/staff_share_text.dart';
 export '/custom_code/functions/role_subtitle.dart';
 export '/custom_code/functions/product_out_of_stock.dart';
 export '/custom_code/functions/role_permission_on.dart';
+export '/custom_code/functions/transaction_since.dart';

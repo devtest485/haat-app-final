@@ -88,18 +88,22 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
           ),
           child: Stack(
             children: [
-              Container(
-                width: double.infinity,
-                height: 0.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: Image.asset(
-                      'assets/images/GrayPageBg.png',
-                    ).image,
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 162.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: Image.asset(
+                          'assets/images/GrayPageBg.png',
+                        ).image,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 0.0),
@@ -273,217 +277,92 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                       ),
                                     );
                                   } else {
-                                    return Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 15.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Expanded(
-                                                  child: FlutterFlowChoiceChips(
-                                                    options: [
-                                                      ChipData(
-                                                          'Last 20 transactions'),
-                                                      ChipData('Last week'),
-                                                      ChipData('Last 30 days'),
-                                                      ChipData('Last 3 months')
-                                                    ],
-                                                    onChanged: (val) async {
-                                                      safeSetState(() => _model
-                                                              .choiceChipsValue =
-                                                          val?.firstOrNull);
-                                                      _model.filterIndex = functions
-                                                          .transactionFilterIndex(
-                                                              _model
-                                                                  .choiceChipsValue);
-                                                      safeSetState(() {});
-                                                    },
-                                                    selectedChipStyle:
-                                                        ChipStyle(
-                                                      backgroundColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .tertiary,
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryBackground,
-                                                                fontSize: 14.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                      iconColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .info,
-                                                      iconSize: 20.0,
-                                                      labelPadding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  12.0,
-                                                                  8.0,
-                                                                  12.0,
-                                                                  8.0),
-                                                      elevation: 0.0,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30.0),
-                                                    ),
-                                                    unselectedChipStyle:
-                                                        ChipStyle(
-                                                      backgroundColor:
-                                                          Color(0xFFEBEBEB),
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                                color: Color(
-                                                                    0xFF111111),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                      iconColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                      iconSize: 16.0,
-                                                      labelPadding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  12.0,
-                                                                  8.0,
-                                                                  12.0,
-                                                                  8.0),
-                                                      elevation: 0.0,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              30.0),
-                                                    ),
-                                                    chipSpacing: 8.0,
-                                                    rowSpacing: 8.0,
-                                                    multiselect: false,
-                                                    initialized: _model
-                                                            .choiceChipsValue !=
-                                                        null,
-                                                    alignment:
-                                                        WrapAlignment.start,
-                                                    controller: _model
-                                                            .choiceChipsValueController ??=
-                                                        FormFieldController<
-                                                            List<String>>(
-                                                      ['Last 20 transactions'],
-                                                    ),
-                                                    wrapped: false,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 25.0, 0.0, 40.0),
-                                            child: Builder(
-                                              builder: (context) {
-                                                final dayGroup = functions
-                                                        .transactionDayGroups(
-                                                            _model
-                                                                .transactionList
-                                                                .toList(),
-                                                            _model.filterIndex)
-                                                        ?.toList() ??
-                                                    [];
+                                    return Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 10.0, 0.0, 35.0),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 15.0, 0.0, 0.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child:
+                                                        FlutterFlowChoiceChips(
+                                                      options: [
+                                                        ChipData(
+                                                            'All transactions'),
+                                                        ChipData(
+                                                            'Last 20 transactions'),
+                                                        ChipData('Last week'),
+                                                        ChipData(
+                                                            'Last 30 days'),
+                                                        ChipData(
+                                                            'Last 3 months')
+                                                      ],
+                                                      onChanged: (val) async {
+                                                        safeSetState(() => _model
+                                                                .choiceChipsValue =
+                                                            val?.firstOrNull);
+                                                        _model.filterIndex = functions
+                                                            .transactionFilterIndex(
+                                                                _model
+                                                                    .choiceChipsValue);
+                                                        safeSetState(() {});
+                                                        _model.filteredResult =
+                                                            await HaatAuthGroup
+                                                                .recentTransactionsCall
+                                                                .call(
+                                                          accessToken:
+                                                              _model.token,
+                                                          limit: 100,
+                                                          since: functions
+                                                              .transactionSince(
+                                                                  _model
+                                                                      .filterIndex),
+                                                        );
 
-                                                return ListView.separated(
-                                                  padding: EdgeInsets.zero,
-                                                  primary: false,
-                                                  shrinkWrap: true,
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  itemCount: dayGroup.length,
-                                                  separatorBuilder: (_, __) =>
-                                                      SizedBox(height: 20.0),
-                                                  itemBuilder:
-                                                      (context, dayGroupIndex) {
-                                                    final dayGroupItem =
-                                                        dayGroup[dayGroupIndex];
-                                                    return Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          (FFCrossAxisAlignment
-                                                                  .start)
-                                                              .flutterValue,
-                                                      textBaseline: TextBaseline
-                                                          .alphabetic,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      4.0,
-                                                                      0.0,
-                                                                      0.0,
-                                                                      0.0),
-                                                          child: Text(
-                                                            getJsonField(
-                                                              dayGroupItem,
-                                                              r'''$.label''',
-                                                            ).toString(),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
+                                                        if ((_model
+                                                                .filteredResult
+                                                                ?.succeeded ??
+                                                            true)) {
+                                                          _model.transactionList =
+                                                              HaatAuthGroup
+                                                                  .recentTransactionsCall
+                                                                  .transactions(
+                                                                    (_model.filteredResult
+                                                                            ?.jsonBody ??
+                                                                        ''),
+                                                                  )!
+                                                                  .toList()
+                                                                  .cast<
+                                                                      dynamic>();
+                                                          safeSetState(() {});
+                                                        }
+
+                                                        safeSetState(() {});
+                                                      },
+                                                      selectedChipStyle:
+                                                          ChipStyle(
+                                                        backgroundColor:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        textStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font: GoogleFonts
-                                                                      .montserrat(
+                                                                  font:
+                                                                      GoogleFonts
+                                                                          .inter(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w600,
@@ -492,12 +371,13 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                                  color: Color(
-                                                                      0x8A000000),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryBackground,
                                                                   fontSize:
-                                                                      11.0,
+                                                                      14.0,
                                                                   letterSpacing:
-                                                                      0.6,
+                                                                      0.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -506,139 +386,303 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .primaryText,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        16.0),
-                                                          ),
-                                                          child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Builder(
-                                                                builder:
-                                                                    (context) {
-                                                                  final txItem =
-                                                                      getJsonField(
-                                                                    dayGroupItem,
-                                                                    r'''$.rows''',
-                                                                  ).toList();
-
-                                                                  return ListView
-                                                                      .builder(
-                                                                    padding:
-                                                                        EdgeInsets
-                                                                            .zero,
-                                                                    primary:
-                                                                        false,
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    scrollDirection:
-                                                                        Axis.vertical,
-                                                                    itemCount:
-                                                                        txItem
-                                                                            .length,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            txItemIndex) {
-                                                                      final txItemItem =
-                                                                          txItem[
-                                                                              txItemIndex];
-                                                                      return Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).primaryText,
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(16.0),
-                                                                        ),
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              5.0,
-                                                                              0.0,
-                                                                              5.0,
-                                                                              0.0),
-                                                                          child:
-                                                                              TransactionsWidget(
-                                                                            key:
-                                                                                Key('Keyetz_${txItemIndex}_of_${txItem.length}'),
-                                                                            title: functions.transactionTitle(
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.description''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.kind''',
-                                                                                ).toString()),
-                                                                            subtitle: functions.transactionSubtitle(
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.description''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.kind''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.occurredAt''',
-                                                                                ).toString()),
-                                                                            amount: functions.transactionAmount(
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.amountMinor''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.currency''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  txItemItem,
-                                                                                  r'''$.direction''',
-                                                                                ).toString()),
-                                                                            incoming:
-                                                                                functions.transactionIsIncoming(getJsonField(
-                                                                              txItemItem,
-                                                                              r'''$.direction''',
-                                                                            ).toString()),
-                                                                            paymentMethod:
-                                                                                getJsonField(
-                                                                              txItemItem,
-                                                                              r'''$.paymentMethod''',
-                                                                            ).toString(),
-                                                                            showDivider:
-                                                                                functions.groupPairDivider(dayGroupItem, txItemIndex),
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                  );
-                                                                },
-                                                              ),
-                                                            ].divide(SizedBox(
-                                                                height: 7.0)),
-                                                          ),
-                                                        ),
-                                                      ].divide(SizedBox(
-                                                          height: 8.0)),
-                                                    );
-                                                  },
-                                                );
-                                              },
+                                                        iconColor:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .info,
+                                                        iconSize: 20.0,
+                                                        labelPadding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    12.0,
+                                                                    8.0,
+                                                                    12.0,
+                                                                    8.0),
+                                                        elevation: 0.0,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30.0),
+                                                      ),
+                                                      unselectedChipStyle:
+                                                          ChipStyle(
+                                                        backgroundColor:
+                                                            Color(0xFFEBEBEB),
+                                                        textStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font:
+                                                                      GoogleFonts
+                                                                          .inter(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: Color(
+                                                                      0xFF111111),
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                        iconColor:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        iconSize: 16.0,
+                                                        labelPadding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    12.0,
+                                                                    8.0,
+                                                                    12.0,
+                                                                    8.0),
+                                                        elevation: 0.0,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30.0),
+                                                      ),
+                                                      chipSpacing: 8.0,
+                                                      rowSpacing: 8.0,
+                                                      multiselect: false,
+                                                      initialized: _model
+                                                              .choiceChipsValue !=
+                                                          null,
+                                                      alignment:
+                                                          WrapAlignment.start,
+                                                      controller: _model
+                                                              .choiceChipsValueController ??=
+                                                          FormFieldController<
+                                                              List<String>>(
+                                                        ['All transactions'],
+                                                      ),
+                                                      wrapped: false,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 25.0, 0.0, 40.0),
+                                              child: Builder(
+                                                builder: (context) {
+                                                  final dayGroup = functions
+                                                          .transactionDayGroups(
+                                                              _model
+                                                                  .transactionList
+                                                                  .toList(),
+                                                              _model
+                                                                  .filterIndex)
+                                                          ?.toList() ??
+                                                      [];
+
+                                                  return ListView.separated(
+                                                    padding: EdgeInsets.zero,
+                                                    primary: false,
+                                                    shrinkWrap: true,
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    itemCount: dayGroup.length,
+                                                    separatorBuilder: (_, __) =>
+                                                        SizedBox(height: 20.0),
+                                                    itemBuilder: (context,
+                                                        dayGroupIndex) {
+                                                      final dayGroupItem =
+                                                          dayGroup[
+                                                              dayGroupIndex];
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        crossAxisAlignment:
+                                                            (FFCrossAxisAlignment
+                                                                    .start)
+                                                                .flutterValue,
+                                                        textBaseline:
+                                                            TextBaseline
+                                                                .alphabetic,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        4.0,
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0),
+                                                            child: Text(
+                                                              getJsonField(
+                                                                dayGroupItem,
+                                                                r'''$.label''',
+                                                              ).toString(),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .montserrat(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    color: Color(
+                                                                        0x8A000000),
+                                                                    fontSize:
+                                                                        11.0,
+                                                                    letterSpacing:
+                                                                        0.6,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryText,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16.0),
+                                                            ),
+                                                            child: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              children: [
+                                                                Builder(
+                                                                  builder:
+                                                                      (context) {
+                                                                    final txItem =
+                                                                        getJsonField(
+                                                                      dayGroupItem,
+                                                                      r'''$.rows''',
+                                                                    ).toList();
+
+                                                                    return ListView
+                                                                        .builder(
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .zero,
+                                                                      primary:
+                                                                          false,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      scrollDirection:
+                                                                          Axis.vertical,
+                                                                      itemCount:
+                                                                          txItem
+                                                                              .length,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              txItemIndex) {
+                                                                        final txItemItem =
+                                                                            txItem[txItemIndex];
+                                                                        return Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryText,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(16.0),
+                                                                          ),
+                                                                          child:
+                                                                              Padding(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
+                                                                                5.0,
+                                                                                0.0,
+                                                                                5.0,
+                                                                                0.0),
+                                                                            child:
+                                                                                TransactionsWidget(
+                                                                              key: Key('Keyetz_${txItemIndex}_of_${txItem.length}'),
+                                                                              title: functions.transactionTitle(
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.description''',
+                                                                                  ).toString(),
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.kind''',
+                                                                                  ).toString()),
+                                                                              subtitle: functions.transactionSubtitle(
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.description''',
+                                                                                  ).toString(),
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.kind''',
+                                                                                  ).toString(),
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.occurredAt''',
+                                                                                  ).toString()),
+                                                                              amount: functions.transactionAmount(
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.amountMinor''',
+                                                                                  ).toString(),
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.currency''',
+                                                                                  ).toString(),
+                                                                                  getJsonField(
+                                                                                    txItemItem,
+                                                                                    r'''$.direction''',
+                                                                                  ).toString()),
+                                                                              incoming: functions.transactionIsIncoming(getJsonField(
+                                                                                txItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString()),
+                                                                              paymentMethod: getJsonField(
+                                                                                txItemItem,
+                                                                                r'''$.paymentMethod''',
+                                                                              ).toString(),
+                                                                              showDivider: functions.groupPairDivider(dayGroupItem, txItemIndex),
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ].divide(SizedBox(
+                                                                  height: 7.0)),
+                                                            ),
+                                                          ),
+                                                        ].divide(SizedBox(
+                                                            height: 8.0)),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     );
                                   }

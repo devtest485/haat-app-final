@@ -192,6 +192,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
+                                      width: double.infinity,
                                       decoration: BoxDecoration(),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,

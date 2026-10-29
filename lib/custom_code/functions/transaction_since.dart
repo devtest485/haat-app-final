@@ -11,9 +11,16 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-double bannerDotWidth(
-  int? dot,
-  int? activeIndex,
-) {
-  return dot == activeIndex ? 14.0 : 5.0;
+/// ISO start date for the transactions chip filter (0 = all time)
+String transactionSince(int filter) {
+  final days = filter == 1
+      ? 7
+      : filter == 2
+          ? 30
+          : filter == 3
+              ? 90
+              : 0;
+  if (days == 0) return '2000-01-01T00:00:00Z';
+  final d = DateTime.now().toUtc().subtract(Duration(days: days));
+  return d.toIso8601String().substring(0, 19) + 'Z';
 }

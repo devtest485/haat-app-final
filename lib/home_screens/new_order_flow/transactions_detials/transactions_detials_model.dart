@@ -51,6 +51,8 @@ class TransactionsDetialsModel
       choiceChipsValueController?.value?.firstOrNull;
   set choiceChipsValue(String? val) =>
       choiceChipsValueController?.value = val != null ? [val] : [];
+  // Stores action output result for [Backend Call - API (RecentTransactions)] action in ChoiceChips widget.
+  ApiCallResponse? filteredResult;
 
   @override
   void initState(BuildContext context) {}

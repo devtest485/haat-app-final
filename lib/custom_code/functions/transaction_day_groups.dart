@@ -39,7 +39,7 @@ List<dynamic>? transactionDayGroups(
       .where((r) =>
           days == 0 ||
           (at(r) != null && at(r)!.isAfter(now.subtract(Duration(days: days)))))
-      .take(days == 0 ? 20 : 1000)
+      .take(filter == 4 ? 20 : 1000)
       .toList();
   return shown
       .map(label)

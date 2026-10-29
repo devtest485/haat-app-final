@@ -1690,6 +1690,7 @@ class ProductsCall {
 class RecentTransactionsCall {
   Future<ApiCallResponse> call({
     int? limit = 3,
+    String? since = '2000-01-01T00:00:00Z',
     String? baseURL,
     String? authToken = '',
     String? dataSource,
@@ -1708,7 +1709,7 @@ class RecentTransactionsCall {
 
     return ApiManager.instance.makeApiCall(
       callName: 'RecentTransactions',
-      apiUrl: '${baseUrl}/transactions?limit=${limit}',
+      apiUrl: '${baseUrl}/transactions?limit=${limit}&since=${since}',
       callType: ApiCallType.GET,
       headers: {
         'Authorization': 'Bearer ${accessToken}',

@@ -13,6 +13,8 @@ import '/flutter_flow/ff_builtin_enums.dart';
 
 int transactionFilterIndex(String? label) {
   switch (label) {
+    case 'Last 20 transactions':
+      return 4;
     case 'Last week':
       return 1;
     case 'Last 30 days':
