@@ -375,8 +375,10 @@ class _HaatLocationMapState extends State<HaatLocationMap> {
                       child: CircularProgressIndicator(
                           strokeWidth: 2.0, color: Colors.black),
                     )
-                  : Image.asset('assets/images/locate.png',
-                      width: 22.0, height: 22.0),
+                  // The same crosshair the locate.png asset drew; as an icon it
+                  // does not depend on a file a FlutterFlow download leaves out.
+                  : const Icon(Icons.my_location,
+                      size: 22.0, color: Colors.black),
             ),
           ),
         ),

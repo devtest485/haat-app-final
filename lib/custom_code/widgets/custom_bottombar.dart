@@ -18,6 +18,18 @@ import 'package:provider/provider.dart';
 /// alag custom action file zaroori nahi.
 void Function(int index)? _bottomTabNavigator;
 
+// The bar's own icons, kept in the code. They exist only for this widget and
+// not as project assets, so a FlutterFlow code download leaves them out of
+// assets/images; read from here they show up either way.
+const Map<String, String> _inlineSvgs = {
+  'assets/images/haat_mark.svg':
+      r'''<svg width="11" height="18" viewBox="0 0 11 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.94869 4.26673L6.28319 7.77788H4.45014V4.26673L3.5211 3.34876L2.59707 4.26673V11.1697H1.24772L0.000114441 4.26673L2.64211 0H4.21329L6.94869 4.26673Z" fill="white"/><path d="M3.78457 13.1283L4.45007 9.61714H6.28312V13.1283L7.21215 14.0463L8.13618 13.1283V6.22363H9.48554L10.7331 13.1283L8.09115 17.395H6.51997L3.78457 13.1283Z" fill="white"/></svg>''',
+  'assets/images/shopping_bag_speed.svg':
+      r'''<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path fill="#fff" d="m60-252.31 15-60h199.61l-14.99 60H60Zm80-155.38 15-60h239.61l-14.99 60H140Zm602.23 248.07 20-160.76 28.62-236.16 10.38-82.84-59 479.76ZM251.15-100q-26.07 0-44.76-17.35-18.7-17.34-18.7-42.65h542.23q5.39 0 9.23-3.46 3.85-3.46 4.62-8.85l55.54-453.23q.77-5.38-3.08-9.61-3.85-4.23-9.23-4.23H681.23l-11.77 93.07q-1.61 12.77-11.35 20.16-9.73 7.38-22.49 6.15-12.39-1.23-19.77-10.65-7.39-9.43-5.77-21.81l10.54-86.92H441.23l-11.77 92.46q-1.61 12.77-11.35 20.46-9.73 7.69-22.49 6.46-12.39-1.23-20.08-10.96-7.69-9.73-6.08-22.12l10.54-86.3H243.46q3.62-27.47 23.5-44.04Q286.85-700 313.46-700h73.85l1.15-10q8-70.77 49-110.38 41-39.62 111.77-39.62 61.31 0 101.12 45.96 39.8 45.96 36.5 107.89l-.77 6.15h102.77q31.38.62 52.3 24.16 20.93 23.53 16.69 54.92l-56.53 455.38q-3.62 28.46-24.97 47Q755-100 726.54-100H251.15Zm196.16-600h179.38l.77-6.15q2.54-38-22.88-65.93Q579.15-800 541.54-800q-41.16 0-64.73 23.81-23.58 23.81-28.35 66.19l-1.15 10Z"/></svg>''',
+  'assets/images/local_mall.svg':
+      r'''<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><mask id="a" width="24" height="24" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#d9d9d9" d="M0 0h24v24H0z"/></mask><g mask="url(#a)"><path fill="#fff" d="M5.308 21.5q-.748 0-1.278-.53a1.74 1.74 0 0 1-.53-1.278V8.308q0-.748.53-1.278t1.278-.53H7.5q0-1.873 1.313-3.186Q10.128 2 12 2t3.187 1.314Q16.5 4.626 16.5 6.5h2.192q.749 0 1.278.53.53.53.53 1.278v11.384q0 .749-.53 1.278-.53.53-1.278.53zm0-1.5h13.384a.3.3 0 0 0 .212-.096.3.3 0 0 0 .096-.212V8.308a.3.3 0 0 0-.096-.212.3.3 0 0 0-.212-.096H5.308a.3.3 0 0 0-.212.096.3.3 0 0 0-.096.212v11.384q0 .116.096.212a.3.3 0 0 0 .212.096m9.879-7.813Q16.5 10.873 16.5 9H15q0 1.25-.875 2.125A2.9 2.9 0 0 1 12 12a2.9 2.9 0 0 1-2.125-.875A2.9 2.9 0 0 1 9 9H7.5q0 1.873 1.313 3.187Q10.128 13.5 12 13.5t3.187-1.313M9 6.5h6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3.5q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6.5"/></g></svg>''',
+};
+
 void callNavigateTab(int index) {
   _bottomTabNavigator?.call(index);
 }
@@ -537,6 +549,21 @@ class _CustomBottombarState extends State<CustomBottombar> {
     }
 
     if (iconPath.toLowerCase().endsWith('.svg')) {
+      final colorFilter = useColorFilter
+          ? ColorFilter.mode(color, BlendMode.srcIn)
+          : (isSelected
+              ? null
+              : ColorFilter.mode(unselectedColor, BlendMode.srcIn));
+      final inline = _inlineSvgs[iconPath];
+      if (inline != null) {
+        return SvgPicture.string(
+          inline,
+          width: iconSize,
+          height: iconSize,
+          fit: BoxFit.contain,
+          colorFilter: colorFilter,
+        );
+      }
       return SvgPicture.asset(
         iconPath,
         width: iconSize,
@@ -550,11 +577,7 @@ class _CustomBottombarState extends State<CustomBottombar> {
         // had nowhere to fall back to.
         placeholderBuilder: (_) =>
             Icon(fallbackIcon, size: iconSize, color: color),
-        colorFilter: useColorFilter
-            ? ColorFilter.mode(color, BlendMode.srcIn)
-            : (isSelected
-                ? null
-                : ColorFilter.mode(unselectedColor, BlendMode.srcIn)),
+        colorFilter: colorFilter,
       );
     }
 
