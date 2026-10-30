@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -141,7 +140,38 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Container(
-                            child: custom_widgets.BusinessLogoMark(),
+                            width: 120.0,
+                            height: 120.0,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Stack(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(0.0),
+                                  child: Image.asset(
+                                    'assets/images/button_company_icon.png',
+                                    width: 67.2,
+                                    height: 67.2,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                if (FFAppState().businessLogoUrl != null &&
+                                    FFAppState().businessLogoUrl != '')
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(60.0),
+                                    child: Image.network(
+                                      FFAppState().businessLogoUrl,
+                                      width: 120.0,
+                                      height: 120.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
@@ -358,51 +388,92 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                 ),
               ),
               if (_model.hasBiometricKey ?? true)
-                Container(
-                  child: custom_widgets.BiometricSignInMark(
-                    done: _model.biometricDone,
-                    onTap: () async {
-                      if (!_model.isSigningIn!) {
-                        _model.isSigningIn = true;
-                        safeSetState(() {});
-                        _model.biometricRetry =
-                            await actions.haatSignInWithBiometrics(
-                          false,
-                        );
-                        _model.isSigningIn = false;
-                        safeSetState(() {});
-                        if (_model.biometricRetry == '') {
-                          _model.biometricDone = true;
+                Align(
+                  alignment: AlignmentDirectional(0.0, -1.0),
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        if (!_model.isSigningIn!) {
+                          _model.isSigningIn = true;
                           safeSetState(() {});
-                          await Future.delayed(
-                            Duration(
-                              milliseconds: 600,
-                            ),
+                          _model.biometricRetry =
+                              await actions.haatSignInWithBiometrics(
+                            false,
                           );
-
-                          context.goNamed(BottomBarPagesWidget.routeName);
-                        } else {
-                          if (_model.biometricRetry == 'NOT_ENROLLED') {
-                            _model.hasBiometricKey = false;
+                          _model.isSigningIn = false;
+                          safeSetState(() {});
+                          if (_model.biometricRetry == '') {
+                            _model.biometricDone = true;
                             safeSetState(() {});
+                            await Future.delayed(
+                              Duration(
+                                milliseconds: 600,
+                              ),
+                            );
+
+                            context.goNamed(BottomBarPagesWidget.routeName);
                           } else {
-                            if (!(_model.biometricRetry == 'CANCELLED')) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    _model.biometricRetry!,
-                                    style: TextStyle(),
+                            if (_model.biometricRetry == 'NOT_ENROLLED') {
+                              _model.hasBiometricKey = false;
+                              safeSetState(() {});
+                            } else {
+                              if (!(_model.biometricRetry == 'CANCELLED')) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      _model.biometricRetry!,
+                                      style: TextStyle(),
+                                    ),
+                                    duration: Duration(milliseconds: 4000),
                                   ),
-                                  duration: Duration(milliseconds: 4000),
-                                ),
-                              );
+                                );
+                              }
                             }
                           }
                         }
-                      }
 
-                      safeSetState(() {});
-                    },
+                        safeSetState(() {});
+                      },
+                      child: SafeArea(
+                        child: Container(
+                          width: 110.0,
+                          height: 110.0,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(26.0),
+                              topRight: Radius.circular(26.0),
+                              bottomLeft: Radius.circular(26.0),
+                              bottomRight: Radius.circular(26.0),
+                            ),
+                          ),
+                          alignment: AlignmentDirectional(0.0, 0.0),
+                          child: Stack(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            children: [
+                              if (_model.biometricDone != true)
+                                Icon(
+                                  Icons.fingerprint_rounded,
+                                  color: Color(0xFFA6E59D),
+                                  size: 60.0,
+                                ),
+                              if (_model.biometricDone == true)
+                                Icon(
+                                  Icons.check_circle_outline_rounded,
+                                  color: Color(0xFFA6E59D),
+                                  size: 60.0,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
             ],

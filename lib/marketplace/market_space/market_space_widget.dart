@@ -1,10 +1,13 @@
+import '/components/market_biller_row/market_biller_row_widget.dart';
+import '/components/market_brand_card/market_brand_card_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
-import '/index.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,12 +22,14 @@ class MarketSpaceWidget extends StatefulWidget {
     this.billers,
     this.brands,
     this.categories,
-  });
+    bool? focusSearch,
+  }) : this.focusSearch = focusSearch ?? false;
 
   final String? initialCategory;
   final List<dynamic>? billers;
   final List<dynamic>? brands;
   final List<dynamic>? categories;
+  final bool focusSearch;
 
   @override
   State<MarketSpaceWidget> createState() => _MarketSpaceWidgetState();
@@ -46,7 +51,8 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
 
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.selectedCategory = widget!.initialCategory;
+      _model.selectedCategory = functions.initialMarketCategory(
+          widget!.initialCategory, widget!.categories?.toList());
       safeSetState(() {});
     });
 
@@ -116,7 +122,12 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                       child: TextFormField(
                         controller: _model.textController,
                         focusNode: _model.textFieldFocusNode,
-                        autofocus: false,
+                        onChanged: (_) => EasyDebounce.debounce(
+                          '_model.textController',
+                          Duration(milliseconds: 300),
+                          () => safeSetState(() {}),
+                        ),
+                        autofocus: widget!.focusSearch,
                         enabled: true,
                         obscureText: false,
                         decoration: InputDecoration(
@@ -188,7 +199,7 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                           ),
                           filled: true,
                           fillColor: FlutterFlowTheme.of(context).primaryText,
-                          suffixIcon: Icon(
+                          prefixIcon: Icon(
                             Icons.search_sharp,
                             color: Color(0xFF707171),
                             size: 24.0,
@@ -203,6 +214,8 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                     .bodyMedium
                                     .fontStyle,
                               ),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
                               letterSpacing: 0.0,
                               fontWeight: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -211,7 +224,8 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                   .bodyMedium
                                   .fontStyle,
                             ),
-                        cursorColor: FlutterFlowTheme.of(context).primaryText,
+                        cursorColor:
+                            FlutterFlowTheme.of(context).primaryBackground,
                         enableInteractiveSelection: true,
                         validator:
                             _model.textControllerValidator.asValidator(context),
@@ -255,7 +269,6 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                             safeSetState(() {});
                           },
                           child: Container(
-                            width: 68.0,
                             height: 35.0,
                             decoration: BoxDecoration(
                               color: _model.selectedCategory ==
@@ -276,35 +289,39 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                               ),
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
-                            child: Text(
-                              valueOrDefault<String>(
-                                functions.notificationText(categoryItemItem,
-                                    'label', FFAppState().languageCode),
-                                'For You',
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.montserrat(
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  14.0, 0.0, 14.0, 0.0),
+                              child: Text(
+                                valueOrDefault<String>(
+                                  functions.notificationText(categoryItemItem,
+                                      'label', FFAppState().languageCode),
+                                  'For You',
+                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w500,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      color: _model.selectedCategory ==
+                                              functions.notificationText(
+                                                  categoryItemItem, 'key', '')
+                                          ? FlutterFlowTheme.of(context)
+                                              .primaryText
+                                          : FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                      fontSize: 12.0,
+                                      letterSpacing: 0.0,
                                       fontWeight: FontWeight.w500,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: _model.selectedCategory ==
-                                            functions.notificationText(
-                                                categoryItemItem, 'key', '')
-                                        ? FlutterFlowTheme.of(context)
-                                            .primaryText
-                                        : FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                    fontSize: 12.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
+                              ),
                             ),
                           ),
                         );
@@ -315,444 +332,128 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(15.0, 30.0, 15.0, 0.0),
-            child: Container(
-              decoration: BoxDecoration(),
+          Expanded(
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        context.pushNamed(PayYourWidget.routeName);
-                      },
-                      child: Container(
-                        width: 100.0,
-                        decoration: BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment:
-                              (FFMainAxisAlignment.spaceBetween).flutterValue,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  width: 44.0,
-                                  height: 44.0,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Image.asset(
-                                    'assets/images/mk_mtn.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      8.0, 0.0, 0.0, 0.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        (FFCrossAxisAlignment.start)
-                                            .flutterValue,
-                                    textBaseline: TextBaseline.alphabetic,
-                                    children: [
-                                      Text(
-                                        'MTN Sudan',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w500,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                      ),
-                                      Text(
-                                        'Pay your Postpaid or prepaid bills',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                              color: Color(0x85000000),
-                                              letterSpacing: 0.0,
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                      ),
-                                    ].divide(SizedBox(height: 6.0)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_right,
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              size: 24.0,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(),
-                    child: Container(
-                      width: 100.0,
-                      decoration: BoxDecoration(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment:
-                            (FFMainAxisAlignment.spaceBetween).flutterValue,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 44.0,
-                                height: 44.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.asset(
-                                  'assets/images/mk_zain.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 0.0, 0.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      (FFCrossAxisAlignment.start).flutterValue,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Text(
-                                      'Zain Telecom',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight: FontWeight.w500,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                    Text(
-                                      'Pay your Postpaid or prepaid bills',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: Color(0x85000000),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(height: 6.0)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_right,
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            size: 24.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(),
-                    child: Container(
-                      width: 100.0,
-                      decoration: BoxDecoration(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment:
-                            (FFMainAxisAlignment.spaceBetween).flutterValue,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 44.0,
-                                height: 44.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.asset(
-                                  'assets/images/mk_canar.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 0.0, 0.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      (FFCrossAxisAlignment.start).flutterValue,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Text(
-                                      'Canar Telecom',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight: FontWeight.w500,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                    Text(
-                                      'Pay your Postpaid or prepaid bills',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: Color(0x85000000),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(height: 6.0)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_right,
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            size: 24.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(),
-                    child: Container(
-                      width: 100.0,
-                      decoration: BoxDecoration(),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment:
-                            (FFMainAxisAlignment.spaceBetween).flutterValue,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 44.0,
-                                height: 44.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.asset(
-                                  'assets/images/mk_tirhal.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 0.0, 0.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      (FFCrossAxisAlignment.start).flutterValue,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Text(
-                                      'Tirhal Travel',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight: FontWeight.w500,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                    Text(
-                                      'Pay your Postpaid or prepaid bills',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: Color(0x85000000),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(height: 6.0)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_right,
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            size: 24.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ].divide(SizedBox(height: 20.0)),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(15.0, 30.0, 0.0, 0.0),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+                textBaseline: TextBaseline.alphabetic,
                 children: [
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
-                    child: Row(
+                        EdgeInsetsDirectional.fromSTEB(15.0, 30.0, 15.0, 0.0),
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment:
-                          (FFMainAxisAlignment.spaceBetween).flutterValue,
                       children: [
-                        Text(
-                          'Explore Top Brands',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
+                        if (functions
+                                .marketplaceItemsFor(
+                                    widget!.billers?.toList(),
+                                    _model.selectedCategory,
+                                    _model.textController.text)
+                                ?.length ==
+                            0)
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 24.0, 0.0, 24.0),
+                              child: Text(
+                                'No billers match. Try another name or category.',
+                                textAlign: TextAlign.center,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      color: Color(0x85000000),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        Builder(
+                          builder: (context) {
+                            final billerItem = functions
+                                    .marketplaceItemsFor(
+                                        widget!.billers?.toList(),
+                                        _model.selectedCategory,
+                                        _model.textController.text)
+                                    ?.toList() ??
+                                [];
+
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: List.generate(billerItem.length,
+                                  (billerItemIndex) {
+                                final billerItemItem =
+                                    billerItem[billerItemIndex];
+                                return MarketBillerRowWidget(
+                                  key: Key(
+                                      'Keyiyg_${billerItemIndex}_of_${billerItem.length}'),
+                                  name: functions.notificationText(
+                                      billerItemItem,
+                                      'name',
+                                      FFAppState().languageCode),
+                                  description: functions.notificationText(
+                                      billerItemItem,
+                                      'description',
+                                      FFAppState().languageCode),
+                                  logoUrl: functions.bannerImageUrl(
+                                      getJsonField(
+                                        billerItemItem,
+                                        r'''$.logoPath''',
+                                      ).toString(),
+                                      FFDevEnvironmentValues().baseURL),
+                                  onTap: () async {
+                                    await actions.openMarketplaceItem(
+                                      context,
+                                      billerItemItem,
+                                      FFAppState().languageCode,
+                                    );
+                                  },
+                                );
+                              }).divide(SizedBox(height: 20.0)),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (functions
+                          .marketplaceItemsFor(widget!.brands?.toList(), '',
+                              _model.textController.text)!
+                          .length >
+                      0)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(5.0, 30.0, 0.0, 30.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment:
+                            (FFCrossAxisAlignment.start).flutterValue,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                10.0, 0.0, 10.0, 0.0),
+                            child: Text(
+                              'Sell With Top Brands',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
                                     font: GoogleFonts.inter(
                                       fontWeight: FontWeight.w500,
                                       fontStyle: FlutterFlowTheme.of(context)
@@ -767,613 +468,73 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                        ),
-                        Text(
-                          'See all',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context).success,
-                                    fontSize: 11.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 181.75,
-                      decoration: BoxDecoration(),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              width: 152.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.0),
-                                border: Border.all(
-                                  color: Color(0xFFF0F0F0),
-                                  width: 1.0,
-                                ),
-                              ),
-                              child: Stack(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                children: [
-                                  Column(
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                10.0, 10.0, 0.0, 0.0),
+                            child: Builder(
+                              builder: (context) {
+                                final brandItem = functions
+                                        .marketplaceItemsFor(
+                                            widget!.brands?.toList(),
+                                            '',
+                                            _model.textController.text)
+                                        ?.toList() ??
+                                    [];
+
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     crossAxisAlignment:
                                         (FFCrossAxisAlignment.start)
                                             .flutterValue,
                                     textBaseline: TextBaseline.alphabetic,
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 67.5,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: Image.asset(
-                                              'assets/images/mk_cover_cyber.png',
-                                            ).image,
-                                          ),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 18.0, 5.0, 0.0),
-                                        child: Text(
-                                          'Syber Gaming Store',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 4.0, 5.0, 0.0),
-                                        child: Text(
-                                          'Explore new gaming adventures, accessories, &',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                fontSize: 11.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 8.0, 0.0, 5.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              'Visit',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .success,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(4.0, 0.0, 0.0, 0.0),
-                                              child: Icon(
-                                                Icons.arrow_outward_sharp,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .success,
-                                                size: 18.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                    children: List.generate(brandItem.length,
+                                        (brandItemIndex) {
+                                      final brandItemItem =
+                                          brandItem[brandItemIndex];
+                                      return MarketBrandCardWidget(
+                                        key: Key(
+                                            'Keyr62_${brandItemIndex}_of_${brandItem.length}'),
+                                        name: functions.notificationText(
+                                            brandItemItem,
+                                            'name',
+                                            FFAppState().languageCode),
+                                        description: functions.notificationText(
+                                            brandItemItem,
+                                            'description',
+                                            FFAppState().languageCode),
+                                        logoUrl: functions.bannerImageUrl(
+                                            getJsonField(
+                                              brandItemItem,
+                                              r'''$.logoPath''',
+                                            ).toString(),
+                                            FFDevEnvironmentValues().baseURL),
+                                        coverUrl: functions.bannerImageUrl(
+                                            getJsonField(
+                                              brandItemItem,
+                                              r'''$.coverPath''',
+                                            ).toString(),
+                                            FFDevEnvironmentValues().baseURL),
+                                        onTap: () async {
+                                          await actions.openMarketplaceItem(
+                                            context,
+                                            brandItemItem,
+                                            FFAppState().languageCode,
+                                          );
+                                        },
+                                      );
+                                    }).divide(SizedBox(width: 10.0)),
                                   ),
-                                  Align(
-                                    alignment: AlignmentDirectional(-1.0, 1.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10.0, 0.0, 0.0, 90.0),
-                                      child: Container(
-                                        width: 42.0,
-                                        height: 42.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
-                                        child: Container(
-                                          width: 35.0,
-                                          height: 35.0,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/mk_mtn.png',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                );
+                              },
                             ),
-                            Container(
-                              width: 152.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.0),
-                                border: Border.all(
-                                  color: Color(0xFFF0F0F0),
-                                  width: 1.0,
-                                ),
-                              ),
-                              child: Stack(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        (FFCrossAxisAlignment.start)
-                                            .flutterValue,
-                                    textBaseline: TextBaseline.alphabetic,
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 67.5,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: Image.asset(
-                                              'assets/images/mk_cover_mtn.png',
-                                            ).image,
-                                          ),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 18.0, 5.0, 0.0),
-                                        child: Text(
-                                          'Syber Gaming Store',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 4.0, 5.0, 0.0),
-                                        child: Text(
-                                          'Explore new gaming adventures, accessories, &',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                fontSize: 11.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 8.0, 0.0, 5.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              'Visit',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .success,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(4.0, 0.0, 0.0, 0.0),
-                                              child: Icon(
-                                                Icons.arrow_outward_sharp,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .success,
-                                                size: 18.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(-1.0, 1.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10.0, 0.0, 0.0, 90.0),
-                                      child: Container(
-                                        width: 42.0,
-                                        height: 42.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
-                                        child: Container(
-                                          width: 35.0,
-                                          height: 35.0,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/mk_sudani.png',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: 152.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.0),
-                                border: Border.all(
-                                  color: Color(0xFFF0F0F0),
-                                  width: 1.0,
-                                ),
-                              ),
-                              child: Stack(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        (FFCrossAxisAlignment.start)
-                                            .flutterValue,
-                                    textBaseline: TextBaseline.alphabetic,
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 67.5,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: Image.asset(
-                                              'assets/images/mk_cover_ikm.png',
-                                            ).image,
-                                          ),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 18.0, 5.0, 0.0),
-                                        child: Text(
-                                          'Syber Gaming Store',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 4.0, 5.0, 0.0),
-                                        child: Text(
-                                          'Explore new gaming adventures, accessories, &',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                fontSize: 11.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            6.0, 8.0, 0.0, 5.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              'Visit',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .success,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(4.0, 0.0, 0.0, 0.0),
-                                              child: Icon(
-                                                Icons.arrow_outward_sharp,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .success,
-                                                size: 18.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(-1.0, 1.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10.0, 0.0, 0.0, 90.0),
-                                      child: Container(
-                                        width: 42.0,
-                                        height: 42.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
-                                        child: Container(
-                                          width: 35.0,
-                                          height: 35.0,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/mk_canar.png',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ].divide(SizedBox(width: 10.0)),
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

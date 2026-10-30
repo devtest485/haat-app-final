@@ -288,7 +288,7 @@ class _WalletBalanceState extends State<WalletBalance>
     return SizeTransition(
       sizeFactor: CurvedAnimation(parent: _note, curve: Curves.easeOutCubic),
       axis: Axis.horizontal,
-      alignment: AlignmentDirectional.centerStart,
+      axisAlignment: -1.0,
       child: FadeTransition(
         opacity: _note,
         child: SlideTransition(

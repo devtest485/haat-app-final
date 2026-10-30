@@ -87,296 +87,364 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    (FFMainAxisAlignment.spaceBetween)
-                                        .flutterValue,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 67.0, 0.0, 0.0),
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x4CFFFFFF),
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x4DFFFFFF),
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 19.0, 0.0, 0.0),
-                                    child: Container(
-                                      width: double.infinity,
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Container(
                                       decoration: BoxDecoration(),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            (FFMainAxisAlignment.spaceBetween)
+                                                .flutterValue,
                                         children: [
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 10.0, 0.0, 0.0),
+                                                    0.0, 67.0, 0.0, 0.0),
                                             child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0x4CFFFFFF),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0x4DFFFFFF),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 19.0, 0.0, 0.0),
+                                            child: Container(
+                                              width: double.infinity,
                                               decoration: BoxDecoration(),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.max,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    'Create a password',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 10.0,
+                                                                0.0, 0.0),
+                                                    child: Container(
+                                                      decoration:
+                                                          BoxDecoration(),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            'Create a passcode',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                  fontSize:
+                                                                      30.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
                                                           ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 30.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    'Please create a 6-digit passcode to use when logging in and approving actions.',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
+                                                          Text(
+                                                            'Please create a 6-digit passcode to use when logging in and approving actions.',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: Color(
+                                                                      0xFFEBEBEB),
+                                                                  fontSize:
+                                                                      15.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                  lineHeight:
+                                                                      1.3,
+                                                                ),
                                                           ),
-                                                          color:
-                                                              Color(0xFFEBEBEB),
-                                                          fontSize: 15.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                          lineHeight: 1.3,
-                                                        ),
+                                                        ].divide(SizedBox(
+                                                            height: 9.0)),
+                                                      ),
+                                                    ),
                                                   ),
-                                                ].divide(SizedBox(height: 9.0)),
+                                                ].divide(
+                                                    SizedBox(height: 24.0)),
                                               ),
                                             ),
                                           ),
-                                        ].divide(SizedBox(height: 24.0)),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 40.0, 0.0, 0.0),
+                                            child: Container(
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  0.8,
+                                              height: 100.0,
+                                              decoration: BoxDecoration(),
+                                              alignment: AlignmentDirectional(
+                                                  0.0, 0.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  0)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  1)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  2)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  3)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  4)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  5)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ].divide(SizedBox(width: 10.0)),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 135.0, 0.0, 0.0),
-                                    child: Container(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.8,
-                                      height: 100.0,
-                                      decoration: BoxDecoration(),
-                                      alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 0)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 1)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 2)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 3)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 4)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 5)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                        ].divide(SizedBox(width: 10.0)),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             Padding(
@@ -1737,299 +1805,369 @@ class _PassCodePageWidgetState extends State<PassCodePageWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 67.0, 0.0, 0.0),
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x4CFFFFFF),
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.17,
-                                            height: 3.0,
-                                            decoration: BoxDecoration(
-                                              color: Color(0x4DFFFFFF),
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 19.0, 0.0, 0.0),
-                                    child: Container(
-                                      width: double.infinity,
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Container(
                                       decoration: BoxDecoration(),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
                                         children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 67.0, 0.0, 0.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0x4CFFFFFF),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.17,
+                                                    height: 3.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0x4DFFFFFF),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2.0),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 19.0, 0.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                InkWell(
-                                                  splashColor:
-                                                      Colors.transparent,
-                                                  focusColor:
-                                                      Colors.transparent,
-                                                  hoverColor:
-                                                      Colors.transparent,
-                                                  highlightColor:
-                                                      Colors.transparent,
-                                                  onTap: () async {
-                                                    _model.reenterPin = false;
-                                                    safeSetState(() {});
-                                                    _model.pinCode = '';
-                                                    safeSetState(() {});
-                                                    _model.createdPasscode = '';
-                                                    safeSetState(() {});
-                                                    _model.passcodeResult = 0;
-                                                    safeSetState(() {});
-                                                  },
-                                                  child: Icon(
-                                                    Icons.arrow_back,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    size: 24.0,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 10.0, 0.0, 0.0),
                                             child: Container(
+                                              width: double.infinity,
                                               decoration: BoxDecoration(),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.max,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    'Re-enter your passcode',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 19.0,
+                                                                0.0, 0.0),
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          onTap: () async {
+                                                            _model.reenterPin =
+                                                                false;
+                                                            safeSetState(() {});
+                                                            _model.pinCode = '';
+                                                            safeSetState(() {});
+                                                            _model.createdPasscode =
+                                                                '';
+                                                            safeSetState(() {});
+                                                            _model.passcodeResult =
+                                                                0;
+                                                            safeSetState(() {});
+                                                          },
+                                                          child: Icon(
+                                                            Icons.arrow_back,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primaryText,
+                                                            size: 24.0,
                                                           ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 30.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
                                                         ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ].divide(SizedBox(height: 9.0)),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 10.0,
+                                                                0.0, 0.0),
+                                                    child: Container(
+                                                      decoration:
+                                                          BoxDecoration(),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            'Re-enter your passcode',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                  fontSize:
+                                                                      30.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                          ),
+                                                        ].divide(SizedBox(
+                                                            height: 9.0)),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 40.0, 0.0, 0.0),
+                                            child: Container(
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  0.8,
+                                              height: 100.0,
+                                              decoration: BoxDecoration(),
+                                              alignment: AlignmentDirectional(
+                                                  0.0, 0.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  0)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  1)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  2)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  3)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  4)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 16.0,
+                                                    height: 16.0,
+                                                    decoration: BoxDecoration(
+                                                      color: functions
+                                                              .isPinDotFilled(
+                                                                  _model
+                                                                      .pinCode,
+                                                                  5)
+                                                          ? FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText
+                                                          : Color(0x00000000),
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        color:
+                                                            Color(0xFFE7E7E7),
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ].divide(SizedBox(width: 10.0)),
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 135.0, 0.0, 0.0),
-                                    child: Container(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.8,
-                                      height: 100.0,
-                                      decoration: BoxDecoration(),
-                                      alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 0)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 1)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 2)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 3)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 4)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 16.0,
-                                            height: 16.0,
-                                            decoration: BoxDecoration(
-                                              color: functions.isPinDotFilled(
-                                                      _model.pinCode, 5)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .primaryText
-                                                  : Color(0x00000000),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFFE7E7E7),
-                                                width: 1.0,
-                                              ),
-                                            ),
-                                          ),
-                                        ].divide(SizedBox(width: 10.0)),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             Padding(

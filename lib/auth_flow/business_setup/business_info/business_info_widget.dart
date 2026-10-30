@@ -85,7 +85,7 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                           ),
                         ),
                         Text(
-                          'Lets setup your business ',
+                          'Let\'s set up your business',
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(
@@ -108,7 +108,7 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Your business account and digital store has been successfully created',
+                            'A few quick questions and your digital store is ready.',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium

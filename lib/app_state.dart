@@ -330,8 +330,8 @@ class FFAppState extends ChangeNotifier {
 
   /// True once the statement has come back with at least one line.
   ///
-  /// Written by the MerchantTransactions widget, read by the empty screen
-  /// beside it.
+  /// Written by the haatHasTransactions action, read by the empty screen of the
+  /// transactions page.
   bool _hasTransactions = false;
   bool get hasTransactions => _hasTransactions;
   set hasTransactions(bool value) {

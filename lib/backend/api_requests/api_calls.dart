@@ -30,6 +30,7 @@ class HaatAuthGroup {
     'Content-Type': 'application/json',
     'Accept-Language': '[language]',
   };
+  static OrganizationsCall organizationsCall = OrganizationsCall();
   static RegisterUserCall registerUserCall = RegisterUserCall();
   static ResendOtpCall resendOtpCall = ResendOtpCall();
   static VerifyOtpCall verifyOtpCall = VerifyOtpCall();
@@ -72,6 +73,51 @@ class HaatAuthGroup {
   static AssignRoleCall assignRoleCall = AssignRoleCall();
   static RevokeRoleCall revokeRoleCall = RevokeRoleCall();
   static CloseBranchCall closeBranchCall = CloseBranchCall();
+}
+
+class OrganizationsCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Organizations',
+      apiUrl: '${baseUrl}/organizations',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: true,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? organizations(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
 }
 
 class RegisterUserCall {

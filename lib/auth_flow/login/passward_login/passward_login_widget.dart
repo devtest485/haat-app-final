@@ -421,7 +421,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                               .fontStyle,
                                                                         ),
                                                                     keyboardType:
-                                                                        (FFKeyboardType.signedDecimal)
+                                                                        (FFKeyboardType.text)
                                                                             .flutterValue,
                                                                     cursorColor:
                                                                         FlutterFlowTheme.of(context)

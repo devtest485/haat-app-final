@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'login_screen_widget.dart' show LoginScreenWidget;
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class LoginScreenModel extends FlutterFlowModel<LoginScreenWidget> {
   bool? biometricKey;
   // Stores action output result for [Custom Action - haatSignInWithBiometrics] action in LoginScreen widget.
   String? biometricSignIn;
-  // Stores action output result for [Custom Action - haatSignInWithBiometrics] action in BiometricMark widget.
+  // Stores action output result for [Custom Action - haatSignInWithBiometrics] action in Container widget.
   String? biometricRetry;
 
   @override

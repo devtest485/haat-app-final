@@ -204,7 +204,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Book Store username',
+                                            'Store username',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(

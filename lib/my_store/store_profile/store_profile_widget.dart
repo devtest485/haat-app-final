@@ -6,10 +6,12 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'store_profile_model.dart';
@@ -35,6 +37,13 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => StoreProfileModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.profileResult = await actions.haatStoreProfile();
+      _model.profile = _model.profileResult;
+      safeSetState(() {});
+    });
   }
 
   @override
@@ -154,7 +163,13 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                     ),
                                               ),
                                               TextSpan(
-                                                text: 'jebena-house',
+                                                text: valueOrDefault<String>(
+                                                  getJsonField(
+                                                    _model.profile,
+                                                    r'''$.handle''',
+                                                  )?.toString(),
+                                                  '—',
+                                                ),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -262,7 +277,13 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 18.0, 0.0, 0.0),
                                             child: Text(
-                                              'Lipper Pizza',
+                                              valueOrDefault<String>(
+                                                getJsonField(
+                                                  _model.profile,
+                                                  r'''$.name''',
+                                                )?.toString(),
+                                                '—',
+                                              ),
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .bodyMedium
@@ -314,7 +335,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                               .flutterValue,
                                                       children: [
                                                         Text(
-                                                          '1,284',
+                                                          valueOrDefault<
+                                                              String>(
+                                                            getJsonField(
+                                                              _model.profile,
+                                                              r'''$.orders''',
+                                                            )?.toString(),
+                                                            '—',
+                                                          ),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium
@@ -383,7 +411,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                               .flutterValue,
                                                       children: [
                                                         Text(
-                                                          '24',
+                                                          valueOrDefault<
+                                                              String>(
+                                                            getJsonField(
+                                                              _model.profile,
+                                                              r'''$.products''',
+                                                            )?.toString(),
+                                                            '—',
+                                                          ),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium
@@ -452,7 +487,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                               .flutterValue,
                                                       children: [
                                                         Text(
-                                                          '5',
+                                                          valueOrDefault<
+                                                              String>(
+                                                            getJsonField(
+                                                              _model.profile,
+                                                              r'''$.staff''',
+                                                            )?.toString(),
+                                                            '—',
+                                                          ),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium
@@ -519,7 +561,7 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 25.0, 0.0, 0.0),
                                             child: Text(
-                                              'Jebena coffee, karkadeh and fresh pastries\nBahri, Khartoum · Open until 11 pm',
+                                              '',
                                               textAlign: TextAlign.center,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -589,7 +631,7 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                'Mange',
+                                                'Manage',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -732,7 +774,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                                 width: 8.0)),
                                                           ),
                                                           Text(
-                                                            '24 products · 3 out of stock',
+                                                            valueOrDefault<
+                                                                String>(
+                                                              getJsonField(
+                                                                _model.profile,
+                                                                r'''$.productsLine''',
+                                                              )?.toString(),
+                                                              '—',
+                                                            ),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -875,7 +924,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                                 width: 8.0)),
                                                           ),
                                                           Text(
-                                                            '5 people · 1 invite pending',
+                                                            valueOrDefault<
+                                                                String>(
+                                                              getJsonField(
+                                                                _model.profile,
+                                                                r'''$.staffLine''',
+                                                              )?.toString(),
+                                                              '—',
+                                                            ),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -1019,7 +1075,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                                 width: 8.0)),
                                                           ),
                                                           Text(
-                                                            '2 branches · Khartoum, Bahri',
+                                                            valueOrDefault<
+                                                                String>(
+                                                              getJsonField(
+                                                                _model.profile,
+                                                                r'''$.branchesLine''',
+                                                              )?.toString(),
+                                                              '—',
+                                                            ),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -1150,7 +1213,14 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                               width: 8.0)),
                                                         ),
                                                         Text(
-                                                          'Licence, owner ID and documents · Verified',
+                                                          valueOrDefault<
+                                                              String>(
+                                                            getJsonField(
+                                                              _model.profile,
+                                                              r'''$.kybLine''',
+                                                            )?.toString(),
+                                                            '—',
+                                                          ),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium
@@ -1296,7 +1366,7 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                             children: [
                                                               Expanded(
                                                                 child: Text(
-                                                                  'Privay Policy',
+                                                                  'Privacy Policy',
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -1329,7 +1399,7 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                                 width: 8.0)),
                                                           ),
                                                           Text(
-                                                            'Returns, refunds and delivery',
+                                                            'How HAAT handles your information',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium

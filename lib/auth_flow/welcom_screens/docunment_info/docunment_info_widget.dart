@@ -201,7 +201,7 @@ class _DocunmentInfoWidgetState extends State<DocunmentInfoWidget> {
                                 ),
                                 alignment: AlignmentDirectional(0.0, 0.0),
                                 child: Text(
-                                  'Enable',
+                                  'Upload',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(

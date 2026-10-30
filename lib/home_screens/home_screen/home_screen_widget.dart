@@ -7,6 +7,7 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/instant_timer.dart';
 import '/home_screens/business_story/business_story_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
@@ -110,6 +111,38 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             _model.transactionsLoaded = true;
             safeSetState(() {});
           }
+        }),
+        Future(() async {
+          _model.organizationsResult =
+              await HaatAuthGroup.organizationsCall.call(
+            accessToken: _model.token,
+          );
+
+          if ((_model.organizationsResult?.succeeded ?? true)) {
+            _model.businessStatus =
+                functions.businessStatus(HaatAuthGroup.organizationsCall
+                    .organizations(
+                      (_model.organizationsResult?.jsonBody ?? ''),
+                    )
+                    ?.toList());
+            safeSetState(() {});
+          }
+        }),
+        Future(() async {
+          _model.bannerAutoplay = InstantTimer.periodic(
+            duration: Duration(milliseconds: 4000),
+            callback: (timer) async {
+              if (_model.banners.length > 1) {
+                await _model.pageViewController?.animateToPage(
+                  functions.nextPageIndex(
+                      _model.pageViewCurrentIndex, _model.banners.length),
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              }
+            },
+            startImmediately: false,
+          );
         }),
       ]);
       _model.apiResult1ib = await HaatAuthGroup.recentTransactionsCall.call(
@@ -973,6 +1006,296 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          if ((_model.businessStatus ==
+                                                  'pending') ||
+                                              (_model.businessStatus ==
+                                                  'suspended'))
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      10.0, 0.0, 10.0, 16.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  if (_model.businessStatus ==
+                                                      'pending')
+                                                    Container(
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xFFFFF3D6),
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                        ),
+                                                        border: Border.all(
+                                                          color:
+                                                              Color(0x808A5A00),
+                                                          width: 1.0,
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    14.0,
+                                                                    14.0,
+                                                                    14.0,
+                                                                    14.0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          crossAxisAlignment:
+                                                              (FFCrossAxisAlignment
+                                                                      .start)
+                                                                  .flutterValue,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .hourglass_top_rounded,
+                                                              color: Color(
+                                                                  0xFF8A5A00),
+                                                              size: 22.0,
+                                                            ),
+                                                            Expanded(
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                crossAxisAlignment:
+                                                                    (FFCrossAxisAlignment
+                                                                            .start)
+                                                                        .flutterValue,
+                                                                textBaseline:
+                                                                    TextBaseline
+                                                                        .alphabetic,
+                                                                children: [
+                                                                  Text(
+                                                                    FFAppState().languageCode ==
+                                                                            'ar'
+                                                                        ? 'بانتظار موافقة هات'
+                                                                        : 'Waiting for approval',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          font:
+                                                                              GoogleFonts.inter(
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                          color:
+                                                                              Color(0xFF8A5A00),
+                                                                          fontSize:
+                                                                              14.0,
+                                                                          letterSpacing:
+                                                                              0.0,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                  ),
+                                                                  Text(
+                                                                    FFAppState().languageCode ==
+                                                                            'ar'
+                                                                        ? 'تراجع هات نشاطك التجاري. يمكنك استخدام التطبيق، وتُفتح المدفوعات والتحويلات بعد الموافقة.'
+                                                                        : 'HAAT is reviewing your business. You can use the app; payments and payouts open once it is approved.',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          font:
+                                                                              GoogleFonts.inter(
+                                                                            fontWeight:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                          color:
+                                                                              Color(0xFF2E2E2E),
+                                                                          fontSize:
+                                                                              12.5,
+                                                                          letterSpacing:
+                                                                              0.0,
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                          lineHeight:
+                                                                              1.35,
+                                                                        ),
+                                                                  ),
+                                                                ].divide(SizedBox(
+                                                                    height:
+                                                                        4.0)),
+                                                              ),
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              width: 12.0)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  if (_model.businessStatus ==
+                                                      'suspended')
+                                                    Container(
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xFFFCE8E6),
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  12.0),
+                                                        ),
+                                                        border: Border.all(
+                                                          color:
+                                                              Color(0x80B3261E),
+                                                          width: 1.0,
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    14.0,
+                                                                    14.0,
+                                                                    14.0,
+                                                                    14.0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          crossAxisAlignment:
+                                                              (FFCrossAxisAlignment
+                                                                      .start)
+                                                                  .flutterValue,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .block_rounded,
+                                                              color: Color(
+                                                                  0xFFB3261E),
+                                                              size: 22.0,
+                                                            ),
+                                                            Expanded(
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                crossAxisAlignment:
+                                                                    (FFCrossAxisAlignment
+                                                                            .start)
+                                                                        .flutterValue,
+                                                                textBaseline:
+                                                                    TextBaseline
+                                                                        .alphabetic,
+                                                                children: [
+                                                                  Text(
+                                                                    FFAppState().languageCode ==
+                                                                            'ar'
+                                                                        ? 'تم إيقاف نشاطك التجاري'
+                                                                        : 'Your business is suspended',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          font:
+                                                                              GoogleFonts.inter(
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                          color:
+                                                                              Color(0xFFB3261E),
+                                                                          fontSize:
+                                                                              14.0,
+                                                                          letterSpacing:
+                                                                              0.0,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                  ),
+                                                                  Text(
+                                                                    FFAppState().languageCode ==
+                                                                            'ar'
+                                                                        ? 'لا يمكنك استقبال المدفوعات أو طلب التحويلات. تواصل مع دعم هات.'
+                                                                        : 'You cannot take payments or ask for payouts. Contact HAAT support.',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          font:
+                                                                              GoogleFonts.inter(
+                                                                            fontWeight:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                          ),
+                                                                          color:
+                                                                              Color(0xFF2E2E2E),
+                                                                          fontSize:
+                                                                              12.5,
+                                                                          letterSpacing:
+                                                                              0.0,
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                          lineHeight:
+                                                                              1.35,
+                                                                        ),
+                                                                  ),
+                                                                ].divide(SizedBox(
+                                                                    height:
+                                                                        4.0)),
+                                                              ),
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              width: 12.0)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
@@ -1242,7 +1565,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             0.0),
                                                                         child:
                                                                             Text(
-                                                                          'Start by adding your first employee to keep your team information organized and up to date.',
+                                                                          'Payments you receive will show up here.',
                                                                           textAlign:
                                                                               TextAlign.center,
                                                                           style: FlutterFlowTheme.of(context)
@@ -1360,50 +1683,50 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                 MainAxisSize
                                                                     .max,
                                                             children: [
-                                                              HomeBannerWidget(
-                                                                key: Key(
-                                                                    'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
-                                                                backgroundColor:
-                                                                    functions
-                                                                        .bannerBackground(
-                                                                            getJsonField(
-                                                                  bannerItemItem,
-                                                                  r'''$.backgroundColor''',
-                                                                ).toString()),
-                                                                title:
-                                                                    getJsonField(
-                                                                  bannerItemItem,
-                                                                  r'''$.title''',
-                                                                ).toString(),
-                                                                imageUrl: functions
-                                                                    .bannerImageUrl(
-                                                                        getJsonField(
-                                                                          bannerItemItem,
-                                                                          r'''$.imagePath''',
-                                                                        )
-                                                                            .toString(),
-                                                                        FFDevEnvironmentValues()
-                                                                            .baseURL),
-                                                                dotCount: _model
-                                                                    .banners
-                                                                    .length,
-                                                                activeIndex: _model
-                                                                    .pageViewCurrentIndex,
-                                                                onTap:
-                                                                    () async {
-                                                                  await actions
-                                                                      .openBannerLink(
-                                                                    context,
-                                                                    getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.actionUrl''',
-                                                                    ).toString(),
-                                                                    getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.actionRoute''',
-                                                                    ).toString(),
-                                                                  );
-                                                                },
+                                                              Expanded(
+                                                                child:
+                                                                    HomeBannerWidget(
+                                                                  key: Key(
+                                                                      'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
+                                                                  backgroundColor:
+                                                                      functions
+                                                                          .bannerBackground(
+                                                                              getJsonField(
+                                                                    bannerItemItem,
+                                                                    r'''$.backgroundColor''',
+                                                                  ).toString()),
+                                                                  title:
+                                                                      getJsonField(
+                                                                    bannerItemItem,
+                                                                    r'''$.title''',
+                                                                  ).toString(),
+                                                                  imageUrl: functions.bannerImageUrl(
+                                                                      getJsonField(
+                                                                        bannerItemItem,
+                                                                        r'''$.imagePath''',
+                                                                      ).toString(),
+                                                                      FFDevEnvironmentValues().baseURL),
+                                                                  dotCount: _model
+                                                                      .banners
+                                                                      .length,
+                                                                  activeIndex:
+                                                                      bannerItemIndex,
+                                                                  onTap:
+                                                                      () async {
+                                                                    await actions
+                                                                        .openBannerLink(
+                                                                      context,
+                                                                      getJsonField(
+                                                                        bannerItemItem,
+                                                                        r'''$.actionUrl''',
+                                                                      ).toString(),
+                                                                      getJsonField(
+                                                                        bannerItemItem,
+                                                                        r'''$.actionRoute''',
+                                                                      ).toString(),
+                                                                    );
+                                                                  },
+                                                                ),
                                                               ),
                                                             ],
                                                           );
@@ -2217,14 +2540,57 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     10.0, 10.0, 10.0, 0.0),
-                                            child: Container(
-                                              width: double.infinity,
-                                              height: 10.0,
-                                              child:
-                                                  custom_widgets.SegmentedBar(
-                                                width: double.infinity,
-                                                height: 10.0,
-                                              ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Expanded(
+                                                  flex: 54,
+                                                  child: Container(
+                                                    height: 10.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.black,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                5.0),
+                                                        bottomLeft:
+                                                            Radius.circular(
+                                                                5.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 31,
+                                                  child: Container(
+                                                    height: 10.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFF60D880),
+                                                      borderRadius:
+                                                          BorderRadius.only(),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 15,
+                                                  child: Container(
+                                                    height: 10.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFFBEBEBE),
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topRight:
+                                                            Radius.circular(
+                                                                5.0),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                5.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ].divide(SizedBox(width: 2.0)),
                                             ),
                                           ),
                                           Padding(
@@ -2852,34 +3218,55 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryBackground,
                                           ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 15.0, 0.0, 0.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    (FFCrossAxisAlignment.start)
-                                                        .flutterValue,
-                                                textBaseline:
-                                                    TextBaseline.alphabetic,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(8.0, 0.0,
-                                                                0.0, 0.0),
-                                                    child: Text(
-                                                      'How was your week in minutes 🤩 ',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .montserrat(
+                                          if (_model.weekStories.length > 0)
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 15.0, 0.0, 0.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      (FFCrossAxisAlignment
+                                                              .start)
+                                                          .flutterValue,
+                                                  textBaseline:
+                                                      TextBaseline.alphabetic,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  8.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Text(
+                                                        'How was your week in minutes 🤩 ',
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryBackground,
+                                                                  fontSize:
+                                                                      16.0,
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -2888,137 +3275,123 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryBackground,
-                                                                fontSize: 16.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 15.0,
-                                                                0.0, 0.0),
-                                                    child: Container(
-                                                      width: double.infinity,
-                                                      decoration:
-                                                          BoxDecoration(),
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0,
-                                                                        20.0),
-                                                            child: Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              decoration:
-                                                                  BoxDecoration(),
-                                                              child: Builder(
-                                                                builder:
-                                                                    (context) {
-                                                                  final weekStoryItem = _model
-                                                                      .weekStories
-                                                                      .toList();
-
-                                                                  return SingleChildScrollView(
-                                                                    scrollDirection:
-                                                                        Axis.horizontal,
-                                                                    child: Row(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .max,
-                                                                      mainAxisAlignment:
-                                                                          (FFMainAxisAlignment.spaceBetween)
-                                                                              .flutterValue,
-                                                                      children: List.generate(
-                                                                          weekStoryItem
-                                                                              .length,
-                                                                          (weekStoryItemIndex) {
-                                                                        final weekStoryItemItem =
-                                                                            weekStoryItem[weekStoryItemIndex];
-                                                                        return WeekStoryCardWidget(
-                                                                          key: Key(
-                                                                              'Keyxir_${weekStoryItemIndex}_of_${weekStoryItem.length}'),
-                                                                          value: functions.notificationText(
-                                                                              weekStoryItemItem,
-                                                                              'value',
-                                                                              FFAppState().languageCode),
-                                                                          unit: functions.notificationText(
-                                                                              weekStoryItemItem,
-                                                                              'unit',
-                                                                              FFAppState().languageCode),
-                                                                          label: functions.notificationText(
-                                                                              weekStoryItemItem,
-                                                                              'label',
-                                                                              FFAppState().languageCode),
-                                                                          detail: functions.notificationText(
-                                                                              weekStoryItemItem,
-                                                                              'detail',
-                                                                              FFAppState().languageCode),
-                                                                          imageUrl: functions.bannerImageUrl(
-                                                                              getJsonField(
-                                                                                weekStoryItemItem,
-                                                                                r'''$.cardImagePath''',
-                                                                              ).toString(),
-                                                                              FFDevEnvironmentValues().baseURL),
-                                                                          onTap:
-                                                                              () async {
-                                                                            await showModalBottomSheet(
-                                                                              isScrollControlled: true,
-                                                                              backgroundColor: Colors.transparent,
-                                                                              enableDrag: false,
-                                                                              context: context,
-                                                                              builder: (context) {
-                                                                                return Padding(
-                                                                                  padding: MediaQuery.viewInsetsOf(context),
-                                                                                  child: Container(
-                                                                                    height: MediaQuery.sizeOf(context).height * 1.0,
-                                                                                    child: BusinessStoryWidget(
-                                                                                      stories: _model.weekStories,
-                                                                                      initialIndex: weekStoryItemIndex,
-                                                                                    ),
-                                                                                  ),
-                                                                                );
-                                                                              },
-                                                                            ).then((value) =>
-                                                                                safeSetState(() {}));
-                                                                          },
-                                                                        );
-                                                                      }).divide(SizedBox(
-                                                                          width:
-                                                                              10.0)),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ].divide(SizedBox(
-                                                            height: 13.0)),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  15.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Container(
+                                                        width: double.infinity,
+                                                        decoration:
+                                                            BoxDecoration(),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          20.0),
+                                                              child: Container(
+                                                                width: double
+                                                                    .infinity,
+                                                                decoration:
+                                                                    BoxDecoration(),
+                                                                child: Builder(
+                                                                  builder:
+                                                                      (context) {
+                                                                    final weekStoryItem = _model
+                                                                        .weekStories
+                                                                        .toList();
+
+                                                                    return SingleChildScrollView(
+                                                                      scrollDirection:
+                                                                          Axis.horizontal,
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        mainAxisAlignment:
+                                                                            (FFMainAxisAlignment.spaceBetween).flutterValue,
+                                                                        children: List.generate(
+                                                                            weekStoryItem.length,
+                                                                            (weekStoryItemIndex) {
+                                                                          final weekStoryItemItem =
+                                                                              weekStoryItem[weekStoryItemIndex];
+                                                                          return WeekStoryCardWidget(
+                                                                            key:
+                                                                                Key('Keyxir_${weekStoryItemIndex}_of_${weekStoryItem.length}'),
+                                                                            value: functions.notificationText(
+                                                                                weekStoryItemItem,
+                                                                                'value',
+                                                                                FFAppState().languageCode),
+                                                                            unit: functions.notificationText(
+                                                                                weekStoryItemItem,
+                                                                                'unit',
+                                                                                FFAppState().languageCode),
+                                                                            label: functions.notificationText(
+                                                                                weekStoryItemItem,
+                                                                                'label',
+                                                                                FFAppState().languageCode),
+                                                                            detail: functions.notificationText(
+                                                                                weekStoryItemItem,
+                                                                                'detail',
+                                                                                FFAppState().languageCode),
+                                                                            imageUrl: functions.bannerImageUrl(
+                                                                                getJsonField(
+                                                                                  weekStoryItemItem,
+                                                                                  r'''$.cardImagePath''',
+                                                                                ).toString(),
+                                                                                FFDevEnvironmentValues().baseURL),
+                                                                            onTap:
+                                                                                () async {
+                                                                              await showModalBottomSheet(
+                                                                                isScrollControlled: true,
+                                                                                backgroundColor: Colors.transparent,
+                                                                                enableDrag: false,
+                                                                                context: context,
+                                                                                builder: (context) {
+                                                                                  return Padding(
+                                                                                    padding: MediaQuery.viewInsetsOf(context),
+                                                                                    child: Container(
+                                                                                      height: MediaQuery.sizeOf(context).height * 1.0,
+                                                                                      child: BusinessStoryWidget(
+                                                                                        stories: _model.weekStories,
+                                                                                        initialIndex: weekStoryItemIndex,
+                                                                                      ),
+                                                                                    ),
+                                                                                  );
+                                                                                },
+                                                                              ).then((value) => safeSetState(() {}));
+                                                                            },
+                                                                          );
+                                                                        }).divide(SizedBox(
+                                                                            width:
+                                                                                10.0)),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              height: 13.0)),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
                                           Container(
                                             width: double.infinity,
                                             decoration: BoxDecoration(
@@ -3037,7 +3410,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                     custom_widgets.HaatAiCard(
                                                   width: double.infinity,
                                                   height: 390.0,
-                                                  userName: 'Ahmed',
+                                                  userName:
+                                                      FFAppState().displayName,
                                                   subtitle:
                                                       'what should we grow today?',
                                                   placeholder: 'Ask HAAT Ai',
@@ -3179,30 +3553,55 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .fontStyle,
                                                                 ),
                                                           ),
-                                                          Container(
-                                                            width: 58.0,
-                                                            height: 25.0,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryBackground,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100.0),
-                                                            ),
-                                                            alignment:
-                                                                AlignmentDirectional(
-                                                                    0.0, 0.0),
-                                                            child: Text(
-                                                              'Manage',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .montserrat(
+                                                          InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              context.pushNamed(
+                                                                  StaffWidget
+                                                                      .routeName);
+                                                            },
+                                                            child: Container(
+                                                              width: 58.0,
+                                                              height: 25.0,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBackground,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100.0),
+                                                              ),
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      0.0, 0.0),
+                                                              child: Text(
+                                                                'Manage',
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      font: GoogleFonts
+                                                                          .montserrat(
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                      fontSize:
+                                                                          10.0,
+                                                                      letterSpacing:
+                                                                          0.0,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w600,
@@ -3211,18 +3610,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           .bodyMedium
                                                                           .fontStyle,
                                                                     ),
-                                                                    fontSize:
-                                                                        10.0,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ].divide(SizedBox(
@@ -3269,7 +3657,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            'Manage My Staff',
+                                                            'Manage My Products',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -3300,30 +3688,55 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .fontStyle,
                                                                 ),
                                                           ),
-                                                          Container(
-                                                            width: 58.0,
-                                                            height: 25.0,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryBackground,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100.0),
-                                                            ),
-                                                            alignment:
-                                                                AlignmentDirectional(
-                                                                    0.0, 0.0),
-                                                            child: Text(
-                                                              'Manage',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .montserrat(
+                                                          InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              context.pushNamed(
+                                                                  ProductsWidget
+                                                                      .routeName);
+                                                            },
+                                                            child: Container(
+                                                              width: 58.0,
+                                                              height: 25.0,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBackground,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            100.0),
+                                                              ),
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      0.0, 0.0),
+                                                              child: Text(
+                                                                'Manage',
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      font: GoogleFonts
+                                                                          .montserrat(
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                      fontSize:
+                                                                          10.0,
+                                                                      letterSpacing:
+                                                                          0.0,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w600,
@@ -3332,18 +3745,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                           .bodyMedium
                                                                           .fontStyle,
                                                                     ),
-                                                                    fontSize:
-                                                                        10.0,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ].divide(SizedBox(

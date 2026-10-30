@@ -195,6 +195,12 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
                   width: 99.0,
                   height: 111.0,
                   fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    'assets/images/error_image.png',
+                    width: 99.0,
+                    height: 111.0,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
           ],

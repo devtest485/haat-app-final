@@ -17,13 +17,15 @@ class MarketBrandCardWidget extends StatefulWidget {
     this.description,
     this.logoUrl,
     this.coverUrl,
+    double? width,
     required this.onTap,
-  });
+  }) : this.width = width ?? 152.0;
 
   final String? name;
   final String? description;
   final String? logoUrl;
   final String? coverUrl;
+  final double width;
   final Future Function()? onTap;
 
   @override
@@ -63,7 +65,7 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
         await widget.onTap?.call();
       },
       child: Container(
-        width: 152.0,
+        width: widget!.width,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).primaryText,
           borderRadius: BorderRadius.circular(4.0),
@@ -73,7 +75,7 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
           ),
         ),
         child: Stack(
-          alignment: AlignmentDirectional(-1.0, 0.0),
+          alignment: AlignmentDirectional(-1.0, -1.0),
           children: [
             Column(
               mainAxisSize: MainAxisSize.max,
@@ -105,6 +107,13 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
                           width: double.infinity,
                           height: 67.55,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset(
+                            'assets/images/error_image.png',
+                            width: double.infinity,
+                            height: 67.55,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -123,6 +132,7 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
                                 .fontStyle,
                           ),
                           color: FlutterFlowTheme.of(context).primaryBackground,
+                          fontSize: 13.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                           fontStyle:
@@ -172,18 +182,15 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
                         'Visit',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontWeight,
+                                fontWeight: FontWeight.w600,
                                 fontStyle: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .fontStyle,
                               ),
                               color: FlutterFlowTheme.of(context).success,
+                              fontSize: 13.0,
                               letterSpacing: 0.0,
-                              fontWeight: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontWeight,
+                              fontWeight: FontWeight.w600,
                               fontStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .fontStyle,
@@ -241,6 +248,11 @@ class _MarketBrandCardWidgetState extends State<MarketBrandCardWidget> {
                                 child: Image.network(
                                   widget!.logoUrl!,
                                   fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset(
+                                    'assets/images/error_image.png',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             if (widget!.logoUrl == null ||

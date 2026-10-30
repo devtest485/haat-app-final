@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -213,17 +214,10 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(
-                                  TransfermethodWidget.routeName,
-                                  queryParameters: {
-                                    'transferMode': serializeParam(
-                                      'BBAN',
-                                      ParamType.String,
-                                    ),
-                                  }.withoutNulls,
+                                await actions.haatOpenPayout(
+                                  context,
+                                  widget!.fundsAmount,
                                 );
-
-                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: double.infinity,
@@ -272,7 +266,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'From my bank account',
+                                                'To my bank account',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -302,7 +296,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'CIF : •••7812',
+                                                'HAAT sends it from your wallet',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium

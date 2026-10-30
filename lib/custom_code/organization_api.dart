@@ -196,8 +196,9 @@ class OrganizationApi {
           if (salesChannels != null) 'salesChannels': salesChannels,
           if (addressLine != null) 'addressLine': addressLine,
           if (city != null) 'city': city,
-          if (latitude != null) 'latitude': latitude,
-          if (longitude != null) 'longitude': longitude,
+          // The backend takes decimal degrees as text, at most 8 places.
+          if (latitude != null) 'latitude': latitude.toStringAsFixed(6),
+          if (longitude != null) 'longitude': longitude.toStringAsFixed(6),
         },
         parse: (_) => true,
       );

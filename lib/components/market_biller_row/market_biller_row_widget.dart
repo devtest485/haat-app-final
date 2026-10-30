@@ -99,6 +99,11 @@ class _MarketBillerRowWidgetState extends State<MarketBillerRowWidget> {
                                 child: Image.network(
                                   widget!.logoUrl!,
                                   fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Image.asset(
+                                    'assets/images/error_image.png',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             if (widget!.logoUrl == null ||

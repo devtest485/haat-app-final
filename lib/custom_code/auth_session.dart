@@ -12,6 +12,8 @@ import '/custom_code/device_identity.dart';
 import '/custom_code/organization_api.dart';
 import '/custom_code/payout_api.dart';
 import '/custom_code/token_store.dart';
+import '/custom_code/business_summary_api.dart';
+import '/custom_code/store_profile_api.dart';
 import '/custom_code/transaction_api.dart';
 import '/custom_code/wallet_api.dart';
 
@@ -150,6 +152,12 @@ class AuthSession extends ChangeNotifier {
 
   /// What has moved through the business's account.
   late final TransactionApi transactions = TransactionApi(_client);
+
+  /// The figures on the Profile tab.
+  late final StoreProfileApi storeProfile = StoreProfileApi(_client);
+
+  /// What the business took in, for the My Business tab.
+  late final BusinessSummaryApi businessSummary = BusinessSummaryApi(_client);
 
   /// What the business holds, bank by bank.
   late final WalletApi wallet = WalletApi(_client);

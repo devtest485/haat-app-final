@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -89,26 +90,51 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
             Align(
               alignment: AlignmentDirectional(0.0, 0.0),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 10.0, 5.0),
+                padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    if (widget!.imageUrl != null && widget!.imageUrl != '')
-                      Opacity(
+                    Expanded(
+                      child: Opacity(
                         opacity:
                             functions.productCardOpacity(widget!.outOfStock),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(),
-                          child: Image.network(
-                            widget!.imageUrl!,
-                            width: double.infinity,
-                            height: 130.23,
-                            fit: BoxFit.contain,
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).alternate,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          alignment: AlignmentDirectional(0.0, 0.0),
+                          child: Stack(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            children: [
+                              Icon(
+                                Icons.image_outlined,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                size: 28.0,
+                              ),
+                              if (widget!.imageUrl != null &&
+                                  widget!.imageUrl != '')
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: CachedNetworkImage(
+                                    fadeInDuration: Duration(milliseconds: 500),
+                                    fadeOutDuration:
+                                        Duration(milliseconds: 500),
+                                    imageUrl: widget!.imageUrl!,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ),
+                    ),
                     Opacity(
                       opacity: functions.productCardOpacity(widget!.outOfStock),
                       child: Padding(
@@ -118,6 +144,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                           (String? priceLabel) {
                             return '${priceLabel ?? ''} SDG';
                           }(widget!.priceLabel),
+                          maxLines: 1,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.montserrat(
@@ -135,6 +162,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
@@ -145,6 +173,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
                         child: Text(
                           widget!.name!,
+                          maxLines: 1,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.montserrat(
@@ -166,6 +195,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
@@ -175,6 +205,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                         child: Text(
                           widget!.unit!,
+                          maxLines: 1,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.montserrat(
@@ -195,6 +226,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     if (widget!.outOfStock == true)

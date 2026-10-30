@@ -101,7 +101,7 @@ class _SetupBisinessLocationPageWidgetState
                                 ),
                               ),
                               Text(
-                                'Lets setup your business ',
+                                'Let\'s set up your business',
                                 textAlign: TextAlign.center,
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
@@ -123,7 +123,7 @@ class _SetupBisinessLocationPageWidgetState
                                     ),
                               ),
                               Text(
-                                'Your business account and digital store has been successfully created',
+                                'What is your business called?',
                                 textAlign: TextAlign.center,
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium

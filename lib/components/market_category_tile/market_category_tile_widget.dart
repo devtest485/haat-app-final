@@ -63,13 +63,13 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
       },
       child: Container(
         width: widget!.width,
-        height: 50.0,
+        height: 44.0,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+          padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 10.0, 0.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: (FFMainAxisAlignment.start).flutterValue,
@@ -78,55 +78,55 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
                 Icon(
                   Icons.cell_tower_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'utilities')
                 Icon(
                   Icons.bolt_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'government')
                 Icon(
                   Icons.account_balance_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'travel')
                 Icon(
                   Icons.directions_car_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'education')
                 Icon(
                   Icons.school_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'gift_cards')
                 Icon(
                   Icons.card_giftcard_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'esim')
                 Icon(
                   Icons.sim_card_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'shopping')
                 Icon(
                   Icons.shopping_bag_outlined,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if (widget!.categoryKey == 'international')
                 Icon(
                   Icons.public_rounded,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               if ((widget!.categoryKey != 'telecom') &&
                   (widget!.categoryKey != 'utilities') &&
@@ -140,7 +140,7 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
                 Icon(
                   Icons.star_border,
                   color: FlutterFlowTheme.of(context).primaryBackground,
-                  size: 19.0,
+                  size: 18.0,
                 ),
               Expanded(
                 child: Text(
@@ -153,6 +153,7 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
                         color: FlutterFlowTheme.of(context).primaryBackground,
+                        fontSize: 13.0,
                         letterSpacing: 0.0,
                         fontWeight: FontWeight.w500,
                         fontStyle:
@@ -161,7 +162,7 @@ class _MarketCategoryTileWidgetState extends State<MarketCategoryTileWidget> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-            ].divide(SizedBox(width: 12.0)),
+            ].divide(SizedBox(width: 8.0)),
           ),
         ),
       ),

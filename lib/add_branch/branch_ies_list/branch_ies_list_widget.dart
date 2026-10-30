@@ -181,6 +181,7 @@ class _BranchIesListWidgetState extends State<BranchIesListWidget> {
                                       0.0, 24.0, 0.0, 24.0),
                                   child: ListView(
                                     padding: EdgeInsets.zero,
+                                    primary: false,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
                                     children: [

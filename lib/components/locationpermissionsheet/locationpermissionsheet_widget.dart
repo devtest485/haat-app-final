@@ -44,7 +44,6 @@ class _LocationpermissionsheetWidgetState
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 415.85,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.only(
@@ -54,12 +53,10 @@ class _LocationpermissionsheetWidgetState
               FlutterFlowTheme.of(context).designToken.radius.sm),
         ),
       ),
-      alignment: AlignmentDirectional(0.0, 0.0),
       child: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 10.0),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: BoxDecoration(),
@@ -150,7 +147,7 @@ class _LocationpermissionsheetWidgetState
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 10.0),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -165,7 +162,7 @@ class _LocationpermissionsheetWidgetState
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        Navigator.pop(context);
+                        Navigator.pop(context, false);
                       },
                       child: Container(
                         width: double.infinity,
@@ -202,7 +199,7 @@ class _LocationpermissionsheetWidgetState
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       },
                       child: Container(
                         width: double.infinity,

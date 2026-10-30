@@ -160,7 +160,7 @@ class _BankDetialsWidgetState extends State<BankDetialsWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'Please enter your {{Bank name}} information detials',
+                                            'Please enter your bank account details',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(

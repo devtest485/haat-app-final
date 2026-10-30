@@ -118,7 +118,7 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Please prepare your self & your Iqama or ID for a quick scanning & verifying',
+                            'Please have your national ID or passport ready for a quick scan',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -300,7 +300,7 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.goNamed(BottomBarPagesWidget.routeName);
+                                context.pushNamed(BusinessInfoWidget.routeName);
                               },
                               child: Container(
                                 width: double.infinity,

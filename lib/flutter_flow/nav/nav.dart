@@ -48,31 +48,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, _) => OnBoardingPageWidget(),
         ),
         FFRoute(
-          name: PhoneNumberPageWidget.routeName,
-          path: PhoneNumberPageWidget.routePath,
-          builder: (context, params) => PhoneNumberPageWidget(),
-        ),
-        FFRoute(
-          name: CreatePasswordPageWidget.routeName,
-          path: CreatePasswordPageWidget.routePath,
-          builder: (context, params) => CreatePasswordPageWidget(),
-        ),
-        FFRoute(
-          name: SecurePageWidget.routeName,
-          path: SecurePageWidget.routePath,
-          builder: (context, params) => SecurePageWidget(),
-        ),
-        FFRoute(
-          name: PassCodePageWidget.routeName,
-          path: PassCodePageWidget.routePath,
-          builder: (context, params) => PassCodePageWidget(),
-        ),
-        FFRoute(
-          name: BiomatricPageWidget.routeName,
-          path: BiomatricPageWidget.routePath,
-          builder: (context, params) => BiomatricPageWidget(),
-        ),
-        FFRoute(
           name: IdCardScanPageWidget.routeName,
           path: IdCardScanPageWidget.routePath,
           builder: (context, params) => IdCardScanPageWidget(),
@@ -88,24 +63,89 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SelfiInfoWidget(),
         ),
         FFRoute(
-          name: BusinessInfoWidget.routeName,
-          path: BusinessInfoWidget.routePath,
-          builder: (context, params) => BusinessInfoWidget(),
+          name: QRpayOutPageWidget.routeName,
+          path: QRpayOutPageWidget.routePath,
+          builder: (context, params) => QRpayOutPageWidget(),
         ),
         FFRoute(
-          name: LikeBusPageWidget.routeName,
-          path: LikeBusPageWidget.routePath,
-          builder: (context, params) => LikeBusPageWidget(),
+          name: LinkPayOutPageWidget.routeName,
+          path: LinkPayOutPageWidget.routePath,
+          builder: (context, params) => LinkPayOutPageWidget(),
         ),
         FFRoute(
-          name: BusinessCatageriousWidget.routeName,
-          path: BusinessCatageriousWidget.routePath,
-          builder: (context, params) => BusinessCatageriousWidget(),
+          name: AddEmployeesWidget.routeName,
+          path: AddEmployeesWidget.routePath,
+          builder: (context, params) => AddEmployeesWidget(),
         ),
         FFRoute(
-          name: UsernamePageWidget.routeName,
-          path: UsernamePageWidget.routePath,
-          builder: (context, params) => UsernamePageWidget(),
+          name: OnBoardingPageWidget.routeName,
+          path: OnBoardingPageWidget.routePath,
+          builder: (context, params) => OnBoardingPageWidget(),
+        ),
+        FFRoute(
+          name: TestWidget.routeName,
+          path: TestWidget.routePath,
+          builder: (context, params) => TestWidget(),
+        ),
+        FFRoute(
+          name: BranchIesListWidget.routeName,
+          path: BranchIesListWidget.routePath,
+          builder: (context, params) => BranchIesListWidget(),
+        ),
+        FFRoute(
+          name: BranchDetailWidget.routeName,
+          path: BranchDetailWidget.routePath,
+          builder: (context, params) => BranchDetailWidget(
+            branch: params.getParam(
+              'branch',
+              ParamType.JSON,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: CreatePasswordPageWidget.routeName,
+          path: CreatePasswordPageWidget.routePath,
+          builder: (context, params) => CreatePasswordPageWidget(),
+        ),
+        FFRoute(
+          name: PassCodePageWidget.routeName,
+          path: PassCodePageWidget.routePath,
+          builder: (context, params) => PassCodePageWidget(),
+        ),
+        FFRoute(
+          name: AddAmountPageWidget.routeName,
+          path: AddAmountPageWidget.routePath,
+          builder: (context, params) => AddAmountPageWidget(),
+        ),
+        FFRoute(
+          name: VerifyPageWidget.routeName,
+          path: VerifyPageWidget.routePath,
+          builder: (context, params) => VerifyPageWidget(),
+        ),
+        FFRoute(
+          name: PaymentStatusWidget.routeName,
+          path: PaymentStatusWidget.routePath,
+          builder: (context, params) => PaymentStatusWidget(
+            paymentStatus: params.getParam(
+              'paymentStatus',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: LoginScreenWidget.routeName,
+          path: LoginScreenWidget.routePath,
+          builder: (context, params) => LoginScreenWidget(),
+        ),
+        FFRoute(
+          name: NotificationsWidget.routeName,
+          path: NotificationsWidget.routePath,
+          builder: (context, params) => NotificationsWidget(),
+        ),
+        FFRoute(
+          name: UploadDocWidget.routeName,
+          path: UploadDocWidget.routePath,
+          builder: (context, params) => UploadDocWidget(),
         ),
         FFRoute(
           name: CongratsPageWidget.routeName,
@@ -118,59 +158,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: AddAmountPageWidget.routeName,
-          path: AddAmountPageWidget.routePath,
-          builder: (context, params) => AddAmountPageWidget(),
-        ),
-        FFRoute(
-          name: TapPayOutWidget.routeName,
-          path: TapPayOutWidget.routePath,
-          builder: (context, params) => TapPayOutWidget(),
-        ),
-        FFRoute(
-          name: QRpayOutPageWidget.routeName,
-          path: QRpayOutPageWidget.routePath,
-          builder: (context, params) => QRpayOutPageWidget(),
-        ),
-        FFRoute(
-          name: LinkPayOutPageWidget.routeName,
-          path: LinkPayOutPageWidget.routePath,
-          builder: (context, params) => LinkPayOutPageWidget(),
-        ),
-        FFRoute(
-          name: BottomBarPagesWidget.routeName,
-          path: BottomBarPagesWidget.routePath,
-          builder: (context, params) => BottomBarPagesWidget(),
-        ),
-        FFRoute(
-          name: DeliveryLocationWidget.routeName,
-          path: DeliveryLocationWidget.routePath,
-          builder: (context, params) => DeliveryLocationWidget(),
-        ),
-        FFRoute(
-          name: RequestSuccessWidget.routeName,
-          path: RequestSuccessWidget.routePath,
-          builder: (context, params) => RequestSuccessWidget(),
-        ),
-        FFRoute(
-          name: AddEmployeesWidget.routeName,
-          path: AddEmployeesWidget.routePath,
-          builder: (context, params) => AddEmployeesWidget(),
-        ),
-        FFRoute(
-          name: AddEmpoleyNameWidget.routeName,
-          path: AddEmpoleyNameWidget.routePath,
-          builder: (context, params) => AddEmpoleyNameWidget(),
-        ),
-        FFRoute(
-          name: EmpoleyRoleWidget.routeName,
-          path: EmpoleyRoleWidget.routePath,
-          builder: (context, params) => EmpoleyRoleWidget(
-            fullName: params.getParam(
-              'fullName',
-              ParamType.String,
-            ),
-          ),
+          name: TransactionsDetialsWidget.routeName,
+          path: TransactionsDetialsWidget.routePath,
+          builder: (context, params) => TransactionsDetialsWidget(),
         ),
         FFRoute(
           name: ReviewDetailsWidget.routeName,
@@ -199,6 +189,110 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
+          name: OtherBanksWidget.routeName,
+          path: OtherBanksWidget.routePath,
+          builder: (context, params) => OtherBanksWidget(),
+        ),
+        FFRoute(
+          name: BusinessInfoWidget.routeName,
+          path: BusinessInfoWidget.routePath,
+          builder: (context, params) => BusinessInfoWidget(),
+        ),
+        FFRoute(
+          name: EditProductWidget.routeName,
+          path: EditProductWidget.routePath,
+          builder: (context, params) => EditProductWidget(
+            product: params.getParam(
+              'product',
+              ParamType.JSON,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: AddProductWidget.routeName,
+          path: AddProductWidget.routePath,
+          builder: (context, params) => AddProductWidget(),
+        ),
+        FFRoute(
+          name: EmployeDetailsWidget.routeName,
+          path: EmployeDetailsWidget.routePath,
+          builder: (context, params) => EmployeDetailsWidget(
+            staff: params.getParam(
+              'staff',
+              ParamType.JSON,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: SuccessWidget.routeName,
+          path: SuccessWidget.routePath,
+          builder: (context, params) => SuccessWidget(
+            type: params.getParam(
+              'type',
+              ParamType.String,
+            ),
+            name: params.getParam(
+              'name',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: PasswardLoginWidget.routeName,
+          path: PasswardLoginWidget.routePath,
+          builder: (context, params) => PasswardLoginWidget(),
+        ),
+        FFRoute(
+          name: DeliveryLocationWidget.routeName,
+          path: DeliveryLocationWidget.routePath,
+          builder: (context, params) => DeliveryLocationWidget(),
+        ),
+        FFRoute(
+          name: BusinessCatageriousWidget.routeName,
+          path: BusinessCatageriousWidget.routePath,
+          builder: (context, params) => BusinessCatageriousWidget(),
+        ),
+        FFRoute(
+          name: BankOTPVerificationWidget.routeName,
+          path: BankOTPVerificationWidget.routePath,
+          builder: (context, params) => BankOTPVerificationWidget(),
+        ),
+        FFRoute(
+          name: EmpoleyRoleWidget.routeName,
+          path: EmpoleyRoleWidget.routePath,
+          builder: (context, params) => EmpoleyRoleWidget(
+            fullName: params.getParam(
+              'fullName',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: OtpVerifyPageWidget.routeName,
+          path: OtpVerifyPageWidget.routePath,
+          builder: (context, params) => OtpVerifyPageWidget(
+            phoneNum: params.getParam(
+              'phoneNum',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: SecurePageWidget.routeName,
+          path: SecurePageWidget.routePath,
+          builder: (context, params) => SecurePageWidget(),
+        ),
+        FFRoute(
+          name: PhoneNumberPageWidget.routeName,
+          path: PhoneNumberPageWidget.routePath,
+          builder: (context, params) => PhoneNumberPageWidget(),
+        ),
+        FFRoute(
+          name: PassCodeLoginWidget.routeName,
+          path: PassCodeLoginWidget.routePath,
+          builder: (context, params) => PassCodeLoginWidget(),
+        ),
+        FFRoute(
           name: CreatingProfileWidget.routeName,
           path: CreatingProfileWidget.routePath,
           builder: (context, params) => CreatingProfileWidget(
@@ -225,16 +319,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: EmployeDetailsWidget.routeName,
-          path: EmployeDetailsWidget.routePath,
-          builder: (context, params) => EmployeDetailsWidget(
-            staff: params.getParam(
-              'staff',
-              ParamType.JSON,
-            ),
-          ),
-        ),
-        FFRoute(
           name: AddFundWidget.routeName,
           path: AddFundWidget.routePath,
           builder: (context, params) => AddFundWidget(
@@ -245,29 +329,84 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: BankOTPVerificationWidget.routeName,
-          path: BankOTPVerificationWidget.routePath,
-          builder: (context, params) => BankOTPVerificationWidget(),
+          name: ProductsWidget.routeName,
+          path: ProductsWidget.routePath,
+          builder: (context, params) => ProductsWidget(),
         ),
         FFRoute(
-          name: OtherBanksWidget.routeName,
-          path: OtherBanksWidget.routePath,
-          builder: (context, params) => OtherBanksWidget(),
+          name: DocunmentInfoWidget.routeName,
+          path: DocunmentInfoWidget.routePath,
+          builder: (context, params) => DocunmentInfoWidget(),
+        ),
+        FFRoute(
+          name: AddBranchWidget.routeName,
+          path: AddBranchWidget.routePath,
+          builder: (context, params) => AddBranchWidget(),
+        ),
+        FFRoute(
+          name: SetupBisinessLocationPageWidget.routeName,
+          path: SetupBisinessLocationPageWidget.routePath,
+          builder: (context, params) => SetupBisinessLocationPageWidget(),
+        ),
+        FFRoute(
+          name: BusinessLocatePageWidget.routeName,
+          path: BusinessLocatePageWidget.routePath,
+          builder: (context, params) => BusinessLocatePageWidget(),
+        ),
+        FFRoute(
+          name: TapPayOutWidget.routeName,
+          path: TapPayOutWidget.routePath,
+          builder: (context, params) => TapPayOutWidget(),
+        ),
+        FFRoute(
+          name: StaffMembersWidget.routeName,
+          path: StaffMembersWidget.routePath,
+          builder: (context, params) => StaffMembersWidget(
+            member: params.getParam(
+              'member',
+              ParamType.JSON,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: OnBordingScreenWidget.routeName,
+          path: OnBordingScreenWidget.routePath,
+          builder: (context, params) => OnBordingScreenWidget(),
+        ),
+        FFRoute(
+          name: AddEmpoleyNameWidget.routeName,
+          path: AddEmpoleyNameWidget.routePath,
+          builder: (context, params) => AddEmpoleyNameWidget(),
+        ),
+        FFRoute(
+          name: PayYourWidget.routeName,
+          path: PayYourWidget.routePath,
+          builder: (context, params) => PayYourWidget(),
+        ),
+        FFRoute(
+          name: StaffWidget.routeName,
+          path: StaffWidget.routePath,
+          builder: (context, params) => StaffWidget(),
+        ),
+        FFRoute(
+          name: RequestSuccessWidget.routeName,
+          path: RequestSuccessWidget.routePath,
+          builder: (context, params) => RequestSuccessWidget(),
+        ),
+        FFRoute(
+          name: LikeBusPageWidget.routeName,
+          path: LikeBusPageWidget.routePath,
+          builder: (context, params) => LikeBusPageWidget(),
+        ),
+        FFRoute(
+          name: UsernamePageWidget.routeName,
+          path: UsernamePageWidget.routePath,
+          builder: (context, params) => UsernamePageWidget(),
         ),
         FFRoute(
           name: BankDetialsWidget.routeName,
           path: BankDetialsWidget.routePath,
           builder: (context, params) => BankDetialsWidget(),
-        ),
-        FFRoute(
-          name: PaymentStatusWidget.routeName,
-          path: PaymentStatusWidget.routePath,
-          builder: (context, params) => PaymentStatusWidget(
-            paymentStatus: params.getParam(
-              'paymentStatus',
-              ParamType.String,
-            ),
-          ),
         ),
         FFRoute(
           name: TransfermethodWidget.routeName,
@@ -285,24 +424,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => PaymentReviewWidget(),
         ),
         FFRoute(
-          name: OnBordingScreenWidget.routeName,
-          path: OnBordingScreenWidget.routePath,
-          builder: (context, params) => OnBordingScreenWidget(),
-        ),
-        FFRoute(
-          name: LoginScreenWidget.routeName,
-          path: LoginScreenWidget.routePath,
-          builder: (context, params) => LoginScreenWidget(),
-        ),
-        FFRoute(
-          name: TransactionsDetialsWidget.routeName,
-          path: TransactionsDetialsWidget.routePath,
-          builder: (context, params) => TransactionsDetialsWidget(),
-        ),
-        FFRoute(
-          name: PayYourWidget.routeName,
-          path: PayYourWidget.routePath,
-          builder: (context, params) => PayYourWidget(),
+          name: BiomatricPageWidget.routeName,
+          path: BiomatricPageWidget.routePath,
+          builder: (context, params) => BiomatricPageWidget(),
         ),
         FFRoute(
           name: TopupamountWidget.routeName,
@@ -310,133 +434,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => TopupamountWidget(),
         ),
         FFRoute(
-          name: NotificationsWidget.routeName,
-          path: NotificationsWidget.routePath,
-          builder: (context, params) => NotificationsWidget(),
-        ),
-        FFRoute(
-          name: OnBoardingPageWidget.routeName,
-          path: OnBoardingPageWidget.routePath,
-          builder: (context, params) => OnBoardingPageWidget(),
-        ),
-        FFRoute(
-          name: OtpVerifyPageWidget.routeName,
-          path: OtpVerifyPageWidget.routePath,
-          builder: (context, params) => OtpVerifyPageWidget(
-            phoneNum: params.getParam(
-              'phoneNum',
-              ParamType.String,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: VerifyPageWidget.routeName,
-          path: VerifyPageWidget.routePath,
-          builder: (context, params) => VerifyPageWidget(),
-        ),
-        FFRoute(
-          name: DocunmentInfoWidget.routeName,
-          path: DocunmentInfoWidget.routePath,
-          builder: (context, params) => DocunmentInfoWidget(),
-        ),
-        FFRoute(
-          name: UploadDocWidget.routeName,
-          path: UploadDocWidget.routePath,
-          builder: (context, params) => UploadDocWidget(),
-        ),
-        FFRoute(
-          name: PasswardLoginWidget.routeName,
-          path: PasswardLoginWidget.routePath,
-          builder: (context, params) => PasswardLoginWidget(),
-        ),
-        FFRoute(
-          name: PassCodeLoginWidget.routeName,
-          path: PassCodeLoginWidget.routePath,
-          builder: (context, params) => PassCodeLoginWidget(),
-        ),
-        FFRoute(
-          name: SetupBisinessLocationPageWidget.routeName,
-          path: SetupBisinessLocationPageWidget.routePath,
-          builder: (context, params) => SetupBisinessLocationPageWidget(),
-        ),
-        FFRoute(
-          name: BusinessLocatePageWidget.routeName,
-          path: BusinessLocatePageWidget.routePath,
-          builder: (context, params) => BusinessLocatePageWidget(),
-        ),
-        FFRoute(
-          name: StaffWidget.routeName,
-          path: StaffWidget.routePath,
-          builder: (context, params) => StaffWidget(),
-        ),
-        FFRoute(
-          name: StaffMembersWidget.routeName,
-          path: StaffMembersWidget.routePath,
-          builder: (context, params) => StaffMembersWidget(
-            member: params.getParam(
-              'member',
-              ParamType.JSON,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: TestWidget.routeName,
-          path: TestWidget.routePath,
-          builder: (context, params) => TestWidget(),
-        ),
-        FFRoute(
-          name: ProductsWidget.routeName,
-          path: ProductsWidget.routePath,
-          builder: (context, params) => ProductsWidget(),
-        ),
-        FFRoute(
-          name: SuccessWidget.routeName,
-          path: SuccessWidget.routePath,
-          builder: (context, params) => SuccessWidget(
-            type: params.getParam(
-              'type',
-              ParamType.String,
-            ),
-            name: params.getParam(
-              'name',
-              ParamType.String,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: AddProductWidget.routeName,
-          path: AddProductWidget.routePath,
-          builder: (context, params) => AddProductWidget(),
-        ),
-        FFRoute(
-          name: BranchIesListWidget.routeName,
-          path: BranchIesListWidget.routePath,
-          builder: (context, params) => BranchIesListWidget(),
-        ),
-        FFRoute(
-          name: BranchDetailWidget.routeName,
-          path: BranchDetailWidget.routePath,
-          builder: (context, params) => BranchDetailWidget(
-            branch: params.getParam(
-              'branch',
-              ParamType.JSON,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: AddBranchWidget.routeName,
-          path: AddBranchWidget.routePath,
-          builder: (context, params) => AddBranchWidget(),
-        ),
-        FFRoute(
-          name: EditProductWidget.routeName,
-          path: EditProductWidget.routePath,
-          builder: (context, params) => EditProductWidget(
-            product: params.getParam(
-              'product',
-              ParamType.JSON,
-            ),
-          ),
+          name: BottomBarPagesWidget.routeName,
+          path: BottomBarPagesWidget.routePath,
+          builder: (context, params) => BottomBarPagesWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

@@ -178,7 +178,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                       ),
                                                 ),
                                                 Text(
-                                                  'Please enter your {{Bank name}} BBAN number detials',
+                                                  'Please enter your BBAN number',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -655,7 +655,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                       ),
                                                 ),
                                                 Text(
-                                                  'Please enter HAAT username detials',
+                                                  'Please enter the HAAT username',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -1138,7 +1138,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                       ),
                                                 ),
                                                 Text(
-                                                  'Please enter HAAT username detials',
+                                                  'Please enter the HAAT username',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium

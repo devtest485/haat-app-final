@@ -362,7 +362,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                                 FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                           ),
                                                                       hintText:
-                                                                          'Repeat your entered password',
+                                                                          'Enter your password',
                                                                       hintStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium

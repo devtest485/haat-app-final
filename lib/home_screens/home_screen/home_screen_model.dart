@@ -7,6 +7,7 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/instant_timer.dart';
 import '/home_screens/business_story/business_story_widget.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
@@ -62,6 +63,8 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
 
   int? bannerIndex = 0;
 
+  String? businessStatus = '';
+
   ///  State fields for stateful widgets in this component.
 
   // Stores action output result for [Custom Action - haatAccessToken] action in HomeScreen widget.
@@ -74,6 +77,9 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   ApiCallResponse? apiResultatl;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? transactionsResult;
+  // Stores action output result for [Backend Call - API (Organizations)] action in HomeScreen widget.
+  ApiCallResponse? organizationsResult;
+  InstantTimer? bannerAutoplay;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? apiResult1ib;
   // Stores action output result for [Custom Action - haatAccessToken] action in WalletBalance widget.
@@ -93,5 +99,7 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {}
+  void dispose() {
+    bannerAutoplay?.cancel();
+  }
 }

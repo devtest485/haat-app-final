@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -67,24 +68,50 @@ class _MarketBillerTileWidgetState extends State<MarketBillerTileWidget> {
             Container(
               width: 55.0,
               height: 55.0,
-              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).alternate,
                 shape: BoxShape.circle,
               ),
-              child: Image.network(
-                widget!.logoUrl!,
-                fit: BoxFit.cover,
+              alignment: AlignmentDirectional(0.0, 0.0),
+              child: Stack(
+                alignment: AlignmentDirectional(0.0, 0.0),
+                children: [
+                  Icon(
+                    Icons.image_outlined,
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                    size: 24.0,
+                  ),
+                  if (widget!.logoUrl != null && widget!.logoUrl != '')
+                    Container(
+                      width: 55.0,
+                      height: 55.0,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.network(
+                        widget!.logoUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Image.asset(
+                          'assets/images/error_image.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-              child: Text(
+              child: AutoSizeText(
                 valueOrDefault<String>(
                   widget!.name,
                   'MTN',
                 ),
                 textAlign: TextAlign.center,
                 maxLines: 1,
+                minFontSize: 8.0,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                       font: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w600,

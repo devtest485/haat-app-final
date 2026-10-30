@@ -4,6 +4,8 @@
   <dict>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>HAAT uses your location only while you pin your business or a branch on the map.</string>
     <key>NSFaceIDUsageDescription</key>
     <string>HAAT uses Face ID to unlock the key on this iPhone that signs you in. Your face is checked by the phone and never leaves it.</string>
     <key>CFBundleDisplayName</key>

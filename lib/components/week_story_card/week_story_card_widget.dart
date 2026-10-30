@@ -81,6 +81,12 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                   width: 179.0,
                   height: 241.0,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    'assets/images/error_image.png',
+                    width: 179.0,
+                    height: 241.0,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             Column(

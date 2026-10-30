@@ -52,7 +52,13 @@ Future openBannerLink(
     return;
   }
 
+  // A route may carry what its screen needs, written as a query: `AddFund?fund=transfer`
+  // opens the transfer amount screen, which cannot open without knowing which it is.
+  final parsed = Uri.tryParse(route);
+  final name = parsed?.path ?? route;
+  final query = parsed?.queryParameters ?? const <String, String>{};
+
   try {
-    context.pushNamed(route);
+    context.pushNamed(name, queryParameters: query);
   } catch (_) {}
 }

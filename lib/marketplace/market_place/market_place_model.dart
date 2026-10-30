@@ -1,5 +1,7 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/market_biller_tile/market_biller_tile_widget.dart';
+import '/components/market_brand_card/market_brand_card_widget.dart';
+import '/components/market_category_tile/market_category_tile_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -73,17 +75,18 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   ApiCallResponse? bannersResult;
   // Stores action output result for [Backend Call - API (Marketplace)] action in MarketPlace widget.
   ApiCallResponse? marketplaceResult;
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
+  // State field(s) for PageView widget.
+  PageController? pageViewController;
+
+  int get pageViewCurrentIndex => pageViewController != null &&
+          pageViewController!.hasClients &&
+          pageViewController!.page != null
+      ? pageViewController!.page!.round()
+      : 0;
 
   @override
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
-  }
+  void dispose() {}
 }

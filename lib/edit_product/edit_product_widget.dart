@@ -317,6 +317,16 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                                               width: 200.0,
                                                               height: 200.0,
                                                               fit: BoxFit.cover,
+                                                              errorBuilder: (context,
+                                                                      error,
+                                                                      stackTrace) =>
+                                                                  Image.asset(
+                                                                'assets/images/error_image.png',
+                                                                width: 200.0,
+                                                                height: 200.0,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
                                                             ),
                                                           ),
                                                       ],
@@ -843,6 +853,10 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                                                       .fontStyle,
                                                                 ),
                                                         maxLines: null,
+                                                        keyboardType:
+                                                            (FFKeyboardType
+                                                                    .decimal)
+                                                                .flutterValue,
                                                         cursorColor:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1331,6 +1345,10 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                                                       .fontStyle,
                                                                 ),
                                                         maxLines: null,
+                                                        keyboardType:
+                                                            (FFKeyboardType
+                                                                    .decimal)
+                                                                .flutterValue,
                                                         cursorColor:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1346,7 +1364,7 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  'only you see this count at 0 the product shows out od stock ',
+                                                  'Only you see this count. At 0 the product shows as out of stock.',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -1692,7 +1710,7 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                     ),
                                     alignment: AlignmentDirectional(0.0, 0.0),
                                     child: Text(
-                                      'Add Product',
+                                      'Save changes',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
