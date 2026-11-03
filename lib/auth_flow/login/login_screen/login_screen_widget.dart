@@ -33,11 +33,7 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      // The greeting is saved across launches; this only fills it the first time,
-      // from the stored session, without holding up the sign-in prompts below.
-      if (FFAppState().displayName == '') {
-        actions.haatLoadProfile();
-      }
+      await actions.haatWarmProfile();
       _model.passcodeSignIn = await actions.haatHasPasscodeSignIn();
       _model.biometricKey = await actions.haatHasBiometricKey();
       _model.hasPasscodeSignIn = _model.passcodeSignIn;

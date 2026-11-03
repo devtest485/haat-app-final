@@ -13,10 +13,10 @@ import '/flutter_flow/ff_builtin_enums.dart';
 
 String? transactionTitle(
   String? description,
-  String? kind, [
+  String? kind,
   String? direction,
   dynamic transfer,
-]) {
+) {
   // One merchant's send to another is a single movement with one description, written
   // from the sender's side. Each side reads it as the other person's name.
   if (transfer is Map) {

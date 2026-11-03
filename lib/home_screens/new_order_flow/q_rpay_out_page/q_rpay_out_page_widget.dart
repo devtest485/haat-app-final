@@ -2,16 +2,24 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'q_rpay_out_page_model.dart';
 export 'q_rpay_out_page_model.dart';
 
 class QRpayOutPageWidget extends StatefulWidget {
-  const QRpayOutPageWidget({super.key});
+  const QRpayOutPageWidget({
+    super.key,
+    String? amount,
+  }) : this.amount = amount ?? '';
+
+  final String amount;
 
   static String routeName = 'QRpayOutPage';
   static String routePath = '/qRpayOutPage';
@@ -29,6 +37,13 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => QRpayOutPageModel());
+    _model.setOnUpdate(onUpdate: () => safeSetState(() {}));
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await _model.makeRequest(context);
+      safeSetState(() {});
+    });
   }
 
   @override
@@ -177,7 +192,10 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Point any camera at this code\nto open the payment page',
+                                      _model.problem != null &&
+                                              _model.problem != ''
+                                          ? _model.problem
+                                          : 'Point any camera at this code\nto open the payment page',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -269,7 +287,10 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                '112-134-024',
+                                                functions.outcomeText(
+                                                    _model.request,
+                                                    'invoice',
+                                                    '—'),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -313,14 +334,13 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
                                             .primaryText,
                                       ),
                                       alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(0.0),
-                                        child: SvgPicture.asset(
-                                          'assets/images/qr_block.svg',
+                                      child: Container(
+                                        width: 173.0,
+                                        height: 173.0,
+                                        child: custom_widgets.PayRequestQr(
                                           width: 173.0,
                                           height: 173.0,
-                                          fit: BoxFit.cover,
+                                          request: _model.request,
                                         ),
                                       ),
                                     ),
@@ -380,7 +400,8 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
                                                 text: TextSpan(
                                                   children: [
                                                     TextSpan(
-                                                      text: '1,000 ',
+                                                      text:
+                                                          '${functions.outcomeText(_model.request, 'amount', widget!.amount)} ',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -412,7 +433,11 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
                                                               ),
                                                     ),
                                                     TextSpan(
-                                                      text: 'SDG',
+                                                      text:
+                                                          functions.outcomeText(
+                                                              _model.request,
+                                                              'currency',
+                                                              'SDG'),
                                                       style: GoogleFonts
                                                           .montserrat(
                                                         fontSize: 18.0,
@@ -473,55 +498,89 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.73,
-                                    height: 50.0,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius:
-                                          BorderRadius.circular(106.67),
-                                    ),
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Text(
-                                      'Save to Photos',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      if (_model.problem != null &&
+                                          _model.problem != '') {
+                                        await _model.makeRequest(context);
+                                        safeSetState(() {});
+                                      } else {
+                                        await actions.haatKeepPayRequest(
+                                          context,
+                                          _model.request,
+                                        );
+                                      }
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.73,
+                                      height: 50.0,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius:
+                                            BorderRadius.circular(106.67),
+                                      ),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Text(
+                                        _model.problem != null &&
+                                                _model.problem != ''
+                                            ? 'Try again'
+                                            : 'Save to Photos',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.inter(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontSize: 18.0,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w500,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 18.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.15,
-                                    height: 50.0,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).accent3,
-                                      borderRadius:
-                                          BorderRadius.circular(106.67),
-                                    ),
-                                    child: Icon(
-                                      Icons.share_outlined,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      size: 20.0,
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      await actions.haatSharePayRequest(
+                                        context,
+                                        _model.request,
+                                      );
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.15,
+                                      height: 50.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .accent3,
+                                        borderRadius:
+                                            BorderRadius.circular(106.67),
+                                      ),
+                                      child: Icon(
+                                        Icons.share_outlined,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        size: 20.0,
+                                      ),
                                     ),
                                   ),
                                 ],

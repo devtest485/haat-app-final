@@ -10,7 +10,12 @@ import 'request_success_model.dart';
 export 'request_success_model.dart';
 
 class RequestSuccessWidget extends StatefulWidget {
-  const RequestSuccessWidget({super.key});
+  const RequestSuccessWidget({
+    super.key,
+    this.standReference,
+  });
+
+  final String? standReference;
 
   static String routeName = 'RequestSuccess';
   static String routePath = '/requestSuccess';
@@ -120,7 +125,7 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 9.0, 0.0, 0.0),
                             child: Text(
-                              'MTN Sudan will call you on +249 ··· ··· 910 within 3 working days to set up your store.',
+                              'We’ll review your request and let you know in your notifications. Once it’s approved, we’ll deliver your stand to the address you confirmed.',
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -184,7 +189,10 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                             ),
                                       ),
                                       Text(
-                                        'SW-2610-1709',
+                                        valueOrDefault<String>(
+                                          widget!.standReference,
+                                          '—',
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -234,8 +242,8 @@ class _RequestSuccessWidgetState extends State<RequestSuccessWidget> {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  context.pushNamed(
-                                      BottomBarPagesWidget.routeName);
+                                  context
+                                      .goNamed(BottomBarPagesWidget.routeName);
                                 },
                                 child: Container(
                                   width: double.infinity,

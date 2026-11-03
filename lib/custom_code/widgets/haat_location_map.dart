@@ -29,7 +29,8 @@ import '/components/locationpermissionsheet/locationpermissionsheet_widget.dart'
 /// green pin stands out.
 ///
 /// The pin stays in the middle and the map moves under it — drag, tap a spot,
-/// search, or use the locate button. Each time the map comes to rest, [onPicked]
+/// search, or use the locate button. Tapping the search bar opens HaatPlaceSearch
+/// over the page; the place chosen there is where the map lands, under its name. Each time the map comes to rest, [onPicked]
 /// gets the point under the pin and its address. Nothing is reported for the
 /// starting view: Khartoum is a default, not the merchant's answer.
 ///
@@ -48,6 +49,7 @@ class HaatLocationMap extends StatefulWidget {
     this.controlsBottomInset,
     this.edgeFade,
     this.borderRadius,
+    this.notFoundImage,
     this.onPicked,
   });
 
@@ -65,6 +67,9 @@ class HaatLocationMap extends StatefulWidget {
   /// because a fade laid over the widget would take the map's touches.
   final double? edgeFade;
   final double? borderRadius;
+
+  /// Shown by the search when no place matches.
+  final String? notFoundImage;
   final Future Function(LatLng location, String address)? onPicked;
 
   @override
@@ -83,21 +88,33 @@ const _greyTiles = ColorFilter.matrix(<double>[
   0, 0, 0, 1, 0,
 ]);
 
+class _Picked {
+  const _Picked(this.location, this.name, this.address);
+
+  final LatLng location;
+  final String name;
+  final String address;
+}
+
 class _HaatLocationMapState extends State<HaatLocationMap> {
   final _map = MapController();
   final _search = TextEditingController();
-  final _searchFocus = FocusNode();
   Timer? _settle;
   int _lookup = 0;
   bool _moving = false;
   bool _locating = false;
-  bool _searching = false;
+
+  /// What was last typed into the search, so it opens where it was left.
+  String _query = '';
+
+  /// The place chosen in the search, reported as is instead of looking up the
+  /// address under the pin; any move of the map by hand drops it.
+  String? _chosen;
 
   @override
   void dispose() {
     _settle?.cancel();
     _search.dispose();
-    _searchFocus.dispose();
     super.dispose();
   }
 
@@ -111,6 +128,7 @@ class _HaatLocationMapState extends State<HaatLocationMap> {
         event.source == MapEventSource.nonRotatedSizeChange) return;
     if (event is MapEventMoveStart || event is MapEventFlingAnimationStart) {
       _settle?.cancel();
+      _chosen = null;
       if (!_moving) setState(() => _moving = true);
     }
     if (event is MapEventMoveEnd ||
@@ -138,9 +156,9 @@ class _HaatLocationMapState extends State<HaatLocationMap> {
   Future<void> _report() async {
     final point = _map.camera.center;
     final ticket = ++_lookup;
-    final address = await _addressAt(point);
+    final address = _chosen ?? await _addressAt(point);
     if (!mounted || ticket != _lookup) return;
-    if (address.isNotEmpty && !_searchFocus.hasFocus) _search.text = address;
+    if (address.isNotEmpty && _chosen == null) _search.text = address;
     await widget.onPicked
         ?.call(LatLng(point.latitude, point.longitude), address);
   }
@@ -186,42 +204,54 @@ class _HaatLocationMapState extends State<HaatLocationMap> {
     return [street, area, city].whereType<String>().toSet().join(', ');
   }
 
-  Future<void> _find(String query) async {
-    final text = query.trim();
-    if (text.length < 2) return;
-    setState(() => _searching = true);
-    try {
-      final response = await http.get(
-        Uri.https('nominatim.openstreetmap.org', '/search', {
-          'format': 'jsonv2',
-          'q': text,
-          'limit': '1',
-          'countrycodes': 'sd',
-          'accept-language': 'en',
-        }),
-        headers: {'User-Agent': _userAgent},
-      ).timeout(const Duration(seconds: 8));
-      final rows = response.statusCode == 200
-          ? jsonDecode(response.body) as List<dynamic>
-          : const [];
-      if (!mounted) return;
-      if (rows.isEmpty) return _tell('No place found for "$text".');
-      final row = rows.first as Map<String, dynamic>;
-      _searchFocus.unfocus();
+  // The search covers the page, then hands back the place picked — or "here".
+  Future<void> _openSearch() async {
+    final center = _map.camera.center;
+    final picked = await Navigator.of(context).push<Object>(
+      PageRouteBuilder<Object>(
+        transitionDuration: const Duration(milliseconds: 200),
+        reverseTransitionDuration: const Duration(milliseconds: 160),
+        pageBuilder: (route, _, __) => HaatPlaceSearch(
+          width: double.infinity,
+          height: double.infinity,
+          initialQuery: _query,
+          searchHint: widget.searchHint,
+          nearLocation: LatLng(center.latitude, center.longitude),
+          notFoundImage: widget.notFoundImage,
+          onPicked: (location, name, address) async =>
+              Navigator.of(route).pop(_Picked(location, name, address)),
+          onUseMyLocation: () async => Navigator.of(route).pop('here'),
+        ),
+        transitionsBuilder: (_, animation, __, child) {
+          final eased =
+              CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+          return FadeTransition(
+            opacity: eased,
+            child: SlideTransition(
+              position: Tween(begin: const Offset(0.0, 0.03), end: Offset.zero)
+                  .animate(eased),
+              child: child,
+            ),
+          );
+        },
+      ),
+    );
+    if (!mounted) return;
+    if (picked == 'here') return _locate();
+    if (picked is _Picked) {
+      _query = picked.name;
+      _chosen = picked.address.isEmpty
+          ? picked.name
+          : '${picked.name}, ${picked.address}';
+      _search.text = picked.name;
       _moveTo(
-        ll.LatLng(double.parse(row['lat'] as String),
-            double.parse(row['lon'] as String)),
-        17,
-      );
-    } catch (_) {
-      if (mounted) _tell('Search is not available right now.');
-    } finally {
-      if (mounted) setState(() => _searching = false);
+          ll.LatLng(picked.location.latitude, picked.location.longitude), 17);
     }
   }
 
   Future<void> _locate() async {
     if (_locating) return;
+    _chosen = null;
     setState(() => _locating = true);
     try {
       if (!await Geolocator.isLocationServiceEnabled()) {
@@ -324,12 +354,11 @@ class _HaatLocationMapState extends State<HaatLocationMap> {
         alignment: Alignment.center,
         child: TextField(
           controller: _search,
-          focusNode: _searchFocus,
-          textInputAction: TextInputAction.search,
+          readOnly: true,
+          showCursor: false,
+          onTap: _openSearch,
           textAlignVertical: TextAlignVertical.center,
-          onSubmitted: _find,
           style: GoogleFonts.inter(color: Colors.black, fontSize: 14.0),
-          cursorColor: Colors.black,
           decoration: InputDecoration(
             isDense: true,
             contentPadding: EdgeInsets.zero,
@@ -342,17 +371,6 @@ class _HaatLocationMapState extends State<HaatLocationMap> {
             ),
             prefixIcon: const Icon(Icons.search_rounded,
                 size: 18.0, color: Colors.black54),
-            suffixIcon: _searching
-                ? const Padding(
-                    padding: EdgeInsets.all(14.0),
-                    child: SizedBox(
-                      width: 16.0,
-                      height: 16.0,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2.0, color: Colors.black54),
-                    ),
-                  )
-                : null,
           ),
         ),
       );

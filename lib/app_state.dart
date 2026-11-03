@@ -3,6 +3,7 @@ import 'package:flutter/material.dart'
 import '/backend/api_requests/api_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+import 'dart:convert';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -52,14 +53,19 @@ class FFAppState extends ChangeNotifier {
       _userPasscode = prefs.getString('ff_userPasscode') ?? _userPasscode;
     });
     _safeInit(() {
-      _businessLogoUrl =
-          prefs.getString('ff_businessLogoUrl') ?? _businessLogoUrl;
-    });
-    _safeInit(() {
       _displayName = prefs.getString('ff_displayName') ?? _displayName;
     });
     _safeInit(() {
       _mobileMasked = prefs.getString('ff_mobileMasked') ?? _mobileMasked;
+    });
+    _safeInit(() {
+      _businessLogoUrl =
+          prefs.getString('ff_businessLogoUrl') ?? _businessLogoUrl;
+    });
+    _safeInit(() {
+      _seenNotificationActions =
+          prefs.getString('ff_seenNotificationActions') ??
+              _seenNotificationActions;
     });
   }
 
@@ -298,8 +304,7 @@ class FFAppState extends ChangeNotifier {
   /// The signed-in merchant's name, or their handle, or their masked number —
   /// whichever they have.
   ///
-  /// Never empty for a signed-in account. Kept across launches, so the login and
-  /// home screens can greet the merchant before `haatLoadProfile` has answered.
+  /// Never empty for a signed-in account.
   String _displayName = '';
   String get displayName => _displayName;
   set displayName(String value) {
@@ -309,8 +314,7 @@ class FFAppState extends ChangeNotifier {
 
   /// The last four digits of the signed-in number, as the backend masks it.
   ///
-  /// The whole number never reaches the handset. Kept across launches, like
-  /// `displayName`.
+  /// The whole number never reaches the handset.
   String _mobileMasked = '';
   String get mobileMasked => _mobileMasked;
   set mobileMasked(String value) {
@@ -346,6 +350,51 @@ class FFAppState extends ChangeNotifier {
   bool get hasTransactions => _hasTransactions;
   set hasTransactions(bool value) {
     _hasTransactions = value;
+  }
+
+  /// How the last send ended, from the passcode sheet to Review Details.
+  ///
+  /// Empty while the sheet is open.
+  dynamic _lastTransfer;
+  dynamic get lastTransfer => _lastTransfer;
+  set lastTransfer(dynamic value) {
+    _lastTransfer = value;
+  }
+
+  /// The country the number on the send screen belongs to, as the picker
+  /// returned it: iso, name, dialCode, flag.
+  ///
+  /// Empty means Sudan.
+  dynamic _transferCountry;
+  dynamic get transferCountry => _transferCountry;
+  set transferCountry(dynamic value) {
+    _transferCountry = value;
+  }
+
+  /// Set by the recipient sheet when the merchant confirms the person; the send
+  /// screen reads it once the sheet closes.
+  bool _transferConfirmed = false;
+  bool get transferConfirmed => _transferConfirmed;
+  set transferConfirmed(bool value) {
+    _transferConfirmed = value;
+  }
+
+  /// How many notifications the merchant has not read: unread feed items plus
+  /// pending actions not yet marked read.
+  ///
+  /// Drives the dot on the home bell.
+  int _unreadNotifications = 0;
+  int get unreadNotifications => _unreadNotifications;
+  set unreadNotifications(int value) {
+    _unreadNotifications = value;
+  }
+
+  /// Comma-separated keys of the pending actions the merchant marked as read.
+  String _seenNotificationActions = '';
+  String get seenNotificationActions => _seenNotificationActions;
+  set seenNotificationActions(String value) {
+    _seenNotificationActions = value;
+    prefs.setString('ff_seenNotificationActions', value);
   }
 }
 

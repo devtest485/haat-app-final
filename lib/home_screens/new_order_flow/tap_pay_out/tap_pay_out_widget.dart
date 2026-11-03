@@ -2,8 +2,10 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +13,12 @@ import 'tap_pay_out_model.dart';
 export 'tap_pay_out_model.dart';
 
 class TapPayOutWidget extends StatefulWidget {
-  const TapPayOutWidget({super.key});
+  const TapPayOutWidget({
+    super.key,
+    String? amount,
+  }) : this.amount = amount ?? '';
+
+  final String amount;
 
   static String routeName = 'TapPayOut';
   static String routePath = '/tapPayOut';
@@ -29,6 +36,13 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TapPayOutModel());
+    _model.setOnUpdate(onUpdate: () => safeSetState(() {}));
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await _model.startTap(context);
+      safeSetState(() {});
+    });
   }
 
   @override
@@ -67,13 +81,26 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                       child: Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 70.0, 0.0, 0.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(0.0),
-                          child: SvgPicture.asset(
-                            'assets/images/nfc.svg',
-                            width: double.infinity,
-                            height: 710.1,
-                            fit: BoxFit.contain,
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            if (_model.problem != null &&
+                                _model.problem != '') {
+                              await _model.startTap(context);
+                              safeSetState(() {});
+                            }
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(0.0),
+                            child: SvgPicture.asset(
+                              'assets/images/nfc.svg',
+                              width: double.infinity,
+                              height: 710.1,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ),
@@ -210,7 +237,8 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                               ),
                                         ),
                                         Text(
-                                          '112-134-024',
+                                          functions.outcomeText(
+                                              _model.request, 'invoice', '—'),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -257,7 +285,8 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: '1,000 ',
+                                          text:
+                                              '${functions.outcomeText(_model.request, 'amount', widget!.amount)} ',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -280,7 +309,10 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                               ),
                                         ),
                                         TextSpan(
-                                          text: 'SDG',
+                                          text: functions.outcomeText(
+                                              _model.request,
+                                              'currency',
+                                              'SDG'),
                                           style: GoogleFonts.montserrat(
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryBackground,
@@ -293,6 +325,50 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                           .bodyMedium
                                           .override(
                                             font: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w500,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      if (_model.problem != null &&
+                                          _model.problem != '') {
+                                        await _model.startTap(context);
+                                        safeSetState(() {});
+                                      }
+                                    },
+                                    child: Text(
+                                      () {
+                                        if (_model.problem != null &&
+                                            _model.problem != '') {
+                                          return _model.problem;
+                                        } else if (_model.waiting != null &&
+                                            _model.waiting != '') {
+                                          return _model.waiting;
+                                        } else {
+                                          return 'Hold your phone near the\ncustomer\'s device';
+                                        }
+                                      }(),
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.montserrat(
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -302,6 +378,8 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondary,
                                             letterSpacing: 0.0,
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
@@ -311,38 +389,9 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium
                                                     .fontStyle,
+                                            lineHeight: 1.2,
                                           ),
                                     ),
-                                  ),
-                                  Text(
-                                    'Hold your phone near the\ncustomer\'s device',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.montserrat(
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondary,
-                                          letterSpacing: 0.0,
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                          lineHeight: 1.2,
-                                        ),
                                   ),
                                 ].divide(SizedBox(height: 9.0)),
                               ),

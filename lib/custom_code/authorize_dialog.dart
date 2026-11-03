@@ -33,8 +33,9 @@ TextStyle _type(
 /// Asks for the passcode or fingerprint that allows moving [amount] to [name].
 ///
 /// [verb] finishes "Use your passcode to …": `send` for a transfer, `pay` for a
-/// payment request. [challenge] is read when the fingerprint is used, so it names the
-/// reference in force then. Null when the person closed it.
+/// payment request, `request` before asking to be paid ([preposition] `from`).
+/// [challenge] is read when the fingerprint is used, so it names the reference in
+/// force then. Null when the person closed it.
 Future<PayCredential?> showAuthorizeDialog(
   BuildContext context, {
   required String amount,
@@ -43,6 +44,7 @@ Future<PayCredential?> showAuthorizeDialog(
   required Future<ApiResult<String>> Function() challenge,
   String verb = 'send',
   String biometricTitle = 'Confirm transfer',
+  String preposition = 'to',
   String? error,
 }) =>
     showGeneralDialog<PayCredential>(
@@ -60,6 +62,7 @@ Future<PayCredential?> showAuthorizeDialog(
         error: error,
         verb: verb,
         biometricTitle: biometricTitle,
+        preposition: preposition,
         challenge: challenge,
       ),
       transitionBuilder: (_, animation, __, child) {
@@ -101,6 +104,7 @@ class AuthorizeDialog extends StatefulWidget {
     required this.challenge,
     this.verb = 'send',
     this.biometricTitle = 'Confirm transfer',
+    this.preposition = 'to',
     this.error,
   });
 
@@ -115,6 +119,9 @@ class AuthorizeDialog extends StatefulWidget {
   /// What the money is doing: `send`, or `pay`.
   final String verb;
   final String biometricTitle;
+
+  /// Between the amount and [name]: `to`, or `from` for a request.
+  final String preposition;
 
   @override
   State<AuthorizeDialog> createState() => AuthorizeDialogState();
@@ -218,7 +225,8 @@ class AuthorizeDialogState extends State<AuthorizeDialog>
       final signed = await AuthSession.instance.biometrics.sign(
         challenge.value,
         title: widget.biometricTitle,
-        reason: '${widget.verb[0].toUpperCase()}${widget.verb.substring(1)} ${widget.amount} to ${widget.name}',
+        reason:
+            '${widget.verb[0].toUpperCase()}${widget.verb.substring(1)} ${widget.amount} ${widget.preposition} ${widget.name}',
         negative: 'Use passcode',
       );
       if (!mounted) return;
@@ -305,7 +313,7 @@ class AuthorizeDialogState extends State<AuthorizeDialog>
                       TextSpan(
                           text: widget.amount,
                           style: _type(13, weight: FontWeight.w600)),
-                      const TextSpan(text: ' to '),
+                      TextSpan(text: ' ${widget.preposition} '),
                       TextSpan(
                           text: widget.name,
                           style: _type(13, weight: FontWeight.w600)),

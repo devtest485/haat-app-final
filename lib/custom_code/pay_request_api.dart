@@ -21,6 +21,7 @@ class PaymentRequest {
     this.invoiceReference,
     this.expiresAt,
     this.paidAt,
+    this.confirmOnPhone = false,
   });
 
   final String id;
@@ -29,7 +30,7 @@ class PaymentRequest {
   /// read from HAAT when it is opened, never from the QR.
   final String code;
 
-  /// `dynamic_qr` or `payment_link`.
+  /// `dynamic_qr`, `payment_link` or `nfc` (tap to pay).
   final String channel;
   final String merchantName;
   final String currency;
@@ -39,6 +40,10 @@ class PaymentRequest {
   final String? invoiceReference;
   final DateTime? expiresAt;
   final DateTime? paidAt;
+
+  /// A tap whose amount the customer approves on their own phone, being above what a
+  /// tap pays alone.
+  final bool confirmOnPhone;
 
   bool get isPaid => status == 'paid';
 
@@ -59,6 +64,7 @@ class PaymentRequest {
         expiresAt:
             DateTime.tryParse(data['expiresAt'] as String? ?? '')?.toLocal(),
         paidAt: DateTime.tryParse(data['paidAt'] as String? ?? '')?.toLocal(),
+        confirmOnPhone: data['confirmOnPhone'] as bool? ?? false,
       );
 }
 
@@ -121,6 +127,9 @@ class PaymentRequestPreview {
     this.invoiceReference,
     this.expiresAt,
     this.refusal,
+    this.limitReason,
+    this.limitMinor,
+    this.remainingMinor,
   });
 
   final String code;
@@ -145,6 +154,13 @@ class PaymentRequestPreview {
   /// `not_open`, `own_request`, `other_bank`, `no_amount`, `no_rule` or `over_limit`.
   final String? refusal;
 
+  /// With `over_limit`, which of the bank's limits: `daily_limit`, `above_maximum`,
+  /// `below_minimum` or `fee_exceeds_amount`, with its figure and, for the daily cap,
+  /// what is left of it today.
+  final String? limitReason;
+  final BigInt? limitMinor;
+  final BigInt? remainingMinor;
+
   bool get isInvoice => channel == 'invoice';
 
   factory PaymentRequestPreview.fromData(Map<String, dynamic> data) =>
@@ -162,6 +178,10 @@ class PaymentRequestPreview {
             DateTime.tryParse(data['expiresAt'] as String? ?? '')?.toLocal(),
         payable: data['payable'] as bool? ?? false,
         refusal: data['refusal'] as String?,
+        limitReason: (data['limit'] as Map?)?['reason'] as String?,
+        limitMinor: _minorOrNull((data['limit'] as Map?)?['limitMinor']),
+        remainingMinor:
+            _minorOrNull((data['limit'] as Map?)?['remainingMinor']),
         requester: PaymentRequester.fromData(
           (data['requester'] as Map?)?.cast<String, dynamic>() ?? const {},
         ),
@@ -196,6 +216,41 @@ class PayRequestApi {
             'description': description.trim(),
         },
         parse: (envelope) => PaymentRequest.fromData(envelope.object),
+      );
+
+  /// A request for [amountMinor] to be paid by a customer holding their phone to this
+  /// one. Lasts five minutes.
+  Future<ApiResult<PaymentRequest>> createTap({
+    required BigInt amountMinor,
+    required String currency,
+    required String reference,
+  }) =>
+      _client.post(
+        '/tap-payments',
+        idempotencyKey: reference,
+        body: {'amountMinor': amountMinor.toString(), 'currency': currency},
+        parse: (envelope) => PaymentRequest.fromData(envelope.object),
+      );
+
+  /// Charges tap request [code] to the phone that answered with [keyId] and
+  /// [signature]. The same tap again returns the first payment.
+  Future<ApiResult<TransferReceipt>> chargeTap({
+    required String code,
+    required String keyId,
+    required String signature,
+  }) =>
+      _client.post(
+        '/pay/${Uri.encodeComponent(code)}/tap',
+        body: {'keyId': keyId, 'signature': signature},
+        parse: (envelope) => TransferReceipt.fromData(envelope.object),
+      );
+
+  /// Lets this phone pay by tap: registers the public half of its tap key, and
+  /// returns the id it answers a merchant's phone with.
+  Future<ApiResult<String>> registerTapKey(String publicKey) => _client.post(
+        '/pay/tap-key',
+        body: {'publicKey': publicKey},
+        parse: (envelope) => envelope.object['keyId'] as String? ?? '',
       );
 
   /// This business's requests, newest first — how the one on screen learns it was paid.
@@ -290,8 +345,17 @@ class PendingPayLink {
   PendingPayLink._();
 
   static String? _code;
+  static String _kind = 'pay';
 
-  static void hold(String code) => _code = code;
+  /// Holds [code]. [kind] is `pay` for a link to pay, `tap` for a tap already paid
+  /// (its receipt is shown), `approve` for a tap to approve on this phone.
+  static void hold(String code, {String kind = 'pay'}) {
+    _code = code;
+    _kind = kind;
+  }
+
+  /// What the held code is: `pay`, `tap` or `approve`.
+  static String get kind => _kind;
 
   /// The held code, once; null when there is none.
   static String? take() {

@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -8,7 +9,6 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
-import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -44,40 +44,25 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
       _model.transactions = _model.traded!;
       safeSetState(() {});
       _model.token = await actions.haatAccessToken();
-      await _loadTransactions();
-    });
-  }
-
-  /// Fetches the rows for the selected chip, showing the shimmer meanwhile.
-  Future<void> _loadTransactions() async {
-    final request = ++_model.transactionsRequest;
-    safeSetState(() => _model.transactionsLoaded = false);
-
-    // A fast answer would otherwise flash the shimmer for a frame or two, which
-    // reads as a flicker rather than as loading.
-    final results = await Future.wait([
-      HaatAuthGroup.recentTransactionsCall.call(
+      _model.transactionsResult =
+          await HaatAuthGroup.recentTransactionsCall.call(
         accessToken: _model.token,
         limit: 100,
-        since: functions.transactionSince(_model.filterIndex),
-      ),
-      Future.delayed(const Duration(milliseconds: 450)),
-    ]);
-    final result = results.first as ApiCallResponse;
+      );
 
-    // The user has picked another chip since; that fetch owns the list now.
-    if (request != _model.transactionsRequest) return;
-
-    _model.transactionsResult = result;
-    safeSetState(() {
-      if (result.succeeded) {
-        _model.transactionList = (HaatAuthGroup.recentTransactionsCall
-                    .transactions(result.jsonBody ?? '') ??
-                [])
+      if ((_model.transactionsResult?.succeeded ?? true)) {
+        _model.transactionList = HaatAuthGroup.recentTransactionsCall
+            .transactions(
+              (_model.transactionsResult?.jsonBody ?? ''),
+            )!
             .toList()
             .cast<dynamic>();
+        _model.transactionsLoaded = true;
+        safeSetState(() {});
+      } else {
+        _model.transactionsLoaded = true;
+        safeSetState(() {});
       }
-      _model.transactionsLoaded = true;
     });
   }
 
@@ -328,31 +313,54 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                             'Last 3 months')
                                                       ],
                                                       onChanged: (val) async {
-                                                        final filter = functions
+                                                        safeSetState(() => _model
+                                                                .choiceChipsValue =
+                                                            val?.firstOrNull);
+                                                        _model.filterIndex = functions
                                                             .transactionFilterIndex(
-                                                                val?.firstOrNull);
-                                                        // The chips report their initial selection
-                                                        // on first build, and a tap on the chip
-                                                        // already selected changes nothing.
-                                                        if (filter ==
                                                                 _model
-                                                                    .filterIndex &&
-                                                            _model.transactionsRequest >
-                                                                0) {
-                                                          return;
-                                                        }
-                                                        _model.choiceChipsValue =
-                                                            val?.firstOrNull;
-                                                        _model.filterIndex =
-                                                            filter;
-                                                        // Before the page load has the token, its
-                                                        // own fetch picks up this filter.
-                                                        if (_model.token ==
-                                                            null) {
+                                                                    .choiceChipsValue);
+                                                        _model.transactionsLoaded =
+                                                            false;
+                                                        safeSetState(() {});
+                                                        _model.filteredResult =
+                                                            await HaatAuthGroup
+                                                                .recentTransactionsCall
+                                                                .call(
+                                                          accessToken:
+                                                              _model.token,
+                                                          limit: 100,
+                                                          since: functions
+                                                              .transactionSince(
+                                                                  _model
+                                                                      .filterIndex),
+                                                        );
+
+                                                        if ((_model
+                                                                .filteredResult
+                                                                ?.succeeded ??
+                                                            true)) {
+                                                          _model.transactionList =
+                                                              HaatAuthGroup
+                                                                  .recentTransactionsCall
+                                                                  .transactions(
+                                                                    (_model.filteredResult
+                                                                            ?.jsonBody ??
+                                                                        ''),
+                                                                  )!
+                                                                  .toList()
+                                                                  .cast<
+                                                                      dynamic>();
+                                                          _model.transactionsLoaded =
+                                                              true;
                                                           safeSetState(() {});
-                                                          return;
+                                                        } else {
+                                                          _model.transactionsLoaded =
+                                                              true;
+                                                          safeSetState(() {});
                                                         }
-                                                        await _loadTransactions();
+
+                                                        safeSetState(() {});
                                                       },
                                                       selectedChipStyle:
                                                           ChipStyle(
@@ -477,223 +485,614 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                 ],
                                               ),
                                             ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      0.0, 25.0, 0.0, 40.0),
-                                              child: Builder(
-                                                builder: (context) {
-                                                  if (!_model
-                                                      .transactionsLoaded) {
-                                                    return custom_widgets
-                                                        .TransactionsShimmer();
-                                                  }
-                                                  final dayGroup = functions
-                                                          .transactionDayGroups(
-                                                              _model
-                                                                  .transactionList
-                                                                  .toList(),
-                                                              _model
-                                                                  .filterIndex)
-                                                          ?.toList() ??
-                                                      [];
-
-                                                  return ListView.separated(
-                                                    padding: EdgeInsets.zero,
-                                                    primary: false,
-                                                    shrinkWrap: true,
-                                                    scrollDirection:
-                                                        Axis.vertical,
-                                                    itemCount: dayGroup.length,
-                                                    separatorBuilder: (_, __) =>
-                                                        SizedBox(height: 20.0),
-                                                    itemBuilder: (context,
-                                                        dayGroupIndex) {
-                                                      final dayGroupItem =
-                                                          dayGroup[
-                                                              dayGroupIndex];
-                                                      return Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        crossAxisAlignment:
-                                                            (FFCrossAxisAlignment
-                                                                    .start)
-                                                                .flutterValue,
-                                                        textBaseline:
-                                                            TextBaseline
-                                                                .alphabetic,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        4.0,
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            child: Text(
-                                                              getJsonField(
-                                                                dayGroupItem,
-                                                                r'''$.label''',
-                                                              ).toString(),
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .montserrat(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
+                                            Builder(
+                                              builder: (context) {
+                                                if (_model.transactionsLoaded ==
+                                                    false) {
+                                                  return Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 25.0,
+                                                                0.0, 40.0),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          crossAxisAlignment:
+                                                              (FFCrossAxisAlignment
+                                                                      .start)
+                                                                  .flutterValue,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              child: Container(
+                                                                width: 72.0,
+                                                                height: 10.0,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Color(
+                                                                      0xFFE6E6E6),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            5.0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            5.0),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            5.0),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            5.0),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16.0),
+                                                              ),
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            5.0,
+                                                                            0.0,
+                                                                            5.0,
+                                                                            0.0),
+                                                                    child:
+                                                                        wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel1,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            0,
+                                                                        showDivider:
+                                                                            true,
+                                                                      ),
                                                                     ),
-                                                                    color: Color(
-                                                                        0x8A000000),
-                                                                    fontSize:
-                                                                        11.0,
-                                                                    letterSpacing:
-                                                                        0.6,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            5.0,
+                                                                            0.0,
+                                                                            5.0,
+                                                                            0.0),
+                                                                    child:
+                                                                        wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel2,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            1,
+                                                                        showDivider:
+                                                                            false,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              height: 8.0)),
+                                                        ),
+                                                        Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          crossAxisAlignment:
+                                                              (FFCrossAxisAlignment
+                                                                      .start)
+                                                                  .flutterValue,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              child: Container(
+                                                                width: 72.0,
+                                                                height: 10.0,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Color(
+                                                                      0xFFE6E6E6),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            5.0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            5.0),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            5.0),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            5.0),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16.0),
+                                                              ),
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            5.0,
+                                                                            0.0,
+                                                                            5.0,
+                                                                            0.0),
+                                                                    child:
+                                                                        wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel3,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            0,
+                                                                        showDivider:
+                                                                            true,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            5.0,
+                                                                            0.0,
+                                                                            5.0,
+                                                                            0.0),
+                                                                    child:
+                                                                        wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel4,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            1,
+                                                                        showDivider:
+                                                                            false,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              height: 8.0)),
+                                                        ),
+                                                        Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          crossAxisAlignment:
+                                                              (FFCrossAxisAlignment
+                                                                      .start)
+                                                                  .flutterValue,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              child: Container(
+                                                                width: 72.0,
+                                                                height: 10.0,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Color(
+                                                                      0xFFE6E6E6),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            5.0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            5.0),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            5.0),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            5.0),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            16.0),
+                                                              ),
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            5.0,
+                                                                            0.0,
+                                                                            5.0,
+                                                                            0.0),
+                                                                    child:
+                                                                        wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel5,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            0,
+                                                                        showDivider:
+                                                                            false,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              height: 8.0)),
+                                                        ),
+                                                      ].divide(SizedBox(
+                                                          height: 20.0)),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  return Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    25.0,
+                                                                    0.0,
+                                                                    40.0),
+                                                        child: Builder(
+                                                          builder: (context) {
+                                                            final dayGroup = functions
+                                                                    .transactionDayGroups(
+                                                                        _model
+                                                                            .transactionList
+                                                                            .toList(),
+                                                                        _model
+                                                                            .filterIndex)
+                                                                    ?.toList() ??
+                                                                [];
+
+                                                            return ListView
+                                                                .separated(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              primary: false,
+                                                              shrinkWrap: true,
+                                                              scrollDirection:
+                                                                  Axis.vertical,
+                                                              itemCount:
+                                                                  dayGroup
+                                                                      .length,
+                                                              separatorBuilder: (_,
+                                                                      __) =>
+                                                                  SizedBox(
+                                                                      height:
+                                                                          20.0),
+                                                              itemBuilder: (context,
+                                                                  dayGroupIndex) {
+                                                                final dayGroupItem =
+                                                                    dayGroup[
+                                                                        dayGroupIndex];
+                                                                return Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  crossAxisAlignment:
+                                                                      (FFCrossAxisAlignment
+                                                                              .start)
+                                                                          .flutterValue,
+                                                                  textBaseline:
+                                                                      TextBaseline
+                                                                          .alphabetic,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                      child:
+                                                                          Text(
+                                                                        getJsonField(
+                                                                          dayGroupItem,
+                                                                          r'''$.label''',
+                                                                        ).toString(),
+                                                                        style: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .override(
+                                                                              font: GoogleFonts.montserrat(
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                              ),
+                                                                              color: Color(0x8A000000),
+                                                                              fontSize: 11.0,
+                                                                              letterSpacing: 0.6,
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .primaryText,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(16.0),
+                                                                      ),
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        children:
+                                                                            [
+                                                                          Builder(
+                                                                            builder:
+                                                                                (context) {
+                                                                              final txItem = getJsonField(
+                                                                                dayGroupItem,
+                                                                                r'''$.rows''',
+                                                                              ).toList();
+
+                                                                              return ListView.builder(
+                                                                                padding: EdgeInsets.zero,
+                                                                                primary: false,
+                                                                                shrinkWrap: true,
+                                                                                scrollDirection: Axis.vertical,
+                                                                                itemCount: txItem.length,
+                                                                                itemBuilder: (context, txItemIndex) {
+                                                                                  final txItemItem = txItem[txItemIndex];
+                                                                                  return Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                      color: FlutterFlowTheme.of(context).primaryText,
+                                                                                      borderRadius: BorderRadius.circular(16.0),
+                                                                                    ),
+                                                                                    child: Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 0.0),
+                                                                                      child: TransactionsWidget(
+                                                                                        key: Key('Keya3q_${txItemIndex}_of_${txItem.length}'),
+                                                                                        title: functions.transactionTitle(
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.description''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.kind''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.direction''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.transfer''',
+                                                                                            )),
+                                                                                        subtitle: functions.transactionSubtitle(
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.description''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.kind''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.occurredAt''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.direction''',
+                                                                                            ).toString()),
+                                                                                        amount: functions.transactionAmount(
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.amountMinor''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.currency''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.direction''',
+                                                                                            ).toString()),
+                                                                                        incoming: functions.transactionIsIncoming(getJsonField(
+                                                                                          txItemItem,
+                                                                                          r'''$.direction''',
+                                                                                        ).toString()),
+                                                                                        paymentMethod: getJsonField(
+                                                                                          txItemItem,
+                                                                                          r'''$.paymentMethod''',
+                                                                                        ).toString(),
+                                                                                        showDivider: functions.groupPairDivider(dayGroupItem, txItemIndex),
+                                                                                        tone: functions.transactionTone(
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.kind''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.direction''',
+                                                                                            ).toString(),
+                                                                                            getJsonField(
+                                                                                              txItemItem,
+                                                                                              r'''$.status''',
+                                                                                            ).toString()),
+                                                                                      ),
+                                                                                    ),
+                                                                                  );
+                                                                                },
+                                                                              );
+                                                                            },
+                                                                          ),
+                                                                        ].divide(SizedBox(height: 7.0)),
+                                                                      ),
+                                                                    ),
+                                                                  ].divide(SizedBox(
+                                                                      height:
+                                                                          8.0)),
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                      if ((_model.transactionsLoaded ==
+                                                              true) &&
+                                                          (functions
+                                                                  .transactionDayGroups(
+                                                                      _model
+                                                                          .transactionList
+                                                                          .toList(),
+                                                                      _model
+                                                                          .filterIndex)
+                                                                  ?.length ==
+                                                              0))
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      24.0,
+                                                                      48.0,
+                                                                      24.0,
+                                                                      40.0),
+                                                          child: Text(
+                                                            'No transactions in this period',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font:
+                                                                      GoogleFonts
+                                                                          .inter(
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontWeight,
                                                                     fontStyle: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryText,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          16.0),
-                                                            ),
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              children: [
-                                                                Builder(
-                                                                  builder:
-                                                                      (context) {
-                                                                    final txItem =
-                                                                        getJsonField(
-                                                                      dayGroupItem,
-                                                                      r'''$.rows''',
-                                                                    ).toList();
-
-                                                                    return ListView
-                                                                        .builder(
-                                                                      padding:
-                                                                          EdgeInsets
-                                                                              .zero,
-                                                                      primary:
-                                                                          false,
-                                                                      shrinkWrap:
-                                                                          true,
-                                                                      scrollDirection:
-                                                                          Axis.vertical,
-                                                                      itemCount:
-                                                                          txItem
-                                                                              .length,
-                                                                      itemBuilder:
-                                                                          (context,
-                                                                              txItemIndex) {
-                                                                        final txItemItem =
-                                                                            txItem[txItemIndex];
-                                                                        return Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                FlutterFlowTheme.of(context).primaryText,
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(16.0),
-                                                                          ),
-                                                                          child:
-                                                                              Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                5.0,
-                                                                                0.0,
-                                                                                5.0,
-                                                                                0.0),
-                                                                            child:
-                                                                                TransactionsWidget(
-                                                                              key: Key('Keyetz_${txItemIndex}_of_${txItem.length}'),
-                                                                              title: functions.transactionTitle(
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.description''',
-                                                                                  ).toString(),
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.kind''',
-                                                                                  ).toString(),
-                                                                                  getJsonField(txItemItem, r'''$.direction''').toString(),
-                                                                                  getJsonField(txItemItem, r'''$.transfer''')),
-                                                                              subtitle: functions.transactionSubtitle(
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.description''',
-                                                                                  ).toString(),
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.kind''',
-                                                                                  ).toString(),
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.occurredAt''',
-                                                                                  ).toString(),
-                                                                                  getJsonField(txItemItem, r'''$.direction''').toString()),
-                                                                              amount: functions.transactionAmount(
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.amountMinor''',
-                                                                                  ).toString(),
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.currency''',
-                                                                                  ).toString(),
-                                                                                  getJsonField(
-                                                                                    txItemItem,
-                                                                                    r'''$.direction''',
-                                                                                  ).toString()),
-                                                                              incoming: functions.transactionIsIncoming(getJsonField(
-                                                                                txItemItem,
-                                                                                r'''$.direction''',
-                                                                              ).toString()),
-                                                                              paymentMethod: getJsonField(
-                                                                                txItemItem,
-                                                                                r'''$.paymentMethod''',
-                                                                              ).toString(),
-                                                                              tone: functions.transactionTone(getJsonField(txItemItem, r'''$.kind''').toString(), getJsonField(txItemItem, r'''$.direction''').toString()),
-                                                                              showDivider: functions.groupPairDivider(dayGroupItem, txItemIndex),
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    );
-                                                                  },
+                                                                  color: Color(
+                                                                      0xFF6C6C6C),
+                                                                  fontSize:
+                                                                      14.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                  lineHeight:
+                                                                      1.5,
                                                                 ),
-                                                              ].divide(SizedBox(
-                                                                  height: 7.0)),
-                                                            ),
                                                           ),
-                                                        ].divide(SizedBox(
-                                                            height: 8.0)),
-                                                      );
-                                                    },
+                                                        ),
+                                                    ],
                                                   );
-                                                },
-                                              ),
+                                                }
+                                              },
                                             ),
                                           ],
                                         ),

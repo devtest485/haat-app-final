@@ -28,6 +28,26 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+// Tap to pay: the AID list HaatTapService answers for. FlutterFlow exposes no res/
+// file to put it in, so it is written here, into build/, on every build.
+def tapResources = new File(layout.buildDirectory.get().asFile, 'generated/haat-tap/res')
+new File(tapResources, 'xml').mkdirs()
+new File(tapResources, 'values').mkdirs()
+new File(tapResources, 'xml/haat_tap_service.xml').text = '''<?xml version="1.0" encoding="utf-8"?>
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/haat_tap_description"
+    android:requireDeviceUnlock="true">
+    <aid-group android:category="other" android:description="@string/haat_tap_description">
+        <aid-filter android:name="F048414154504159"/>
+    </aid-group>
+</host-apdu-service>
+'''
+new File(tapResources, 'values/haat_tap.xml').text = '''<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="haat_tap_description">HAAT tap to pay</string>
+</resources>
+'''
+
 android {
     namespace "com.mycompany.haat"
     compileSdkVersion 36
@@ -45,6 +65,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        main.res.srcDirs += tapResources
     }
 
     lintOptions {

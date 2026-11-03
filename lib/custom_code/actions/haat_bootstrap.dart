@@ -10,7 +10,9 @@ import 'package:flutter/material.dart' hide RepeatMode;
 
 import '/custom_code/api_config.dart';
 import '/custom_code/auth_session.dart';
+import '/custom_code/connection_gate.dart';
 import '/custom_code/pay_request_screens.dart' show PayLinks;
+import '/custom_code/tap_to_pay.dart' show TapToPay;
 
 /// Brings the session up before the first frame.
 ///
@@ -22,10 +24,14 @@ import '/custom_code/pay_request_screens.dart' show PayLinks;
 /// FlutterFlow itself, so it cannot be exported away.
 ///
 /// Order matters. The session restores tokens from the keystore, and it cannot
-/// build its HTTP client until it knows where the backend is. Payment links are
-/// listened for before the router is, so it never sees one the app can open.
+/// build its HTTP client until it knows where the backend is. The connection
+/// watcher starts last; it puts the no-internet screen up once there is a screen.
+/// Payment links are listened for before the router is, so it never sees one the
+/// app can open. Tap to pay keeps this phone ready to be tapped while signed in.
 Future<void> haatBootstrap() async {
   await ApiConfig.load();
   await AuthSession.initialize();
+  ConnectionGate.start();
   PayLinks.start();
+  TapToPay.start();
 }

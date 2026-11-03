@@ -143,6 +143,8 @@ class _AddBranchWidgetState extends State<AddBranchWidget> {
                                               searchHint:
                                                   'Search a place or address',
                                               showLocateButton: true,
+                                              notFoundImage:
+                                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/haat-4d5muk/assets/za80tcvdsygb/search_not_found.png',
                                               onPicked:
                                                   (location, address) async {
                                                 _model.branchLocation =
@@ -669,6 +671,7 @@ class _AddBranchWidgetState extends State<AddBranchWidget> {
                                 context,
                                 _model.textController1.text,
                                 _model.branchAddress,
+                                _model.branchLocation,
                               );
                               _model.saving = false;
                               safeSetState(() {});

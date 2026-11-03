@@ -1,5 +1,7 @@
+import '/backend/api_requests/api_calls.dart';
 import '/components/notification_action_row/notification_action_row_widget.dart';
 import '/components/notification_item/notification_item_widget.dart';
+import '/components/transaction_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -95,18 +97,24 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                         mainAxisAlignment:
                             (FFMainAxisAlignment.spaceBetween).flutterValue,
                         children: [
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              context.safePop();
-                            },
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
-                              size: 24.0,
+                          Container(
+                            width: 96.0,
+                            height: 24.0,
+                            decoration: BoxDecoration(),
+                            alignment: AlignmentDirectional(-1.0, 0.0),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                context.safePop();
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 24.0,
+                              ),
                             ),
                           ),
                           Text(
@@ -131,9 +139,10 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                                 ),
                           ),
                           Container(
-                            width: 24.0,
+                            width: 96.0,
                             height: 24.0,
                             decoration: BoxDecoration(),
+                            alignment: AlignmentDirectional(1.0, 0.0),
                           ),
                         ],
                       ),
@@ -218,6 +227,62 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                         wrapped: true,
                       ),
                     ),
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 16.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment:
+                            (FFMainAxisAlignment.end).flutterValue,
+                        children: [
+                          if (FFAppState().unreadNotifications > 0)
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                _model.token = await actions.haatAccessToken();
+                                _model.seenResult = await HaatAuthGroup
+                                    .notificationsSeenCall
+                                    .call(
+                                  accessToken: _model.token,
+                                );
+
+                                FFAppState().seenNotificationActions =
+                                    functions.pendingActionKeys(
+                                        _model.pendingActions.toList(),
+                                        FFAppState().seenNotificationActions);
+                                FFAppState().unreadNotifications = 0;
+                                FFAppState().update(() {});
+
+                                safeSetState(() {});
+                              },
+                              child: Text(
+                                'Mark as read',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w600,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      color: Color(0xFF111111),
+                                      fontSize: 13.0,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.w600,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                      lineHeight: 1.5,
+                                    ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
@@ -231,6 +296,177 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                             padding: EdgeInsets.zero,
                             scrollDirection: Axis.vertical,
                             children: [
+                              if (_model.loaded == false)
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      (FFCrossAxisAlignment.stretch)
+                                          .flutterValue,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          (FFCrossAxisAlignment.start)
+                                              .flutterValue,
+                                      textBaseline: TextBaseline.alphabetic,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  4.0, 0.0, 0.0, 0.0),
+                                          child: Container(
+                                            width: 72.0,
+                                            height: 10.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFE6E6E6),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(5.0),
+                                                topRight: Radius.circular(5.0),
+                                                bottomLeft:
+                                                    Radius.circular(5.0),
+                                                bottomRight:
+                                                    Radius.circular(5.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 8.0, 0.0, 8.0),
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(16.0),
+                                                topRight: Radius.circular(16.0),
+                                                bottomLeft:
+                                                    Radius.circular(16.0),
+                                                bottomRight:
+                                                    Radius.circular(16.0),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .transactionShimmerModel1,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child:
+                                                      TransactionShimmerWidget(
+                                                    index: 0,
+                                                    showDivider: true,
+                                                  ),
+                                                ),
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .transactionShimmerModel2,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child:
+                                                      TransactionShimmerWidget(
+                                                    index: 1,
+                                                    showDivider: true,
+                                                  ),
+                                                ),
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .transactionShimmerModel3,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child:
+                                                      TransactionShimmerWidget(
+                                                    index: 2,
+                                                    showDivider: false,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ].divide(SizedBox(height: 8.0)),
+                                    ),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          (FFCrossAxisAlignment.start)
+                                              .flutterValue,
+                                      textBaseline: TextBaseline.alphabetic,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  4.0, 0.0, 0.0, 0.0),
+                                          child: Container(
+                                            width: 72.0,
+                                            height: 10.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFE6E6E6),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(5.0),
+                                                topRight: Radius.circular(5.0),
+                                                bottomLeft:
+                                                    Radius.circular(5.0),
+                                                bottomRight:
+                                                    Radius.circular(5.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 8.0, 0.0, 8.0),
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(16.0),
+                                                topRight: Radius.circular(16.0),
+                                                bottomLeft:
+                                                    Radius.circular(16.0),
+                                                bottomRight:
+                                                    Radius.circular(16.0),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .transactionShimmerModel4,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child:
+                                                      TransactionShimmerWidget(
+                                                    index: 0,
+                                                    showDivider: true,
+                                                  ),
+                                                ),
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .transactionShimmerModel5,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child:
+                                                      TransactionShimmerWidget(
+                                                    index: 1,
+                                                    showDivider: false,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ].divide(SizedBox(height: 8.0)),
+                                    ),
+                                  ].divide(SizedBox(height: 24.0)),
+                                ),
                               if (_model.loaded! && _model.failed!)
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -312,6 +548,9 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                                             0.0, 8.0, 0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
+                                            _model.loaded = false;
+                                            _model.failed = false;
+                                            safeSetState(() {});
                                             await _model
                                                 .loadNotifications(context);
                                             safeSetState(() {});
@@ -446,11 +685,14 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                                                     pendingActionItem,
                                                     r'''$.key''',
                                                   ).toString(),
-                                                  showDot: '${getJsonField(
-                                                        pendingActionItem,
-                                                        r'''$.key''',
-                                                      ).toString()}' !=
-                                                      'add_team',
+                                                  showDot: functions
+                                                      .notificationActionUnread(
+                                                          getJsonField(
+                                                            pendingActionItem,
+                                                            r'''$.key''',
+                                                          ).toString(),
+                                                          FFAppState()
+                                                              .seenNotificationActions),
                                                   showDivider: functions.isNotLastItem(
                                                       pendingActionIndex,
                                                       functions
@@ -606,9 +848,12 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                                                     r'''$.category''',
                                                   ).toString(),
                                                   unread: getJsonField(
-                                                    todayItemItem,
-                                                    r'''$.unread''',
-                                                  ),
+                                                        todayItemItem,
+                                                        r'''$.unread''',
+                                                      ) &&
+                                                      (FFAppState()
+                                                              .unreadNotifications >
+                                                          0),
                                                   showDivider:
                                                       functions.isNotLastItem(
                                                           todayItemIndex,
@@ -745,9 +990,12 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                                                     r'''$.category''',
                                                   ).toString(),
                                                   unread: getJsonField(
-                                                    earlierItemItem,
-                                                    r'''$.unread''',
-                                                  ),
+                                                        earlierItemItem,
+                                                        r'''$.unread''',
+                                                      ) &&
+                                                      (FFAppState()
+                                                              .unreadNotifications >
+                                                          0),
                                                   showDivider: functions.isNotLastItem(
                                                       earlierItemIndex,
                                                       functions

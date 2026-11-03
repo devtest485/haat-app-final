@@ -7,8 +7,6 @@ export '/custom_code/actions/haat_register.dart' show haatRegister;
 export '/custom_code/actions/haat_resend_otp.dart' show haatResendOtp;
 export '/custom_code/actions/haat_verify_otp.dart' show haatVerifyOtp;
 export '/custom_code/actions/haat_sign_in.dart' show haatSignIn;
-export '/custom_code/actions/haat_sign_out.dart' show haatSignOut;
-export '/custom_code/actions/haat_bootstrap.dart' show haatBootstrap;
 export '/custom_code/actions/haat_dev_otp_code.dart' show haatDevOtpCode;
 export '/custom_code/actions/haat_pending_mobile.dart' show haatPendingMobile;
 export '/custom_code/actions/haat_sign_in_with_passcode.dart'
@@ -24,7 +22,6 @@ export '/custom_code/actions/haat_categories_chosen.dart'
     show haatCategoriesChosen;
 export '/custom_code/actions/haat_sales_channel_chosen.dart'
     show haatSalesChannelChosen;
-export '/custom_code/actions/haat_load_profile.dart' show haatLoadProfile;
 export '/custom_code/actions/haat_pick_business_logo.dart'
     show haatPickBusinessLogo;
 export '/custom_code/actions/haat_submit_kyb.dart' show haatSubmitKyb;
@@ -40,7 +37,6 @@ export '/custom_code/actions/haat_access_token.dart' show haatAccessToken;
 export '/custom_code/actions/haat_business_name_was_taken.dart'
     show haatBusinessNameWasTaken;
 export '/custom_code/actions/haat_open_payout.dart' show haatOpenPayout;
-export '/custom_code/actions/haat_open_send_money.dart' show haatOpenSendMoney;
 export '/custom_code/actions/haat_has_passcode_sign_in.dart'
     show haatHasPasscodeSignIn;
 export '/custom_code/actions/haat_save_business_setup.dart'
@@ -54,7 +50,6 @@ export '/custom_code/actions/haat_open_and_wait.dart' show haatOpenAndWait;
 export '/custom_code/actions/haat_load_products.dart' show haatLoadProducts;
 export '/custom_code/actions/haat_save_product.dart' show haatSaveProduct;
 export '/custom_code/actions/haat_delete_product.dart' show haatDeleteProduct;
-export '/custom_code/actions/haat_create_branch.dart' show haatCreateBranch;
 export '/custom_code/actions/haat_load_roles.dart' show haatLoadRoles;
 export '/custom_code/actions/haat_change_staff_role.dart'
     show haatChangeStaffRole;
@@ -64,3 +59,36 @@ export '/custom_code/actions/haat_business_summary.dart'
 export '/custom_code/actions/haat_store_profile.dart' show haatStoreProfile;
 export '/custom_code/actions/haat_save_business_location.dart'
     show haatSaveBusinessLocation;
+export '/custom_code/actions/haat_load_profile.dart' show haatLoadProfile;
+export '/custom_code/actions/haat_sign_out.dart' show haatSignOut;
+export '/custom_code/actions/haat_fingerprint_available.dart'
+    show haatFingerprintAvailable;
+export '/custom_code/actions/haat_refresh_wallet.dart' show haatRefreshWallet;
+export '/custom_code/actions/haat_warm_profile.dart' show haatWarmProfile;
+export '/custom_code/actions/haat_transfer_fingerprint.dart'
+    show haatTransferFingerprint;
+export '/custom_code/actions/haat_request_stand.dart' show haatRequestStand;
+export '/custom_code/actions/haat_open_pay_scanner.dart'
+    show haatOpenPayScanner;
+export '/custom_code/actions/haat_open_payment_request.dart'
+    show haatOpenPaymentRequest;
+export '/custom_code/actions/haat_keep_pay_request.dart'
+    show haatKeepPayRequest;
+export '/custom_code/actions/haat_await_pay_request.dart'
+    show haatAwaitPayRequest;
+export '/custom_code/actions/haat_share_pay_request.dart'
+    show haatSharePayRequest;
+export '/custom_code/actions/haat_preview_pay_request.dart'
+    show haatPreviewPayRequest;
+export '/custom_code/actions/haat_approve_pay_request.dart'
+    show haatApprovePayRequest;
+export '/custom_code/actions/haat_create_pay_request.dart'
+    show haatCreatePayRequest;
+export '/custom_code/actions/haat_create_branch.dart' show haatCreateBranch;
+export '/custom_code/actions/haat_bootstrap.dart' show haatBootstrap;
+export '/custom_code/actions/haat_tap_to_pay.dart' show haatTapToPay;
+export '/custom_code/actions/haat_create_tap_payment.dart'
+    show haatCreateTapPayment;
+export '/custom_code/actions/haat_confirm_its_you.dart' show haatConfirmItsYou;
+export '/custom_code/actions/haat_await_tap_approval.dart'
+    show haatAwaitTapApproval;

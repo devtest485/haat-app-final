@@ -478,11 +478,21 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                await actions.haatOpenSendMoney(
-                                  context,
-                                  'username',
-                                  widget!.fundsAmount,
+                                context.pushNamed(
+                                  TransfermethodWidget.routeName,
+                                  queryParameters: {
+                                    'transferMode': serializeParam(
+                                      'UserName',
+                                      ParamType.String,
+                                    ),
+                                    'amount': serializeParam(
+                                      widget!.fundsAmount,
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
                                 );
+
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: double.infinity,
@@ -608,11 +618,21 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                await actions.haatOpenSendMoney(
-                                  context,
-                                  'mobile',
-                                  widget!.fundsAmount,
+                                context.pushNamed(
+                                  TransfermethodWidget.routeName,
+                                  queryParameters: {
+                                    'transferMode': serializeParam(
+                                      'PhoneNumber',
+                                      ParamType.String,
+                                    ),
+                                    'amount': serializeParam(
+                                      widget!.fundsAmount,
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
                                 );
+
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: double.infinity,

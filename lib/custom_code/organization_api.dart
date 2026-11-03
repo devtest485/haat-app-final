@@ -249,6 +249,51 @@ class OrganizationApi {
         },
       );
 
+  /// The branch a stand is delivered for when the merchant does not pick one: the
+  /// primary branch, or else the first still open. Null when none is open.
+  Future<ApiResult<String?>> standBranchId() => _client.get(
+        '/organizations/branches',
+        parse: (envelope) {
+          final open = envelope.list
+              .whereType<Map<String, dynamic>>()
+              .where((branch) => branch['status'] != 'closed')
+              .toList();
+          if (open.isEmpty) return null;
+
+          final primary = open.where((branch) => branch['isPrimary'] == true);
+          final chosen = primary.isNotEmpty ? primary.first : open.first;
+
+          return chosen['branchId'] as String?;
+        },
+      );
+
+  /// Asks for a QR and NFC stand delivered to the point the merchant chose on the
+  /// map. Returns the reference to quote when chasing it.
+  ///
+  /// One open request per branch: a second comes back as a 409 whose message says
+  /// one is already on its way, which is what the merchant should read.
+  Future<ApiResult<String>> requestStand({
+    required String branchId,
+    required String addressLine,
+    String? streetName,
+    String? nearby,
+    double? latitude,
+    double? longitude,
+  }) =>
+      _client.post(
+        '/organizations/stand-requests',
+        body: {
+          'branchId': branchId,
+          'addressLine': addressLine,
+          if (streetName != null) 'streetName': streetName,
+          if (nearby != null) 'nearby': nearby,
+          // The backend takes decimal degrees as text, at most 8 places.
+          if (latitude != null) 'latitude': latitude.toStringAsFixed(6),
+          if (longitude != null) 'longitude': longitude.toStringAsFixed(6),
+        },
+        parse: (envelope) => envelope.object['reference'] as String,
+      );
+
   /// Forgets the cached lists. Called when the session ends, so the next merchant
   /// on this handset does not read the previous one's copy.
   void forget() => _cached = null;

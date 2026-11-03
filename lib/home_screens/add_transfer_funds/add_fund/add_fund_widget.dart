@@ -53,8 +53,6 @@ class _AddFundWidgetState extends State<AddFundWidget> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        // On a transfer the button stays at the bottom, under the keyboard.
-        resizeToAvoidBottomInset: widget!.fund != 'transfer',
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Container(
           width: double.infinity,

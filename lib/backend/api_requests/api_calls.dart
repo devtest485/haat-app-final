@@ -30,6 +30,8 @@ class HaatAuthGroup {
     'Content-Type': 'application/json',
     'Accept-Language': '[language]',
   };
+  static FindTransferRecipientCall findTransferRecipientCall =
+      FindTransferRecipientCall();
   static OrganizationsCall organizationsCall = OrganizationsCall();
   static RegisterUserCall registerUserCall = RegisterUserCall();
   static ResendOtpCall resendOtpCall = ResendOtpCall();
@@ -73,6 +75,82 @@ class HaatAuthGroup {
   static AssignRoleCall assignRoleCall = AssignRoleCall();
   static RevokeRoleCall revokeRoleCall = RevokeRoleCall();
   static CloseBranchCall closeBranchCall = CloseBranchCall();
+  static SendTransferCall sendTransferCall = SendTransferCall();
+  static CountriesCall countriesCall = CountriesCall();
+  static WalletCall walletCall = WalletCall();
+}
+
+class FindTransferRecipientCall {
+  Future<ApiCallResponse> call({
+    String? by = '',
+    String? value = '',
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    final ffApiRequestBody = '''
+{
+  "by": ${by == null ? 'null' : '"${escapeStringForJson(by)}"'},
+  "value": ${value == null ? 'null' : '"${escapeStringForJson(value)}"'}
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'FindTransferRecipient',
+      apiUrl: '${baseUrl}/transfers/recipient',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  String? name(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.name''',
+      ));
+  String? businessName(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.businessName''',
+      ));
+  String? username(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.username''',
+      ));
+  String? mobileMasked(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.mobileMasked''',
+      ));
+  String? errorCode(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.errorCode''',
+      ));
+  String? message(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.message''',
+      ));
 }
 
 class OrganizationsCall {
@@ -2528,6 +2606,155 @@ class CloseBranchCall {
         response,
         r'''$.message''',
       );
+}
+
+class SendTransferCall {
+  Future<ApiCallResponse> call({
+    dynamic? bodyJson,
+    String? idempotencyKey = '',
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    final body = _serializeJson(bodyJson);
+    final ffApiRequestBody = '''
+${body}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'SendTransfer',
+      apiUrl: '${baseUrl}/transfers',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+        'Idempotency-Key': '${idempotencyKey}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  String? message(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.message''',
+      ));
+  String? status(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.status''',
+      ));
+}
+
+class CountriesCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Countries',
+      apiUrl: '${baseUrl}/countries',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? countries(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?;
+}
+
+class WalletCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Wallet',
+      apiUrl: '${baseUrl}/wallet',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  String? currency(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.balances[0].currency''',
+      ));
+  String? availableMinor(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.balances[0].availableMinor''',
+      ));
 }
 
 /// End HaatAuth Group Code

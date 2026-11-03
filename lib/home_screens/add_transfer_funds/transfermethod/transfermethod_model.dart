@@ -1,9 +1,14 @@
+import '/backend/api_requests/api_calls.dart';
+import '/components/country_picker_widget.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/add_transfer_funds/user_info/user_info_widget.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'transfermethod_widget.dart' show TransfermethodWidget;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +24,16 @@ class TransfermethodModel extends FlutterFlowModel<TransfermethodWidget> {
   bool isValidUsername = false;
 
   bool isValidPhoneNum = false;
+
+  String typed = '';
+
+  String asked = '';
+
+  String foundFor = '';
+
+  String lookupError = '';
+
+  dynamic recipient;
 
   ///  State fields for stateful widgets in this page.
 
@@ -61,5 +76,59 @@ class TransfermethodModel extends FlutterFlowModel<TransfermethodWidget> {
 
     phoneFocusNode?.dispose();
     phoneTextController?.dispose();
+  }
+
+  /// Action blocks.
+  Future lookupRecipient(BuildContext context) async {
+    String? token;
+    ApiCallResponse? lookup;
+
+    if (functions.transferValueComplete(widget!.transferMode, typed,
+            functions.countryField(FFAppState().transferCountry, 'dialCode')) ==
+        true) {
+      asked = functions.transferValue(widget!.transferMode, typed,
+          functions.countryField(FFAppState().transferCountry, 'dialCode'));
+      lookupError = '';
+      foundFor = '';
+      updatePage(() {});
+      token = await actions.haatAccessToken();
+      lookup = await HaatAuthGroup.findTransferRecipientCall.call(
+        accessToken: token,
+        by: functions.transferBy(widget!.transferMode),
+        value: asked,
+      );
+
+      if (asked ==
+          functions.transferValue(
+              widget!.transferMode,
+              typed,
+              functions.countryField(
+                  FFAppState().transferCountry, 'dialCode'))) {
+        if ((lookup?.succeeded ?? true)) {
+          recipient = getJsonField(
+            (lookup?.jsonBody ?? ''),
+            r'''$.data''',
+          );
+          foundFor = asked;
+          updatePage(() {});
+        } else {
+          lookupError = functions.transferLookupError(
+              widget!.transferMode,
+              (lookup?.statusCode ?? 200),
+              HaatAuthGroup.findTransferRecipientCall.errorCode(
+                (lookup?.jsonBody ?? ''),
+              ),
+              HaatAuthGroup.findTransferRecipientCall.message(
+                (lookup?.jsonBody ?? ''),
+              ));
+          updatePage(() {});
+        }
+      }
+    } else {
+      asked = '';
+      foundFor = '';
+      lookupError = '';
+      updatePage(() {});
+    }
   }
 }

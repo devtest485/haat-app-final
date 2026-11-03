@@ -69,7 +69,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(5.0, 8.0, 5.0, 8.0),
+          padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
           child: InkWell(
             splashColor: Colors.transparent,
             focusColor: Colors.transparent,
@@ -109,19 +109,19 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                             ),
                           if ((widget!.imageUrl == null ||
                                   widget!.imageUrl == '') &&
-                              (widget!.category == 'money'))
-                            Icon(
-                              Icons.south_west_rounded,
-                              color: Color(0xFF00794A),
-                              size: 16.0,
-                            ),
-                          if ((widget!.imageUrl == null ||
-                                  widget!.imageUrl == '') &&
                               (widget!.category != 'offer') &&
                               (widget!.category != 'money'))
                             Icon(
                               Icons.lightbulb_outline_rounded,
                               color: Colors.black,
+                              size: 16.0,
+                            ),
+                          if ((widget!.imageUrl == null ||
+                                  widget!.imageUrl == '') &&
+                              (widget!.category == 'money'))
+                            Icon(
+                              Icons.south_west_rounded,
+                              color: Color(0xFF00794A),
                               size: 16.0,
                             ),
                           if (widget!.imageUrl != null &&

@@ -100,44 +100,41 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                       child: Opacity(
                         opacity:
                             functions.productCardOpacity(widget!.outOfStock),
-                        child: Container(
-                          width: double.infinity,
-                          // The card's own white: product photos are often cut out
-                          // on a transparent canvas, and any other colour shows
-                          // through as bands above and below them.
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: Stack(
-                            fit: StackFit.expand,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
                             alignment: AlignmentDirectional(0.0, 0.0),
-                            children: [
-                              Center(
-                                child: Icon(
+                            child: Stack(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              children: [
+                                Icon(
                                   Icons.image_outlined,
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryText,
                                   size: 28.0,
                                 ),
-                              ),
-                              if (widget!.imageUrl != null &&
-                                  widget!.imageUrl != '')
-                                Positioned.fill(
-                                  child: CachedNetworkImage(
-                                    fadeInDuration: Duration(milliseconds: 500),
-                                    fadeOutDuration:
-                                        Duration(milliseconds: 500),
-                                    imageUrl: widget!.imageUrl!,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
-                                    errorWidget: (context, url, error) =>
-                                        SizedBox.shrink(),
+                                if (widget!.imageUrl != null &&
+                                    widget!.imageUrl != '')
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: CachedNetworkImage(
+                                      fadeInDuration:
+                                          Duration(milliseconds: 500),
+                                      fadeOutDuration:
+                                          Duration(milliseconds: 500),
+                                      imageUrl: widget!.imageUrl!,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -1,6 +1,7 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/home_banner/home_banner_widget.dart';
 import '/components/security_sheet_widget.dart';
+import '/components/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/components/week_story_card/week_story_card_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
@@ -86,6 +87,12 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   String? balanceToken;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in WalletBalance widget.
   ApiCallResponse? balanceTransactions;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel1;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel2;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel3;
   // State field(s) for PageView widget.
   PageController? pageViewController;
 
@@ -96,10 +103,20 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
       : 0;
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    transactionShimmerModel1 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel2 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel3 =
+        createModel(context, () => TransactionShimmerModel());
+  }
 
   @override
   void dispose() {
     bannerAutoplay?.cancel();
+    transactionShimmerModel1.dispose();
+    transactionShimmerModel2.dispose();
+    transactionShimmerModel3.dispose();
   }
 }

@@ -1,6 +1,7 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/notification_action_row/notification_action_row_widget.dart';
 import '/components/notification_item/notification_item_widget.dart';
+import '/components/transaction_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -60,18 +61,48 @@ class NotificationsModel extends FlutterFlowModel<NotificationsWidget> {
       choiceChipsValueController?.value?.firstOrNull;
   set choiceChipsValue(String? val) =>
       choiceChipsValueController?.value = val != null ? [val] : [];
+  // Stores action output result for [Custom Action - haatAccessToken] action in Text widget.
+  String? token;
+  // Stores action output result for [Backend Call - API (NotificationsSeen)] action in Text widget.
+  ApiCallResponse? seenResult;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel1;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel2;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel3;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel4;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel5;
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    transactionShimmerModel1 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel2 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel3 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel4 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel5 =
+        createModel(context, () => TransactionShimmerModel());
+  }
 
   @override
-  void dispose() {}
+  void dispose() {
+    transactionShimmerModel1.dispose();
+    transactionShimmerModel2.dispose();
+    transactionShimmerModel3.dispose();
+    transactionShimmerModel4.dispose();
+    transactionShimmerModel5.dispose();
+  }
 
   /// Action blocks.
   Future loadNotifications(BuildContext context) async {
     String? token;
     ApiCallResponse? notificationsResult;
-    ApiCallResponse? seenResult;
 
     token = await actions.haatAccessToken();
     notificationsResult = await HaatAuthGroup.notificationsCall.call(
@@ -116,9 +147,10 @@ class NotificationsModel extends FlutterFlowModel<NotificationsWidget> {
       failed = false;
       loaded = true;
       updatePage(() {});
-      seenResult = await HaatAuthGroup.notificationsSeenCall.call(
-        accessToken: token,
-      );
+      FFAppState().unreadNotifications = functions.unreadNotificationCount(
+          (notificationsResult?.jsonBody ?? ''),
+          FFAppState().seenNotificationActions);
+      updatePage(() {});
     } else {
       failed = true;
       loaded = true;

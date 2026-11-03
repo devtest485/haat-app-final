@@ -35,7 +35,14 @@ List<dynamic>? transactionDayGroups(
           : ago(at(r)!) == 1
               ? 'YESTERDAY'
               : DateFormat('d/M/yy').format(at(r)!);
+  bool hiddenLine(dynamic r) {
+    final k = (r['kind'] ?? '').toString().trim();
+    return k == 'hold_release' ||
+        (k == 'hold' && (r['direction'] ?? '').toString().trim() == 'credit');
+  }
+
   final shown = (rows ?? [])
+      .where((r) => !hiddenLine(r))
       .where((r) =>
           days == 0 ||
           (at(r) != null && at(r)!.isAfter(now.subtract(Duration(days: days)))))

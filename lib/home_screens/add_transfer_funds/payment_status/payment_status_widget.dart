@@ -14,9 +14,11 @@ class PaymentStatusWidget extends StatefulWidget {
   const PaymentStatusWidget({
     super.key,
     required this.paymentStatus,
+    this.outcome,
   });
 
   final String? paymentStatus;
+  final dynamic outcome;
 
   static String routeName = 'PaymentStatus';
   static String routePath = '/paymentStatus';
@@ -63,19 +65,25 @@ class _PaymentStatusWidgetState extends State<PaymentStatusWidget> {
                 return wrapWithModel(
                   model: _model.paymentSuccessModel,
                   updateCallback: () => safeSetState(() {}),
-                  child: PaymentSuccessWidget(),
+                  child: PaymentSuccessWidget(
+                    outcome: widget!.outcome,
+                  ),
                 );
               } else if (widget!.paymentStatus == 'Pending') {
                 return wrapWithModel(
                   model: _model.paymentPendingModel,
                   updateCallback: () => safeSetState(() {}),
-                  child: PaymentPendingWidget(),
+                  child: PaymentPendingWidget(
+                    outcome: widget!.outcome,
+                  ),
                 );
               } else {
                 return wrapWithModel(
                   model: _model.paymentErrorModel,
                   updateCallback: () => safeSetState(() {}),
-                  child: PaymentErrorWidget(),
+                  child: PaymentErrorWidget(
+                    outcome: widget!.outcome,
+                  ),
                 );
               }
             },

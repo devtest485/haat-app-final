@@ -2,15 +2,23 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'link_pay_out_page_model.dart';
 export 'link_pay_out_page_model.dart';
 
 class LinkPayOutPageWidget extends StatefulWidget {
-  const LinkPayOutPageWidget({super.key});
+  const LinkPayOutPageWidget({
+    super.key,
+    String? amount,
+  }) : this.amount = amount ?? '';
+
+  final String amount;
 
   static String routeName = 'LinkPayOutPage';
   static String routePath = '/linkPayOutPage';
@@ -28,6 +36,13 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => LinkPayOutPageModel());
+    _model.setOnUpdate(onUpdate: () => safeSetState(() {}));
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await _model.makeRequest(context);
+      safeSetState(() {});
+    });
   }
 
   @override
@@ -111,7 +126,7 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                     ),
                                   ),
                                   Text(
-                                    'Scan Qr code',
+                                    'Share link',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -177,7 +192,10 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Point any camera at this code\nto open the payment page',
+                                      _model.problem != null &&
+                                              _model.problem != ''
+                                          ? _model.problem
+                                          : 'Point any camera at this code\nto open the payment page',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
@@ -268,7 +286,10 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                '112-134-024',
+                                                functions.outcomeText(
+                                                    _model.request,
+                                                    'invoice',
+                                                    '—'),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -371,7 +392,11 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'pay.app/r/ahmed?amt=11&cur=SDG',
+                                                functions.outcomeText(
+                                                    _model.request,
+                                                    'linkText',
+                                                    'Making your link…'),
+                                                maxLines: 2,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -400,6 +425,7 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ].divide(SizedBox(height: 5.0)),
                                           ),
@@ -462,7 +488,8 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                                 text: TextSpan(
                                                   children: [
                                                     TextSpan(
-                                                      text: '1,000 ',
+                                                      text:
+                                                          '${functions.outcomeText(_model.request, 'amount', widget!.amount)} ',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -494,7 +521,11 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                                               ),
                                                     ),
                                                     TextSpan(
-                                                      text: 'SDG',
+                                                      text:
+                                                          functions.outcomeText(
+                                                              _model.request,
+                                                              'currency',
+                                                              'SDG'),
                                                       style: GoogleFonts
                                                           .montserrat(
                                                         fontSize: 18.0,
@@ -556,55 +587,89 @@ class _LinkPayOutPageWidgetState extends State<LinkPayOutPageWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.73,
-                                    height: 50.0,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius:
-                                          BorderRadius.circular(106.67),
-                                    ),
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Text(
-                                      'Save to Photos',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.montserrat(
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      if (_model.problem != null &&
+                                          _model.problem != '') {
+                                        await _model.makeRequest(context);
+                                        safeSetState(() {});
+                                      } else {
+                                        await actions.haatKeepPayRequest(
+                                          context,
+                                          _model.request,
+                                        );
+                                      }
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.73,
+                                      height: 50.0,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius:
+                                            BorderRadius.circular(106.67),
+                                      ),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Text(
+                                        _model.problem != null &&
+                                                _model.problem != ''
+                                            ? 'Try again'
+                                            : 'Copy link',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.montserrat(
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontSize: 18.0,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 18.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 0.15,
-                                    height: 50.0,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).accent3,
-                                      borderRadius:
-                                          BorderRadius.circular(106.67),
-                                    ),
-                                    child: Icon(
-                                      Icons.share_outlined,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      size: 20.0,
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      await actions.haatSharePayRequest(
+                                        context,
+                                        _model.request,
+                                      );
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.15,
+                                      height: 50.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .accent3,
+                                        borderRadius:
+                                            BorderRadius.circular(106.67),
+                                      ),
+                                      child: Icon(
+                                        Icons.share_outlined,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        size: 20.0,
+                                      ),
                                     ),
                                   ),
                                 ],

@@ -39,14 +39,19 @@ Future<ApiResult<bool>> _postBranch(ApiClient client, Map<String, dynamic> body,
     client.post("/organizations/branches",
         body: body..["code"] = _branchCode(name, random), parse: (_) => true);
 
-Future haatCreateBranch(
-    BuildContext context, String? name, String? address) async {
+Future haatCreateBranch(BuildContext context, String? name, String? address,
+    LatLng? location) async {
   final branchName = name?.trim() ?? "";
   if (branchName.length < 2) return _tell(context, "Enter a branch name.");
   final branchAddress = address?.trim() ?? "";
   final body = Map<String, dynamic>();
   body["name"] = branchName;
   if (branchAddress.isNotEmpty) body["address"] = branchAddress;
+  // The pin, so the branch can be shown where it is.
+  if (location != null) {
+    body["latitude"] = location.latitude.toStringAsFixed(6);
+    body["longitude"] = location.longitude.toStringAsFixed(6);
+  }
   await haatAccessToken();
   final tokens = TokenStore();
   await tokens.restore();

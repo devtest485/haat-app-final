@@ -14,9 +14,9 @@ import '/flutter_flow/ff_builtin_enums.dart';
 String? transactionSubtitle(
   String? description,
   String? kind,
-  String? occurredAt, [
+  String? occurredAt,
   String? direction,
-]) {
+) {
   final at = DateTime.tryParse(occurredAt ?? '')?.toLocal();
 
   var day = '';

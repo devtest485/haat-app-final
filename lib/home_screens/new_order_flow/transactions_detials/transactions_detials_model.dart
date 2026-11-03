@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -37,10 +38,6 @@ class TransactionsDetialsModel
 
   bool transactionsLoaded = false;
 
-  // Bumped on every fetch; a response is only applied if it belongs to the latest
-  // one, so a slow answer for an earlier chip cannot replace the current list.
-  int transactionsRequest = 0;
-
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Custom Action - haatHasTransactions] action in TransactionsDetials widget.
@@ -57,10 +54,37 @@ class TransactionsDetialsModel
       choiceChipsValueController?.value = val != null ? [val] : [];
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in ChoiceChips widget.
   ApiCallResponse? filteredResult;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel1;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel2;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel3;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel4;
+  // Model for TransactionShimmer component.
+  late TransactionShimmerModel transactionShimmerModel5;
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    transactionShimmerModel1 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel2 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel3 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel4 =
+        createModel(context, () => TransactionShimmerModel());
+    transactionShimmerModel5 =
+        createModel(context, () => TransactionShimmerModel());
+  }
 
   @override
-  void dispose() {}
+  void dispose() {
+    transactionShimmerModel1.dispose();
+    transactionShimmerModel2.dispose();
+    transactionShimmerModel3.dispose();
+    transactionShimmerModel4.dispose();
+    transactionShimmerModel5.dispose();
+  }
 }

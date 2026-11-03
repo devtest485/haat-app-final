@@ -1,7 +1,7 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/home_banner/home_banner_widget.dart';
 import '/components/security_sheet_widget.dart';
-import '/components/transaction_shimmer/transaction_shimmer_widget.dart';
+import '/components/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/components/week_story_card/week_story_card_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
@@ -60,6 +60,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                 HaatAuthGroup.notificationsCall.unreadCount(
               (_model.apiResultid3?.jsonBody ?? ''),
             );
+            safeSetState(() {});
+            FFAppState().unreadNotifications =
+                functions.unreadNotificationCount(
+                    (_model.apiResultid3?.jsonBody ?? ''),
+                    FFAppState().seenNotificationActions);
             safeSetState(() {});
           }
         }),
@@ -133,11 +138,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           _model.bannerAutoplay = InstantTimer.periodic(
             duration: Duration(milliseconds: 4000),
             callback: (timer) async {
-              // The banner PageView is only built once banners have loaded, and
-              // leaves the tree while the screen is covered, so the controller
-              // can be detached when the timer fires.
-              if (_model.banners.length > 1 &&
-                  (_model.pageViewController?.hasClients ?? false)) {
+              if (_model.banners.length > 1) {
                 await _model.pageViewController?.animateToPage(
                   functions.nextPageIndex(
                       _model.pageViewCurrentIndex, _model.banners.length),
@@ -161,11 +162,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             )!
             .toList()
             .cast<dynamic>();
+        _model.transactionsLoaded = true;
+        safeSetState(() {});
       }
-      // Loaded either way, so a failed call ends the shimmer instead of leaving
-      // it running.
-      _model.transactionsLoaded = true;
-      safeSetState(() {});
     });
   }
 
@@ -351,31 +350,63 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                         height: 24.0,
                                                         decoration:
                                                             BoxDecoration(),
-                                                        child: InkWell(
-                                                          splashColor: Colors
-                                                              .transparent,
-                                                          focusColor: Colors
-                                                              .transparent,
-                                                          hoverColor: Colors
-                                                              .transparent,
-                                                          highlightColor: Colors
-                                                              .transparent,
-                                                          onTap: () async {
-                                                            context.pushNamed(
-                                                                NotificationsWidget
-                                                                    .routeName);
-                                                          },
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        0.0),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/images/notification_icon.svg',
-                                                              fit: BoxFit.cover,
+                                                        child: Stack(
+                                                          alignment:
+                                                              AlignmentDirectional(
+                                                                  1.0, -1.0),
+                                                          children: [
+                                                            InkWell(
+                                                              splashColor: Colors
+                                                                  .transparent,
+                                                              focusColor: Colors
+                                                                  .transparent,
+                                                              hoverColor: Colors
+                                                                  .transparent,
+                                                              highlightColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              onTap: () async {
+                                                                context.pushNamed(
+                                                                    NotificationsWidget
+                                                                        .routeName);
+                                                              },
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            0.0),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/images/notification_icon.svg',
+                                                                  width: 24.0,
+                                                                  height: 24.0,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
+                                                            if (FFAppState()
+                                                                    .unreadNotifications >
+                                                                0)
+                                                              Container(
+                                                                width: 8.0,
+                                                                height: 8.0,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Color(
+                                                                      0xFFFF3128),
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    width: 1.5,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ].divide(
@@ -1461,8 +1492,14 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                                 transactionItemItem,
                                                                                 r'''$.kind''',
                                                                               ).toString(),
-                                                                              getJsonField(transactionItemItem, r'''$.direction''').toString(),
-                                                                              getJsonField(transactionItemItem, r'''$.transfer''')),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.transfer''',
+                                                                              )),
                                                                           subtitle: functions.transactionSubtitle(
                                                                               getJsonField(
                                                                                 transactionItemItem,
@@ -1476,7 +1513,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                                 transactionItemItem,
                                                                                 r'''$.occurredAt''',
                                                                               ).toString(),
-                                                                              getJsonField(transactionItemItem, r'''$.direction''').toString()),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString()),
                                                                           amount: functions.transactionAmount(
                                                                               getJsonField(
                                                                                 transactionItemItem,
@@ -1500,22 +1540,31 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             transactionItemItem,
                                                                             r'''$.paymentMethod''',
                                                                           ).toString(),
-                                                                          tone: functions.transactionTone(
-                                                                              getJsonField(transactionItemItem, r'''$.kind''').toString(),
-                                                                              getJsonField(transactionItemItem, r'''$.direction''').toString()),
                                                                           showDivider: functions.isNotLastItem(
                                                                               transactionItemIndex,
                                                                               _model.transactions.length),
+                                                                          tone: functions.transactionTone(
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.kind''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.status''',
+                                                                              ).toString()),
                                                                         );
                                                                       },
                                                                     );
                                                                   },
                                                                 ),
                                                               );
-                                                            } else if (!_model
-                                                                .transactionsLoaded) {
-                                                              // Still loading: three placeholder rows where the
-                                                              // last three transactions will land.
+                                                            } else if (_model
+                                                                    .transactionsLoaded ==
+                                                                false) {
                                                               return Padding(
                                                                 padding:
                                                                     EdgeInsetsDirectional
@@ -1529,16 +1578,48 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       MainAxisSize
                                                                           .min,
                                                                   children: [
-                                                                    for (var i =
-                                                                            0;
-                                                                        i < 3;
-                                                                        i++)
-                                                                      TransactionShimmerWidget(
+                                                                    wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel1,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
                                                                         index:
-                                                                            i,
+                                                                            0,
                                                                         showDivider:
-                                                                            i < 2,
+                                                                            true,
                                                                       ),
+                                                                    ),
+                                                                    wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel2,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            1,
+                                                                        showDivider:
+                                                                            true,
+                                                                      ),
+                                                                    ),
+                                                                    wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel3,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            2,
+                                                                        showDivider:
+                                                                            false,
+                                                                      ),
+                                                                    ),
                                                                   ],
                                                                 ),
                                                               );
@@ -2109,16 +2190,68 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                           height: 24.0,
                                                           decoration:
                                                               BoxDecoration(),
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        0.0),
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/images/notification_icon.svg',
-                                                              fit: BoxFit.cover,
-                                                            ),
+                                                          child: Stack(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    1.0, -1.0),
+                                                            children: [
+                                                              InkWell(
+                                                                splashColor: Colors
+                                                                    .transparent,
+                                                                focusColor: Colors
+                                                                    .transparent,
+                                                                hoverColor: Colors
+                                                                    .transparent,
+                                                                highlightColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                                onTap:
+                                                                    () async {
+                                                                  context.pushNamed(
+                                                                      NotificationsWidget
+                                                                          .routeName);
+                                                                },
+                                                                child:
+                                                                    ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              0.0),
+                                                                  child:
+                                                                      SvgPicture
+                                                                          .asset(
+                                                                    'assets/images/notification_icon.svg',
+                                                                    width: 24.0,
+                                                                    height:
+                                                                        24.0,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              if (FFAppState()
+                                                                      .unreadNotifications >
+                                                                  0)
+                                                                Container(
+                                                                  width: 8.0,
+                                                                  height: 8.0,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Color(
+                                                                        0xFFFF3128),
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      width:
+                                                                          1.5,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ].divide(

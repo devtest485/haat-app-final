@@ -2,10 +2,14 @@
     package="com.mycompany.haat"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- Tap to pay: reading a customer's phone, and being read as one. Not required,
+         so phones without NFC still install HAAT and pay by QR. -->
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-feature android:name="android.hardware.nfc" android:required="false"/>
+    <uses-feature android:name="android.hardware.nfc.hce" android:required="false"/>
     <application
         android:label="HAAT"
         tools:replace="android:label"
@@ -49,8 +53,30 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="haat" android:host="haat.com" />
             </intent-filter>
+            <!-- Payment links open here rather than in the browser, once the server's
+                 assetlinks.json vouches for this app. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="haat-api.xtroedge.com" android:pathPrefix="/api/v1/p/" />
+            </intent-filter>
 
         </activity>
+
+        <!-- The phone as a card for tap to pay; see HaatTapService in MainActivity.kt.
+             Its AID list is written by build.gradle. -->
+        <service
+            android:name=".HaatTapService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/haat_tap_service"/>
+        </service>
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

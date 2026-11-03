@@ -65,7 +65,7 @@ class _NotificationActionRowWidgetState
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(5.0, 8.0, 5.0, 8.0),
+          padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
           child: InkWell(
             splashColor: Colors.transparent,
             focusColor: Colors.transparent,

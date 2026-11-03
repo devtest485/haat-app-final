@@ -11,14 +11,22 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// How a statement line is coloured: `sent` (yellow) for money this business sent to
-/// another merchant, `received` (green) for money another merchant sent it, and empty
-/// for everything else, which keeps the statement's plain style.
-String? transactionTone(
+String transactionTone(
   String? kind,
   String? direction,
+  String? status,
 ) {
-  if ((kind ?? '').trim() != 'transfer') return '';
+  final k = (kind ?? '').trim();
+  final s = (status ?? '').trim();
+  // A held send moves money into the business's own held account and, if it is turned
+  // down, back out again. Only the send's line is shown.
+  if (k == 'hold_release' ||
+      (k == 'hold' && (direction ?? '').trim() == 'credit')) {
+    return 'hidden';
+  }
+  if (s == 'on_hold' || s == 'held') return 'held';
+  if (s == 'hold_released' || s == 'rejected') return 'declined';
+  if (k != 'transfer') return '';
 
   return (direction ?? '').trim() == 'credit' ? 'received' : 'sent';
 }

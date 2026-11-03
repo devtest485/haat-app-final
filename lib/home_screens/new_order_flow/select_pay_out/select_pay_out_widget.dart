@@ -2,8 +2,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
-import '/custom_code/pay_request_screens.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,18 +45,6 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
     _model.maybeDispose();
 
     super.dispose();
-  }
-
-  /// Closes this sheet, then shows the QR or the link for the amount typed.
-  void _openRequest({required bool link}) {
-    final navigator = Navigator.of(context);
-    navigator.pop();
-    navigator.push(MaterialPageRoute(
-      builder: (_) => RequestPaymentScreen(
-        amount: widget.amountPay ?? '',
-        link: link,
-      ),
-    ));
   }
 
   @override
@@ -223,9 +212,28 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(TapPayOutWidget.routeName);
+                        _model.confirmedTapPayOut =
+                            await actions.haatConfirmItsYou(
+                          context,
+                          widget!.amountPay,
+                        );
+                        if (functions.outcomeText(
+                                _model.confirmedTapPayOut, 'ok', '') ==
+                            'true') {
+                          context.pushNamed(
+                            TapPayOutWidget.routeName,
+                            queryParameters: {
+                              'amount': serializeParam(
+                                widget!.amountPay,
+                                ParamType.String,
+                              ),
+                            }.withoutNulls,
+                          );
 
-                        Navigator.pop(context);
+                          Navigator.pop(context);
+                        }
+
+                        safeSetState(() {});
                       },
                       child: Container(
                         width: double.infinity,
@@ -335,7 +343,28 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        _openRequest(link: false);
+                        _model.confirmedQRpayOutPage =
+                            await actions.haatConfirmItsYou(
+                          context,
+                          widget!.amountPay,
+                        );
+                        if (functions.outcomeText(
+                                _model.confirmedQRpayOutPage, 'ok', '') ==
+                            'true') {
+                          context.pushNamed(
+                            QRpayOutPageWidget.routeName,
+                            queryParameters: {
+                              'amount': serializeParam(
+                                widget!.amountPay,
+                                ParamType.String,
+                              ),
+                            }.withoutNulls,
+                          );
+
+                          Navigator.pop(context);
+                        }
+
+                        safeSetState(() {});
                       },
                       child: Container(
                         width: double.infinity,
@@ -445,7 +474,28 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        _openRequest(link: true);
+                        _model.confirmedLinkPayOutPage =
+                            await actions.haatConfirmItsYou(
+                          context,
+                          widget!.amountPay,
+                        );
+                        if (functions.outcomeText(
+                                _model.confirmedLinkPayOutPage, 'ok', '') ==
+                            'true') {
+                          context.pushNamed(
+                            LinkPayOutPageWidget.routeName,
+                            queryParameters: {
+                              'amount': serializeParam(
+                                widget!.amountPay,
+                                ParamType.String,
+                              ),
+                            }.withoutNulls,
+                          );
+
+                          Navigator.pop(context);
+                        }
+
+                        safeSetState(() {});
                       },
                       child: Container(
                         width: double.infinity,
