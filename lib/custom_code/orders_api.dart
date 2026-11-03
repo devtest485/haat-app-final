@@ -77,18 +77,6 @@ class SaleOrder {
     );
   }
 
-  /// Whether one of [products] — the business's own, `isMine` — is in this order. A
-  /// line from before lines named their product is matched by its name.
-  bool sells(List<Map<String, dynamic>> products) {
-    final ids = {for (final p in products) '${p['id']}'.toLowerCase()};
-    final names = {
-      for (final p in products) '${p['name'] ?? ''}'.trim().toLowerCase()
-    };
-    return lines.any((line) => line.productId != null
-        ? ids.contains(line.productId!.toLowerCase())
-        : names.contains(line.description.trim().toLowerCase()));
-  }
-
   /// What the Orders page binds to.
   Map<String, dynamic> toJson(DateTime now) {
     String money(BigInt value) {
@@ -142,8 +130,9 @@ class OrdersApi {
 
   final ApiClient _client;
 
-  /// The business's orders with one of its own products in them, newest first; null
-  /// when the server could not be reached or refused.
+  /// The business's orders — sales of its products, whoever took the payment — newest
+  /// first, each with only its lines; null when the server could not be reached or
+  /// refused.
   Future<List<SaleOrder>?> mine({int limit = 100}) async {
     final orders = await _client.get<List<SaleOrder>>(
       '/business/orders',
@@ -156,23 +145,6 @@ class OrdersApi {
             .toList();
       },
     );
-    final all = orders.valueOrNull;
-    if (all == null) return null;
-
-    final products = await _client.get<List<Map<String, dynamic>>>(
-      '/products',
-      parse: (envelope) {
-        final data = envelope.data;
-        return (data is List ? data : const [])
-            .whereType<Map<String, dynamic>>()
-            .where((p) => p['isMine'] == true)
-            .toList();
-      },
-    );
-    final mine = products.valueOrNull;
-    // Without the catalogue there is no telling whose product sold; show every order
-    // rather than none.
-    if (mine == null) return all;
-    return all.where((order) => order.sells(mine)).toList();
+    return orders.valueOrNull;
   }
 }

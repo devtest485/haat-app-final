@@ -1,5 +1,4 @@
 import '/custom_code/api_client.dart';
-import '/custom_code/api_result.dart';
 import '/custom_code/orders_api.dart';
 
 /// What the Profile tab says about the business, read from the server.
@@ -27,8 +26,8 @@ class StoreProfile {
   final String? logoPath;
   final String status;
 
-  /// Orders with the business's own products in them, counted up to [ordersCap] —
-  /// or, before the server kept orders, the payments it has received.
+  /// Sales of the business's products, whoever took the payment, counted up to
+  /// [ordersCap].
   final int orders;
   final int products;
   final int outOfStock;
@@ -39,7 +38,7 @@ class StoreProfile {
   /// The business documents case: draft, submitted, approved, rejected — or none.
   final String kybStatus;
 
-  // The most /transactions returns in one page.
+  // The most /business/orders returns in one page.
   static const ordersCap = 100;
 
   Map<String, dynamic> toJson() => {
@@ -112,13 +111,11 @@ class StoreProfileApi {
       _list('/products'),
       _list('/organizations/staff'),
       _list('/organizations/branches'),
-      _list('/transactions', query: {'limit': '${StoreProfile.ordersCap}'}),
     ]);
     // /products is the whole catalogue the business sees; its own are `isMine`.
     final products = lists[0].where((p) => p['isMine'] == true).toList(),
         staff = lists[1],
-        branches = lists[2],
-        payments = lists[3];
+        branches = lists[2];
     final active = branches.where((b) => b['status'] != 'closed').toList();
     final orders = (await sold).valueOrNull;
 
@@ -135,10 +132,7 @@ class StoreProfileApi {
       handle: '${business['slug'] ?? ''}',
       logoPath: business['logoPath'] as String?,
       status: '${business['status'] ?? ''}',
-      orders: orders?.where((o) => o.sells(products)).length ??
-          payments
-              .where((p) => '${p['direction'] ?? 'credit'}' == 'credit')
-              .length,
+      orders: orders?.length ?? 0,
       products: products.length,
       outOfStock: products.where((p) => p['outOfStock'] == true).length,
       // The owner is the account, not one of its staff.
