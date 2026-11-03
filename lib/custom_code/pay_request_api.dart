@@ -218,8 +218,8 @@ class PayRequestApi {
         parse: (envelope) => PaymentRequest.fromData(envelope.object),
       );
 
-  /// A request for [amountMinor] to be paid by a customer holding their phone to this
-  /// one. Lasts five minutes.
+  /// A request for [amountMinor] to be paid, from this business, to whoever holds their
+  /// phone to this one. Lasts five minutes; needs [tapUnlock] first.
   Future<ApiResult<PaymentRequest>> createTap({
     required BigInt amountMinor,
     required String currency,
@@ -232,8 +232,8 @@ class PayRequestApi {
         parse: (envelope) => PaymentRequest.fromData(envelope.object),
       );
 
-  /// Charges tap request [code] to the phone that answered with [keyId] and
-  /// [signature]. The same tap again returns the first payment.
+  /// Pays tap request [code] from this business to the phone that answered with
+  /// [keyId] and [signature]. The same tap again returns the first payment.
   Future<ApiResult<TransferReceipt>> chargeTap({
     required String code,
     required String keyId,
@@ -245,7 +245,36 @@ class PayRequestApi {
         parse: (envelope) => TransferReceipt.fromData(envelope.object),
       );
 
-  /// Lets this phone pay by tap: registers the public half of its tap key, and
+  /// A value for this phone's biometric key to sign, unlocking tapping under
+  /// [reference].
+  Future<ApiResult<String>> tapUnlockChallenge(String reference) =>
+      _client.post(
+        '/pay/tap-unlock/challenge',
+        body: {'reference': reference},
+        parse: (envelope) => envelope.object['challenge'] as String? ?? '',
+      );
+
+  /// Lets this phone pay by tap for the next five minutes, allowed by the [passcode]
+  /// or a [biometricSignature] over the challenge for [reference]. The tap itself then
+  /// asks nobody anything, so it is answered while the phones are still together.
+  Future<ApiResult<void>> tapUnlock({
+    required String reference,
+    String? passcode,
+    String? biometricSignature,
+  }) =>
+      _client.post(
+        '/pay/tap-unlock',
+        body: {
+          'reference': reference,
+          if (biometricSignature != null)
+            'biometricSignature': biometricSignature
+          else
+            'passcode': passcode,
+        },
+        parse: (_) {},
+      );
+
+  /// Lets this phone be paid by tap: registers the public half of its tap key, and
   /// returns the id it answers a merchant's phone with.
   Future<ApiResult<String>> registerTapKey(String publicKey) => _client.post(
         '/pay/tap-key',

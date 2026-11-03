@@ -339,13 +339,14 @@ class BiometricKeyBridge(private val activity: FragmentActivity) :
 // ---------------------------------------------------------------------------
 // Tap to pay. Both halves live here for the same reason BiometricKeyBridge does.
 //
-// The customer's phone is the card: HaatTapService answers a merchant's phone over
-// NFC by signing what it was asked to pay, with a key that never leaves the Keystore.
-// The merchant's phone is the terminal: TapBridge reads that answer and hands it to
-// Dart, which charges the request with it.
+// The phone that made the tap pays the phone held to it. The phone being paid is the
+// card: HaatTapService answers over NFC by signing the tap's code, amount and
+// currency, with a key that never leaves the Keystore — saying whose phone it is. The
+// paying phone is the terminal: TapBridge reads that answer and hands it to Dart,
+// which pays with it.
 // ---------------------------------------------------------------------------
 
-/** The customer's tap key, and the id the server gave it. */
+/** This phone's tap key, what it is paid by tap with, and the id the server gave it. */
 object TapKeys {
     /** "F0" for a proprietary AID, then HAATPAY. Also in haat_tap_service.xml. */
     val AID = "F048414154504159".chunked(2).map { it.toInt(16).toByte() }.toByteArray()
@@ -365,7 +366,7 @@ object TapKeys {
      * A new key, its public half as SPKI base64.
      *
      * Not behind the fingerprint: a tap has to work with the phone just unlocked, as a
-     * card does. Above the limit the server sends the payer to approve on the phone.
+     * card does. It only says who is being paid; the paying phone was unlocked first.
      */
     fun enrol(context: Context): String {
         forget(context)
@@ -404,15 +405,15 @@ object TapKeys {
 }
 
 /**
- * The customer's half: the phone as a card.
+ * The half being paid: the phone as a card.
  *
  * Android routes a reader's SELECT for our AID here, and only while the phone is
  * unlocked (`requireDeviceUnlock`). The reader then sends one PAY command — the
  * request's code, amount and currency — and gets back the key id and a signature over
  * exactly those. Nothing else can be asked of it.
  *
- * Then the app opens on the request, so the payer sees what they paid, or approves
- * it there when the amount is above what a tap may pay alone.
+ * Then the app opens on the tap, to show what this phone was paid. (`confirm`, an
+ * approval on this screen, is from when the tapped phone paid; nothing asks for it.)
  */
 class HaatTapService : HostApduService() {
     companion object {
@@ -472,15 +473,14 @@ class HaatTapService : HostApduService() {
                 NOT_SET_UP
             }
         } else {
-            // The app opens first, so the customer's screen turns while the merchant's
-            // phone asks HAAT. Above the tap limit the signature only says who is
-            // paying; it is approved on this screen.
-            open(if (confirm) "approve" else "tap", code)
+            // Signed first, so the paying phone has its answer at once; then the app
+            // opens, so this screen turns while the paying phone asks HAAT.
             val signer = Signature.getInstance("SHA256withECDSA").apply {
                 initSign(key)
                 update(TapKeys.message(code, amount, currency).toByteArray(Charsets.UTF_8))
             }
             val signature = Base64.encodeToString(signer.sign(), Base64.NO_WRAP)
+            open(if (confirm) "approve" else "tap", code)
             JSONObject().put("k", keyId).put("s", signature).put("confirm", confirm).toString()
                 .toByteArray(Charsets.UTF_8) + OK
         }
@@ -513,9 +513,9 @@ class HaatTapService : HostApduService() {
 }
 
 /**
- * The merchant's half, and the customer's key setup, for Dart.
+ * The paying half, and this phone's key setup, for Dart.
  *
- * `read` arms NFC reader mode and answers once: with the customer's reply (a JSON
+ * `read` arms NFC reader mode and answers once: with the other phone's reply (a JSON
  * string), or an error code — `not_set_up` (that phone has no HAAT tap), `lost` (the
  * phones parted mid-read), `refused`, `nfc_off`, `no_nfc`, `cancelled`. Reader mode
  * stays armed between reads so a phone held a moment early is not handed to another

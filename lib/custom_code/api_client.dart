@@ -22,8 +22,11 @@ class ApiClient {
   ApiClient({required TokenStore tokens, http.Client? inner, String? baseUrl})
       : _tokens = tokens,
         _http = inner ??
-            IOClient(
-                HttpClient()..connectionTimeout = ApiConfig.connectTimeout),
+            IOClient(HttpClient()
+              ..connectionTimeout = ApiConfig.connectTimeout
+              // A connection kept a minute, so a tap or a payment a little after
+              // the last call skips setting one up again.
+              ..idleTimeout = const Duration(seconds: 60)),
         _baseUrl = baseUrl;
 
   final TokenStore _tokens;
