@@ -119,6 +119,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           }
         }),
         Future(() async {
+          _model.business =
+              await actions.haatBusinessSummary(_model.businessPeriod);
+          safeSetState(() {});
+        }),
+        Future(() async {
           _model.organizationsResult =
               await HaatAuthGroup.organizationsCall.call(
             accessToken: _model.token,
@@ -496,6 +501,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                       Colors.transparent,
                                                   onTap: () async {
                                                     _model.switchd = true;
+                                                    safeSetState(() {});
+                                                    _model.business = await actions
+                                                        .haatBusinessSummary(
+                                                            _model
+                                                                .businessPeriod);
                                                     safeSetState(() {});
                                                   },
                                                   child: Container(
@@ -2491,7 +2501,13 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       children: [
                                                                         TextSpan(
                                                                           text:
-                                                                              '+30,000',
+                                                                              valueOrDefault<String>(
+                                                                            getJsonField(
+                                                                              _model.business,
+                                                                              r'''$.total''',
+                                                                            )?.toString(),
+                                                                            '0',
+                                                                          ),
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
@@ -2508,7 +2524,13 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                         ),
                                                                         TextSpan(
                                                                           text:
-                                                                              ' SDG',
+                                                                              ' ${valueOrDefault<String>(
+                                                                            getJsonField(
+                                                                              _model.business,
+                                                                              r'''$.currency''',
+                                                                            )?.toString(),
+                                                                            'SDG',
+                                                                          )}',
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
@@ -2552,53 +2574,67 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                     MainAxisAlignment
                                                                         .spaceBetween,
                                                                 children: [
-                                                                  Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: Color(
-                                                                          0x32FFFFFF),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              22.0),
-                                                                      border:
-                                                                          Border
-                                                                              .all(
+                                                                  if (valueOrDefault<
+                                                                          String>(
+                                                                        getJsonField(
+                                                                          _model
+                                                                              .business,
+                                                                          r'''$.change''',
+                                                                        )?.toString(),
+                                                                        '',
+                                                                      ) !=
+                                                                      '')
+                                                                    Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
                                                                         color: Color(
-                                                                            0x4EFFFFFF),
-                                                                        width:
-                                                                            1.0,
+                                                                            0x32FFFFFF),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(22.0),
+                                                                        border:
+                                                                            Border.all(
+                                                                          color:
+                                                                              Color(0x4EFFFFFF),
+                                                                          width:
+                                                                              1.0,
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          8.0,
-                                                                          3.0,
-                                                                          8.0,
-                                                                          3.0),
                                                                       child:
-                                                                          Row(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        children: [
-                                                                          Text(
-                                                                            '+ 12% vs last week',
-                                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  font: GoogleFonts.montserrat(
+                                                                          Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            8.0,
+                                                                            3.0,
+                                                                            8.0,
+                                                                            3.0),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.max,
+                                                                          children: [
+                                                                            Text(
+                                                                              valueOrDefault<String>(
+                                                                                getJsonField(
+                                                                                  _model.business,
+                                                                                  r'''$.change''',
+                                                                                )?.toString(),
+                                                                                '',
+                                                                              ),
+                                                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                    font: GoogleFonts.montserrat(
+                                                                                      fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    ),
+                                                                                    color: Color(0xCCFFFFFF),
+                                                                                    fontSize: 11.0,
+                                                                                    letterSpacing: 0.0,
                                                                                     fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                     fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                   ),
-                                                                                  color: Color(0xCCFFFFFF),
-                                                                                  fontSize: 11.0,
-                                                                                  letterSpacing: 0.0,
-                                                                                  fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                ),
-                                                                          ),
-                                                                        ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
                                                                 ],
                                                               ),
                                                             ].divide(SizedBox(
@@ -2623,10 +2659,44 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                   custom_widgets.StepAreaChart(
                                                 width: double.infinity,
                                                 height: 282.0,
-                                                selectedIndex: 5,
-                                                selectedPeriod: 'Week',
+                                                values: (getJsonField(
+                                                  _model.business,
+                                                  r'''$.values''',
+                                                  true,
+                                                ) as List?)
+                                                    ?.map<double>((e) =>
+                                                        castToType<double>(e) ??
+                                                        0.0)
+                                                    .toList(),
+                                                labels: (getJsonField(
+                                                  _model.business,
+                                                  r'''$.labels''',
+                                                  true,
+                                                ) as List?)
+                                                    ?.map<String>(
+                                                        (s) => s.toString())
+                                                    .toList(),
+                                                selectedIndex:
+                                                    valueOrDefault<int>(
+                                                  castToType<int>(getJsonField(
+                                                    _model.business,
+                                                    r'''$.selected''',
+                                                  )),
+                                                  0,
+                                                ),
+                                                selectedPeriod:
+                                                    _model.businessPeriod,
                                                 onPeriodChanged:
-                                                    (period) async {},
+                                                    (period) async {
+                                                  _model.businessPeriod =
+                                                      period;
+                                                  safeSetState(() {});
+                                                  _model.business =
+                                                      await actions
+                                                          .haatBusinessSummary(
+                                                              period);
+                                                  safeSetState(() {});
+                                                },
                                                 onBarSelected: (index) async {},
                                               ),
                                             ),
@@ -2719,50 +2789,86 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                Expanded(
-                                                  flex: 54,
-                                                  child: Container(
-                                                    height: 10.0,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.black,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                5.0),
-                                                        bottomLeft:
-                                                            Radius.circular(
-                                                                5.0),
-                                                      ),
+                                                Container(
+                                                  width:
+                                                      functions.channelBarWidth(
+                                                    MediaQuery.sizeOf(context)
+                                                            .width -
+                                                        48.0,
+                                                    (getJsonField(
+                                                      _model.business,
+                                                      r'''$.shares''',
+                                                      true,
+                                                    ) as List?)
+                                                        ?.map<double>((e) =>
+                                                            castToType<double>(
+                                                                e) ??
+                                                            0.0)
+                                                        .toList(),
+                                                    0,
+                                                  ),
+                                                  height: 10.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(5.0),
+                                                      bottomLeft:
+                                                          Radius.circular(5.0),
                                                     ),
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  flex: 31,
-                                                  child: Container(
-                                                    height: 10.0,
-                                                    decoration: BoxDecoration(
-                                                      color: Color(0xFF60D880),
-                                                      borderRadius:
-                                                          BorderRadius.only(),
-                                                    ),
+                                                Container(
+                                                  width:
+                                                      functions.channelBarWidth(
+                                                    MediaQuery.sizeOf(context)
+                                                            .width -
+                                                        48.0,
+                                                    (getJsonField(
+                                                      _model.business,
+                                                      r'''$.shares''',
+                                                      true,
+                                                    ) as List?)
+                                                        ?.map<double>((e) =>
+                                                            castToType<double>(
+                                                                e) ??
+                                                            0.0)
+                                                        .toList(),
+                                                    1,
+                                                  ),
+                                                  height: 10.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFF60D880),
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  flex: 15,
-                                                  child: Container(
-                                                    height: 10.0,
-                                                    decoration: BoxDecoration(
-                                                      color: Color(0xFFBEBEBE),
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topRight:
-                                                            Radius.circular(
-                                                                5.0),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                5.0),
-                                                      ),
+                                                Container(
+                                                  width:
+                                                      functions.channelBarWidth(
+                                                    MediaQuery.sizeOf(context)
+                                                            .width -
+                                                        48.0,
+                                                    (getJsonField(
+                                                      _model.business,
+                                                      r'''$.shares''',
+                                                      true,
+                                                    ) as List?)
+                                                        ?.map<double>((e) =>
+                                                            castToType<double>(
+                                                                e) ??
+                                                            0.0)
+                                                        .toList(),
+                                                    2,
+                                                  ),
+                                                  height: 10.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFFBEBEBE),
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(5.0),
+                                                      bottomRight:
+                                                          Radius.circular(5.0),
                                                     ),
                                                   ),
                                                 ),
@@ -2814,9 +2920,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                         highlightColor:
                                                             Colors.transparent,
                                                         onTap: () async {
-                                                          context.pushNamed(
-                                                              VerifyPageWidget
-                                                                  .routeName);
                                                         },
                                                         child: Row(
                                                           mainAxisSize:
@@ -2904,7 +3007,12 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             8.0)),
                                                                   ),
                                                                   Text(
-                                                                    '693 payments',
+                                                                    valueOrDefault<
+                                                                            String>(
+                                                                        getJsonField(_model.business,
+                                                                                r'''$.qrCount''')
+                                                                            ?.toString(),
+                                                                        '0 payments'),
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -2955,7 +3063,13 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   ),
                                                                 ),
                                                                 Text(
-                                                                  '54%',
+                                                                  valueOrDefault<
+                                                                          String>(
+                                                                      getJsonField(
+                                                                              _model.business,
+                                                                              r'''$.qrShare''')
+                                                                          ?.toString(),
+                                                                      '0%'),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -3012,9 +3126,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                         highlightColor:
                                                             Colors.transparent,
                                                         onTap: () async {
-                                                          context.pushNamed(
-                                                              UploadDocWidget
-                                                                  .routeName);
                                                         },
                                                         child: Row(
                                                           mainAxisSize:
@@ -3102,7 +3213,12 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             8.0)),
                                                                   ),
                                                                   Text(
-                                                                    '398 payments',
+                                                                    valueOrDefault<
+                                                                            String>(
+                                                                        getJsonField(_model.business,
+                                                                                r'''$.nfcCount''')
+                                                                            ?.toString(),
+                                                                        '0 payments'),
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -3153,7 +3269,13 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   ),
                                                                 ),
                                                                 Text(
-                                                                  '31%',
+                                                                  valueOrDefault<
+                                                                          String>(
+                                                                      getJsonField(
+                                                                              _model.business,
+                                                                              r'''$.nfcShare''')
+                                                                          ?.toString(),
+                                                                      '0%'),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -3210,9 +3332,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                         highlightColor:
                                                             Colors.transparent,
                                                         onTap: () async {
-                                                          context.pushNamed(
-                                                              AddEmployeesWidget
-                                                                  .routeName);
                                                         },
                                                         child: Row(
                                                           mainAxisSize:
@@ -3300,7 +3419,12 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             8.0)),
                                                                   ),
                                                                   Text(
-                                                                    '193 payments',
+                                                                    valueOrDefault<
+                                                                            String>(
+                                                                        getJsonField(_model.business,
+                                                                                r'''$.linkCount''')
+                                                                            ?.toString(),
+                                                                        '0 payments'),
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -3350,7 +3474,13 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                   ),
                                                                 ),
                                                                 Text(
-                                                                  '15%',
+                                                                  valueOrDefault<
+                                                                          String>(
+                                                                      getJsonField(
+                                                                              _model.business,
+                                                                              r'''$.linkShare''')
+                                                                          ?.toString(),
+                                                                      '0%'),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium

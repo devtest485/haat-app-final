@@ -92,3 +92,7 @@ export '/custom_code/actions/haat_create_tap_payment.dart'
 export '/custom_code/actions/haat_confirm_its_you.dart' show haatConfirmItsYou;
 export '/custom_code/actions/haat_await_tap_approval.dart'
     show haatAwaitTapApproval;
+export '/custom_code/actions/haat_can_manage_member.dart'
+    show haatCanManageMember;
+export '/custom_code/actions/haat_set_sale_cart.dart' show haatSetSaleCart;
+export '/custom_code/actions/haat_load_orders.dart' show haatLoadOrders;

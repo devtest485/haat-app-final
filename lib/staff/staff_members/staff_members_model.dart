@@ -18,6 +18,8 @@ class StaffMembersModel extends FlutterFlowModel<StaffMembersWidget> {
 
   bool saving = false;
 
+  bool canManage = false;
+
   List<String> revokeIds = [];
   void addToRevokeIds(String item) => revokeIds.add(item);
   void removeFromRevokeIds(String item) => revokeIds.remove(item);

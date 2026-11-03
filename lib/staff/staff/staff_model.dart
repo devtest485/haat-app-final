@@ -45,10 +45,12 @@ class StaffModel extends FlutterFlowModel<StaffWidget> {
     );
 
     if ((staffResult?.succeeded ?? true)) {
-      staff = HaatAuthGroup.staffCall
-          .staff(
-            (staffResult?.jsonBody ?? ''),
-          )!
+      staff = functions
+          .staffWithoutOwner(HaatAuthGroup.staffCall
+              .staff(
+                (staffResult?.jsonBody ?? ''),
+              )
+              ?.toList())
           .toList()
           .cast<dynamic>();
       loadError = null;

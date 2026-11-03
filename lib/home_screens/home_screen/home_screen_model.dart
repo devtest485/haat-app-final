@@ -31,6 +31,10 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
 
   bool switchd = false;
 
+  dynamic business;
+
+  String businessPeriod = 'Week';
+
   List<dynamic> transactions = [];
   void addToTransactions(dynamic item) => transactions.add(item);
   void removeFromTransactions(dynamic item) => transactions.remove(item);

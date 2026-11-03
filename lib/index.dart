@@ -53,6 +53,7 @@ export '/home_screens/add_user/creating_profile/creating_profile_widget.dart'
 export '/home_screens/add_transfer_funds/add_fund/add_fund_widget.dart'
     show AddFundWidget;
 export '/product/products/products_widget.dart' show ProductsWidget;
+export '/my_store/orders/orders_widget.dart' show OrdersWidget;
 export '/auth_flow/welcom_screens/docunment_info/docunment_info_widget.dart'
     show DocunmentInfoWidget;
 export '/auth_flow/business_setup/setup_bisiness_location_page/setup_bisiness_location_page_widget.dart'

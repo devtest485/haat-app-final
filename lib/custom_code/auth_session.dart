@@ -9,6 +9,7 @@ import '/custom_code/auth_api.dart';
 import '/custom_code/banner_api.dart';
 import '/custom_code/biometric_key_store.dart';
 import '/custom_code/device_identity.dart';
+import '/custom_code/orders_api.dart';
 import '/custom_code/organization_api.dart';
 import '/custom_code/payout_api.dart';
 import '/custom_code/pay_request_api.dart';
@@ -160,6 +161,9 @@ class AuthSession extends ChangeNotifier {
 
   /// What the business took in, for the My Business tab.
   late final BusinessSummaryApi businessSummary = BusinessSummaryApi(_client);
+
+  /// The business's orders that sold its own products.
+  late final OrdersApi orders = OrdersApi(_client);
 
   /// What the business holds, bank by bank.
   late final WalletApi wallet = WalletApi(_client);

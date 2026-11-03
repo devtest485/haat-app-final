@@ -13,12 +13,45 @@ class BusinessSummary {
     required this.channels,
   });
 
+  /// Nothing taken yet, or the server could not say: the period's steps at zero,
+  /// so the chart draws flat rather than falling back to its design sample.
   BusinessSummary.empty(this.period)
       : currency = 'SDG',
         totalMinor = BigInt.zero,
         changePercent = null,
-        series = const [],
+        series = [
+          for (final (en, ar) in _steps[period] ?? _steps['week']!)
+            (en, ar, BigInt.zero)
+        ],
         channels = const {};
+
+  /// The server's steps for each period, for [BusinessSummary.empty].
+  static const _steps = {
+    'day': [
+      ('12am', '12 ص'),
+      ('4am', '4 ص'),
+      ('8am', '8 ص'),
+      ('12pm', '12 م'),
+      ('4pm', '4 م'),
+      ('8pm', '8 م'),
+    ],
+    'week': [
+      ('Sat', 'السبت'),
+      ('Sun', 'الأحد'),
+      ('Mon', 'الاثنين'),
+      ('Tue', 'الثلاثاء'),
+      ('Wed', 'الأربعاء'),
+      ('Thu', 'الخميس'),
+      ('Fri', 'الجمعة'),
+    ],
+    'month': [
+      ('W1', 'الأسبوع 1'),
+      ('W2', 'الأسبوع 2'),
+      ('W3', 'الأسبوع 3'),
+      ('W4', 'الأسبوع 4'),
+      ('W5', 'الأسبوع 5'),
+    ],
+  };
 
   final String period;
   final String currency;
@@ -72,12 +105,21 @@ class BusinessSummary {
     };
     final arabic = languageCode.toLowerCase().startsWith('ar');
 
+    // An invoice is paid through its link, so it is counted with the links: the
+    // three rows then add up to every payment, and their shares to 100.
+    (int, int) of(String key) {
+      final (count, share) = channels[key] ?? (0, 0);
+      if (key != 'link') return (count, share);
+      final (invoices, invoiceShare) = channels['invoice'] ?? (0, 0);
+      return (count + invoices, share + invoiceShare);
+    }
+
     String count(String key) {
-      final n = channels[key]?.$1 ?? 0;
+      final n = of(key).$1;
       return '$n ${n == 1 ? 'payment' : 'payments'}';
     }
 
-    String share(String key) => '${channels[key]?.$2 ?? 0}%';
+    String share(String key) => '${of(key).$2}%';
 
     return {
       'total': totalMinor == BigInt.zero ? '0' : '+$whole',
@@ -96,11 +138,26 @@ class BusinessSummary {
       'linkCount': count('link'),
       'linkShare': share('link'),
       'shares': [
-        (channels['qr']?.$2 ?? 0).toDouble(),
-        (channels['nfc']?.$2 ?? 0).toDouble(),
-        (channels['link']?.$2 ?? 0).toDouble(),
+        of('qr').$2.toDouble(),
+        of('nfc').$2.toDouble(),
+        of('link').$2.toDouble(),
       ],
+      // The step now falls in, in Khartoum time like the server's: the bar the
+      // chart opens on.
+      'selected': _now(series.length),
     };
+  }
+
+  int _now(int steps) {
+    if (steps == 0) return 0;
+    final now = DateTime.now().toUtc().add(const Duration(hours: 2));
+    final index = switch (period) {
+      'day' => now.hour ~/ 4,
+      'month' => (now.day - 1) ~/ 7,
+      // Saturday first.
+      _ => (now.weekday + 1) % 7,
+    };
+    return index.clamp(0, steps - 1);
   }
 }
 

@@ -279,6 +279,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => ProductsWidget(),
         ),
         FFRoute(
+          name: OrdersWidget.routeName,
+          path: OrdersWidget.routePath,
+          builder: (context, params) => OrdersWidget(),
+        ),
+        FFRoute(
           name: DocunmentInfoWidget.routeName,
           path: DocunmentInfoWidget.routePath,
           builder: (context, params) => DocunmentInfoWidget(),

@@ -1,5 +1,6 @@
 import '/custom_code/api_client.dart';
 import '/custom_code/api_result.dart';
+import '/custom_code/orders_api.dart';
 
 /// What the Profile tab says about the business, read from the server.
 ///
@@ -26,7 +27,8 @@ class StoreProfile {
   final String? logoPath;
   final String status;
 
-  /// Payments the business has received, counted up to [ordersCap].
+  /// Orders with the business's own products in them, counted up to [ordersCap] —
+  /// or, before the server kept orders, the payments it has received.
   final int orders;
   final int products;
   final int outOfStock;
@@ -51,6 +53,9 @@ class StoreProfile {
         'productsLine': outOfStock == 0
             ? _count(products, 'product', 'products')
             : '${_count(products, 'product', 'products')} · $outOfStock out of stock',
+        'ordersLine': orders >= ordersCap
+            ? '$ordersCap+ orders'
+            : _count(orders, 'order', 'orders'),
         'staffLine': _count(staff, 'person', 'people'),
         'branchesLine': branchNames.isEmpty
             ? _count(branches, 'branch', 'branches')
@@ -92,17 +97,30 @@ class StoreProfileApi {
 
     // The rest only fill in figures; one failing leaves its figure at zero rather
     // than the whole tab empty.
+    final sold = _client.get<List<SaleOrder>>(
+      '/business/orders',
+      query: {'limit': '${StoreProfile.ordersCap}'},
+      parse: (envelope) {
+        final data = envelope.data;
+        return (data is List ? data : const [])
+            .whereType<Map<String, dynamic>>()
+            .map(SaleOrder.fromData)
+            .toList();
+      },
+    );
     final lists = await Future.wait([
       _list('/products'),
       _list('/organizations/staff'),
       _list('/organizations/branches'),
       _list('/transactions', query: {'limit': '${StoreProfile.ordersCap}'}),
     ]);
-    final products = lists[0],
+    // /products is the whole catalogue the business sees; its own are `isMine`.
+    final products = lists[0].where((p) => p['isMine'] == true).toList(),
         staff = lists[1],
         branches = lists[2],
         payments = lists[3];
     final active = branches.where((b) => b['status'] != 'closed').toList();
+    final orders = (await sold).valueOrNull;
 
     final kyb = await _client.get<String>(
       '/kyc/organization',
@@ -117,12 +135,18 @@ class StoreProfileApi {
       handle: '${business['slug'] ?? ''}',
       logoPath: business['logoPath'] as String?,
       status: '${business['status'] ?? ''}',
-      orders: payments
-          .where((p) => '${p['direction'] ?? 'credit'}' == 'credit')
-          .length,
+      orders: orders?.where((o) => o.sells(products)).length ??
+          payments
+              .where((p) => '${p['direction'] ?? 'credit'}' == 'credit')
+              .length,
       products: products.length,
       outOfStock: products.where((p) => p['outOfStock'] == true).length,
-      staff: staff.length,
+      // The owner is the account, not one of its staff.
+      staff: staff
+          .where((m) => !((m['assignments'] as List?) ?? const [])
+              .whereType<Map>()
+              .any((a) => a['roleKey'] == 'business_owner'))
+          .length,
       branches: active.length,
       branchNames: active
           .map((b) => '${b['name'] ?? ''}')

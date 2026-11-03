@@ -2,6 +2,7 @@ import '/custom_code/api_client.dart';
 import '/custom_code/api_config.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/organization_api.dart' show logoUrlFor;
+import '/custom_code/sale_cart.dart';
 import '/custom_code/transfer_api.dart';
 
 BigInt? _minorOrNull(Object? value) =>
@@ -214,6 +215,7 @@ class PayRequestApi {
           'currency': currency,
           if (description != null && description.trim().isNotEmpty)
             'description': description.trim(),
+          if (SaleCart.linesFor(amountMinor) case final lines?) 'lines': lines,
         },
         parse: (envelope) => PaymentRequest.fromData(envelope.object),
       );
@@ -228,7 +230,11 @@ class PayRequestApi {
       _client.post(
         '/tap-payments',
         idempotencyKey: reference,
-        body: {'amountMinor': amountMinor.toString(), 'currency': currency},
+        body: {
+          'amountMinor': amountMinor.toString(),
+          'currency': currency,
+          if (SaleCart.linesFor(amountMinor) case final lines?) 'lines': lines,
+        },
         parse: (envelope) => PaymentRequest.fromData(envelope.object),
       );
 
