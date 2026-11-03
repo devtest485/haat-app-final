@@ -72,6 +72,7 @@ export '/custom_code/functions/active_branches.dart';
 export '/custom_code/functions/default_branch_id.dart';
 export '/custom_code/functions/branch_name_for.dart';
 export '/custom_code/functions/branch_subtitle.dart';
+export '/custom_code/functions/branch_location.dart';
 export '/custom_code/functions/transaction_filter_index.dart';
 export '/custom_code/functions/staff_share_text.dart';
 export '/custom_code/functions/role_subtitle.dart';

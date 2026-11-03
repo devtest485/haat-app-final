@@ -461,14 +461,10 @@ class _BranchDetailWidgetState extends State<BranchDetailWidget> {
                                                             MainAxisSize.max,
                                                         children: [
                                                           Text(
-                                                            valueOrDefault<
-                                                                String>(
-                                                              getJsonField(
-                                                                widget!.branch,
-                                                                r'''$.address''',
-                                                              )?.toString(),
-                                                              'Not set',
-                                                            ),
+                                                            functions
+                                                                .branchLocation(
+                                                                    widget!
+                                                                        .branch),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
