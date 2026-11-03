@@ -30,15 +30,25 @@ if (keystorePropertiesFile.exists()) {
 
 // Tap to pay: the AID list HaatTapService answers for. FlutterFlow exposes no res/
 // file to put it in, so it is written here, into build/, on every build.
+//
+// The tap itself is the `other` group: Android sends HAAT's own AID to HAAT whichever
+// wallet is the default, so a tap works with Google Wallet or another wallet chosen.
+// The `payment` group, an AID of HAAT's that nothing selects, is only so HAAT is
+// listed under Settings › Default wallet app; choosing it there changes nothing for
+// HAAT's tap.
 def tapResources = new File(layout.buildDirectory.get().asFile, 'generated/haat-tap/res')
 new File(tapResources, 'xml').mkdirs()
 new File(tapResources, 'values').mkdirs()
 new File(tapResources, 'xml/haat_tap_service.xml').text = '''<?xml version="1.0" encoding="utf-8"?>
 <host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/haat_tap_description"
+    android:apduServiceBanner="@mipmap/ic_launcher"
     android:requireDeviceUnlock="true">
     <aid-group android:category="other" android:description="@string/haat_tap_description">
         <aid-filter android:name="F048414154504159"/>
+    </aid-group>
+    <aid-group android:category="payment" android:description="@string/haat_tap_description">
+        <aid-filter android:name="F04841415457414C"/>
     </aid-group>
 </host-apdu-service>
 '''
