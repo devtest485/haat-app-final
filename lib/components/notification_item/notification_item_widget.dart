@@ -90,7 +90,9 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                       width: 32.0,
                       height: 32.0,
                       decoration: BoxDecoration(
-                        color: Color(0xFFF1F1F1),
+                        color: widget!.category == 'money'
+                            ? Color(0x1F00DA76)
+                            : Color(0xFFF1F1F1),
                         shape: BoxShape.circle,
                       ),
                       alignment: AlignmentDirectional(0.0, 0.0),
@@ -107,7 +109,16 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                             ),
                           if ((widget!.imageUrl == null ||
                                   widget!.imageUrl == '') &&
-                              (widget!.category != 'offer'))
+                              (widget!.category == 'money'))
+                            Icon(
+                              Icons.south_west_rounded,
+                              color: Color(0xFF00794A),
+                              size: 16.0,
+                            ),
+                          if ((widget!.imageUrl == null ||
+                                  widget!.imageUrl == '') &&
+                              (widget!.category != 'offer') &&
+                              (widget!.category != 'money'))
                             Icon(
                               Icons.lightbulb_outline_rounded,
                               color: Colors.black,

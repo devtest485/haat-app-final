@@ -21,6 +21,9 @@ import '/custom_code/transaction_api.dart';
 /// card sits on white. See [BusinessLogoAvatar].
 const _haatGreen = Color(0xFF00DA76);
 
+/// Money sent to another merchant — the same yellow as the wallet's "Sent" note.
+const _sentYellow = Color(0xFFFFC21A);
+
 /// The last few movements, on the home screen.
 ///
 /// The design drew two rows and the app shipped them: "Solace Studio · Invoice paid ·
@@ -86,8 +89,12 @@ class _RecentTransactionsState extends State<RecentTransactions> {
           Container(
             width: 40,
             height: 40,
-            decoration: const BoxDecoration(
-              color: Color(0xFFF1F1F1),
+            decoration: BoxDecoration(
+              color: row.isTransfer
+                  ? (row.incoming
+                      ? const Color(0x1F00DA76)
+                      : const Color(0xFFFFF5D6))
+                  : const Color(0xFFF1F1F1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -116,12 +123,25 @@ class _RecentTransactionsState extends State<RecentTransactions> {
               ],
             ),
           ),
-          Text(
-            '${row.incoming ? '+' : '-'} ${row.amount}',
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
+          Container(
+            padding: row.isTransfer
+                ? const EdgeInsets.symmetric(horizontal: 9, vertical: 4)
+                : EdgeInsets.zero,
+            decoration: row.isTransfer
+                ? BoxDecoration(
+                    color: row.incoming ? const Color(0x1F00DA76) : _sentYellow,
+                    borderRadius: BorderRadius.circular(100),
+                  )
+                : null,
+            child: Text(
+              '${row.incoming ? '+' : '-'} ${row.amount}',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: row.isTransfer && row.incoming
+                    ? const Color(0xFF00794A)
+                    : Colors.black,
+              ),
             ),
           ),
         ],

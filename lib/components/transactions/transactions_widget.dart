@@ -18,6 +18,7 @@ class TransactionsWidget extends StatefulWidget {
     bool? incoming,
     this.paymentMethod,
     this.showDivider,
+    this.tone,
   })  : this.title = title ?? 'Transaction',
         this.incoming = incoming ?? true;
 
@@ -27,6 +28,10 @@ class TransactionsWidget extends StatefulWidget {
   final bool incoming;
   final String? paymentMethod;
   final bool? showDivider;
+
+  /// `sent` or `received` for money between merchants — yellow and green — and
+  /// empty for every other line.
+  final String? tone;
 
   @override
   State<TransactionsWidget> createState() => _TransactionsWidgetState();
@@ -54,8 +59,31 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
     super.dispose();
   }
 
+  bool get _sent => widget.tone == 'sent';
+  bool get _received => widget.tone == 'received';
+
   @override
   Widget build(BuildContext context) {
+    final row = _row(context);
+    if (!_sent && !_received) return row;
+
+    // Money between merchants arrives with a small rise, so a new one is noticed.
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : Duration(milliseconds: 420),
+      curve: Curves.easeOutCubic,
+      builder: (context, t, child) => Opacity(
+        opacity: t,
+        child:
+            Transform.translate(offset: Offset(0, 10 * (1 - t)), child: child),
+      ),
+      child: row,
+    );
+  }
+
+  Widget _row(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(),
@@ -71,7 +99,11 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                   width: 32.0,
                   height: 32.0,
                   decoration: BoxDecoration(
-                    color: Color(0xFFF1F1F1),
+                    color: _sent
+                        ? Color(0xFFFFF5D6)
+                        : _received
+                            ? Color(0x1F00DA76)
+                            : Color(0xFFF1F1F1),
                     shape: BoxShape.circle,
                   ),
                   alignment: AlignmentDirectional(0.0, 0.0),
@@ -83,13 +115,13 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                         if (widget!.incoming)
                           Icon(
                             Icons.south_west,
-                            color: Colors.black,
+                            color: _received ? Color(0xFF00794A) : Colors.black,
                             size: 16.0,
                           ),
                         if (widget!.incoming == false)
                           Icon(
                             Icons.arrow_outward,
-                            color: Colors.black,
+                            color: _sent ? Color(0xFF7A5600) : Colors.black,
                             size: 16.0,
                           ),
                         if ((widget!.paymentMethod == 'tap') ||
@@ -206,22 +238,29 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                     ].divide(SizedBox(height: 2.0)),
                   ),
                 ),
-                Text(
-                  widget!.amount!,
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        font: GoogleFonts.montserrat(
+                if (_sent || _received)
+                  _TonePill(
+                    text: widget!.amount!,
+                    sent: _sent,
+                  )
+                else
+                  Text(
+                    widget!.amount!,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          font: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          fontSize: 12.0,
+                          letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
-                        color: FlutterFlowTheme.of(context).primaryBackground,
-                        fontSize: 12.0,
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w500,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                      ),
-                ),
+                  ),
               ].divide(SizedBox(width: 12.0)),
             ),
           ),
@@ -232,6 +271,43 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
               color: Color(0x14000000),
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// The amount on a line between merchants: solid yellow for sent, soft green for
+/// received. Ink on the yellow, dark green on the green, so both read at a glance.
+class _TonePill extends StatelessWidget {
+  const _TonePill({required this.text, required this.sent});
+
+  final String text;
+  final bool sent;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.85, end: 1.0),
+      duration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : Duration(milliseconds: 520),
+      curve: Curves.elasticOut,
+      builder: (context, scale, child) =>
+          Transform.scale(scale: scale, child: child),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 4.0),
+        decoration: BoxDecoration(
+          color: sent ? Color(0xFFFFC21A) : Color(0x1F00DA76),
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+        child: Text(
+          text,
+          style: GoogleFonts.montserrat(
+            fontSize: 12.0,
+            fontWeight: FontWeight.w600,
+            color: sent ? Color(0xFF111111) : Color(0xFF00794A),
+          ),
+        ),
       ),
     );
   }

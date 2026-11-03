@@ -14,8 +14,9 @@ import '/flutter_flow/ff_builtin_enums.dart';
 String? transactionSubtitle(
   String? description,
   String? kind,
-  String? occurredAt,
-) {
+  String? occurredAt, [
+  String? direction,
+]) {
   final at = DateTime.tryParse(occurredAt ?? '')?.toLocal();
 
   var day = '';
@@ -31,6 +32,13 @@ String? transactionSubtitle(
             ? 'Yesterday'
             : DateFormat(at.year == today.year ? 'd MMM' : 'd MMM y')
                 .format(at);
+  }
+
+  if (kind == 'transfer') {
+    final label = (direction ?? '').trim() == 'credit'
+        ? 'Transfer received'
+        : 'Transfer sent';
+    return [label, day].where((part) => part.isNotEmpty).join(' · ');
   }
 
   final given = (description ?? '').trim();

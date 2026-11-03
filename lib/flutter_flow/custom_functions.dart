@@ -18,6 +18,7 @@ export '/custom_code/functions/transaction_title.dart';
 export '/custom_code/functions/transaction_subtitle.dart';
 export '/custom_code/functions/transaction_amount.dart';
 export '/custom_code/functions/transaction_is_incoming.dart';
+export '/custom_code/functions/transaction_tone.dart';
 export '/custom_code/functions/banner_image_url.dart';
 export '/custom_code/functions/banner_dot_indexes.dart';
 export '/custom_code/functions/banner_background.dart';

@@ -37,6 +37,12 @@
         </array>
       </dict>
     </array>
+    <key>NSCameraUsageDescription</key>
+    <string>HAAT uses the camera to scan payment QR codes and verify your identity.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>HAAT saves your payment QR code to Photos so you can print or share it.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>HAAT reads a payment QR code from a photo you choose.</string>
     <key>FlutterDeepLinkingEnabled</key>
     <true/>
     <key>CFBundleVersion</key>

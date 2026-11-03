@@ -10,6 +10,7 @@ import '/custom_code/token_store.dart';
 import '/custom_code/api_config.dart';
 import '/custom_code/api_envelope.dart';
 import '/custom_code/api_result.dart';
+import '/custom_code/connection_status.dart';
 
 /// Talks to the HAAT backend.
 ///
@@ -151,15 +152,20 @@ class ApiClient {
           .then(http.Response.fromStream)
           .timeout(ApiConfig.timeout);
     } on TimeoutException catch (error) {
+      ConnectionStatus.instance.reportUnreachable();
       return ApiUnreachable.tooSlow<T>(error);
     } on SocketException catch (error) {
+      ConnectionStatus.instance.reportUnreachable();
       return ApiUnreachable.offline<T>(error);
     } on http.ClientException catch (error) {
+      ConnectionStatus.instance.reportUnreachable();
       return ApiUnreachable.offline<T>(error);
     } on HandshakeException catch (error) {
+      ConnectionStatus.instance.reportUnreachable();
       return ApiUnreachable.offline<T>(error);
     }
 
+    ConnectionStatus.instance.reportReachable();
     final envelope = _decode(response);
 
     if (_shouldAttemptRefresh(envelope,

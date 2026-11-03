@@ -11,7 +11,10 @@ import 'package:flutter/material.dart' hide RepeatMode;
 import '/custom_code/auth_session.dart';
 
 /// Ends the session and clears the keystore.
+///
+/// The business logo is left in App State, like `displayName`, so the login
+/// screen can still greet the merchant with it. The next successful
+/// `haatLoadProfile` overwrites it — with an empty value if that account has none.
 Future<void> haatSignOut() async {
   await AuthSession.instance.signOut();
-  FFAppState().update(() => FFAppState().businessLogoUrl = '');
 }

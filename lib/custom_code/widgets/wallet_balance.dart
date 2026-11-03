@@ -54,6 +54,12 @@ class WalletBalance extends StatefulWidget {
   final int? refreshSeconds;
   final Future Function()? onBalanceChanged;
 
+  /// Bumped by a screen that has just moved money — a transfer sent — so the balance
+  /// and the lines under it update on the way back rather than a poll later.
+  static final ValueNotifier<int> refreshSignal = ValueNotifier<int>(0);
+
+  static void refreshNow() => refreshSignal.value++;
+
   @override
   State<WalletBalance> createState() => _WalletBalanceState();
 }
@@ -95,6 +101,7 @@ class _WalletBalanceState extends State<WalletBalance>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    WalletBalance.refreshSignal.addListener(_load);
     _count.value = 1;
     _load();
     _startPolling();
@@ -116,6 +123,7 @@ class _WalletBalanceState extends State<WalletBalance>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    WalletBalance.refreshSignal.removeListener(_load);
     _poll?.cancel();
     _noteTimer?.cancel();
     _count.dispose();

@@ -55,6 +55,12 @@ class FFAppState extends ChangeNotifier {
       _businessLogoUrl =
           prefs.getString('ff_businessLogoUrl') ?? _businessLogoUrl;
     });
+    _safeInit(() {
+      _displayName = prefs.getString('ff_displayName') ?? _displayName;
+    });
+    _safeInit(() {
+      _mobileMasked = prefs.getString('ff_mobileMasked') ?? _mobileMasked;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -292,20 +298,24 @@ class FFAppState extends ChangeNotifier {
   /// The signed-in merchant's name, or their handle, or their masked number —
   /// whichever they have.
   ///
-  /// Never empty for a signed-in account.
+  /// Never empty for a signed-in account. Kept across launches, so the login and
+  /// home screens can greet the merchant before `haatLoadProfile` has answered.
   String _displayName = '';
   String get displayName => _displayName;
   set displayName(String value) {
     _displayName = value;
+    prefs.setString('ff_displayName', value);
   }
 
   /// The last four digits of the signed-in number, as the backend masks it.
   ///
-  /// The whole number never reaches the handset.
+  /// The whole number never reaches the handset. Kept across launches, like
+  /// `displayName`.
   String _mobileMasked = '';
   String get mobileMasked => _mobileMasked;
   set mobileMasked(String value) {
     _mobileMasked = value;
+    prefs.setString('ff_mobileMasked', value);
   }
 
   /// Address of the business's logo, or empty when it has none.

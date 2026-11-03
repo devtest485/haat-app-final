@@ -34,7 +34,10 @@ List<dynamic> filterTransactions(
     final whole = (minor ~/ BigInt.from(100)).toString();
     final kind = field(r, 'kind');
     return [
-      transactionTitle(field(r, 'description'), kind) ?? '',
+      transactionTitle(field(r, 'description'), kind, field(r, 'direction'),
+              r is Map ? r['transfer'] : null) ??
+          '',
+      kind == 'transfer' ? 'transfer user' : '',
       kind,
       field(r, 'reference'),
       field(r, 'paymentMethod'),

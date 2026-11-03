@@ -9,6 +9,7 @@ import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
+import '/custom_code/pay_request_screens.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -102,7 +103,15 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                           (FFMainAxisAlignment.spaceBetween)
                                               .flutterValue,
                                       children: [
-                                        Container(
+                                        InkWell(
+                                          customBorder: const CircleBorder(),
+                                          onTap: () => Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const PayScannerScreen(),
+                                            ),
+                                          ),
+                                          child: Container(
                                           width: 40.0,
                                           height: 40.0,
                                           decoration: BoxDecoration(
@@ -122,6 +131,7 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                                                 .primaryText,
                                             size: 20.0,
                                           ),
+                                        ),
                                         ),
                                         RichText(
                                           textScaler:

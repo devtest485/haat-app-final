@@ -1,6 +1,7 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/home_banner/home_banner_widget.dart';
 import '/components/security_sheet_widget.dart';
+import '/components/transaction_shimmer/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/components/week_story_card/week_story_card_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
@@ -132,7 +133,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           _model.bannerAutoplay = InstantTimer.periodic(
             duration: Duration(milliseconds: 4000),
             callback: (timer) async {
-              if (_model.banners.length > 1) {
+              // The banner PageView is only built once banners have loaded, and
+              // leaves the tree while the screen is covered, so the controller
+              // can be detached when the timer fires.
+              if (_model.banners.length > 1 &&
+                  (_model.pageViewController?.hasClients ?? false)) {
                 await _model.pageViewController?.animateToPage(
                   functions.nextPageIndex(
                       _model.pageViewCurrentIndex, _model.banners.length),
@@ -156,9 +161,11 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             )!
             .toList()
             .cast<dynamic>();
-        _model.transactionsLoaded = true;
-        safeSetState(() {});
       }
+      // Loaded either way, so a failed call ends the shimmer instead of leaving
+      // it running.
+      _model.transactionsLoaded = true;
+      safeSetState(() {});
     });
   }
 
@@ -1453,7 +1460,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                               getJsonField(
                                                                                 transactionItemItem,
                                                                                 r'''$.kind''',
-                                                                              ).toString()),
+                                                                              ).toString(),
+                                                                              getJsonField(transactionItemItem, r'''$.direction''').toString(),
+                                                                              getJsonField(transactionItemItem, r'''$.transfer''')),
                                                                           subtitle: functions.transactionSubtitle(
                                                                               getJsonField(
                                                                                 transactionItemItem,
@@ -1466,7 +1475,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                               getJsonField(
                                                                                 transactionItemItem,
                                                                                 r'''$.occurredAt''',
-                                                                              ).toString()),
+                                                                              ).toString(),
+                                                                              getJsonField(transactionItemItem, r'''$.direction''').toString()),
                                                                           amount: functions.transactionAmount(
                                                                               getJsonField(
                                                                                 transactionItemItem,
@@ -1490,6 +1500,9 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             transactionItemItem,
                                                                             r'''$.paymentMethod''',
                                                                           ).toString(),
+                                                                          tone: functions.transactionTone(
+                                                                              getJsonField(transactionItemItem, r'''$.kind''').toString(),
+                                                                              getJsonField(transactionItemItem, r'''$.direction''').toString()),
                                                                           showDivider: functions.isNotLastItem(
                                                                               transactionItemIndex,
                                                                               _model.transactions.length),
@@ -1497,6 +1510,36 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       },
                                                                     );
                                                                   },
+                                                                ),
+                                                              );
+                                                            } else if (!_model
+                                                                .transactionsLoaded) {
+                                                              // Still loading: three placeholder rows where the
+                                                              // last three transactions will land.
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    for (var i =
+                                                                            0;
+                                                                        i < 3;
+                                                                        i++)
+                                                                      TransactionShimmerWidget(
+                                                                        index:
+                                                                            i,
+                                                                        showDivider:
+                                                                            i < 2,
+                                                                      ),
+                                                                  ],
                                                                 ),
                                                               );
                                                             } else {

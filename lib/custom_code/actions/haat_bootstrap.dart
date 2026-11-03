@@ -10,6 +10,7 @@ import 'package:flutter/material.dart' hide RepeatMode;
 
 import '/custom_code/api_config.dart';
 import '/custom_code/auth_session.dart';
+import '/custom_code/pay_request_screens.dart' show PayLinks;
 
 /// Brings the session up before the first frame.
 ///
@@ -21,8 +22,10 @@ import '/custom_code/auth_session.dart';
 /// FlutterFlow itself, so it cannot be exported away.
 ///
 /// Order matters. The session restores tokens from the keystore, and it cannot
-/// build its HTTP client until it knows where the backend is.
+/// build its HTTP client until it knows where the backend is. Payment links are
+/// listened for before the router is, so it never sees one the app can open.
 Future<void> haatBootstrap() async {
   await ApiConfig.load();
   await AuthSession.initialize();
+  PayLinks.start();
 }

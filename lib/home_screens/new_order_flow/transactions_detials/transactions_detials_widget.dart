@@ -8,6 +8,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -43,21 +44,40 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
       _model.transactions = _model.traded!;
       safeSetState(() {});
       _model.token = await actions.haatAccessToken();
-      _model.transactionsResult =
-          await HaatAuthGroup.recentTransactionsCall.call(
+      await _loadTransactions();
+    });
+  }
+
+  /// Fetches the rows for the selected chip, showing the shimmer meanwhile.
+  Future<void> _loadTransactions() async {
+    final request = ++_model.transactionsRequest;
+    safeSetState(() => _model.transactionsLoaded = false);
+
+    // A fast answer would otherwise flash the shimmer for a frame or two, which
+    // reads as a flicker rather than as loading.
+    final results = await Future.wait([
+      HaatAuthGroup.recentTransactionsCall.call(
         accessToken: _model.token,
         limit: 100,
-      );
+        since: functions.transactionSince(_model.filterIndex),
+      ),
+      Future.delayed(const Duration(milliseconds: 450)),
+    ]);
+    final result = results.first as ApiCallResponse;
 
-      if ((_model.transactionsResult?.succeeded ?? true)) {
-        _model.transactionList = HaatAuthGroup.recentTransactionsCall
-            .transactions(
-              (_model.transactionsResult?.jsonBody ?? ''),
-            )!
+    // The user has picked another chip since; that fetch owns the list now.
+    if (request != _model.transactionsRequest) return;
+
+    _model.transactionsResult = result;
+    safeSetState(() {
+      if (result.succeeded) {
+        _model.transactionList = (HaatAuthGroup.recentTransactionsCall
+                    .transactions(result.jsonBody ?? '') ??
+                [])
             .toList()
             .cast<dynamic>();
-        safeSetState(() {});
       }
+      _model.transactionsLoaded = true;
     });
   }
 
@@ -308,46 +328,31 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                             'Last 3 months')
                                                       ],
                                                       onChanged: (val) async {
-                                                        safeSetState(() => _model
-                                                                .choiceChipsValue =
-                                                            val?.firstOrNull);
-                                                        _model.filterIndex = functions
+                                                        final filter = functions
                                                             .transactionFilterIndex(
+                                                                val?.firstOrNull);
+                                                        // The chips report their initial selection
+                                                        // on first build, and a tap on the chip
+                                                        // already selected changes nothing.
+                                                        if (filter ==
                                                                 _model
-                                                                    .choiceChipsValue);
-                                                        safeSetState(() {});
-                                                        _model.filteredResult =
-                                                            await HaatAuthGroup
-                                                                .recentTransactionsCall
-                                                                .call(
-                                                          accessToken:
-                                                              _model.token,
-                                                          limit: 100,
-                                                          since: functions
-                                                              .transactionSince(
-                                                                  _model
-                                                                      .filterIndex),
-                                                        );
-
-                                                        if ((_model
-                                                                .filteredResult
-                                                                ?.succeeded ??
-                                                            true)) {
-                                                          _model.transactionList =
-                                                              HaatAuthGroup
-                                                                  .recentTransactionsCall
-                                                                  .transactions(
-                                                                    (_model.filteredResult
-                                                                            ?.jsonBody ??
-                                                                        ''),
-                                                                  )!
-                                                                  .toList()
-                                                                  .cast<
-                                                                      dynamic>();
-                                                          safeSetState(() {});
+                                                                    .filterIndex &&
+                                                            _model.transactionsRequest >
+                                                                0) {
+                                                          return;
                                                         }
-
-                                                        safeSetState(() {});
+                                                        _model.choiceChipsValue =
+                                                            val?.firstOrNull;
+                                                        _model.filterIndex =
+                                                            filter;
+                                                        // Before the page load has the token, its
+                                                        // own fetch picks up this filter.
+                                                        if (_model.token ==
+                                                            null) {
+                                                          safeSetState(() {});
+                                                          return;
+                                                        }
+                                                        await _loadTransactions();
                                                       },
                                                       selectedChipStyle:
                                                           ChipStyle(
@@ -478,6 +483,11 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                       0.0, 25.0, 0.0, 40.0),
                                               child: Builder(
                                                 builder: (context) {
+                                                  if (!_model
+                                                      .transactionsLoaded) {
+                                                    return custom_widgets
+                                                        .TransactionsShimmer();
+                                                  }
                                                   final dayGroup = functions
                                                           .transactionDayGroups(
                                                               _model
@@ -626,7 +636,9 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                                   getJsonField(
                                                                                     txItemItem,
                                                                                     r'''$.kind''',
-                                                                                  ).toString()),
+                                                                                  ).toString(),
+                                                                                  getJsonField(txItemItem, r'''$.direction''').toString(),
+                                                                                  getJsonField(txItemItem, r'''$.transfer''')),
                                                                               subtitle: functions.transactionSubtitle(
                                                                                   getJsonField(
                                                                                     txItemItem,
@@ -639,7 +651,8 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                                   getJsonField(
                                                                                     txItemItem,
                                                                                     r'''$.occurredAt''',
-                                                                                  ).toString()),
+                                                                                  ).toString(),
+                                                                                  getJsonField(txItemItem, r'''$.direction''').toString()),
                                                                               amount: functions.transactionAmount(
                                                                                   getJsonField(
                                                                                     txItemItem,
@@ -661,6 +674,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                                 txItemItem,
                                                                                 r'''$.paymentMethod''',
                                                                               ).toString(),
+                                                                              tone: functions.transactionTone(getJsonField(txItemItem, r'''$.kind''').toString(), getJsonField(txItemItem, r'''$.direction''').toString()),
                                                                               showDivider: functions.groupPairDivider(dayGroupItem, txItemIndex),
                                                                             ),
                                                                           ),

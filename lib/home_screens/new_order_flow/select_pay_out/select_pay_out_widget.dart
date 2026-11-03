@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/index.dart';
+import '/custom_code/pay_request_screens.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -43,6 +44,18 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
     _model.maybeDispose();
 
     super.dispose();
+  }
+
+  /// Closes this sheet, then shows the QR or the link for the amount typed.
+  void _openRequest({required bool link}) {
+    final navigator = Navigator.of(context);
+    navigator.pop();
+    navigator.push(MaterialPageRoute(
+      builder: (_) => RequestPaymentScreen(
+        amount: widget.amountPay ?? '',
+        link: link,
+      ),
+    ));
   }
 
   @override
@@ -322,9 +335,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(QRpayOutPageWidget.routeName);
-
-                        Navigator.pop(context);
+                        _openRequest(link: false);
                       },
                       child: Container(
                         width: double.infinity,
@@ -434,9 +445,7 @@ class _SelectPayOutWidgetState extends State<SelectPayOutWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        context.pushNamed(LinkPayOutPageWidget.routeName);
-
-                        Navigator.pop(context);
+                        _openRequest(link: true);
                       },
                       child: Container(
                         width: double.infinity,

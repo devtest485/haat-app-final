@@ -478,17 +478,11 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(
-                                  TransfermethodWidget.routeName,
-                                  queryParameters: {
-                                    'transferMode': serializeParam(
-                                      'UserName',
-                                      ParamType.String,
-                                    ),
-                                  }.withoutNulls,
+                                await actions.haatOpenSendMoney(
+                                  context,
+                                  'username',
+                                  widget!.fundsAmount,
                                 );
-
-                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: double.infinity,
@@ -614,17 +608,11 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(
-                                  TransfermethodWidget.routeName,
-                                  queryParameters: {
-                                    'transferMode': serializeParam(
-                                      'PhoneNumber',
-                                      ParamType.String,
-                                    ),
-                                  }.withoutNulls,
+                                await actions.haatOpenSendMoney(
+                                  context,
+                                  'mobile',
+                                  widget!.fundsAmount,
                                 );
-
-                                Navigator.pop(context);
                               },
                               child: Container(
                                 width: double.infinity,

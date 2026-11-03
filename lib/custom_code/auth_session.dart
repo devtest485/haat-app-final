@@ -11,10 +11,12 @@ import '/custom_code/biometric_key_store.dart';
 import '/custom_code/device_identity.dart';
 import '/custom_code/organization_api.dart';
 import '/custom_code/payout_api.dart';
+import '/custom_code/pay_request_api.dart';
 import '/custom_code/token_store.dart';
 import '/custom_code/business_summary_api.dart';
 import '/custom_code/store_profile_api.dart';
 import '/custom_code/transaction_api.dart';
+import '/custom_code/transfer_api.dart';
 import '/custom_code/wallet_api.dart';
 
 /// What a biometric sign-in attempt came to.
@@ -164,6 +166,13 @@ class AuthSession extends ChangeNotifier {
 
   /// Money the business sends from its wallet to its own bank account.
   late final PayoutApi payouts = PayoutApi(_client);
+
+  /// Money the business sends to another merchant, by handle or phone number.
+  late final TransferApi transfers = TransferApi(_client);
+
+  /// QR codes and links this business is paid by, and paying other businesses' from
+  /// the wallet.
+  late final PayRequestApi payRequests = PayRequestApi(_client);
 
   /// The device key behind biometric sign-in. Held here so the screens that offer it and
   /// the screen that enrols it are talking to the same thing.

@@ -37,6 +37,10 @@ class TransactionsDetialsModel
 
   bool transactionsLoaded = false;
 
+  // Bumped on every fetch; a response is only applied if it belongs to the latest
+  // one, so a slow answer for an earlier chip cannot replace the current list.
+  int transactionsRequest = 0;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Custom Action - haatHasTransactions] action in TransactionsDetials widget.

@@ -32,7 +32,12 @@ List<dynamic>? notificationsFor(
   };
   if (category == null) return [];
 
+  // Money another merchant sent is news about the business, so it sits with Updates.
+  final also = category == 'update' ? 'money' : category;
+
   return list
-      .where((item) => item is Map && '${item['category']}' == category)
+      .where((item) =>
+          item is Map &&
+          ('${item['category']}' == category || '${item['category']}' == also))
       .toList();
 }

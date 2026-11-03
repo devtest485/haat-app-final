@@ -26,6 +26,11 @@ Future<void> haatLoadProfile() async {
 
   if (profile == null) return;
 
+  // The handle comes from the credential status, which a cold start may not have
+  // managed to read. Without it a merchant with no full name would be greeted by
+  // their masked number instead of the handle they chose.
+  if (session.username == null) await session.refreshCredentials();
+
   // Written here rather than in AuthSession, which is ported Dart the tests run
   // without a widget tree — reaching for FFAppState there would drag FlutterFlow
   // into all of them.

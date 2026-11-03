@@ -99,7 +99,8 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Column(
+                      Expanded(
+                        child: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment:
                             (FFCrossAxisAlignment.start).flutterValue,
@@ -108,7 +109,8 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              AutoSizeText(
+                              Flexible(
+                                child: AutoSizeText(
                                 widget!.value!,
                                 maxLines: 2,
                                 minFontSize: 16.0,
@@ -130,6 +132,7 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                                       lineHeight: 1.2,
                                     ),
                                 overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               if (widget!.unit != null && widget!.unit != '')
                                 Text(
@@ -180,6 +183,7 @@ class _WeekStoryCardWidgetState extends State<WeekStoryCardWidget> {
                             ),
                           ),
                         ],
+                        ),
                       ),
                     ],
                   ),

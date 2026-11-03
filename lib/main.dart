@@ -1,4 +1,5 @@
 import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/connection_gate.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -94,6 +95,7 @@ class _MyAppState extends State<MyApp> {
       ),
       themeMode: _themeMode,
       routerConfig: _router,
+      builder: (context, child) => ConnectionGate(child: child!),
     );
   }
 }

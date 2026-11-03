@@ -13,6 +13,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '/custom_code/pay_request_screens.dart' show openPendingPayLink;
+
 /// Live CustomBottombar ka tab switcher. Bar khud isay initState me set karta
 /// hai aur dispose par clear kar deta hai. Widget self-contained hai — koi
 /// alag custom action file zaroori nahi.
@@ -171,6 +173,8 @@ class _CustomBottombarState extends State<CustomBottombar> {
     super.initState();
     _currentIndex = (widget.initialIndex ?? 0).clamp(0, 3);
     _bottomTabNavigator = navigateTo;
+    // A payment link opened before sign-in waits for here.
+    openPendingPayLink(context);
   }
 
   /// The router this bar is listening to.

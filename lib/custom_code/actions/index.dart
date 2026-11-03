@@ -40,6 +40,7 @@ export '/custom_code/actions/haat_access_token.dart' show haatAccessToken;
 export '/custom_code/actions/haat_business_name_was_taken.dart'
     show haatBusinessNameWasTaken;
 export '/custom_code/actions/haat_open_payout.dart' show haatOpenPayout;
+export '/custom_code/actions/haat_open_send_money.dart' show haatOpenSendMoney;
 export '/custom_code/actions/haat_has_passcode_sign_in.dart'
     show haatHasPasscodeSignIn;
 export '/custom_code/actions/haat_save_business_setup.dart'
