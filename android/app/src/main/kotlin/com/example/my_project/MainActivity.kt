@@ -2,7 +2,12 @@ package com.mycompany.haat
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
+import android.Manifest
 import android.app.Activity
+import android.app.KeyguardManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,8 +20,15 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import org.json.JSONObject
 import java.io.IOException
+import java.math.BigDecimal
+import java.net.HttpURLConnection
+import java.net.URL
+import java.text.DecimalFormat
+import java.util.Currency
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
@@ -24,6 +36,9 @@ import android.security.keystore.KeyProperties
 import android.util.Base64
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import io.flutter.plugin.common.MethodCall
@@ -61,9 +76,15 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun onResume() {
         super.onResume()
+        TapKeys.foreground = true
         // Reader mode belongs to the foreground activity; a merchant who glanced at a
         // notification mid-sale comes back to a phone that is still reading.
         tap?.resume()
+    }
+
+    override fun onPause() {
+        TapKeys.foreground = false
+        super.onPause()
     }
 }
 
@@ -362,6 +383,27 @@ object TapKeys {
 
     fun userId(context: Context): String? = preferences(context).getString("userId", null)
 
+    /** HAAT is on screen. A tap with it closed is answered only when [background] is on. */
+    @Volatile
+    var foreground = false
+
+    /**
+     * The owner's choice under Security: this phone is paid by tap with the screen
+     * locked, or off, or HAAT closed — answered without opening HAAT, and told by a
+     * notification. Off, HAAT has to be open to be paid by tap.
+     */
+    fun background(context: Context): Boolean =
+        preferences(context).getBoolean("background", false)
+
+    /** Where to ask what a tap paid, with HAAT closed: the app's API base URL. */
+    fun apiBase(context: Context): String? = preferences(context).getString("apiBase", null)
+
+    fun setBackground(context: Context, on: Boolean, apiBase: String?) {
+        val editor = preferences(context).edit().putBoolean("background", on)
+        if (!apiBase.isNullOrBlank()) editor.putString("apiBase", apiBase.trimEnd('/'))
+        editor.apply()
+    }
+
     /**
      * A new key, its public half as SPKI base64.
      *
@@ -369,7 +411,9 @@ object TapKeys {
      * card does. It only says who is being paid; the paying phone was unlocked first.
      */
     fun enrol(context: Context): String {
-        forget(context)
+        // The key only: the owner's choice under Security stays with the phone.
+        preferences(context).edit().remove("keyId").remove("userId").apply()
+        deleteKey()
 
         val specification = KeyGenParameterSpec.Builder(KEY_ALIAS, KeyProperties.PURPOSE_SIGN)
             .setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
@@ -385,8 +429,13 @@ object TapKeys {
         preferences(context).edit().putString("keyId", keyId).putString("userId", userId).apply()
     }
 
+    /** Signed out: the key, and the choice to be paid while locked, both go. */
     fun forget(context: Context) {
         preferences(context).edit().clear().apply()
+        deleteKey()
+    }
+
+    private fun deleteKey() {
         try {
             KeyStore.getInstance(KEYSTORE).apply { load(null) }.deleteEntry(KEY_ALIAS)
         } catch (_: Throwable) {
@@ -402,6 +451,17 @@ object TapKeys {
     /** What a tap signs. The server builds the same string — see wallet-pay.controller. */
     fun message(code: String, amountMinor: String, currency: String) =
         "HAAT-TAP-1|$code|$amountMinor|$currency"
+
+    /** What this phone signs to ask what tap [code] paid it — nothing a tap pays with. */
+    fun resultMessage(code: String) = "HAAT-TAP-RESULT-1|${code.uppercase()}"
+
+    fun sign(key: PrivateKey, message: String): String {
+        val signer = Signature.getInstance("SHA256withECDSA").apply {
+            initSign(key)
+            update(message.toByteArray(Charsets.UTF_8))
+        }
+        return Base64.encodeToString(signer.sign(), Base64.NO_WRAP)
+    }
 }
 
 /**
@@ -414,6 +474,11 @@ object TapKeys {
  *
  * Then the app opens on the tap, to show what this phone was paid. (`confirm`, an
  * approval on this screen, is from when the tapped phone paid; nothing asks for it.)
+ *
+ * With HAAT closed, or the phone locked, it answers only if the owner turned that on
+ * under Security ([TapKeys.background]); otherwise SELECT is refused with `6986`, which
+ * the paying phone reads as "open HAAT". When it does answer, HAAT stays closed: what
+ * the tap paid is asked of HAAT by [TapNotice], and told in a notification.
  */
 class HaatTapService : HostApduService() {
     companion object {
@@ -424,6 +489,7 @@ class HaatTapService : HostApduService() {
         private val CODE = Regex("^[A-Za-z0-9_-]{4,64}$")
         private val AMOUNT = Regex("^[0-9]{1,18}$")
         private val CURRENCY = Regex("^[A-Z]{3}$")
+        private val CLOSED = byteArrayOf(0x69, 0x86.toByte())
     }
 
     private val worker = Executors.newSingleThreadExecutor()
@@ -434,6 +500,10 @@ class HaatTapService : HostApduService() {
     override fun processCommandApdu(apdu: ByteArray, extras: Bundle?): ByteArray? {
         if (isSelect(apdu)) {
             selected = TapKeys.keyId(this) != null && TapKeys.privateKey() != null
+            if (selected && !open() && !TapKeys.background(this)) {
+                selected = false
+                return CLOSED
+            }
             return if (selected) "HAAT1".toByteArray(Charsets.UTF_8) + OK else NOT_SET_UP
         }
         if (!selected) return NOT_SET_UP
@@ -474,19 +544,26 @@ class HaatTapService : HostApduService() {
             }
         } else {
             // Signed first, so the paying phone has its answer at once; then the app
-            // opens, so this screen turns while the paying phone asks HAAT.
-            val signer = Signature.getInstance("SHA256withECDSA").apply {
-                initSign(key)
-                update(TapKeys.message(code, amount, currency).toByteArray(Charsets.UTF_8))
+            // opens, so this screen turns while the paying phone asks HAAT. With HAAT
+            // closed or the phone locked it stays that way, and a notification tells.
+            val signature = TapKeys.sign(key, TapKeys.message(code, amount, currency))
+            if (open()) {
+                open(if (confirm) "approve" else "tap", code)
+            } else {
+                TapNotice.follow(applicationContext, code)
             }
-            val signature = Base64.encodeToString(signer.sign(), Base64.NO_WRAP)
-            open(if (confirm) "approve" else "tap", code)
             JSONObject().put("k", keyId).put("s", signature).put("confirm", confirm).toString()
                 .toByteArray(Charsets.UTF_8) + OK
         }
     } catch (_: Throwable) {
         REFUSED
     }
+
+    /** HAAT is on screen, on an unlocked phone. */
+    private fun open(): Boolean =
+        TapKeys.foreground &&
+            (getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager)
+                ?.isKeyguardLocked != true
 
     /** The app, on the request: a receipt after a tap, its invoice to approve above the limit. */
     private fun open(kind: String, code: String) {
@@ -513,11 +590,162 @@ class HaatTapService : HostApduService() {
 }
 
 /**
+ * What a tap answered with HAAT closed paid this phone, told in a notification.
+ *
+ * Nobody is signed in here — the session lives in Dart, behind the lock — so this phone
+ * asks with its tap key instead: `POST /pay/{code}/tap-result`, signed over
+ * `HAAT-TAP-RESULT-1|code`, answers only what that tap paid this phone's business. It
+ * asks until the paying phone has paid, or a minute has passed.
+ */
+object TapNotice {
+    private const val CHANNEL_ID = "haat.tap.received"
+    private const val WAIT_MS = 60_000L
+    private const val EVERY_MS = 1_500L
+
+    /** Codes being followed; the paying phone may read this one twice for one tap. */
+    private val following = ConcurrentHashMap.newKeySet<String>()
+
+    fun follow(context: Context, code: String) {
+        val base = TapKeys.apiBase(context) ?: return
+        val key = TapKeys.privateKey() ?: return
+        val keyId = TapKeys.keyId(context) ?: return
+        val tap = code.uppercase()
+        if (!following.add(tap)) return
+
+        Thread {
+            try {
+                val body = JSONObject()
+                    .put("keyId", keyId)
+                    .put("signature", TapKeys.sign(key, TapKeys.resultMessage(tap)))
+                    .toString()
+                val until = SystemClock.elapsedRealtime() + WAIT_MS
+                var result: JSONObject? = null
+                while (SystemClock.elapsedRealtime() < until) {
+                    result = ask(base, tap, body) ?: result
+                    val status = result?.optString("status")
+                    if (status != null && status != "pending") break
+                    Thread.sleep(EVERY_MS)
+                }
+                notify(context, tap, result)
+            } catch (_: Throwable) {
+            } finally {
+                following.remove(tap)
+            }
+        }.start()
+    }
+
+    /** HAAT's answer; null when it could not be reached, `unknown` when it refused. */
+    private fun ask(base: String, code: String, body: String): JSONObject? {
+        val connection = URL("$base/pay/$code/tap-result").openConnection() as HttpURLConnection
+        return try {
+            connection.requestMethod = "POST"
+            connection.connectTimeout = 10_000
+            connection.readTimeout = 10_000
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.setRequestProperty("Accept", "application/json")
+            connection.outputStream.use { it.write(body.toByteArray(Charsets.UTF_8)) }
+
+            val status = connection.responseCode
+            when {
+                status in 200..299 -> {
+                    val text = connection.inputStream.bufferedReader().use { it.readText() }
+                    val json = JSONObject(text)
+                    json.optJSONObject("data") ?: json
+                }
+                // Signed out, or a key HAAT no longer knows: asking again won't change it.
+                status in 400..499 && status != 429 -> JSONObject().put("status", "unknown")
+                else -> null
+            }
+        } catch (_: Throwable) {
+            null
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    private fun notify(context: Context, code: String, result: JSONObject?) {
+        val notifications = NotificationManagerCompat.from(context)
+        if (!notifications.areNotificationsEnabled()) return
+
+        val currency = result?.optString("currency").orEmpty()
+        val amount = money(result?.optString("amountMinor").orEmpty(), currency)
+        val payer = result?.optString("payerName").orEmpty().ifBlank { "a HAAT business" }
+        val (title, text) = when (result?.optString("status")) {
+            "completed" -> "Payment received" to "$amount from $payer"
+            "held" -> "Payment on hold" to
+                "$amount from $payer is held for review. You'll be told when it's decided."
+            "rejected" -> "Payment not received" to
+                "$amount from $payer was turned down on review."
+            "failed" -> "Payment not received" to "The tap from $payer didn't go through."
+            else -> "Tap payment" to "Couldn't confirm the tap yet. Open HAAT to check."
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+                .createNotificationChannel(
+                    NotificationChannel(
+                        CHANNEL_ID,
+                        "Tap payments",
+                        NotificationManager.IMPORTANCE_HIGH,
+                    ).apply { description = "Payments received by tap with HAAT closed" },
+                )
+        }
+
+        val receipt = PendingIntent.getActivity(
+            context,
+            code.hashCode(),
+            Intent(Intent.ACTION_VIEW, Uri.parse("haat://haat.com/tap/$code"))
+                .setPackage(context.packageName)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
+        fun base() = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.haat_tap_notification)
+            .setContentIntent(receipt)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_STATUS)
+            .setContentTitle(title)
+
+        // On the lock screen, what happened but not how much or from whom.
+        val notification = base()
+            .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .setPublicVersion(base().setContentText("Open HAAT for details").build())
+            .build()
+
+        try {
+            notifications.notify(code.hashCode(), notification)
+        } catch (_: SecurityException) {
+            // Notifications refused since the check above; nothing else to tell with.
+        }
+    }
+
+    /** `50000`, `SDG` → `500.00 SDG`. */
+    private fun money(minor: String, currency: String): String {
+        val digits = try {
+            Currency.getInstance(currency).defaultFractionDigits.coerceAtLeast(0)
+        } catch (_: Throwable) {
+            2
+        }
+        return try {
+            val format = DecimalFormat(if (digits == 0) "#,##0" else "#,##0." + "0".repeat(digits))
+            "${format.format(BigDecimal(minor).movePointLeft(digits))} $currency".trim()
+        } catch (_: Throwable) {
+            "A payment"
+        }
+    }
+}
+
+/**
  * The paying half, and this phone's key setup, for Dart.
  *
  * `read` arms NFC reader mode and answers once: with the other phone's reply (a JSON
  * string), or an error code — `not_set_up` (that phone has no HAAT tap), `lost` (the
- * phones parted mid-read), `refused`, `nfc_off`, `no_nfc`, `cancelled`. Reader mode
+ * phones parted mid-read), `closed` (HAAT is closed there, and not paid while closed),
+ * `refused`, `nfc_off`, `no_nfc`, `cancelled`. Reader mode
  * stays armed between reads so a phone held a moment early is not handed to another
  * app; `cancelRead` ends it.
  */
@@ -563,6 +791,34 @@ class TapBridge(private val activity: Activity) : MethodChannel.MethodCallHandle
             }
             "forget" -> {
                 TapKeys.forget(activity)
+                result.success(true)
+            }
+            // Paid by tap with the phone locked or HAAT closed: Security's switch.
+            "background" -> result.success(
+                mapOf(
+                    "on" to TapKeys.background(activity),
+                    "card" to activity.packageManager
+                        .hasSystemFeature(PackageManager.FEATURE_NFC_HOST_CARD_EMULATION),
+                    "screenOff" to (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S),
+                    "notifications" to
+                        NotificationManagerCompat.from(activity).areNotificationsEnabled(),
+                ),
+            )
+            "setBackground" -> {
+                val on = call.argument<Boolean>("on") ?: false
+                TapKeys.setBackground(activity, on, call.argument<String>("apiBase"))
+                if (on && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    ContextCompat.checkSelfPermission(
+                        activity,
+                        Manifest.permission.POST_NOTIFICATIONS,
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        activity,
+                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                        7301,
+                    )
+                }
                 result.success(true)
             }
             "read" -> read(call, result)
@@ -626,6 +882,10 @@ class TapBridge(private val activity: Activity) : MethodChannel.MethodCallHandle
                 byteArrayOf(0x00, 0xA4.toByte(), 0x04, 0x00, TapKeys.AID.size.toByte()) +
                     TapKeys.AID + byteArrayOf(0x00),
             )
+            if (status(select) == 0x6986) {
+                answer { it.error("closed", "HAAT is closed on that phone", null) }
+                return
+            }
             if (!ok(select) || String(body(select), Charsets.UTF_8) != "HAAT1") {
                 answer { it.error("not_set_up", "That phone has no HAAT tap", null) }
                 return

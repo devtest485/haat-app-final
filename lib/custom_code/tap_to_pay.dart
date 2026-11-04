@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 
+import '/custom_code/api_config.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/pay_request_api.dart';
@@ -234,6 +235,40 @@ class TapToPay {
   }
 }
 
+// ══ Paid by tap while locked ══════════════════════════════════════════════════════
+
+/// Whether this phone is paid by tap with the screen locked or off, or HAAT closed —
+/// Security's switch. Null on a phone that cannot be paid by tap at all.
+///
+/// `{on, screenOff, notifications}`: `screenOff` is false before Android 12, where a
+/// tap needs the screen on (locked is fine); `notifications` false means the payment
+/// still happens but nothing tells the owner.
+Future<Map<String, dynamic>?> tapWhileLockedStatus() async {
+  if (!_android) return null;
+  try {
+    final status =
+        await _channel.invokeMapMethod<String, dynamic>('background');
+    if (status == null || status['card'] != true) return null;
+    return status;
+  } catch (_) {
+    return null;
+  }
+}
+
+/// Turns [tapWhileLockedStatus] on or off. Turning it on asks for notifications, the
+/// only way a payment taken with HAAT closed is told.
+Future<bool> setTapWhileLocked(bool on) async {
+  try {
+    return await _channel.invokeMethod<bool>(
+          'setBackground',
+          {'on': on, 'apiBase': ApiConfig.baseUrl},
+        ) ??
+        false;
+  } catch (_) {
+    return false;
+  }
+}
+
 // ══ Asking to be paid by tap ═══════════════════════════════════════════════════════
 
 /// Kept across a retry of the same amount, so a request HAAT made but never answered
@@ -379,6 +414,11 @@ Future<Map<String, dynamic>> tapToPay(
             HapticFeedback.heavyImpact();
             hint.show('That phone can’t be paid by tap yet. It needs HAAT open '
                 'and signed in once — or use the QR.');
+          case 'closed':
+            HapticFeedback.heavyImpact();
+            hint.show(
+                'HAAT is closed on that phone. Ask them to open it — or to '
+                'turn on Tap to receive when locked, under Security.');
           case 'lost':
             hint.show('Hold the phones together a moment longer.');
           case 'cancelled':
@@ -773,7 +813,8 @@ Future<void> openTapReceipt(BuildContext context, String code) async {
                   r.channel == 'nfc' &&
                   r.isPaid &&
                   (r.paidAt == null || r.paidAt!.isAfter(since)) &&
-                  (tap?.amountMinor == null || r.amountMinor == tap!.amountMinor))
+                  (tap?.amountMinor == null ||
+                      r.amountMinor == tap!.amountMinor))
               .firstOrNull
           : null;
 
@@ -794,7 +835,8 @@ Future<void> openTapReceipt(BuildContext context, String code) async {
 }
 
 /// What a tap paid this phone, as its receipt; [tap] says who paid.
-Map<String, dynamic> _received(PaymentRequest owed, PaymentRequestPreview? tap) {
+Map<String, dynamic> _received(
+    PaymentRequest owed, PaymentRequestPreview? tap) {
   final payer = tap?.requester;
   final name = payer?.name ?? '';
   final handle = payer == null ? '' : payer.username ?? payer.handle;

@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
+import '/custom_code/tap_to_pay.dart';
 
 /// The passcode and the fingerprint, from inside the app.
 ///
@@ -47,6 +48,9 @@ class _SecuritySettingsState extends State<SecuritySettings> {
   bool _loading = true;
   bool _hasPasscode = false;
   bool _hasFingerprint = false;
+
+  /// Paid by tap while locked: null on a phone that can't be paid by tap at all.
+  Map<String, dynamic>? _tapWhileLocked;
   bool _editingPasscode = false;
   bool _busy = false;
   String? _error;
@@ -73,11 +77,13 @@ class _SecuritySettingsState extends State<SecuritySettings> {
   Future<void> _load() async {
     await _session.refreshCredentials();
     final hasKey = await _session.hasBiometricKey();
+    final tap = await tapWhileLockedStatus();
     if (!mounted) return;
 
     setState(() {
       _hasPasscode = _session.credentials?.hasPasscode ?? false;
       _hasFingerprint = hasKey;
+      _tapWhileLocked = tap;
       _loading = false;
     });
   }
@@ -148,6 +154,42 @@ class _SecuritySettingsState extends State<SecuritySettings> {
         _error = outcome;
       }
     });
+  }
+
+  Future<void> _setTapWhileLocked(bool on) async {
+    setState(() {
+      _busy = true;
+      _error = null;
+      _notice = null;
+    });
+
+    final saved = await setTapWhileLocked(on);
+    final tap = await tapWhileLockedStatus();
+    if (!mounted) return;
+
+    setState(() {
+      _busy = false;
+      _tapWhileLocked = tap;
+      if (!saved) {
+        _error = 'Couldn’t change that on this phone. Try again.';
+      } else if (on) {
+        _notice = 'Tap to receive when locked is on. Each payment comes as a '
+            'notification; HAAT stays closed.';
+      } else {
+        _notice =
+            'Tap to receive when locked is off. Open HAAT to be paid by tap.';
+      }
+    });
+  }
+
+  String _tapWhileLockedState(Map<String, dynamic> tap) {
+    if (tap['on'] != true) return 'Off — open HAAT to be paid by tap';
+    final when = tap['screenOff'] == true
+        ? 'with the screen locked or off, or HAAT closed'
+        : 'with the screen locked or HAAT closed';
+    return tap['notifications'] == false
+        ? 'On — paid $when. Notifications are off, so nothing tells you.'
+        : 'On — paid $when, told by a notification';
   }
 
   TextStyle _style(double size, FontWeight weight, Color color) =>
@@ -274,7 +316,7 @@ class _SecuritySettingsState extends State<SecuritySettings> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'How you sign back in on this phone.',
+                    'How you sign back in, and get paid, on this phone.',
                     textAlign: TextAlign.center,
                     style: _style(13, FontWeight.w400, Colors.black54),
                   ),
@@ -337,6 +379,21 @@ class _SecuritySettingsState extends State<SecuritySettings> {
                         ? null
                         : _button('Turn on', _enableFingerprint),
                   ),
+                  if (_tapWhileLocked case final tap?) ...[
+                    const SizedBox(height: 20),
+                    _row(
+                      icon: Icons.contactless_rounded,
+                      title: 'Tap to receive when locked',
+                      state: _tapWhileLockedState(tap),
+                      action: tap['on'] == true
+                          ? _button(
+                              'Turn off',
+                              () => _setTapWhileLocked(false),
+                              filled: false,
+                            )
+                          : _button('Turn on', () => _setTapWhileLocked(true)),
+                    ),
+                  ],
                   if (_error != null) ...[
                     const SizedBox(height: 16),
                     Text(

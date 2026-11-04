@@ -36,14 +36,21 @@ if (keystorePropertiesFile.exists()) {
 // The `payment` group, an AID of HAAT's that nothing selects, is only so HAAT is
 // listed under Settings › Default wallet app; choosing it there changes nothing for
 // HAAT's tap.
+//
+// Neither unlocked nor screen-on is required here: whether a locked phone, or one with
+// HAAT closed, answers a tap is the owner's choice under Security, and HaatTapService
+// refuses the tap itself when it is off. (requireDeviceScreenOn is read from Android 12
+// on; older phones only answer with the screen on.)
 def tapResources = new File(layout.buildDirectory.get().asFile, 'generated/haat-tap/res')
 new File(tapResources, 'xml').mkdirs()
 new File(tapResources, 'values').mkdirs()
+new File(tapResources, 'drawable').mkdirs()
 new File(tapResources, 'xml/haat_tap_service.xml').text = '''<?xml version="1.0" encoding="utf-8"?>
 <host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/haat_tap_description"
     android:apduServiceBanner="@mipmap/ic_launcher"
-    android:requireDeviceUnlock="true">
+    android:requireDeviceUnlock="false"
+    android:requireDeviceScreenOn="false">
     <aid-group android:category="other" android:description="@string/haat_tap_description">
         <aid-filter android:name="F048414154504159"/>
     </aid-group>
@@ -51,6 +58,15 @@ new File(tapResources, 'xml/haat_tap_service.xml').text = '''<?xml version="1.0"
         <aid-filter android:name="F04841415457414C"/>
     </aid-group>
 </host-apdu-service>
+'''
+// The status-bar icon of the notification a phone paid by tap while locked gets.
+new File(tapResources, 'drawable/haat_tap_notification.xml').text = '''<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM10,17l-5,-5 1.41,-1.41L10,14.17l7.59,-7.59L19,8l-9,9z"/>
+</vector>
 '''
 new File(tapResources, 'values/haat_tap.xml').text = '''<?xml version="1.0" encoding="utf-8"?>
 <resources>

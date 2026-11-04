@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.NFC"/>
     <uses-feature android:name="android.hardware.nfc" android:required="false"/>
     <uses-feature android:name="android.hardware.nfc.hce" android:required="false"/>
+    <!-- "Payment received" for a tap answered with the phone locked or HAAT closed. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:label="HAAT"
         tools:replace="android:label"
