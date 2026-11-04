@@ -2,6 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/gestures.dart';
@@ -431,17 +432,11 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            await Clipboard.setData(ClipboardData(
-                                text: functions.outcomeText(widget!.outcome,
-                                    'shareText', 'HAAT receipt')));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Receipt copied',
-                                  style: TextStyle(),
-                                ),
-                                duration: Duration(milliseconds: 4000),
-                              ),
+                            await actions.haatShareScreenshot(
+                              context,
+                              147.0,
+                              functions.outcomeText(
+                                  widget!.outcome, 'shareText', 'HAAT receipt'),
                             );
                           },
                           child: Container(

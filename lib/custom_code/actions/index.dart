@@ -96,3 +96,5 @@ export '/custom_code/actions/haat_can_manage_member.dart'
     show haatCanManageMember;
 export '/custom_code/actions/haat_set_sale_cart.dart' show haatSetSaleCart;
 export '/custom_code/actions/haat_load_orders.dart' show haatLoadOrders;
+export '/custom_code/actions/haat_share_screenshot.dart'
+    show haatShareScreenshot;
