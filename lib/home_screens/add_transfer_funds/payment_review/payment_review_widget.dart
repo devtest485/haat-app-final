@@ -62,12 +62,18 @@ class _PaymentReviewWidgetState extends State<PaymentReviewWidget> {
       );
 
       if ((_model.wallet?.succeeded ?? true)) {
-        _model.currency = HaatAuthGroup.walletCall.currency(
-          (_model.wallet?.jsonBody ?? ''),
-        )!;
-        _model.available = HaatAuthGroup.walletCall.availableMinor(
-          (_model.wallet?.jsonBody ?? ''),
-        )!;
+        _model.currency = valueOrDefault<String>(
+          HaatAuthGroup.walletCall.currency(
+            (_model.wallet?.jsonBody ?? ''),
+          ),
+          'SDG',
+        );
+        _model.available = valueOrDefault<String>(
+          HaatAuthGroup.walletCall.availableMinor(
+            (_model.wallet?.jsonBody ?? ''),
+          ),
+          '0',
+        );
         safeSetState(() {});
       }
     });

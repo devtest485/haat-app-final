@@ -17,14 +17,14 @@ double channelBarWidth(
   int index,
 ) {
   // One part of the "How customers pay" bar: its share of the bar's width. With no
-  // payments yet the parts are even, so the bar still reads as three.
+  // payments yet the last (gray) part fills the bar, so no channel looks used.
   final parts = shares ?? [];
   if (index < 0 || index >= parts.length || barWidth <= 0) {
     return 0;
   }
   final total = parts.fold<double>(0, (sum, s) => sum + (s < 0 ? 0 : s));
   if (total <= 0) {
-    return barWidth / parts.length;
+    return index == parts.length - 1 ? barWidth : 0;
   }
   final share = parts[index] < 0 ? 0 : parts[index];
   return barWidth * share / total;

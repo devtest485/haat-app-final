@@ -311,6 +311,7 @@ class _StepAreaPainter extends CustomPainter {
     if (n == 0) return;
 
     double maxV = values.reduce((a, b) => a > b ? a : b);
+    final hasData = maxV > 0;
     if (maxV <= 0) maxV = 1;
 
     final colW = size.width / n;
@@ -376,7 +377,7 @@ class _StepAreaPainter extends CustomPainter {
     canvas.drawPath(visibleLine, linePaint);
 
     // Chota sa square marker (design me pehle step ke end par hai)
-    if (n > 1 && (p >= 1 || tip.dx >= colW)) {
+    if (hasData && n > 1 && (p >= 1 || tip.dx >= colW)) {
       final markerPaint = Paint()..color = _markerColor;
       canvas.drawRect(
         Rect.fromCenter(

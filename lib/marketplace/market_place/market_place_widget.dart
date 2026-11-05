@@ -777,6 +777,7 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                     ),
                                   ),
                                 ),
+                                if (_model.brands.isNotEmpty)
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 20.0),

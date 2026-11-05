@@ -201,7 +201,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Column(
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 180.0),
+                          child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Stack(
@@ -1728,42 +1731,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                       ],
                                                     ),
                                                   ),
-                                                  if (_model
-                                                          .transactionsLoaded &&
-                                                      (_model.transactions
-                                                              .length ==
-                                                          0))
-                                                    Text(
-                                                      'No transactions yet',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                    ),
                                                 ],
                                               ),
                                             ),
@@ -1879,6 +1846,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                               ],
                             ),
                           ],
+                        ),
                         ),
                       ],
                     ),
