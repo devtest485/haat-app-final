@@ -500,7 +500,7 @@ class HaatTapService : HostApduService() {
     override fun processCommandApdu(apdu: ByteArray, extras: Bundle?): ByteArray? {
         if (isSelect(apdu)) {
             selected = TapKeys.keyId(this) != null && TapKeys.privateKey() != null
-            if (selected && !open() && !TapKeys.background(this)) {
+            if (selected && !open()) {
                 selected = false
                 return CLOSED
             }

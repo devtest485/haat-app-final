@@ -12,7 +12,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 
 import '/app_state.dart';
-import '/custom_code/api_envelope.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/authorize_dialog.dart';
@@ -106,154 +105,26 @@ void openPayRequest(BuildContext context, String code) {
 
 // ══ Asking to be paid ══════════════════════════════════════════════════════════════
 
-/// Asks whoever holds the phone for the passcode or a fingerprint before tap to pay,
-/// a QR or a link for [amount], so a phone left on the counter can't be used in its
-/// owner's name. For tap to pay — the business paying whoever it taps — it also
-/// unlocks tapping on HAAT for five minutes.
+/// Checks [amount] before tap to pay, a QR or a link. Nothing is asked of whoever
+/// holds this phone: the merchant is collecting, and it is the customer who approves
+/// paying, with their passcode or a fingerprint, on their own phone.
 ///
-/// Returns `{ok: true}` once given, `{}` when the person closed the dialog.
+/// Returns `{ok: true}` for an amount above zero, `{}` otherwise.
 Future<Map<String, dynamic>> confirmItsYou(
   BuildContext context,
   String amount,
 ) async {
-  final session = AuthSession.instance;
-  final checks = await Future.wait<Object?>([
-    session.biometrics.availability(),
-    session.wallet.get().timeout(
-          const Duration(seconds: 2),
-          onTimeout: () => const ApiUnreachable<Wallet>('timeout',
-              message: '', messageAr: ''),
-        ),
-  ]);
-  final fingerprint = checks[0] == null;
-  final wallet = checks[1];
+  final wallet = await AuthSession.instance.wallet.get().timeout(
+        const Duration(seconds: 2),
+        onTimeout: () =>
+            const ApiUnreachable<Wallet>('timeout', message: '', messageAr: ''),
+      );
   final currency = wallet is ApiSuccess<Wallet> ? wallet.value.currency : 'SDG';
   final minor = toMinor(amount, currency);
   if (minor == null || minor <= BigInt.zero) {
     if (context.mounted) _toast(context, 'Enter an amount above zero first.');
     return {};
   }
-  if (!context.mounted) return {};
-
-  final confirmed = await _askItsYou(
-    context,
-    amount: _money(minor, currency),
-    name: 'your customer',
-    preposition: 'from',
-    verb: 'request',
-    fingerprint: fingerprint,
-  );
-  return confirmed && context.mounted ? _confirmed(context) : {};
-}
-
-/// Unlocks tap to pay again when it ran out while the tap page was open, for paying
-/// [amount] (as shown, with its currency). True once unlocked.
-Future<bool> unlockTapAgain(BuildContext context, String amount) async {
-  final fingerprint =
-      await AuthSession.instance.biometrics.availability() == null;
-  if (!context.mounted) return false;
-  return _askItsYou(
-    context,
-    amount: amount,
-    name: 'the phone you tap',
-    preposition: 'to',
-    verb: 'pay',
-    fingerprint: fingerprint,
-  );
-}
-
-/// The passcode or a fingerprint, asked until given or the dialog is closed.
-Future<bool> _askItsYou(
-  BuildContext context, {
-  required String amount,
-  required String name,
-  required String preposition,
-  required String verb,
-  required bool fingerprint,
-}) async {
-  final session = AuthSession.instance;
-  String? error;
-  // The same passcode or fingerprint unlocks tap to pay on HAAT for five minutes, so
-  // the tap itself asks nothing more while the phones are together. Someone who may
-  // not pay from the business — a cashier — has nothing to unlock: it is only checked.
-  var unlock = true;
-  while (context.mounted) {
-    final reference = const Uuid().v4();
-    final credential = await showAuthorizeDialog(
-      context,
-      amount: amount,
-      name: name,
-      preposition: preposition,
-      fingerprint: fingerprint,
-      verb: verb,
-      biometricTitle: 'Confirm it’s you',
-      error: error,
-      challenge: () async {
-        if (unlock) {
-          final issued = await session.payRequests.tapUnlockChallenge(reference);
-          if (!_nothingToUnlock(issued)) return issued;
-          unlock = false;
-        }
-        // Signing anything with the fingerprint key needs the fingerprint: proof
-        // enough on this phone that its owner is holding it.
-        return ApiSuccess(const Uuid().v4(), _localEnvelope);
-      },
-    );
-    if (!context.mounted || credential == null) return false;
-
-    if (unlock) {
-      final unlocked = await session.payRequests.tapUnlock(
-        reference: reference,
-        passcode: credential.passcode,
-        biometricSignature: credential.signature,
-      );
-      if (!context.mounted) return false;
-      if (unlocked is ApiSuccess<void>) return true;
-      if (unlocked is ApiUnreachable<void>) {
-        error = 'You’re offline. Connect, then try again.';
-        continue;
-      }
-      if (!_nothingToUnlock(unlocked)) {
-        error = unlocked.messageIn(session.languageCode);
-        continue;
-      }
-      unlock = false;
-    }
-    if (credential.signature != null) return true;
-
-    final checked =
-        await session.api.verifyPasscode(passcode: credential.passcode ?? '');
-    if (!context.mounted) return false;
-    if (checked case ApiSuccess<bool>(value: true)) return true;
-    error = switch (checked) {
-      ApiUnreachable<bool>() => 'You’re offline. Connect, then try again.',
-      ApiSuccess<bool>() => 'That passcode isn’t right. Try again.',
-      ApiFailure<bool>() => checked.messageIn(session.languageCode),
-    };
-  }
-  return false;
-}
-
-/// Refused for who is asking rather than for what they gave (403), or a HAAT that
-/// does not unlock tapping at all (404): the passcode or fingerprint is only checked.
-bool _nothingToUnlock(ApiResult<Object?> result) =>
-    result is ApiFailure<Object?> &&
-    (result.envelope.responseCode == 403 ||
-        result.envelope.responseCode == 404);
-
-const _localEnvelope = ApiEnvelope(
-  isSuccess: true,
-  title: '',
-  titleAr: '',
-  message: '',
-  messageAr: '',
-  data: <String, dynamic>{},
-  responseCode: 200,
-);
-
-Map<String, dynamic> _confirmed(BuildContext context) {
-  HapticFeedback.selectionClick();
-  _toast(context, 'Confirmed — you can take the payment now.');
   return {'ok': true};
 }
 

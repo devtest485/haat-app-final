@@ -220,8 +220,8 @@ class PayRequestApi {
         parse: (envelope) => PaymentRequest.fromData(envelope.object),
       );
 
-  /// A request for [amountMinor] to be paid, from this business, to whoever holds their
-  /// phone to this one. Lasts five minutes; needs [tapUnlock] first.
+  /// A request for [amountMinor] to be paid to this business by whoever holds their
+  /// phone to this one, approving it there. Lasts five minutes.
   Future<ApiResult<PaymentRequest>> createTap({
     required BigInt amountMinor,
     required String currency,

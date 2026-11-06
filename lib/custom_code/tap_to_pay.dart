@@ -6,24 +6,20 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 
-import '/custom_code/api_config.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/pay_request_api.dart';
-import '/custom_code/pay_request_flow.dart' show unlockTapAgain;
 import '/custom_code/payout_api.dart' show toMinor;
 import '/custom_code/transfer_api.dart';
 import '/custom_code/wallet_api.dart';
 import '/custom_code/widgets/wallet_balance.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
-// Tap to pay, both phones. The phone that makes the tap pays the phone held to it:
-// its owner unlocks it with the passcode or a fingerprint first (confirmItsYou in
-// pay_request_flow.dart), so nothing is asked while the phones are together. The NFC
-// half is native — HaatTapService (the phone being paid, answering like a card) and
-// TapBridge (the paying phone, reading it) in MainActivity.kt. This is the rest:
-// setting a phone up to be tapped, making the request, reading the other phone and
-// paying it, and the receipt on the phone that was paid.
+// Tap to pay, both phones. The NFC half is native — HaatTapService (the customer's
+// phone, answering like a card) and TapBridge (the merchant's, reading it) in
+// MainActivity.kt. This is the rest: setting a phone up to be tapped, making the
+// request, reading the customer's phone and charging what it signed, and the
+// customer's receipt.
 
 const _channel = MethodChannel('com.mycompany.haat/tap');
 const _ink = Color(0xFF111111);
@@ -134,17 +130,16 @@ void _showStatus(Map<String, dynamic> outcome) {
   navigator.context.pushNamed(
     _statusRoute,
     queryParameters: {
-      'paymentStatus':
-          serializeParam(outcome['paymentStatus'], ParamType.String),
+      'paymentStatus': serializeParam(outcome['paymentStatus'], ParamType.String),
       'outcome': serializeParam(outcome, ParamType.JSON),
     }.withoutNulls,
   );
 }
 
-/// Who was paid, as the paying phone shows them: `Amna Osman · •••• 4821`.
-String _payeeLine(dynamic payee) => [
-      _field(payee, 'payeeName'),
-      _field(payee, 'payeeMobileMasked'),
+/// Who paid, as the merchant's phone shows them: `Amna Osman · •••• 4821`.
+String _payerLine(dynamic payer) => [
+      _field(payer, 'payerName'),
+      _field(payer, 'payerMobileMasked'),
     ].where((part) => part.isNotEmpty).join(' · ');
 
 // ══ Setting a phone up to be tapped ════════════════════════════════════════════════
@@ -235,39 +230,15 @@ class TapToPay {
   }
 }
 
-// ══ Paid by tap while locked ══════════════════════════════════════════════════════
+// ══ Tapped while locked ════════════════════════════════════════════════════════════
 
-/// Whether this phone is paid by tap with the screen locked or off, or HAAT closed —
-/// Security's switch. Null on a phone that cannot be paid by tap at all.
-///
-/// `{on, screenOff, notifications}`: `screenOff` is false before Android 12, where a
-/// tap needs the screen on (locked is fine); `notifications` false means the payment
-/// still happens but nothing tells the owner.
-Future<Map<String, dynamic>?> tapWhileLockedStatus() async {
-  if (!_android) return null;
-  try {
-    final status =
-        await _channel.invokeMapMethod<String, dynamic>('background');
-    if (status == null || status['card'] != true) return null;
-    return status;
-  } catch (_) {
-    return null;
-  }
-}
+/// Security's "Tap to receive when locked" switch. Always null, so it is not shown:
+/// a phone held to a merchant's is the one paying, and its owner approves the amount
+/// on its screen — never with the phone locked or HAAT closed.
+Future<Map<String, dynamic>?> tapWhileLockedStatus() async => null;
 
-/// Turns [tapWhileLockedStatus] on or off. Turning it on asks for notifications, the
-/// only way a payment taken with HAAT closed is told.
-Future<bool> setTapWhileLocked(bool on) async {
-  try {
-    return await _channel.invokeMethod<bool>(
-          'setBackground',
-          {'on': on, 'apiBase': ApiConfig.baseUrl},
-        ) ??
-        false;
-  } catch (_) {
-    return false;
-  }
-}
+/// Kept for Security's switch; nothing to turn on.
+Future<bool> setTapWhileLocked(bool on) async => false;
 
 // ══ Asking to be paid by tap ═══════════════════════════════════════════════════════
 
@@ -281,10 +252,7 @@ final _createReferences = <String, String>{};
 /// `confirmOnPhone` — or `{error}`, a sentence to show.
 Future<Map<String, dynamic>> createTapPayment(String amount) async {
   if (!_android) {
-    return {
-      'error':
-          'Tap to pay works on Android phones with NFC. Use the QR instead.'
-    };
+    return {'error': 'Tap to pay works on Android phones with NFC. Use the QR instead.'};
   }
   try {
     final phone = await _channel.invokeMapMethod<String, dynamic>('status');
@@ -311,14 +279,8 @@ Future<Map<String, dynamic>> createTapPayment(String amount) async {
     reference: reference,
   );
   if (created is ApiFailure<PaymentRequest>) {
-    _createReferences.remove(slot);
-    if (created.data['field'] == 'unlock') {
-      return {
-        'error': 'Tap to pay locked again. Go back and choose Tap to pay to '
-            'confirm it’s you.'
-      };
-    }
     // Refused — above what the bank allows, or not allowed at all: the red screen.
+    _createReferences.remove(slot);
     return _failed(
       [('Amount', _money(minor, currency)), ('Paid by', 'Tap to pay')],
       created.messageIn(session.languageCode),
@@ -326,8 +288,7 @@ Future<Map<String, dynamic>> createTapPayment(String amount) async {
   }
   if (created is! ApiSuccess<PaymentRequest>) {
     return {
-      'error':
-          'You’re offline, so the tap couldn’t start. Tap here to try again.'
+      'error': 'You’re offline, so the tap couldn’t start. Tap here to try again.'
     };
   }
   _createReferences.remove(slot);
@@ -346,15 +307,14 @@ Future<Map<String, dynamic>> createTapPayment(String amount) async {
   };
 }
 
-/// Reads the phone held to this one and pays it [request]'s amount, while the page is
-/// open.
+/// Reads the customer's phone and charges [request] to it, while the page is open.
 ///
-/// Keeps reading through a phone pulled away too soon, not set up or not allowed to be
-/// paid, saying so in a line at the foot of the screen, and asks for the passcode or
-/// fingerprint again if tapping locked meanwhile. Returns the PaymentStatus outcome
-/// once paid or refused (the red screen), `{problem}` when it cannot go on — this
-/// business's balance too short among them, said in a dialog first — and `{}` once the
-/// page is closed.
+/// Keeps reading through a phone pulled away too soon or not set up, saying so in a
+/// line at the foot of the screen, and through a customer without enough balance,
+/// saying so in a dialog. Returns the PaymentStatus outcome once paid or refused (the
+/// red screen), `{confirm: true, waiting, payerName}` when the customer approves on
+/// their phone instead (the amount is above what a tap pays alone), `{problem}` when
+/// it cannot go on, and `{}` once the page is closed.
 Future<Map<String, dynamic>> tapToPay(
   BuildContext context,
   dynamic request,
@@ -363,6 +323,9 @@ Future<Map<String, dynamic>> tapToPay(
   final amountMinor = BigInt.tryParse(_field(request, 'amountMinor'));
   final currency = _field(request, 'currency');
   if (code.isEmpty || amountMinor == null) return {};
+  // The merchant collects: the customer always approves the amount on their own
+  // phone, with their passcode or a fingerprint. Nothing is asked on this one.
+  const confirm = true;
   final expiresAt = DateTime.tryParse(_field(request, 'expiresAt'));
   bool expired() => expiresAt != null && !expiresAt.isAfter(DateTime.now());
 
@@ -373,15 +336,6 @@ Future<Map<String, dynamic>> tapToPay(
     if (!context.mounted || expired()) {
       timer.cancel();
       _channel.invokeMethod<bool>('cancelRead').catchError((_) => false);
-    }
-  });
-  // Kept warm while waiting — the connection open, the sign-in fresh — so the tap is
-  // one quick call, with nothing to set up first while the phones are together.
-  final warm = Timer.periodic(const Duration(seconds: 20), (timer) {
-    if (!context.mounted || expired()) {
-      timer.cancel();
-    } else {
-      session.wallet.get();
     }
   });
 
@@ -397,8 +351,7 @@ Future<Map<String, dynamic>> tapToPay(
               'code': code,
               'amountMinor': amountMinor.toString(),
               'currency': currency,
-              // Nobody approves on the other phone: this one was unlocked first.
-              'confirm': false,
+              'confirm': confirm,
             }) ??
             '';
       } on PlatformException catch (error) {
@@ -412,13 +365,12 @@ Future<Map<String, dynamic>> tapToPay(
             };
           case 'not_set_up':
             HapticFeedback.heavyImpact();
-            hint.show('That phone can’t be paid by tap yet. It needs HAAT open '
-                'and signed in once — or use the QR.');
+            hint.show('That phone can’t pay by tap yet. The customer needs '
+                'HAAT open and signed in once — or use the QR.');
           case 'closed':
             HapticFeedback.heavyImpact();
-            hint.show(
-                'HAAT is closed on that phone. Ask them to open it — or to '
-                'turn on Tap to receive when locked, under Security.');
+            hint.show('HAAT is closed on that phone. Ask the customer to open '
+                'it, then tap again — or use the QR.');
           case 'lost':
             hint.show('Hold the phones together a moment longer.');
           case 'cancelled':
@@ -434,13 +386,23 @@ Future<Map<String, dynamic>> tapToPay(
       final keyId = _field(answer, 'k');
       final signature = _field(answer, 's');
       if (keyId.isEmpty || signature.isEmpty) {
+        // A phone that approves on its own screen but can't sign yet: it asks there.
+        if (answer['confirm'] == true) {
+          HapticFeedback.mediumImpact();
+          hint.hide();
+          return {
+            'confirm': true,
+            'waiting': 'Waiting for the customer\nto approve on their phone',
+          };
+        }
         hint.show('Couldn’t read that phone. Try again.');
         continue;
       }
 
-      // HAAT answers while the phones are still together: paid, or why not.
+      // HAAT answers while the phones are still together: paid, or approve on the
+      // phone, or why not.
       HapticFeedback.selectionClick();
-      hint.show('Paying…', hold: true);
+      hint.show('Checking…', hold: true);
       final charged = await _charge(code, keyId, signature);
       if (!context.mounted) return {};
 
@@ -448,40 +410,46 @@ Future<Map<String, dynamic>> tapToPay(
         hint.hide();
         HapticFeedback.mediumImpact();
         WalletBalance.refreshNow();
-        return _paid(charged.value, request, charged.envelope.object);
+        return _received(charged.value, request, charged.envelope.object);
       }
 
       if (charged is ApiFailure<TransferReceipt>) {
         final data = charged.data;
         final field = data['field'];
         final message = charged.messageIn(session.languageCode);
+        final payer = _field(data, 'payerName');
         hint.hide();
-        HapticFeedback.heavyImpact();
-        // Tapping locked while the page was open: unlock it, then read again.
-        if (field == 'unlock') {
-          if (await unlockTapAgain(context, _money(amountMinor, currency))) {
-            continue;
-          }
-          return {};
+        if (field == 'confirm') {
+          HapticFeedback.mediumImpact();
+          return {
+            'confirm': true,
+            'payerName': payer,
+            'payerMobileMasked': _field(data, 'payerMobileMasked'),
+            'waiting': payer.isEmpty
+                ? 'Waiting for the customer\nto approve on their phone'
+                : 'Waiting for $payer\nto approve on their phone',
+          };
         }
-        // That phone, not this request: the next phone may be paid with it.
+        HapticFeedback.heavyImpact();
+        // That phone, not this request: the next phone may pay it.
         if (field == 'tap') {
           hint.show(message);
           continue;
         }
         if (field == 'balance') {
-          final wallet = await session.wallet.get();
-          if (!context.mounted) return {};
           await showTapNotice(
             context,
             title: 'Not enough balance',
-            message: 'You don’t have enough in your HAAT wallet to pay '
-                '${_money(amountMinor, currency)} and its fee. Nothing was paid.'
-                '${wallet is ApiSuccess<Wallet> ? '\n\nAvailable: ${_money(wallet.value.available, wallet.value.currency)}' : ''}',
+            message: '${payer.isEmpty ? 'The customer doesn’t' : '$payer doesn’t'} '
+                'have enough in their HAAT wallet to pay '
+                '${_money(amountMinor, currency)}. Nothing was paid. Ask them to '
+                'top up, or use the QR with another account.',
           );
-          return {
-            'problem': 'Not enough balance. Top up, then tap here to try again.'
-          };
+          continue;
+        }
+        if (field == 'passcode' || field == 'biometric') {
+          hint.show(message);
+          continue;
         }
         // Refused by the rules — above the admin's limit, another bank — or the
         // request ended: the red screen, saying why.
@@ -492,13 +460,13 @@ Future<Map<String, dynamic>> tapToPay(
                 BigInt.tryParse(_field(data, 'limitMinor')),
                 BigInt.tryParse(_field(data, 'remainingMinor')),
                 currency,
-                who: 'You',
+                who: payer.isEmpty ? 'The customer' : payer,
               )
             : null;
         return _failed(
           [
             ('Amount', _money(amountMinor, currency)),
-            if (_payeeLine(data).isNotEmpty) ('Paid to', _payeeLine(data)),
+            if (_payerLine(data).isNotEmpty) ('Customer', _payerLine(data)),
             if (invoice.isNotEmpty && invoice != code) ('Invoice', invoice),
             ('Request code', code),
             ('Paid by', 'Tap to pay'),
@@ -516,13 +484,12 @@ Future<Map<String, dynamic>> tapToPay(
     return {};
   } finally {
     watch.cancel();
-    warm.cancel();
     hint.hide();
     await _channel.invokeMethod<bool>('cancelRead').catchError((_) => false);
   }
 }
 
-/// Pays the tap, again on a dropped connection: the server pays a tap request once,
+/// Charges the tap, again on a dropped connection: the server pays a request once,
 /// so asking twice cannot pay twice.
 Future<ApiResult<TransferReceipt>> _charge(
   String code,
@@ -539,27 +506,22 @@ Future<ApiResult<TransferReceipt>> _charge(
   return result;
 }
 
-/// The paying phone's screen once a tap is paid: how much, and to whom.
-Map<String, dynamic> _paid(
+/// The merchant's screen once a tap is paid: how much, and who paid it.
+Map<String, dynamic> _received(
   TransferReceipt receipt,
   dynamic request,
-  dynamic payee,
+  dynamic payer,
 ) {
   final code = _field(request, 'code');
   final invoice = _field(request, 'invoice');
-  final name = _field(payee, 'payeeName').isNotEmpty
-      ? _field(payee, 'payeeName')
-      : receipt.recipientName;
-  final mobile = _field(payee, 'payeeMobileMasked');
+  final name = _field(payer, 'payerName');
+  final mobile = _field(payer, 'payerMobileMasked');
   final reference = receipt.transactionId.split('-').first.toUpperCase();
   final when = dateTimeFormat('d MMM y · HH:mm', receipt.occurredAt);
 
   if (receipt.isRejected) {
     return _failed(
-      [
-        ('Amount', _money(receipt.amountMinor, receipt.currency)),
-        ('Reference number', reference)
-      ],
+      [('Amount', _money(receipt.amountMinor, receipt.currency)), ('Reference number', reference)],
       receipt.reason ?? '',
     );
   }
@@ -569,7 +531,7 @@ Map<String, dynamic> _paid(
       'details': [
         for (final (label, value) in [
           ('Amount', _money(receipt.amountMinor, receipt.currency)),
-          if (name.isNotEmpty) ('To', name),
+          if (name.isNotEmpty) ('From', name),
           ('Request code', code),
           ('Reference number', reference),
           ('Date & Time', when),
@@ -581,31 +543,26 @@ Map<String, dynamic> _paid(
   }
   return _outcome(
     [
-      if (name.isNotEmpty) ('Paid to', name),
+      if (name.isNotEmpty) ('Paid by', name),
       if (mobile.isNotEmpty) ('Phone', mobile),
       if (invoice.isNotEmpty && invoice != code) ('Invoice', invoice),
       ('Request code', code),
-      if (receipt.feeMinor > BigInt.zero)
-        ('Fee', _money(receipt.feeMinor, receipt.currency)),
       ('Method', 'Tap to pay'),
       ('Reference number', reference),
       ('Date & time', when),
     ],
-    title: 'Payment sent',
+    title: 'Payment received',
     amountMinor: receipt.amountMinor,
     currency: receipt.currency,
-    subtitle: name.isEmpty ? 'Tap to pay' : '$name · Tap to pay',
-    share: 'HAAT payment receipt\n'
-        'Paid ${_money(receipt.amountMinor, receipt.currency)}'
-        '${name.isEmpty ? '' : ' to $name'} by tap',
+    subtitle: name.isEmpty ? 'Paid into your HAAT wallet' : 'From $name · Tap to pay',
+    share: 'HAAT payment received\n'
+        '${_money(receipt.amountMinor, receipt.currency)}'
+        '${name.isEmpty ? '' : ' from $name'} by tap to pay',
   );
 }
 
 /// Waits, while the page is open, for the customer to approve [request] on their
 /// phone after a tap.
-///
-/// From when the tapped phone paid; [tapToPay] no longer asks for it — the paying
-/// phone is unlocked first — and it stays only for TapPayOut's existing action.
 ///
 /// Asks HAAT every second, so the merchant's screen turns as soon as the customer's
 /// does. [tapped] is what the tap said about the customer. Returns the PaymentStatus
@@ -643,17 +600,12 @@ Future<Map<String, dynamic>> awaitTapApproval(
           if (invoice != null && invoice != now.code) ('Invoice', invoice),
           ('Request code', now.code),
           ('Method', 'Tap to pay · approved on phone'),
-          (
-            'Date & time',
-            dateTimeFormat('d MMM y · HH:mm', now.paidAt ?? DateTime.now())
-          ),
+          ('Date & time', dateTimeFormat('d MMM y · HH:mm', now.paidAt ?? DateTime.now())),
         ],
         title: 'Payment received',
         amountMinor: now.amountMinor,
         currency: now.currency,
-        subtitle: name.isEmpty
-            ? 'Paid into your HAAT wallet'
-            : 'From $name · Tap to pay',
+        subtitle: name.isEmpty ? 'Paid into your HAAT wallet' : 'From $name · Tap to pay',
         share: 'HAAT payment received\n'
             '${_money(now.amountMinor, now.currency)}'
             '${name.isEmpty ? '' : ' from $name'} by tap to pay',
@@ -665,8 +617,7 @@ Future<Map<String, dynamic>> awaitTapApproval(
     if (now?.status == 'expired' ||
         (expiresAt != null && !expiresAt.isAfter(DateTime.now()))) {
       return {
-        'problem':
-            'The customer didn’t approve in time. Tap here to start again.'
+        'problem': 'The customer didn’t approve in time. Tap here to start again.'
       };
     }
   }
@@ -682,7 +633,7 @@ Map<String, dynamic> _decode(String reply) {
   }
 }
 
-// ══ The phone being paid ═══════════════════════════════════════════════════════════
+// ══ The customer's phone ═══════════════════════════════════════════════════════════
 
 /// Why this phone can't pay [p], read the way the merchant's phone reads it.
 ///
@@ -716,8 +667,7 @@ String _refusalReason(PaymentRequestPreview p) => switch (p.refusal) {
           ) ??
           'This amount is above the limit the admin allows.',
       'no_rule' => 'Your bank doesn’t allow this payment yet.',
-      'other_bank' =>
-        'This request is for a different bank than your HAAT wallet.',
+      'other_bank' => 'This request is for a different bank than your HAAT wallet.',
       _ => 'This payment can’t be made right now.',
     };
 
@@ -729,8 +679,7 @@ Future<bool> _sayWhyNot(
   Wallet? wallet,
   String? refusal,
 ) async {
-  final amount =
-      _money(p.totalMinor ?? p.amountMinor ?? BigInt.zero, p.currency);
+  final amount = _money(p.totalMinor ?? p.amountMinor ?? BigInt.zero, p.currency);
   final name = p.requester.name;
   switch (refusal) {
     case 'limit':
@@ -776,57 +725,45 @@ Future<(PaymentRequestPreview?, Wallet?)> _readTap(String code) async {
   );
 }
 
-/// Shows this phone what it was just paid, once HAAT says so.
+/// Shows the customer what their phone just paid, once HAAT says it is paid.
 ///
-/// The phone opens here right after answering a tap; the phone that made the tap is
-/// paying it meanwhile — into a request of this business's own, made for that tap —
-/// so this asks HAAT every half second or so for that request, paid: the newest tap
-/// request for the tap's amount. Who paid is read from the tap request [code] itself.
+/// The phone opens here right after answering a merchant's tap; the merchant's
+/// phone is charging it meanwhile, so this asks HAAT every half second or so. A tap
+/// HAAT refuses says why here too: the red screen above the bank's limit, a dialog
+/// when the wallet is short.
 Future<void> openTapReceipt(BuildContext context, String code) async {
-  final hint = _Hint()..show('Getting paid…', hold: true);
-  final session = AuthSession.instance;
-  // Two minutes back, so a phone clock a little off HAAT's still finds the payment.
-  final since = DateTime.now().subtract(const Duration(minutes: 2));
-  PaymentRequestPreview? tap;
+  final hint = _Hint()..show('Paying…', hold: true);
+  var shortSeen = false;
   try {
-    for (var attempt = 0; attempt < 30; attempt++) {
+    for (var attempt = 0; attempt < 24; attempt++) {
       if (attempt > 0) {
-        await Future.delayed(Duration(milliseconds: attempt < 10 ? 300 : 800));
+        await Future.delayed(Duration(milliseconds: attempt < 6 ? 500 : 900));
       }
-      // The tap request is closed once it has paid, so a look at this business's own
-      // after it was seen closed shows the payment by then.
-      final closed = tap != null && tap.status != 'open';
-      final reading = closed ? null : session.payRequests.preview(code);
-      final listed = await session.payRequests.list(limit: 10);
-      final read = await reading;
-      if (read is ApiSuccess<PaymentRequestPreview>) tap = read.value;
-      if (listed is ApiFailure<List<PaymentRequest>>) {
-        // Not allowed to see this business's requests: the payment shows in its
-        // transactions instead.
-        WalletBalance.refreshNow();
-        hint.show('Check your transactions to see the payment.');
-        return;
-      }
-      final owed = listed is ApiSuccess<List<PaymentRequest>>
-          ? listed.value
-              .where((r) =>
-                  r.channel == 'nfc' &&
-                  r.isPaid &&
-                  (r.paidAt == null || r.paidAt!.isAfter(since)) &&
-                  (tap?.amountMinor == null ||
-                      r.amountMinor == tap!.amountMinor))
-              .firstOrNull
-          : null;
+      final (p, wallet) = await _readTap(code);
+      if (p == null) continue;
 
-      if (owed != null) {
+      if (p.status == 'paid') {
         hint.hide();
         HapticFeedback.mediumImpact();
         WalletBalance.refreshNow();
-        _showStatus(_received(owed, tap));
+        _showStatus(_sent(p, approved: false));
         return;
       }
-      // Seen closed before this look, and nothing paid here: it ended without paying.
-      if (closed) break;
+
+      final refusal = _refusalOf(p, wallet);
+      if (refusal == 'ended') break;
+      // Short twice in a row, so a balance read just after the payment left it is
+      // not taken for one too small to make it.
+      if (refusal == 'balance' && !shortSeen) {
+        shortSeen = true;
+        continue;
+      }
+      if (refusal != null) {
+        hint.hide();
+        await _sayWhyNot(context, p, wallet, refusal);
+        return;
+      }
+      shortSeen = false;
     }
     hint.show('The tap didn’t go through. Nothing was paid.');
   } catch (_) {
@@ -834,32 +771,30 @@ Future<void> openTapReceipt(BuildContext context, String code) async {
   }
 }
 
-/// What a tap paid this phone, as its receipt; [tap] says who paid.
-Map<String, dynamic> _received(
-    PaymentRequest owed, PaymentRequestPreview? tap) {
-  final payer = tap?.requester;
-  final name = payer?.name ?? '';
-  final handle = payer == null ? '' : payer.username ?? payer.handle;
+/// What a tap paid, as the customer's receipt.
+Map<String, dynamic> _sent(PaymentRequestPreview p, {required bool approved}) {
+  final amount = p.amountMinor ?? BigInt.zero;
+  final requester = p.requester;
+  final name = requester.name;
+  final handle = requester.username ?? requester.handle;
   return _outcome(
     [
-      if (name.isNotEmpty) ('Paid by', name),
+      ('Paid to', name),
       if (handle.isNotEmpty) ('Username', '@$handle'),
-      if (payer?.mobileMasked != null) ('Phone', payer!.mobileMasked!),
-      ('Request code', tap?.code ?? owed.code),
-      ('Method', 'Tap to pay'),
-      (
-        'Date & time',
-        dateTimeFormat('d MMM y · HH:mm', owed.paidAt ?? DateTime.now())
-      ),
+      if (requester.mobileMasked != null) ('Phone', requester.mobileMasked!),
+      if (p.invoiceReference != null) ('Invoice', p.invoiceReference!),
+      ('Request code', p.code),
+      if (p.feeMinor != null && p.feeMinor! > BigInt.zero)
+        ('Fee', _money(p.feeMinor!, p.currency)),
+      ('Method', approved ? 'Tap to pay · approved on phone' : 'Tap to pay'),
+      ('Date & time', dateTimeFormat('d MMM y · HH:mm', DateTime.now())),
     ],
-    title: 'Payment received',
-    amountMinor: owed.amountMinor,
-    currency: owed.currency,
-    subtitle:
-        name.isEmpty ? 'Paid into your HAAT wallet' : 'From $name · Tap to pay',
-    share: 'HAAT payment received\n'
-        '${_money(owed.amountMinor, owed.currency)}'
-        '${name.isEmpty ? '' : ' from $name'} by tap to pay',
+    title: 'Payment sent',
+    amountMinor: amount,
+    currency: p.currency,
+    subtitle: '$name · Tap to pay',
+    share: 'HAAT payment receipt\n'
+        'Paid ${_money(amount, p.currency)} to $name by tap',
   );
 }
 
@@ -898,8 +833,7 @@ Future<void> openTapApproval(BuildContext context, String code) async {
     if (navigator == null) return;
     navigator.context.pushNamed(
       _approvalRoute,
-      queryParameters:
-          {'code': serializeParam(p.code, ParamType.String)}.withoutNulls,
+      queryParameters: {'code': serializeParam(p.code, ParamType.String)}.withoutNulls,
     );
   } catch (_) {
     hint.hide();
@@ -923,11 +857,9 @@ Future<void> showTapNotice(
     transitionDuration: MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 200),
-    pageBuilder: (dialogContext, __, ___) =>
-        _Notice(title: title, message: message),
+    pageBuilder: (dialogContext, __, ___) => _Notice(title: title, message: message),
     transitionBuilder: (_, animation, __, child) {
-      final curved =
-          CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+      final curved = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
       return FadeTransition(
         opacity: curved,
         child: ScaleTransition(
@@ -1072,16 +1004,14 @@ class _HintPill extends StatelessWidget {
           curve: Curves.easeOut,
           builder: (_, t, child) => Opacity(
             opacity: t,
-            child: Transform.translate(
-                offset: Offset(0, 8 * (1 - t)), child: child),
+            child: Transform.translate(offset: Offset(0, 8 * (1 - t)), child: child),
           ),
           child: Center(
             child: Material(
               color: _ink,
               borderRadius: BorderRadius.circular(16),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: ValueListenableBuilder<String>(
                   valueListenable: text,
                   builder: (_, value, __) => Text(
