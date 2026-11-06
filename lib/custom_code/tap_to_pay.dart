@@ -33,6 +33,9 @@ const _statusRoute = 'PaymentStatus';
 /// The page that shows a request's invoice, with Approve & pay.
 const _approvalRoute = 'PayRequestApproval';
 
+/// How long the merchant's phone waits for a customer's phone to be tapped.
+const _tapWindow = Duration(minutes: 1);
+
 bool get _android => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
 String _field(dynamic json, String name) {
@@ -328,12 +331,16 @@ Future<Map<String, dynamic>> tapToPay(
   const confirm = true;
   final expiresAt = DateTime.tryParse(_field(request, 'expiresAt'));
   bool expired() => expiresAt != null && !expiresAt.isAfter(DateTime.now());
+  // Nobody tapped within a minute: the reader closes rather than wait on.
+  final deadline = DateTime.now().add(_tapWindow);
+  bool timedOut() => !DateTime.now().isBefore(deadline);
 
   final session = AuthSession.instance;
   final hint = _Hint();
-  // Reading only stops from here: the page closing, or the request running out.
+  // Reading only stops from here: the page closing, the request running out, or
+  // the minute passing with no phone.
   final watch = Timer.periodic(const Duration(milliseconds: 400), (timer) {
-    if (!context.mounted || expired()) {
+    if (!context.mounted || expired() || timedOut()) {
       timer.cancel();
       _channel.invokeMethod<bool>('cancelRead').catchError((_) => false);
     }
@@ -343,6 +350,16 @@ Future<Map<String, dynamic>> tapToPay(
     while (context.mounted) {
       if (expired()) {
         return {'problem': 'This tap has expired. Tap here to start again.'};
+      }
+      if (timedOut()) {
+        // So a phone tapped late can't pay a request nobody is waiting on.
+        final id = _field(request, 'id');
+        if (id.isNotEmpty) unawaited(session.payRequests.cancel(id));
+        HapticFeedback.heavyImpact();
+        return {
+          'problem': 'No phone was tapped within a minute, so this tap closed. '
+              'Tap here to start again.'
+        };
       }
 
       String reply;
