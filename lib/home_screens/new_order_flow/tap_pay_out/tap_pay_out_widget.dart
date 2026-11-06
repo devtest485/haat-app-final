@@ -271,7 +271,7 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 80.0, 0.0, 130.0),
+                                0.0, 240.0, 0.0, 60.0),
                             child: Container(
                               width: double.infinity,
                               height: 79.2,
