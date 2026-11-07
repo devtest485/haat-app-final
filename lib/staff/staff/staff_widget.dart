@@ -177,7 +177,7 @@ class _StaffWidgetState extends State<StaffWidget> {
                               Container(
                                 child: Builder(
                                   builder: (context) {
-                                    if (_model.staff.isNotEmpty) {
+                                    if (_model.staff.length > 0) {
                                       return Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 24.0, 0.0, 24.0),
@@ -607,7 +607,7 @@ class _StaffWidgetState extends State<StaffWidget> {
                           ),
                         ),
                       ),
-                      if (_model.staff.isNotEmpty)
+                      if (_model.staff.length > 0)
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               15.0, 0.0, 15.0, 35.0),

@@ -76,17 +76,7 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                     width: 32.0,
                     height: 32.0,
                     decoration: BoxDecoration(
-                      color: () {
-                        if (widget!.tone == 'sent') {
-                          return Color(0xFFFFF5D6);
-                        } else if (widget!.tone == 'received') {
-                          return Color(0x1F00DA76);
-                        } else if (widget!.tone == 'held') {
-                          return Color(0xFFFFF5D6);
-                        } else {
-                          return Color(0xFFF1F1F1);
-                        }
-                      }(),
+                      color: Color(0xFFF1F1F1),
                       shape: BoxShape.circle,
                     ),
                     alignment: AlignmentDirectional(0.0, 0.0),
@@ -98,31 +88,13 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                           if (widget!.incoming)
                             Icon(
                               Icons.south_west,
-                              color: () {
-                                if (widget!.tone == 'received') {
-                                  return Color(0xFF00794A);
-                                } else if (widget!.tone == 'declined') {
-                                  return Color(0xFF8A8A8A);
-                                } else {
-                                  return Colors.black;
-                                }
-                              }(),
+                              color: Colors.black,
                               size: 16.0,
                             ),
                           if (widget!.incoming == false)
                             Icon(
                               Icons.arrow_outward,
-                              color: () {
-                                if (widget!.tone == 'sent') {
-                                  return Color(0xFF7A5600);
-                                } else if (widget!.tone == 'held') {
-                                  return Color(0xFF7A5600);
-                                } else if (widget!.tone == 'declined') {
-                                  return Color(0xFF8A8A8A);
-                                } else {
-                                  return Colors.black;
-                                }
-                              }(),
+                              color: Colors.black,
                               size: 16.0,
                             ),
                           if ((widget!.paymentMethod == 'tap') ||
@@ -268,65 +240,38 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                 .fontStyle,
                           ),
                     ),
-                  if (widget!.tone != '')
-                    Container(
-                      decoration: BoxDecoration(
-                        color: () {
-                          if (widget!.tone == 'sent') {
-                            return Color(0xFFFFC21A);
-                          } else if (widget!.tone == 'received') {
-                            return Color(0x1F00DA76);
-                          } else if (widget!.tone == 'held') {
-                            return Color(0xFFFFF1C2);
-                          } else if (widget!.tone == 'declined') {
-                            return Color(0xFFF1F1F1);
-                          } else {
-                            return Colors.transparent;
-                          }
-                        }(),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(100.0),
-                          topRight: Radius.circular(100.0),
-                          bottomLeft: Radius.circular(100.0),
-                          bottomRight: Radius.circular(100.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(9.0, 4.0, 9.0, 4.0),
-                        child: Text(
-                          widget!.amount!,
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: () {
-                                      if (widget!.tone == 'sent') {
-                                        return Color(0xFF111111);
-                                      } else if (widget!.tone == 'received') {
-                                        return Color(0xFF00794A);
-                                      } else if (widget!.tone == 'held') {
-                                        return Color(0xFF7A5600);
-                                      } else if (widget!.tone == 'declined') {
-                                        return Color(0xFF6C6C6C);
-                                      } else {
-                                        return Colors.black;
-                                      }
-                                    }(),
-                                    fontSize: 12.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(100.0),
+                        topRight: Radius.circular(100.0),
+                        bottomLeft: Radius.circular(100.0),
+                        bottomRight: Radius.circular(100.0),
                       ),
                     ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(9.0, 4.0, 9.0, 4.0),
+                      child: Text(
+                        widget!.amount!,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: Colors.black,
+                              fontSize: 12.0,
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                      ),
+                    ),
+                  ),
                 ].divide(SizedBox(width: 12.0)),
               ),
             ),

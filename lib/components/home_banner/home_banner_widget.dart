@@ -79,7 +79,7 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
               width: 159.46,
               decoration: BoxDecoration(),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12.0, 6.0, 0.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(12.0, 15.0, 0.0, 0.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment:
@@ -118,36 +118,40 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
                             (FFCrossAxisAlignment.start).flutterValue,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
-                          Text(
-                            valueOrDefault<String>(
-                              widget!.title,
-                              '.',
-                            ),
-                            maxLines: 2,
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  font: GoogleFonts.montserrat(
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 9.0),
+                            child: Text(
+                              valueOrDefault<String>(
+                                widget!.title,
+                                '.',
+                              ),
+                              maxLines: 2,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.montserrat(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: functions
+                                        .bannerOnColor(widget!.backgroundColor),
+                                    fontSize: 16.0,
+                                    letterSpacing: 0.0,
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontWeight,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
+                                    lineHeight: 1.3,
                                   ),
-                                  color: functions
-                                      .bannerOnColor(widget!.backgroundColor),
-                                  fontSize: 16.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontStyle,
-                                  lineHeight: 1.3,
-                                ),
-                            overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(

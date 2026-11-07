@@ -54,6 +54,7 @@ class _SetupBisinessLocationPageWidgetState
       },
       child: Scaffold(
         key: scaffoldKey,
+        resizeToAvoidBottomInset: false,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Container(
           width: double.infinity,
@@ -101,7 +102,7 @@ class _SetupBisinessLocationPageWidgetState
                                 ),
                               ),
                               Text(
-                                'Let\'s set up your business',
+                                'Lets setup your business ',
                                 textAlign: TextAlign.center,
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium

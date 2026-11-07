@@ -2,12 +2,17 @@ import '/components/transaction_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'orders_model.dart';
 export 'orders_model.dart';
 
+/// The business's paid sales with its own products in them, newest first; a
+/// card opens to show what was sold.
 class OrdersWidget extends StatefulWidget {
   const OrdersWidget({super.key});
 
@@ -27,6 +32,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OrdersModel());
+    _model.setOnUpdate(onUpdate: () => safeSetState(() {}));
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -122,7 +128,10 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                         .fontStyle,
                                   ),
                         ),
-                        SizedBox(width: 24.0),
+                        Container(
+                          width: 24.0,
+                          decoration: BoxDecoration(),
+                        ),
                       ],
                     ),
                     Expanded(
@@ -139,7 +148,12 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(16.0),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(16.0),
+                                        topRight: Radius.circular(16.0),
+                                        bottomLeft: Radius.circular(16.0),
+                                        bottomRight: Radius.circular(16.0),
+                                      ),
                                     ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -187,8 +201,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                               true) {
                             return Column(
                               mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                                  (FFMainAxisAlignment.center).flutterValue,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
                                   width: 64.0,
@@ -279,8 +292,12 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .primaryBackground,
-                                        borderRadius:
-                                            BorderRadius.circular(106.67),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(106.67),
+                                          topRight: Radius.circular(106.67),
+                                          bottomLeft: Radius.circular(106.67),
+                                          bottomRight: Radius.circular(106.67),
+                                        ),
                                       ),
                                       alignment: AlignmentDirectional(0.0, 0.0),
                                       child: Text(
@@ -312,20 +329,498 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                 ),
                               ],
                             );
-                          } else if ((getJsonField(
+                          } else if (getJsonField(
                                 _model.orders,
-                                r'''$.orders''',
-                                true,
-                              ) as List?)
-                                  ?.isEmpty ??
-                              true) {
+                                r'''$.orders[0]''',
+                              ) !=
+                              null) {
+                            return Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 25.0, 0.0, 35.0),
+                              child: Builder(
+                                builder: (context) {
+                                  final orderItem = getJsonField(
+                                    _model.orders,
+                                    r'''$.orders''',
+                                  ).toList();
+
+                                  return RefreshIndicator(
+                                    key: Key('RefreshIndicator_psy4bah2'),
+                                    onRefresh: () async {
+                                      await _model.loadOrders(context);
+                                      safeSetState(() {});
+                                    },
+                                    child: ListView.separated(
+                                      padding: EdgeInsets.zero,
+                                      primary: false,
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: orderItem.length,
+                                      separatorBuilder: (_, __) =>
+                                          SizedBox(height: 10.0),
+                                      itemBuilder: (context, orderItemIndex) {
+                                        final orderItemItem =
+                                            orderItem[orderItemIndex];
+                                        return InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            _model.openOrder =
+                                                _model.openOrder ==
+                                                        orderItemIndex
+                                                    ? -1
+                                                    : orderItemIndex;
+                                            safeSetState(() {});
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(16.0),
+                                                topRight: Radius.circular(16.0),
+                                                bottomLeft:
+                                                    Radius.circular(16.0),
+                                                bottomRight:
+                                                    Radius.circular(16.0),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      14.0, 14.0, 14.0, 14.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Container(
+                                                        width: 40.0,
+                                                        height: 40.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Color(0xFFF1F1F1),
+                                                          shape:
+                                                              BoxShape.circle,
+                                                        ),
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, 0.0),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      0.0),
+                                                          child: Image.asset(
+                                                            'assets/images/bag.png',
+                                                            width: 18.0,
+                                                            height: 18.0,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          crossAxisAlignment:
+                                                              (FFCrossAxisAlignment
+                                                                      .start)
+                                                                  .flutterValue,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            Text(
+                                                              getJsonField(
+                                                                orderItemItem,
+                                                                r'''$.title''',
+                                                              ).toString(),
+                                                              maxLines: 1,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .montserrat(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    color: Color(
+                                                                        0xFF111111),
+                                                                    fontSize:
+                                                                        13.0,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                    lineHeight:
+                                                                        1.54,
+                                                                  ),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                            Text(
+                                                              '${getJsonField(
+                                                                orderItemItem,
+                                                                r'''$.items''',
+                                                              ).toString()} · ${getJsonField(
+                                                                orderItemItem,
+                                                                r'''$.paidBy''',
+                                                              ).toString()}',
+                                                              maxLines: 1,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .montserrat(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    color: Color(
+                                                                        0x84000000),
+                                                                    fontSize:
+                                                                        10.0,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                    lineHeight:
+                                                                        1.5,
+                                                                  ),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              height: 2.0)),
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            (FFCrossAxisAlignment
+                                                                    .end)
+                                                                .flutterValue,
+                                                        textBaseline:
+                                                            TextBaseline
+                                                                .alphabetic,
+                                                        children: [
+                                                          Text(
+                                                            getJsonField(
+                                                              orderItemItem,
+                                                              r'''$.amount''',
+                                                            ).toString(),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: Color(
+                                                                      0xFF111111),
+                                                                  fontSize:
+                                                                      13.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                  lineHeight:
+                                                                      1.54,
+                                                                ),
+                                                          ),
+                                                          Text(
+                                                            getJsonField(
+                                                              orderItemItem,
+                                                              r'''$.when''',
+                                                            ).toString(),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: Color(
+                                                                      0x84000000),
+                                                                  fontSize:
+                                                                      10.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                  lineHeight:
+                                                                      1.5,
+                                                                ),
+                                                          ),
+                                                        ].divide(SizedBox(
+                                                            height: 2.0)),
+                                                      ),
+                                                      if (_model.openOrder !=
+                                                          orderItemIndex)
+                                                        Icon(
+                                                          Icons
+                                                              .keyboard_arrow_down_rounded,
+                                                          color:
+                                                              Color(0x73000000),
+                                                          size: 20.0,
+                                                        ),
+                                                      if (_model.openOrder ==
+                                                          orderItemIndex)
+                                                        Icon(
+                                                          Icons
+                                                              .keyboard_arrow_up_rounded,
+                                                          color:
+                                                              Color(0x73000000),
+                                                          size: 20.0,
+                                                        ),
+                                                    ].divide(
+                                                        SizedBox(width: 10.0)),
+                                                  ),
+                                                  if (_model.openOrder ==
+                                                      orderItemIndex)
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  12.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Container(
+                                                            width:
+                                                                double.infinity,
+                                                            height: 1.0,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Color(
+                                                                  0xFFEDEDED),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0.0,
+                                                                        12.0,
+                                                                        0.0,
+                                                                        0.0),
+                                                            child: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              crossAxisAlignment:
+                                                                  (FFCrossAxisAlignment
+                                                                          .start)
+                                                                      .flutterValue,
+                                                              textBaseline:
+                                                                  TextBaseline
+                                                                      .alphabetic,
+                                                              children: [
+                                                                Builder(
+                                                                  builder:
+                                                                      (context) {
+                                                                    final lineItem =
+                                                                        getJsonField(
+                                                                      orderItemItem,
+                                                                      r'''$.lines''',
+                                                                    ).toList();
+
+                                                                    return Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      children: List.generate(
+                                                                          lineItem
+                                                                              .length,
+                                                                          (lineItemIndex) {
+                                                                        final lineItemItem =
+                                                                            lineItem[lineItemIndex];
+                                                                        return Row(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.max,
+                                                                          children:
+                                                                              [
+                                                                            Expanded(
+                                                                              child: Text(
+                                                                                getJsonField(
+                                                                                  lineItemItem,
+                                                                                  r'''$.name''',
+                                                                                ).toString(),
+                                                                                maxLines: 2,
+                                                                                style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                      font: GoogleFonts.montserrat(
+                                                                                        fontWeight: FontWeight.w500,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                      ),
+                                                                                      color: Color(0xFF111111),
+                                                                                      fontSize: 12.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                      lineHeight: 1.5,
+                                                                                    ),
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              getJsonField(
+                                                                                lineItemItem,
+                                                                                r'''$.quantity''',
+                                                                              ).toString(),
+                                                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                    font: GoogleFonts.montserrat(
+                                                                                      fontWeight: FontWeight.normal,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    ),
+                                                                                    color: Color(0x84000000),
+                                                                                    fontSize: 12.0,
+                                                                                    letterSpacing: 0.0,
+                                                                                    fontWeight: FontWeight.normal,
+                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    lineHeight: 1.5,
+                                                                                  ),
+                                                                            ),
+                                                                            Text(
+                                                                              getJsonField(
+                                                                                lineItemItem,
+                                                                                r'''$.amount''',
+                                                                              ).toString(),
+                                                                              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                    font: GoogleFonts.montserrat(
+                                                                                      fontWeight: FontWeight.w600,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    ),
+                                                                                    color: Color(0xFF111111),
+                                                                                    fontSize: 12.0,
+                                                                                    letterSpacing: 0.0,
+                                                                                    fontWeight: FontWeight.w600,
+                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                    lineHeight: 1.5,
+                                                                                  ),
+                                                                            ),
+                                                                          ].divide(SizedBox(width: 12.0)),
+                                                                        );
+                                                                      }).divide(SizedBox(
+                                                                          height:
+                                                                              8.0)),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                                Text(
+                                                                  'Order ${getJsonField(
+                                                                    orderItemItem,
+                                                                    r'''$.code''',
+                                                                  ).toString()}',
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .montserrat(
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        color: Color(
+                                                                            0x84000000),
+                                                                        fontSize:
+                                                                            10.0,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                        lineHeight:
+                                                                            1.5,
+                                                                      ),
+                                                                ),
+                                                              ].divide(SizedBox(
+                                                                  height:
+                                                                      12.0)),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          } else {
                             return Column(
                               mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment:
-                                  (FFMainAxisAlignment.center).flutterValue,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderRadius: BorderRadius.circular(0.0),
                                   child: Image.asset(
                                     'assets/images/shoppig_troll.png',
                                     width: 183.6,
@@ -390,49 +885,6 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                 ),
                               ],
                             );
-                          } else {
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 25.0, 0.0, 0.0),
-                              child: RefreshIndicator(
-                                color: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
-                                onRefresh: () async {
-                                  await _model.loadOrders(context);
-                                  safeSetState(() {});
-                                },
-                                child: Builder(
-                                  builder: (context) {
-                                    final orderItem = (getJsonField(
-                                          _model.orders,
-                                          r'''$.orders''',
-                                          true,
-                                        ) as List?)
-                                            ?.toList() ??
-                                        [];
-
-                                    return ListView.separated(
-                                      padding: EdgeInsets.fromLTRB(
-                                        0,
-                                        0,
-                                        0,
-                                        35.0,
-                                      ),
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: orderItem.length,
-                                      separatorBuilder: (_, __) =>
-                                          SizedBox(height: 10.0),
-                                      itemBuilder: (context, orderItemIndex) {
-                                        final orderItemItem =
-                                            orderItem[orderItemIndex];
-                                        return _orderCard(
-                                            orderItemItem, orderItemIndex);
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
                           }
                         },
                       ),
@@ -440,240 +892,6 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  TextStyle _style(
-    BuildContext context, {
-    required FontWeight weight,
-    required Color color,
-    required double size,
-    double? lineHeight,
-  }) =>
-      FlutterFlowTheme.of(context).bodyMedium.override(
-            font: GoogleFonts.montserrat(
-              fontWeight: weight,
-              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-            ),
-            color: color,
-            fontSize: size,
-            letterSpacing: 0.0,
-            fontWeight: weight,
-            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-            lineHeight: lineHeight,
-          );
-
-  Widget _orderCard(dynamic orderItemItem, int orderItemIndex) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onTap: () async {
-        _model.openOrder =
-            _model.openOrder == orderItemIndex ? -1 : orderItemIndex;
-        safeSetState(() {});
-      },
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(14.0, 14.0, 14.0, 14.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: 40.0,
-                    height: 40.0,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF1F1F1),
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Image.asset(
-                      'assets/images/bag.png',
-                      width: 18.0,
-                      height: 18.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment:
-                          (FFCrossAxisAlignment.start).flutterValue,
-                      children: [
-                        Text(
-                          getJsonField(
-                            orderItemItem,
-                            r'''$.title''',
-                          ).toString(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: _style(context,
-                              weight: FontWeight.w600,
-                              color: Color(0xFF111111),
-                              size: 13.0,
-                              lineHeight: 1.54),
-                        ),
-                        Text(
-                          '${getJsonField(orderItemItem, r'''$.items''').toString()} · ${getJsonField(orderItemItem, r'''$.paidBy''').toString()}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: _style(context,
-                              weight: FontWeight.normal,
-                              color: Color(0x84000000),
-                              size: 10.0,
-                              lineHeight: 1.5),
-                        ),
-                      ].divide(SizedBox(height: 2.0)),
-                    ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: (FFCrossAxisAlignment.end).flutterValue,
-                    children: [
-                      Text(
-                        getJsonField(
-                          orderItemItem,
-                          r'''$.amount''',
-                        ).toString(),
-                        style: _style(context,
-                            weight: FontWeight.bold,
-                            color: Color(0xFF111111),
-                            size: 13.0,
-                            lineHeight: 1.54),
-                      ),
-                      Text(
-                        getJsonField(
-                          orderItemItem,
-                          r'''$.when''',
-                        ).toString(),
-                        style: _style(context,
-                            weight: FontWeight.normal,
-                            color: Color(0x84000000),
-                            size: 10.0,
-                            lineHeight: 1.5),
-                      ),
-                    ].divide(SizedBox(height: 2.0)),
-                  ),
-                  if (_model.openOrder != orderItemIndex)
-                    Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: Color(0x73000000),
-                      size: 20.0,
-                    ),
-                  if (_model.openOrder == orderItemIndex)
-                    Icon(
-                      Icons.keyboard_arrow_up_rounded,
-                      color: Color(0x73000000),
-                      size: 20.0,
-                    ),
-                ].divide(SizedBox(width: 10.0)),
-              ),
-              if (_model.openOrder == orderItemIndex)
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(color: Color(0xFFEDEDED), width: 1.0),
-                      ),
-                    ),
-                    child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Builder(
-                            builder: (context) {
-                              final lineItem = (getJsonField(
-                                    orderItemItem,
-                                    r'''$.lines''',
-                                    true,
-                                  ) as List?)
-                                      ?.toList() ??
-                                  [];
-
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: List.generate(lineItem.length,
-                                    (lineItemIndex) {
-                                  final lineItemItem = lineItem[lineItemIndex];
-                                  return Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          getJsonField(
-                                            lineItemItem,
-                                            r'''$.name''',
-                                          ).toString(),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: _style(context,
-                                              weight: FontWeight.w500,
-                                              color: Color(0xFF111111),
-                                              size: 12.0,
-                                              lineHeight: 1.5),
-                                        ),
-                                      ),
-                                      Text(
-                                        getJsonField(
-                                          lineItemItem,
-                                          r'''$.quantity''',
-                                        ).toString(),
-                                        style: _style(context,
-                                            weight: FontWeight.normal,
-                                            color: Color(0x84000000),
-                                            size: 12.0,
-                                            lineHeight: 1.5),
-                                      ),
-                                      Text(
-                                        getJsonField(
-                                          lineItemItem,
-                                          r'''$.amount''',
-                                        ).toString(),
-                                        style: _style(context,
-                                            weight: FontWeight.w600,
-                                            color: Color(0xFF111111),
-                                            size: 12.0,
-                                            lineHeight: 1.5),
-                                      ),
-                                    ].divide(SizedBox(width: 12.0)),
-                                  );
-                                }).divide(SizedBox(height: 8.0)),
-                              );
-                            },
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(-1.0, 0.0),
-                            child: Text(
-                              'Order ${getJsonField(orderItemItem, r'''$.code''').toString()}',
-                              style: _style(context,
-                                  weight: FontWeight.normal,
-                                  color: Color(0x84000000),
-                                  size: 10.0,
-                                  lineHeight: 1.5),
-                            ),
-                          ),
-                        ].divide(SizedBox(height: 12.0)),
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
         ),

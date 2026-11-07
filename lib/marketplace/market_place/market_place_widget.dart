@@ -778,46 +778,34 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                   ),
                                 ),
                                 if (_model.brands.isNotEmpty)
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 20.0),
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  10.0, 0.0, 10.0, 0.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                (FFMainAxisAlignment
-                                                        .spaceBetween)
-                                                    .flutterValue,
-                                            children: [
-                                              Text(
-                                                'Explore Top Brands',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryBackground,
-                                                          letterSpacing: 0.0,
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    10.0, 0.0, 10.0, 0.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  (FFMainAxisAlignment
+                                                          .spaceBetween)
+                                                      .flutterValue,
+                                              children: [
+                                                Text(
+                                                  'Explore Top Brands',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           fontStyle:
@@ -826,46 +814,75 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
-                                              ),
-                                              InkWell(
-                                                splashColor: Colors.transparent,
-                                                focusColor: Colors.transparent,
-                                                hoverColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
-                                                onTap: () async {
-                                                  await showModalBottomSheet(
-                                                    isScrollControlled: true,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    enableDrag: false,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return Padding(
-                                                        padding: MediaQuery
-                                                            .viewInsetsOf(
-                                                                context),
-                                                        child:
-                                                            MarketSpaceWidget(
-                                                          billers:
-                                                              _model.billers,
-                                                          brands: _model.brands,
-                                                          categories:
-                                                              _model.categories,
-                                                        ),
-                                                      );
-                                                    },
-                                                  ).then((value) =>
-                                                      safeSetState(() {}));
-                                                },
-                                                child: Text(
-                                                  'See all',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts
-                                                            .montserrat(
+                                                        color: FlutterFlowTheme
+                                                                .of(context)
+                                                            .primaryBackground,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
+                                                InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  focusColor:
+                                                      Colors.transparent,
+                                                  hoverColor:
+                                                      Colors.transparent,
+                                                  highlightColor:
+                                                      Colors.transparent,
+                                                  onTap: () async {
+                                                    await showModalBottomSheet(
+                                                      isScrollControlled: true,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      enableDrag: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return Padding(
+                                                          padding: MediaQuery
+                                                              .viewInsetsOf(
+                                                                  context),
+                                                          child:
+                                                              MarketSpaceWidget(
+                                                            billers:
+                                                                _model.billers,
+                                                            brands:
+                                                                _model.brands,
+                                                            categories: _model
+                                                                .categories,
+                                                          ),
+                                                        );
+                                                      },
+                                                    ).then((value) =>
+                                                        safeSetState(() {}));
+                                                  },
+                                                  child: Text(
+                                                    'See all',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .success,
+                                                          fontSize: 11.0,
+                                                          letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontStyle:
@@ -874,105 +891,91 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .success,
-                                                        fontSize: 11.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  10.0, 10.0, 10.0, 0.0),
-                                          child: Builder(
-                                            builder: (context) {
-                                              final brand =
-                                                  _model.brands.toList();
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    10.0, 10.0, 10.0, 0.0),
+                                            child: Builder(
+                                              builder: (context) {
+                                                final brand =
+                                                    _model.brands.toList();
 
-                                              return SingleChildScrollView(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: List.generate(
-                                                      brand.length,
-                                                      (brandIndex) {
-                                                    final brandItem =
-                                                        brand[brandIndex];
-                                                    return MarketBrandCardWidget(
-                                                      key: Key(
-                                                          'Keygg3_${brandIndex}_of_${brand.length}'),
-                                                      name: functions
-                                                          .notificationText(
-                                                              brandItem,
-                                                              'name',
-                                                              FFAppState()
-                                                                  .languageCode),
-                                                      description: functions
-                                                          .notificationText(
-                                                              brandItem,
-                                                              'description',
-                                                              FFAppState()
-                                                                  .languageCode),
-                                                      logoUrl: functions
-                                                          .bannerImageUrl(
-                                                              getJsonField(
+                                                return SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: List.generate(
+                                                        brand.length,
+                                                        (brandIndex) {
+                                                      final brandItem =
+                                                          brand[brandIndex];
+                                                      return MarketBrandCardWidget(
+                                                        key: Key(
+                                                            'Keygg3_${brandIndex}_of_${brand.length}'),
+                                                        name: functions
+                                                            .notificationText(
                                                                 brandItem,
-                                                                r'''$.logoPath''',
-                                                              ).toString(),
-                                                              FFDevEnvironmentValues()
-                                                                  .baseURL),
-                                                      coverUrl: functions
-                                                          .bannerImageUrl(
-                                                              getJsonField(
+                                                                'name',
+                                                                FFAppState()
+                                                                    .languageCode),
+                                                        description: functions
+                                                            .notificationText(
                                                                 brandItem,
-                                                                r'''$.coverPath''',
-                                                              ).toString(),
-                                                              FFDevEnvironmentValues()
-                                                                  .baseURL),
-                                                      width: functions
-                                                          .shareOfWidth(
-                                                              MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width,
-                                                              44.0,
-                                                              2.35,
-                                                              0.0),
-                                                      onTap: () async {
-                                                        await actions
-                                                            .openMarketplaceItem(
-                                                          context,
-                                                          brandItem,
-                                                          FFAppState()
-                                                              .languageCode,
-                                                        );
-                                                      },
-                                                    );
-                                                  }).divide(
-                                                      SizedBox(width: 10.0)),
-                                                ),
-                                              );
-                                            },
+                                                                'description',
+                                                                FFAppState()
+                                                                    .languageCode),
+                                                        logoUrl: functions
+                                                            .bannerImageUrl(
+                                                                getJsonField(
+                                                                  brandItem,
+                                                                  r'''$.logoPath''',
+                                                                ).toString(),
+                                                                FFDevEnvironmentValues()
+                                                                    .baseURL),
+                                                        coverUrl: functions
+                                                            .bannerImageUrl(
+                                                                getJsonField(
+                                                                  brandItem,
+                                                                  r'''$.coverPath''',
+                                                                ).toString(),
+                                                                FFDevEnvironmentValues()
+                                                                    .baseURL),
+                                                        width: functions
+                                                            .shareOfWidth(
+                                                                MediaQuery.sizeOf(
+                                                                        context)
+                                                                    .width,
+                                                                44.0,
+                                                                2.35,
+                                                                0.0),
+                                                        onTap: () async {
+                                                          await actions
+                                                              .openMarketplaceItem(
+                                                            context,
+                                                            brandItem,
+                                                            FFAppState()
+                                                                .languageCode,
+                                                          );
+                                                        },
+                                                      );
+                                                    }).divide(
+                                                        SizedBox(width: 10.0)),
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                           ),

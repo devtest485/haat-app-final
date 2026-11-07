@@ -118,7 +118,7 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Please have your national ID or passport ready for a quick scan',
+                            'Please prepare your self & your Iqama or ID for a\n quick scanning & verifying',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium

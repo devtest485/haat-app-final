@@ -7,7 +7,6 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'payment_success_model.dart';
@@ -83,7 +82,6 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
-                      primary: true,
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -293,7 +291,8 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                                                       width: double.infinity,
                                                       constraints:
                                                           BoxConstraints(
-                                                              minHeight: 65.0),
+                                                        minHeight: 65.0,
+                                                      ),
                                                       decoration:
                                                           BoxDecoration(),
                                                       child: Padding(

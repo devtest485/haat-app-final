@@ -84,31 +84,36 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Text(
-                          'Let\'s set up your business',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                font: GoogleFonts.montserrat(
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 25.0, 0.0, 0.0),
+                          child: Text(
+                            'Lets setup your business ',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  fontSize: 24.0,
+                                  letterSpacing: 0.0,
                                   fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .fontStyle,
                                 ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                fontSize: 24.0,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .fontStyle,
-                              ),
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'A few quick questions and your digital store is ready.',
+                            'Your business account and digital store has been successfully created',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium

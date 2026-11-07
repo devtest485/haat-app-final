@@ -31,10 +31,6 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
 
   bool switchd = false;
 
-  dynamic business;
-
-  String businessPeriod = 'Week';
-
   List<dynamic> transactions = [];
   void addToTransactions(dynamic item) => transactions.add(item);
   void removeFromTransactions(dynamic item) => transactions.remove(item);
@@ -70,6 +66,10 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
 
   String? businessStatus = '';
 
+  dynamic business;
+
+  String businessPeriod = 'Week';
+
   ///  State fields for stateful widgets in this component.
 
   // Stores action output result for [Custom Action - haatAccessToken] action in HomeScreen widget.
@@ -82,11 +82,15 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   ApiCallResponse? apiResultatl;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? transactionsResult;
+  // Stores action output result for [Custom Action - haatBusinessSummary] action in HomeScreen widget.
+  dynamic? businessSummary;
   // Stores action output result for [Backend Call - API (Organizations)] action in HomeScreen widget.
   ApiCallResponse? organizationsResult;
   InstantTimer? bannerAutoplay;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? apiResult1ib;
+  // Stores action output result for [Custom Action - haatBusinessSummary] action in Container widget.
+  dynamic? tabSummary;
   // Stores action output result for [Custom Action - haatAccessToken] action in WalletBalance widget.
   String? balanceToken;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in WalletBalance widget.
@@ -105,6 +109,8 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
           pageViewController!.page != null
       ? pageViewController!.page!.round()
       : 0;
+  // Stores action output result for [Custom Action - haatBusinessSummary] action in StepAreaChart widget.
+  dynamic? periodSummary;
 
   @override
   void initState(BuildContext context) {

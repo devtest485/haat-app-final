@@ -427,7 +427,7 @@ class _AddAmountViewWidgetState extends State<AddAmountViewWidget> {
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
                                       await actions.haatSetSaleCart(
-                                        null,
+                                        functions.noSaleCart()?.toList(),
                                       );
                                       await showModalBottomSheet(
                                         isScrollControlled: true,
@@ -1025,7 +1025,7 @@ class _AddAmountViewWidgetState extends State<AddAmountViewWidget> {
                 products: _model.products,
                 onCharge: (totalMinor) async {
                   await actions.haatSetSaleCart(
-                    _model.cart,
+                    _model.cart.toList(),
                   );
                   await showModalBottomSheet(
                     isScrollControlled: true,

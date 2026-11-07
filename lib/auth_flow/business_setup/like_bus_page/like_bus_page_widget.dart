@@ -198,7 +198,7 @@ class _LikeBusPageWidgetState extends State<LikeBusPageWidget> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Where would you like to sell?',
+                                                    'What do you want to sell?',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium

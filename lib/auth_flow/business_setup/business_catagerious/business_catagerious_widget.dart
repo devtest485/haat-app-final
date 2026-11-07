@@ -179,7 +179,7 @@ class _BusinessCatageriousWidgetState extends State<BusinessCatageriousWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'What do you want to sell?',
+                                            'Where would you like to sell?',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(

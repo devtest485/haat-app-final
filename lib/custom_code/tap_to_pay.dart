@@ -133,7 +133,8 @@ void _showStatus(Map<String, dynamic> outcome) {
   navigator.context.pushNamed(
     _statusRoute,
     queryParameters: {
-      'paymentStatus': serializeParam(outcome['paymentStatus'], ParamType.String),
+      'paymentStatus':
+          serializeParam(outcome['paymentStatus'], ParamType.String),
       'outcome': serializeParam(outcome, ParamType.JSON),
     }.withoutNulls,
   );
@@ -255,7 +256,10 @@ final _createReferences = <String, String>{};
 /// `confirmOnPhone` — or `{error}`, a sentence to show.
 Future<Map<String, dynamic>> createTapPayment(String amount) async {
   if (!_android) {
-    return {'error': 'Tap to pay works on Android phones with NFC. Use the QR instead.'};
+    return {
+      'error':
+          'Tap to pay works on Android phones with NFC. Use the QR instead.'
+    };
   }
   try {
     final phone = await _channel.invokeMapMethod<String, dynamic>('status');
@@ -291,7 +295,8 @@ Future<Map<String, dynamic>> createTapPayment(String amount) async {
   }
   if (created is! ApiSuccess<PaymentRequest>) {
     return {
-      'error': 'You’re offline, so the tap couldn’t start. Tap here to try again.'
+      'error':
+          'You’re offline, so the tap couldn’t start. Tap here to try again.'
     };
   }
   _createReferences.remove(slot);
@@ -457,7 +462,8 @@ Future<Map<String, dynamic>> tapToPay(
           await showTapNotice(
             context,
             title: 'Not enough balance',
-            message: '${payer.isEmpty ? 'The customer doesn’t' : '$payer doesn’t'} '
+            message:
+                '${payer.isEmpty ? 'The customer doesn’t' : '$payer doesn’t'} '
                 'have enough in their HAAT wallet to pay '
                 '${_money(amountMinor, currency)}. Nothing was paid. Ask them to '
                 'top up, or use the QR with another account.',
@@ -538,7 +544,10 @@ Map<String, dynamic> _received(
 
   if (receipt.isRejected) {
     return _failed(
-      [('Amount', _money(receipt.amountMinor, receipt.currency)), ('Reference number', reference)],
+      [
+        ('Amount', _money(receipt.amountMinor, receipt.currency)),
+        ('Reference number', reference)
+      ],
       receipt.reason ?? '',
     );
   }
@@ -571,7 +580,8 @@ Map<String, dynamic> _received(
     title: 'Payment received',
     amountMinor: receipt.amountMinor,
     currency: receipt.currency,
-    subtitle: name.isEmpty ? 'Paid into your HAAT wallet' : 'From $name · Tap to pay',
+    subtitle:
+        name.isEmpty ? 'Paid into your HAAT wallet' : 'From $name · Tap to pay',
     share: 'HAAT payment received\n'
         '${_money(receipt.amountMinor, receipt.currency)}'
         '${name.isEmpty ? '' : ' from $name'} by tap to pay',
@@ -617,12 +627,17 @@ Future<Map<String, dynamic>> awaitTapApproval(
           if (invoice != null && invoice != now.code) ('Invoice', invoice),
           ('Request code', now.code),
           ('Method', 'Tap to pay · approved on phone'),
-          ('Date & time', dateTimeFormat('d MMM y · HH:mm', now.paidAt ?? DateTime.now())),
+          (
+            'Date & time',
+            dateTimeFormat('d MMM y · HH:mm', now.paidAt ?? DateTime.now())
+          ),
         ],
         title: 'Payment received',
         amountMinor: now.amountMinor,
         currency: now.currency,
-        subtitle: name.isEmpty ? 'Paid into your HAAT wallet' : 'From $name · Tap to pay',
+        subtitle: name.isEmpty
+            ? 'Paid into your HAAT wallet'
+            : 'From $name · Tap to pay',
         share: 'HAAT payment received\n'
             '${_money(now.amountMinor, now.currency)}'
             '${name.isEmpty ? '' : ' from $name'} by tap to pay',
@@ -634,7 +649,8 @@ Future<Map<String, dynamic>> awaitTapApproval(
     if (now?.status == 'expired' ||
         (expiresAt != null && !expiresAt.isAfter(DateTime.now()))) {
       return {
-        'problem': 'The customer didn’t approve in time. Tap here to start again.'
+        'problem':
+            'The customer didn’t approve in time. Tap here to start again.'
       };
     }
   }
@@ -684,7 +700,8 @@ String _refusalReason(PaymentRequestPreview p) => switch (p.refusal) {
           ) ??
           'This amount is above the limit the admin allows.',
       'no_rule' => 'Your bank doesn’t allow this payment yet.',
-      'other_bank' => 'This request is for a different bank than your HAAT wallet.',
+      'other_bank' =>
+        'This request is for a different bank than your HAAT wallet.',
       _ => 'This payment can’t be made right now.',
     };
 
@@ -696,7 +713,8 @@ Future<bool> _sayWhyNot(
   Wallet? wallet,
   String? refusal,
 ) async {
-  final amount = _money(p.totalMinor ?? p.amountMinor ?? BigInt.zero, p.currency);
+  final amount =
+      _money(p.totalMinor ?? p.amountMinor ?? BigInt.zero, p.currency);
   final name = p.requester.name;
   switch (refusal) {
     case 'limit':
@@ -850,7 +868,8 @@ Future<void> openTapApproval(BuildContext context, String code) async {
     if (navigator == null) return;
     navigator.context.pushNamed(
       _approvalRoute,
-      queryParameters: {'code': serializeParam(p.code, ParamType.String)}.withoutNulls,
+      queryParameters:
+          {'code': serializeParam(p.code, ParamType.String)}.withoutNulls,
     );
   } catch (_) {
     hint.hide();
@@ -874,9 +893,11 @@ Future<void> showTapNotice(
     transitionDuration: MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 200),
-    pageBuilder: (dialogContext, __, ___) => _Notice(title: title, message: message),
+    pageBuilder: (dialogContext, __, ___) =>
+        _Notice(title: title, message: message),
     transitionBuilder: (_, animation, __, child) {
-      final curved = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+      final curved =
+          CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
       return FadeTransition(
         opacity: curved,
         child: ScaleTransition(
@@ -1021,14 +1042,16 @@ class _HintPill extends StatelessWidget {
           curve: Curves.easeOut,
           builder: (_, t, child) => Opacity(
             opacity: t,
-            child: Transform.translate(offset: Offset(0, 8 * (1 - t)), child: child),
+            child: Transform.translate(
+                offset: Offset(0, 8 * (1 - t)), child: child),
           ),
           child: Center(
             child: Material(
               color: _ink,
               borderRadius: BorderRadius.circular(16),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: ValueListenableBuilder<String>(
                   valueListenable: text,
                   builder: (_, value, __) => Text(

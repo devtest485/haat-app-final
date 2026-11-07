@@ -41,9 +41,10 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.canManage = await actions.haatCanManageMember(
+      _model.canManageResult = await actions.haatCanManageMember(
         widget!.member,
       );
+      _model.canManage = _model.canManageResult!;
       safeSetState(() {});
     });
   }
@@ -390,55 +391,55 @@ class _StaffMembersWidgetState extends State<StaffMembersWidget> {
                                                         highlightColor:
                                                             Colors.transparent,
                                                         onTap: () async {
-                                                          if (!_model
+                                                          if (_model
                                                               .canManage) {
-                                                            return;
-                                                          }
-                                                          await showModalBottomSheet(
-                                                            isScrollControlled:
-                                                                true,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            enableDrag: false,
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return GestureDetector(
-                                                                onTap: () {
-                                                                  FocusScope.of(
-                                                                          context)
-                                                                      .unfocus();
-                                                                  FocusManager
-                                                                      .instance
-                                                                      .primaryFocus
-                                                                      ?.unfocus();
-                                                                },
-                                                                child: Padding(
-                                                                  padding: MediaQuery
-                                                                      .viewInsetsOf(
-                                                                          context),
+                                                            await showModalBottomSheet(
+                                                              isScrollControlled:
+                                                                  true,
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              enableDrag: false,
+                                                              context: context,
+                                                              builder:
+                                                                  (context) {
+                                                                return GestureDetector(
+                                                                  onTap: () {
+                                                                    FocusScope.of(
+                                                                            context)
+                                                                        .unfocus();
+                                                                    FocusManager
+                                                                        .instance
+                                                                        .primaryFocus
+                                                                        ?.unfocus();
+                                                                  },
                                                                   child:
-                                                                      Container(
-                                                                    height: MediaQuery.sizeOf(context)
-                                                                            .height *
-                                                                        0.72,
+                                                                      Padding(
+                                                                    padding: MediaQuery
+                                                                        .viewInsetsOf(
+                                                                            context),
                                                                     child:
-                                                                        RoleAccessWidget(
-                                                                      currentRoleName:
-                                                                          functions
-                                                                              .staffRoleName(widget!.member),
-                                                                      member: widget!
-                                                                          .member,
+                                                                        Container(
+                                                                      height: MediaQuery.sizeOf(context)
+                                                                              .height *
+                                                                          0.72,
+                                                                      child:
+                                                                          RoleAccessWidget(
+                                                                        currentRoleName:
+                                                                            functions.staffRoleName(widget!.member),
+                                                                        member:
+                                                                            widget!.member,
+                                                                      ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ).then((value) =>
-                                                              safeSetState(
-                                                                  () {}));
+                                                                );
+                                                              },
+                                                            ).then((value) =>
+                                                                safeSetState(
+                                                                    () {}));
 
-                                                          safeSetState(() {});
+                                                            safeSetState(() {});
+                                                          }
                                                         },
                                                         child: Row(
                                                           mainAxisSize:

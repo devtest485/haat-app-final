@@ -108,7 +108,7 @@ class _DocunmentInfoWidgetState extends State<DocunmentInfoWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'Please upload the required documents to complete\n your business verification.',
+                            'Please upload the required documents to complete your business verification.',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium

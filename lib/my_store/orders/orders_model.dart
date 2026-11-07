@@ -1,24 +1,27 @@
 import '/components/transaction_shimmer_widget.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'orders_widget.dart' show OrdersWidget;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class OrdersModel extends FlutterFlowModel<OrdersWidget> {
   ///  Local state fields for this page.
 
-  /// `ok` and `orders`, from haatLoadOrders.
   dynamic orders;
 
   bool loaded = false;
 
-  /// The order whose items are showing; -1 for none.
   int openOrder = -1;
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - haatLoadOrders] action in Orders widget.
-  dynamic loadedOrders;
   // Model for TransactionShimmer component.
   late TransactionShimmerModel transactionShimmerModel1;
   // Model for TransactionShimmer component.
@@ -45,9 +48,12 @@ class OrdersModel extends FlutterFlowModel<OrdersWidget> {
 
   /// Action blocks.
   Future loadOrders(BuildContext context) async {
+    dynamic? loadedOrders;
+
     loadedOrders = await actions.haatLoadOrders();
     orders = loadedOrders;
     loaded = true;
     openOrder = -1;
+    updatePage(() {});
   }
 }
