@@ -139,7 +139,7 @@ class _SuccessWidgetState extends State<SuccessWidget> {
                             child: Text(
                               () {
                                 if (widget!.type == 'Product') {
-                                  return 'Jebena coffee is now in your Cashier.';
+                                  return 'Jebena coffee is now in your store.';
                                 } else if (widget!.type == 'BranchRemove') {
                                   return 'Bahri branch has been removed successfully';
                                 } else if (widget!.type == 'Branch Add') {

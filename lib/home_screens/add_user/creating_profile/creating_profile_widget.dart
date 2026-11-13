@@ -1,14 +1,18 @@
 import '/backend/api_requests/api_calls.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'creating_profile_model.dart';
 export 'creating_profile_model.dart';
@@ -36,10 +40,13 @@ class CreatingProfileWidget extends StatefulWidget {
   State<CreatingProfileWidget> createState() => _CreatingProfileWidgetState();
 }
 
-class _CreatingProfileWidgetState extends State<CreatingProfileWidget> {
+class _CreatingProfileWidgetState extends State<CreatingProfileWidget>
+    with TickerProviderStateMixin {
   late CreatingProfileModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -113,6 +120,47 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget> {
         context.safePop();
       }
     });
+
+    animationsMap.addAll({
+      'progressBarOnPageLoadAnimation': AnimationInfo(
+        loop: true,
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          RotateEffect(
+            curve: Curves.linear,
+            delay: 0.0.ms,
+            duration: 1100.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+        ],
+      ),
+      'containerOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          ScaleEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 420.0.ms,
+            begin: Offset(0.8, 0.8),
+            end: Offset(1.0, 1.0),
+          ),
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 300.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -168,26 +216,34 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget> {
                     Container(
                       width: 150.0,
                       height: 150.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: FlutterFlowTheme.of(context).secondary,
-                          width: 4.0,
-                        ),
-                      ),
-                      alignment: AlignmentDirectional(0.0, 0.0),
-                      child: Container(
-                        width: 150.0,
-                        height: 150.0,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF01C552),
-                          shape: BoxShape.circle,
-                        ),
+                      decoration: BoxDecoration(),
+                      child: Stack(
                         alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Text(
-                          functions.staffInitials(widget!.fullName),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
+                        children: [
+                          CircularPercentIndicator(
+                            percent: 0.22,
+                            radius: 75.0,
+                            lineWidth: 4.0,
+                            animation: true,
+                            animateFromLastPercent: true,
+                            progressColor:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            backgroundColor: Color(0x14000000),
+                          ).animateOnPageLoad(
+                              animationsMap['progressBarOnPageLoadAnimation']!),
+                          Container(
+                            width: 128.0,
+                            height: 128.0,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF01C552),
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Text(
+                              functions.staffInitials(widget!.fullName),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
                                     font: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w500,
                                       fontStyle: FlutterFlowTheme.of(context)
@@ -203,7 +259,10 @@ class _CreatingProfileWidgetState extends State<CreatingProfileWidget> {
                                         .bodyMedium
                                         .fontStyle,
                                   ),
-                        ),
+                            ),
+                          ).animateOnPageLoad(
+                              animationsMap['containerOnPageLoadAnimation']!),
+                        ],
                       ),
                     ),
                     Padding(

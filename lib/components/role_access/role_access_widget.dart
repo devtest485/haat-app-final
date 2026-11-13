@@ -453,7 +453,7 @@ class _RoleAccessWidgetState extends State<RoleAccessWidget> {
                                             ),
                                       ),
                                       Text(
-                                        'Use the Cashier and its catalogue',
+                                        'Use My Store and its catalogue',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(

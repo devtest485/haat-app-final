@@ -51,6 +51,8 @@ class _StepAreaChartState extends State<StepAreaChart>
   // (0.211 = pehle wali height, 0.10 = ab). Aur lambi chahiye to 0.06 try karo.
   static const double _chartTopFrac = 0.10;
   static const double _chartBottomFrac = 0.70; // fill yahan tak fade hota hai
+  // Zero ki line (aur draw hote waqt ka dot) day labels ke upar rehti hai.
+  static const double _baselineFrac = 0.575;
   static const double _labelsTopFrac = 0.60;
   static const double _pillsTopFrac = 0.74;
 
@@ -183,6 +185,7 @@ class _StepAreaChartState extends State<StepAreaChart>
                         painter: _StepAreaPainter(
                           values: _values,
                           topInset: chartTop,
+                          baseline: h * _baselineFrac,
                           bottom: chartBottom,
                           progress:
                               Curves.easeInOutCubic.transform(_anim.value),
@@ -282,12 +285,18 @@ class _StepAreaPainter extends CustomPainter {
   _StepAreaPainter({
     required this.values,
     required this.topInset,
+    required this.baseline,
     required this.bottom,
     required this.progress,
   });
 
   final List<double> values;
   final double topInset;
+
+  /// Zero ki y: line kabhi labels ke neeche nahi jati.
+  final double baseline;
+
+  /// Fill yahan tak fade hota hai.
   final double bottom;
 
   /// 0 = kuch nahi dikhta, 1 = poori line aur fill.
@@ -317,7 +326,7 @@ class _StepAreaPainter extends CustomPainter {
     final colW = size.width / n;
     double yOf(double v) {
       final clamped = v < 0 ? 0.0 : v;
-      return topInset + (1 - clamped / maxV) * (bottom - topInset);
+      return topInset + (1 - clamped / maxV) * (baseline - topInset);
     }
 
     // Step line: horizontal, phir seedha upar/neeche, phir horizontal ...
@@ -406,6 +415,7 @@ class _StepAreaPainter extends CustomPainter {
   bool shouldRepaint(covariant _StepAreaPainter old) {
     return old.values != values ||
         old.topInset != topInset ||
+        old.baseline != baseline ||
         old.bottom != bottom ||
         old.progress != progress;
   }

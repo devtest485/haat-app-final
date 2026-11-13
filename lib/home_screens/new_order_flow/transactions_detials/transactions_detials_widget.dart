@@ -1,5 +1,6 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/transaction_shimmer_widget.dart';
+import '/components/transaction_filter_sheet/transaction_filter_sheet_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -130,22 +131,26 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                     0.0, 55.0, 0.0, 0.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        context.safePop();
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_back,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                        size: 24.0,
+                                    Expanded(
+                                      child: Align(
+                                        alignment:
+                                            AlignmentDirectional(-1.0, 0.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.safePop();
+                                          },
+                                          child: Icon(
+                                            Icons.arrow_back,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryBackground,
+                                            size: 24.0,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     Text(
@@ -171,11 +176,167 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Icon(
-                                      Icons.search_sharp,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      size: 24.0,
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Icon(
+                                            Icons.search_sharp,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryBackground,
+                                            size: 24.0,
+                                          ),
+                                          InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              await showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                enableDrag: true,
+                                                context: context,
+                                                builder: (context) {
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      FocusScope.of(context)
+                                                          .unfocus();
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
+                                                    child: Padding(
+                                                      padding: MediaQuery
+                                                          .viewInsetsOf(
+                                                              context),
+                                                      child:
+                                                          TransactionFilterSheetWidget(
+                                                        transactions: _model
+                                                            .transactionList,
+                                                        filterIndex:
+                                                            _model.filterIndex,
+                                                        direction: _model
+                                                            .directionFilter,
+                                                        status:
+                                                            _model.statusFilter,
+                                                        method:
+                                                            _model.methodFilter,
+                                                        onApply: (direction,
+                                                            status,
+                                                            method) async {
+                                                          _model.directionFilter =
+                                                              direction;
+                                                          _model.statusFilter =
+                                                              status;
+                                                          _model.methodFilter =
+                                                              method;
+                                                          safeSetState(() {});
+                                                        },
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ).then((value) =>
+                                                  safeSetState(() {}));
+                                            },
+                                            child: Container(
+                                              width: 30.0,
+                                              height: 30.0,
+                                              child: Stack(
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.0, 0.0),
+                                                    child: Icon(
+                                                      Icons.tune_rounded,
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
+                                                      size: 24.0,
+                                                    ),
+                                                  ),
+                                                  if (functions.activeTransactionFilters(
+                                                          _model
+                                                              .directionFilter,
+                                                          _model.statusFilter,
+                                                          _model.methodFilter) >
+                                                      0)
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              1.0, -1.0),
+                                                      child: Container(
+                                                        width: 15.0,
+                                                        height: 15.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .tertiary,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          border: Border.all(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryBackground,
+                                                            width: 1.5,
+                                                          ),
+                                                        ),
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, 0.0),
+                                                        child: Text(
+                                                          functions
+                                                              .activeTransactionFilters(
+                                                                  _model
+                                                                      .directionFilter,
+                                                                  _model
+                                                                      .statusFilter,
+                                                                  _model
+                                                                      .methodFilter)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryBackground,
+                                                                fontSize: 8.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ].divide(SizedBox(width: 14.0)),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -303,8 +464,6 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                         FlutterFlowChoiceChips(
                                                       options: [
                                                         ChipData(
-                                                            'All transactions'),
-                                                        ChipData(
                                                             'Last 20 transactions'),
                                                         ChipData('Last week'),
                                                         ChipData(
@@ -376,9 +535,8 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                     context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w600,
@@ -391,7 +549,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                           context)
                                                                       .primaryBackground,
                                                                   fontSize:
-                                                                      14.0,
+                                                                      12.0,
                                                                   letterSpacing:
                                                                       0.0,
                                                                   fontWeight:
@@ -410,27 +568,29 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                         labelPadding:
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
-                                                                    12.0,
-                                                                    8.0,
-                                                                    12.0,
-                                                                    8.0),
+                                                                    10.0,
+                                                                    5.5,
+                                                                    10.0,
+                                                                    5.5),
                                                         elevation: 0.0,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(30.0),
+                                                                .circular(
+                                                                    999.0),
                                                       ),
                                                       unselectedChipStyle:
                                                           ChipStyle(
                                                         backgroundColor:
-                                                            Color(0xFFEBEBEB),
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
                                                         textStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .bodyMedium
                                                                 .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500,
@@ -441,6 +601,8 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                   ),
                                                                   color: Color(
                                                                       0xFF111111),
+                                                                  fontSize:
+                                                                      12.0,
                                                                   letterSpacing:
                                                                       0.0,
                                                                   fontWeight:
@@ -459,14 +621,15 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                         labelPadding:
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
-                                                                    12.0,
-                                                                    8.0,
-                                                                    12.0,
-                                                                    8.0),
+                                                                    10.0,
+                                                                    5.5,
+                                                                    10.0,
+                                                                    5.5),
                                                         elevation: 0.0,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(30.0),
+                                                                .circular(
+                                                                    999.0),
                                                       ),
                                                       chipSpacing: 8.0,
                                                       rowSpacing: 8.0,
@@ -480,7 +643,9 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                               .choiceChipsValueController ??=
                                                           FormFieldController<
                                                               List<String>>(
-                                                        ['All transactions'],
+                                                        [
+                                                          'Last 20 transactions'
+                                                        ],
                                                       ),
                                                       wrapped: false,
                                                     ),
@@ -838,11 +1003,14 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                           builder: (context) {
                                                             final dayGroup = functions
                                                                     .transactionDayGroups(
-                                                                        _model
-                                                                            .transactionList
+                                                                        functions
+                                                                            .filterTransactionsBy(
+                                                                                _model.transactionList.toList(),
+                                                                                _model.directionFilter,
+                                                                                _model.statusFilter,
+                                                                                _model.methodFilter)
                                                                             .toList(),
-                                                                        _model
-                                                                            .filterIndex)
+                                                                        _model.filterIndex)
                                                                     ?.toList() ??
                                                                 [];
 
@@ -896,13 +1064,13 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                             .bodyMedium
                                                                             .override(
                                                                               font: GoogleFonts.montserrat(
-                                                                                fontWeight: FontWeight.w600,
+                                                                                fontWeight: FontWeight.w500,
                                                                                 fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                               ),
-                                                                              color: Color(0x8A000000),
-                                                                              fontSize: 11.0,
-                                                                              letterSpacing: 0.6,
-                                                                              fontWeight: FontWeight.w600,
+                                                                              color: Color(0xFF484848),
+                                                                              fontSize: 12.0,
+                                                                              letterSpacing: 0.0,
+                                                                              fontWeight: FontWeight.w500,
                                                                               fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                             ),
                                                                       ),
@@ -963,23 +1131,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                                               txItemItem,
                                                                                               r'''$.transfer''',
                                                                                             )),
-                                                                                        subtitle: functions.transactionSubtitle(
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.description''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.kind''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.occurredAt''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.direction''',
-                                                                                            ).toString()),
+                                                                                        subtitle: functions.transactionRowSubtitle(txItemItem, true),
                                                                                         amount: functions.transactionAmount(
                                                                                             getJsonField(
                                                                                               txItemItem,
@@ -997,10 +1149,7 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                                           txItemItem,
                                                                                           r'''$.direction''',
                                                                                         ).toString()),
-                                                                                        paymentMethod: getJsonField(
-                                                                                          txItemItem,
-                                                                                          r'''$.paymentMethod''',
-                                                                                        ).toString(),
+                                                                                        paymentMethod: functions.transactionMethod(txItemItem),
                                                                                         showDivider: functions.groupPairDivider(dayGroupItem, txItemIndex),
                                                                                         tone: functions.transactionTone(
                                                                                             getJsonField(
@@ -1038,11 +1187,14 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                               true) &&
                                                           (functions
                                                                   .transactionDayGroups(
-                                                                      _model
-                                                                          .transactionList
+                                                                      functions
+                                                                          .filterTransactionsBy(
+                                                                              _model.transactionList.toList(),
+                                                                              _model.directionFilter,
+                                                                              _model.statusFilter,
+                                                                              _model.methodFilter)
                                                                           .toList(),
-                                                                      _model
-                                                                          .filterIndex)
+                                                                      _model.filterIndex)
                                                                   ?.length ==
                                                               0))
                                                         Padding(
@@ -1050,46 +1202,216 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                               EdgeInsetsDirectional
                                                                   .fromSTEB(
                                                                       24.0,
-                                                                      48.0,
+                                                                      56.0,
                                                                       24.0,
                                                                       40.0),
-                                                          child: Text(
-                                                            'No transactions in this period',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  color: Color(
-                                                                      0xFF6C6C6C),
-                                                                  fontSize:
-                                                                      14.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                  lineHeight:
-                                                                      1.5,
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            0.0),
+                                                                child:
+                                                                    Image.asset(
+                                                                  'assets/images/Coin.png',
+                                                                  width: 140.0,
+                                                                  height: 140.0,
+                                                                  fit: BoxFit
+                                                                      .cover,
                                                                 ),
+                                                              ),
+                                                              Text(
+                                                                'No Transactions',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      font: GoogleFonts
+                                                                          .montserrat(
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primaryBackground,
+                                                                      fontSize:
+                                                                          22.0,
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                    ),
+                                                              ),
+                                                              if (functions.activeTransactionFilters(
+                                                                      _model
+                                                                          .directionFilter,
+                                                                      _model
+                                                                          .statusFilter,
+                                                                      _model
+                                                                          .methodFilter) >
+                                                                  0)
+                                                                Text(
+                                                                  'No transactions match these filters.\nTry changing or clearing them.',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .montserrat(
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        color: Color(
+                                                                            0x99000000),
+                                                                        fontSize:
+                                                                            13.0,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                        lineHeight:
+                                                                            1.5,
+                                                                      ),
+                                                                ),
+                                                              if (functions.activeTransactionFilters(
+                                                                      _model
+                                                                          .directionFilter,
+                                                                      _model
+                                                                          .statusFilter,
+                                                                      _model
+                                                                          .methodFilter) ==
+                                                                  0)
+                                                                Text(
+                                                                  'No transactions in this period.\nTry a longer one above.',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .montserrat(
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        color: Color(
+                                                                            0x99000000),
+                                                                        fontSize:
+                                                                            13.0,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                        lineHeight:
+                                                                            1.5,
+                                                                      ),
+                                                                ),
+                                                              if (functions.activeTransactionFilters(
+                                                                      _model
+                                                                          .directionFilter,
+                                                                      _model
+                                                                          .statusFilter,
+                                                                      _model
+                                                                          .methodFilter) >
+                                                                  0)
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child:
+                                                                      InkWell(
+                                                                    splashColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    focusColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    hoverColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    highlightColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    onTap:
+                                                                        () async {
+                                                                      _model.directionFilter =
+                                                                          'All';
+                                                                      _model.statusFilter =
+                                                                          'All';
+                                                                      _model.methodFilter =
+                                                                          'All types';
+                                                                      safeSetState(
+                                                                          () {});
+                                                                    },
+                                                                    child: Text(
+                                                                      'Clear filters',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.montserrat(
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryBackground,
+                                                                            fontSize:
+                                                                                14.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            decoration:
+                                                                                TextDecoration.underline,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                            ].divide(SizedBox(
+                                                                height: 8.0)),
                                                           ),
                                                         ),
                                                     ],

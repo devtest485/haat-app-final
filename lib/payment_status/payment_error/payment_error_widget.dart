@@ -175,7 +175,7 @@ class _PaymentErrorWidgetState extends State<PaymentErrorWidget>
                                     children: [
                                       Container(
                                         width: 200.0,
-                                        height: 140.0,
+                                        height: 168.0,
                                         decoration: BoxDecoration(),
                                         child: Stack(
                                           alignment:
@@ -183,19 +183,19 @@ class _PaymentErrorWidgetState extends State<PaymentErrorWidget>
                                           children: [
                                             ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(36.0),
+                                                  BorderRadius.circular(48.0),
                                               child: BackdropFilter(
                                                 filter: ImageFilter.blur(
                                                   sigmaX: 4.0,
                                                   sigmaY: 4.0,
                                                 ),
                                                 child: Container(
-                                                  width: 72.0,
-                                                  height: 72.0,
+                                                  width: 96.0,
+                                                  height: 96.0,
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            36.0),
+                                                            48.0),
                                                   ),
                                                 ),
                                               ),
@@ -204,8 +204,8 @@ class _PaymentErrorWidgetState extends State<PaymentErrorWidget>
                                             Lottie.asset(
                                               'assets/jsons/result-failed.json',
                                               width: 200.0,
-                                              height: 140.0,
-                                              fit: BoxFit.none,
+                                              height: 168.0,
+                                              fit: BoxFit.contain,
                                               repeat: false,
                                               animate: true,
                                             ),

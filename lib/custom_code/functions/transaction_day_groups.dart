@@ -31,9 +31,9 @@ List<dynamic>? transactionDayGroups(
   String label(dynamic r) => at(r) == null
       ? ''
       : ago(at(r)!) == 0
-          ? 'TODAY'
+          ? 'Today'
           : ago(at(r)!) == 1
-              ? 'YESTERDAY'
+              ? 'Yesterday'
               : DateFormat('d/M/yy').format(at(r)!);
   bool hiddenLine(dynamic r) {
     final k = (r['kind'] ?? '').toString().trim();

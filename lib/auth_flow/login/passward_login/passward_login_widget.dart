@@ -499,7 +499,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                                 EasyDebounce.debounce(
                                                                           '_model.passwordTextController',
                                                                           Duration(
-                                                                              milliseconds: 2000),
+                                                                              milliseconds: 100),
                                                                           () async {
                                                                             safeSetState(() {});
                                                                             if (_model.usernameMobilenumberTextController.text !=

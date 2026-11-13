@@ -16,6 +16,8 @@ class PhoneNumberPageModel extends FlutterFlowModel<PhoneNumberPageWidget> {
 
   bool isPhoneValid = false;
 
+  bool showPhoneError = false;
+
   bool isSubmitting = false;
 
   String? idempotencyKey;

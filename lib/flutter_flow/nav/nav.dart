@@ -40,12 +40,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => OnBoardingPageWidget(),
+      errorBuilder: (context, state) => WelcomeMotionWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => OnBoardingPageWidget(),
+          builder: (context, _) => WelcomeMotionWidget(),
+        ),
+        FFRoute(
+          name: WelcomeMotionWidget.routeName,
+          path: WelcomeMotionWidget.routePath,
+          builder: (context, params) => WelcomeMotionWidget(),
         ),
         FFRoute(
           name: IdCardScanPageWidget.routeName,

@@ -148,7 +148,8 @@ class _ThousandsSeparatorFormatter extends TextInputFormatter {
   }
 }
 
-class _AmountInputState extends State<AmountInput> {
+class _AmountInputState extends State<AmountInput>
+    with SingleTickerProviderStateMixin {
   static const _numberColor = Color(0xFF111111);
   static const _currencyColor = Color(0xFFBBBBBB);
   static const _lineColor = Color(0x17000000);
@@ -156,6 +157,28 @@ class _AmountInputState extends State<AmountInput> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
   bool _lastValid = false;
+
+  // Pointer blink: 530 ms on, 530 ms off (iOS caret rate) with short fades.
+  late final AnimationController _blink = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1060),
+  );
+  late final Animation<double> _pointerOpacity = _blink.drive(
+    TweenSequence<double>([
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: 40),
+      TweenSequenceItem(
+        tween: Tween(begin: 1.0, end: 0.0)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 10,
+      ),
+      TweenSequenceItem(tween: ConstantTween(0.0), weight: 40),
+      TweenSequenceItem(
+        tween: Tween(begin: 0.0, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 10,
+      ),
+    ]),
+  );
 
   @override
   void initState() {
@@ -166,7 +189,7 @@ class _AmountInputState extends State<AmountInput> {
     final safeInitial = (initial.trim() == '0') ? '' : initial.trim();
 
     _controller = TextEditingController(text: safeInitial);
-    _focusNode = FocusNode();
+    _focusNode = FocusNode()..addListener(_restartBlink);
     _lastValid = _isValid(_controller.text);
 
     if (widget.autofocus ?? true) {
@@ -178,9 +201,22 @@ class _AmountInputState extends State<AmountInput> {
 
   @override
   void dispose() {
+    _blink.dispose();
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  /// Pointer solid dikhao, phir blink shuru karo. Focus na ho ya
+  /// "Reduce motion" on ho to blink nahi, sirf solid line.
+  void _restartBlink() {
+    if (!mounted) return;
+    _blink.value = 0;
+    if (_focusNode.hasFocus && !MediaQuery.of(context).disableAnimations) {
+      _blink.repeat();
+    } else {
+      _blink.stop();
+    }
   }
 
   static bool _isValid(String raw) {
@@ -189,6 +225,8 @@ class _AmountInputState extends State<AmountInput> {
   }
 
   Future<void> _handleChanged(String raw) async {
+    // Type karte waqt pointer solid rahe, ruk kar dobara blink kare.
+    _restartBlink();
     setState(() {});
     await widget.onAmountChanged?.call(raw);
     final valid = _isValid(raw);
@@ -258,12 +296,15 @@ class _AmountInputState extends State<AmountInput> {
                   if (widget.showCursorLine ?? true)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: Container(
-                        width: 2,
-                        height: 47,
-                        decoration: BoxDecoration(
-                          color: _lineColor,
-                          borderRadius: BorderRadius.circular(2),
+                      child: FadeTransition(
+                        opacity: _pointerOpacity,
+                        child: Container(
+                          width: 2,
+                          height: 47,
+                          decoration: BoxDecoration(
+                            color: _lineColor,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
                       ),
                     ),

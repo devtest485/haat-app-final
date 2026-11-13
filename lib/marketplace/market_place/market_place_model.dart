@@ -2,6 +2,7 @@ import '/backend/api_requests/api_calls.dart';
 import '/components/market_biller_tile/market_biller_tile_widget.dart';
 import '/components/market_brand_card/market_brand_card_widget.dart';
 import '/components/market_category_tile/market_category_tile_widget.dart';
+import '/components/marketplace_shimmer/marketplace_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -84,9 +85,19 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
       ? pageViewController!.page!.round()
       : 0;
 
-  @override
-  void initState(BuildContext context) {}
+  bool marketplaceLoaded = false;
+
+  // Model for MarketplaceShimmer component.
+  late MarketplaceShimmerModel marketplaceShimmerModel;
 
   @override
-  void dispose() {}
+  void initState(BuildContext context) {
+    marketplaceShimmerModel =
+        createModel(context, () => MarketplaceShimmerModel());
+  }
+
+  @override
+  void dispose() {
+    marketplaceShimmerModel.dispose();
+  }
 }

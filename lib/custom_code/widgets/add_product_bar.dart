@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '/components/product_card/product_card_widget.dart';
+import '/custom_code/widgets/custom_bottombar.dart' show bottomBarHiderOf;
 
 /// The cart on the Cashier tab: a black bar that rises from the bottom once something
 /// is in it, and opens into the black Checkout screen when Charge is tapped.
@@ -100,11 +101,31 @@ class _AddProductBarState extends State<AddProductBar>
   List<Map> _lines = const [];
   bool _open = false;
 
+  /// Slides the app's bottom bar away while the cart has something in it, so
+  /// the cart takes its place; null when this page has no bottom bar.
+  void Function(Object owner, bool hidden)? _bottomBar;
+  bool _bottomBarHidden = false;
+
+  void _hideBottomBar(bool hide) {
+    if (_bottomBarHidden == hide) return;
+    _bottomBarHidden = hide;
+    _bottomBar?.call(this, hide);
+  }
+
   @override
   void initState() {
     super.initState();
     _lines = _read(widget.cart);
     if (_lines.isNotEmpty) _presence.value = 1;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_bottomBar == null) {
+      _bottomBar = bottomBarHiderOf(context);
+      if (_lines.isNotEmpty) _hideBottomBar(true);
+    }
   }
 
   @override
@@ -119,10 +140,12 @@ class _AddProductBarState extends State<AddProductBar>
       _presence.reverse();
       if (_open) _setOpen(false);
     }
+    _hideBottomBar(lines.isNotEmpty);
   }
 
   @override
   void dispose() {
+    _hideBottomBar(false);
     _expand.dispose();
     _presence.dispose();
     super.dispose();

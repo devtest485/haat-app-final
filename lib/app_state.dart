@@ -63,6 +63,10 @@ class FFAppState extends ChangeNotifier {
           prefs.getString('ff_businessLogoUrl') ?? _businessLogoUrl;
     });
     _safeInit(() {
+      _businessCoverUrl =
+          prefs.getString('ff_businessCoverUrl') ?? _businessCoverUrl;
+    });
+    _safeInit(() {
       _seenNotificationActions =
           prefs.getString('ff_seenNotificationActions') ??
               _seenNotificationActions;
@@ -330,6 +334,17 @@ class FFAppState extends ChangeNotifier {
   set businessLogoUrl(String value) {
     _businessLogoUrl = value;
     prefs.setString('ff_businessLogoUrl', value);
+  }
+
+  /// Address of the business's profile cover, or empty when it has none.
+  ///
+  /// Kept between visits so the header shows at once instead of waiting for the
+  /// profile to load again. Written by the Store Profile page.
+  String _businessCoverUrl = '';
+  String get businessCoverUrl => _businessCoverUrl;
+  set businessCoverUrl(String value) {
+    _businessCoverUrl = value;
+    prefs.setString('ff_businessCoverUrl', value);
   }
 
   /// The business's wallet number, as a value — the line it is written in is

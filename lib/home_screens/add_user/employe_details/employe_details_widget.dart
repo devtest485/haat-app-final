@@ -91,7 +91,7 @@ class _EmployeDetailsWidgetState extends State<EmployeDetailsWidget> {
                     lowercase: true,
                     fadeStart: 0.36,
                     fadeEnd: 0.83,
-                    animate: false,
+                    animate: true,
                     showContent: false,
                     onButtonTap: () async {},
                   ),

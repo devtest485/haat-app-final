@@ -11,11 +11,18 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
+/// Row subtitle: "<status label> · <time>".
+///
+/// [grouped] is true where the rows already sit under a date heading (All
+/// Transactions), so only the time is shown; elsewhere (home) the day is
+/// shown instead, as before.
 String? transactionSubtitle(
   String? description,
   String? kind,
   String? occurredAt,
   String? direction,
+  String? status,
+  bool? grouped,
 ) {
   final at = DateTime.tryParse(occurredAt ?? '')?.toLocal();
 
@@ -33,25 +40,32 @@ String? transactionSubtitle(
             : DateFormat(at.year == today.year ? 'd MMM' : 'd MMM y')
                 .format(at);
   }
-
-  if (kind == 'transfer') {
-    final label = (direction ?? '').trim() == 'credit'
-        ? 'Transfer received'
-        : 'Transfer sent';
-    return [label, day].where((part) => part.isNotEmpty).join(' · ');
-  }
+  final when = (grouped ?? false)
+      ? (at == null ? '' : DateFormat('hh:mm a').format(at))
+      : day;
 
   final given = (description ?? '').trim();
-  if (given.isEmpty || given == 'null') return day;
+  final base = kind == 'transfer'
+      ? ((direction ?? '').trim() == 'credit'
+          ? 'Transfer received'
+          : 'Transfer sent')
+      : (given.isEmpty || given == 'null')
+          ? ''
+          : switch (kind) {
+              'payment' => 'Payment received',
+              'payout' => 'Payout',
+              'release' => 'Funds released',
+              'refund' => 'Refund',
+              'fee' => 'Fee',
+              _ => '',
+            };
 
-  final label = switch (kind) {
-    'payment' => 'Payment received',
-    'payout' => 'Payout',
-    'release' => 'Funds released',
-    'refund' => 'Refund',
-    'fee' => 'Fee',
-    _ => '',
+  final label = switch (transactionTone(kind, direction, status)) {
+    'pending' => 'Pending',
+    'failed' => 'Failed',
+    'expired' => 'Expired',
+    _ => base,
   };
 
-  return [label, day].where((part) => part.isNotEmpty).join(' · ');
+  return [label, when].where((part) => part.isNotEmpty).join(' · ');
 }

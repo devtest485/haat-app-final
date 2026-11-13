@@ -36,6 +36,35 @@ void callNavigateTab(int index) {
   _bottomTabNavigator?.call(index);
 }
 
+/// Lets something inside a tab put the bar away while it needs the bottom of
+/// the screen — the My Store cart does while it has something in it.
+///
+/// Returns null when [context] is not inside a CustomBottombar tab. The call
+/// takes an owner so a page being replaced can't withdraw its successor's
+/// request; the bar hides while its showing tab has any request standing, and
+/// slides back as soon as there is none or another tab is chosen.
+///
+/// Resolve it in didChangeDependencies and keep it: it is still safe to call
+/// from dispose, where looking up ancestors is not.
+void Function(Object owner, bool hidden)? bottomBarHiderOf(
+    BuildContext context) {
+  final scope = context.getInheritedWidgetOfExactType<_TabScope>();
+  final bar = context.findAncestorStateOfType<_CustomBottombarState>();
+  if (scope == null || bar == null) return null;
+  final tab = scope.index;
+  return (owner, hidden) => bar._requestHidden(tab, owner, hidden);
+}
+
+/// Tells what is inside a tab which tab it is, for [bottomBarHiderOf].
+class _TabScope extends InheritedWidget {
+  const _TabScope({required this.index, required super.child});
+
+  final int index;
+
+  @override
+  bool updateShouldNotify(_TabScope oldWidget) => oldWidget.index != index;
+}
+
 class CustomBottombar extends StatefulWidget {
   const CustomBottombar({
     super.key,
@@ -105,7 +134,7 @@ class CustomBottombar extends StatefulWidget {
 }
 
 class _CustomBottombarState extends State<CustomBottombar>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   static const double _kBarHeight = 85.0;
   static const double _kTopPadding = 12.0;
   static const double _kBorderWidth = 1.0;
@@ -117,6 +146,48 @@ class _CustomBottombarState extends State<CustomBottombar>
 
   late int _currentIndex;
   final List<int> _pageKeys = [0, 0, 0, 0];
+
+  /// 0 with the bar up, 1 with it slid away below the screen.
+  late final AnimationController _hide = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 300),
+    reverseDuration: const Duration(milliseconds: 260),
+  );
+  late final Animation<double> _hideCurve = CurvedAnimation(
+    parent: _hide,
+    curve: Curves.easeInOutCubic,
+    // Coming back it decelerates into place.
+    reverseCurve: Curves.easeInCubic,
+  );
+
+  /// Standing requests to hide the bar, per tab, by owner.
+  final Map<int, Set<Object>> _hideRequests = {};
+
+  /// Read in didChangeDependencies, since a request can arrive from a
+  /// disposing child when this context can no longer be looked up from.
+  bool _reduceMotion = false;
+
+  void _requestHidden(int tab, Object owner, bool hidden) {
+    final owners = _hideRequests.putIfAbsent(tab, () => <Object>{});
+    final changed = hidden ? owners.add(owner) : owners.remove(owner);
+    if (changed) _syncHidden();
+  }
+
+  void _syncHidden() {
+    if (_disposed) return;
+    final hide = _hideRequests[_currentIndex]?.isNotEmpty ?? false;
+    // Only ever started, never set: requests arrive mid-build and from
+    // dispose, where setting the value — which notifies at once — would
+    // rebuild at a moment that is not allowed. A started animation first
+    // notifies on the next tick.
+    if (_reduceMotion) {
+      _hide.animateTo(hide ? 1 : 0, duration: const Duration(milliseconds: 1));
+    } else if (hide) {
+      _hide.forward();
+    } else {
+      _hide.reverse();
+    }
+  }
 
   /// Har tab ka apna alag ScrollController — tab switch par position
   /// remember rehti hai.
@@ -206,6 +277,8 @@ class _CustomBottombarState extends State<CustomBottombar>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    _reduceMotion = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+
     final router = GoRouter.of(context);
     if (identical(router, _router)) return;
 
@@ -228,6 +301,7 @@ class _CustomBottombarState extends State<CustomBottombar>
     for (final c in _scrollControllers) {
       c.dispose();
     }
+    _hide.dispose();
     super.dispose();
   }
 
@@ -265,6 +339,8 @@ class _CustomBottombarState extends State<CustomBottombar>
       _currentIndex = target;
       _pageKeys[target]++;
     });
+    // A hidden bar belongs to the tab that hid it.
+    _syncHidden();
     widget.onTabChanged?.call(target);
   }
 
@@ -327,7 +403,10 @@ class _CustomBottombarState extends State<CustomBottombar>
 
     return KeyedSubtree(
       key: ValueKey('${keyPrefix}_${_pageKeys[index]}'),
-      child: _wrapWithScroll(index: index, child: pageContent),
+      child: _TabScope(
+        index: index,
+        child: _wrapWithScroll(index: index, child: pageContent),
+      ),
     );
   }
 
@@ -372,7 +451,26 @@ class _CustomBottombarState extends State<CustomBottombar>
           ),
         ),
         // Bottom bar har tab par show hota hai — keyboard khula ho to nahi.
-        bottomNavigationBar: _keyboardOpen ? null : _buildNavBar(context),
+        // A tab can also slide it away (bottomBarHiderOf). Its height shrinks
+        // with it, so the body's bottom padding — and anything resting on it,
+        // like the cart bar — follows it down.
+        bottomNavigationBar: _keyboardOpen
+            ? null
+            : AnimatedBuilder(
+                animation: _hideCurve,
+                child: _buildNavBar(context),
+                builder: (context, bar) {
+                  final hidden = _hideCurve.value;
+                  if (hidden >= 1) return const SizedBox.shrink();
+                  return ClipRect(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      heightFactor: 1 - hidden,
+                      child: bar,
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }
@@ -414,7 +512,7 @@ class _CustomBottombarState extends State<CustomBottombar>
                 ),
                 _buildNavItem(
                   index: 1,
-                  label: widget.cashierLabel ?? 'Cashier',
+                  label: widget.cashierLabel ?? 'My Store',
                   // The design's bag with speed lines: Material Symbols
                   // "shopping_bag_speed", outlined at weight 300 like local_mall.
                   selectedIcon: 'assets/images/shopping_bag_speed.svg',

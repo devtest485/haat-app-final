@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/product_shimmer_grid/product_shimmer_grid_widget.dart';
 import '/components/product_card/product_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -50,9 +51,17 @@ class AddAmountViewModel extends FlutterFlowModel<AddAmountViewWidget> {
   // Stores action output result for [Backend Call - API (Products)] action in AddAmountView widget.
   ApiCallResponse? apiResultp8j;
 
-  @override
-  void initState(BuildContext context) {}
+  // Model for ProductShimmerGrid component.
+  late ProductShimmerGridModel productShimmerGridModel;
 
   @override
-  void dispose() {}
+  void initState(BuildContext context) {
+    productShimmerGridModel =
+        createModel(context, () => ProductShimmerGridModel());
+  }
+
+  @override
+  void dispose() {
+    productShimmerGridModel.dispose();
+  }
 }

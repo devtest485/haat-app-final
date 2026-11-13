@@ -23,3 +23,4 @@ export '/custom_code/widgets/haat_place_search.dart' show HaatPlaceSearch;
 export '/custom_code/widgets/step_area_chart.dart' show StepAreaChart;
 export '/custom_code/widgets/haat_branch_map.dart' show HaatBranchMap;
 export '/custom_code/widgets/security_settings.dart' show SecuritySettings;
+export '/custom_code/widgets/tap_to_pay_pulse.dart' show TapToPayPulse;

@@ -9,6 +9,8 @@ export '/home_screens/add_user/add_employees/add_employees_widget.dart'
     show AddEmployeesWidget;
 export '/auth_flow/on_bording_flow/on_boarding_page/on_boarding_page_widget.dart'
     show OnBoardingPageWidget;
+export '/auth_flow/on_bording_flow/welcome_motion/welcome_motion_widget.dart'
+    show WelcomeMotionWidget;
 export '/test/test_widget.dart' show TestWidget;
 export '/add_branch/branch_ies_list/branch_ies_list_widget.dart'
     show BranchIesListWidget;

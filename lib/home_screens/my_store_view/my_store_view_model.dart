@@ -1,0 +1,73 @@
+import '/components/product_card/product_card_widget.dart';
+import '/components/product_shimmer_grid/product_shimmer_grid_widget.dart';
+import '/components/products_menu_sheet/products_menu_sheet_widget.dart';
+import '/flutter_flow/ff_builtin_enums.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/home_screens/new_order_flow/select_pay_out/select_pay_out_widget.dart';
+import 'dart:math';
+import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
+import 'my_store_view_widget.dart' show MyStoreViewWidget;
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
+
+class MyStoreViewModel extends FlutterFlowModel<MyStoreViewWidget> {
+  ///  Local state fields for this component.
+
+  List<dynamic> products = [];
+  void addToProducts(dynamic item) => products.add(item);
+  void removeFromProducts(dynamic item) => products.remove(item);
+  void removeAtIndexFromProducts(int index) => products.removeAt(index);
+  void insertAtIndexInProducts(int index, dynamic item) =>
+      products.insert(index, item);
+  void updateProductsAtIndex(int index, Function(dynamic) updateFn) =>
+      products[index] = updateFn(products[index]);
+
+  bool productsLoaded = false;
+
+  List<dynamic> cart = [];
+  void addToCart(dynamic item) => cart.add(item);
+  void removeFromCart(dynamic item) => cart.remove(item);
+  void removeAtIndexFromCart(int index) => cart.removeAt(index);
+  void insertAtIndexInCart(int index, dynamic item) => cart.insert(index, item);
+  void updateCartAtIndex(int index, Function(dynamic) updateFn) =>
+      cart[index] = updateFn(cart[index]);
+
+  ///  State fields for stateful widgets in this component.
+
+  // Stores action output result for [Bottom Sheet - ProductsMenuSheet] action in Container widget.
+  String? menuChoice;
+
+  // Model for ProductShimmerGrid component.
+  late ProductShimmerGridModel productShimmerGridModel;
+
+  @override
+  void initState(BuildContext context) {
+    productShimmerGridModel =
+        createModel(context, () => ProductShimmerGridModel());
+  }
+
+  @override
+  void dispose() {
+    productShimmerGridModel.dispose();
+  }
+
+  /// Action blocks.
+  Future loadProducts(BuildContext context) async {
+    List<dynamic>? loadedProducts;
+
+    loadedProducts = await actions.haatLoadProducts();
+    products = loadedProducts!.toList().cast<dynamic>();
+    productsLoaded = true;
+    updatePage(() {});
+  }
+}

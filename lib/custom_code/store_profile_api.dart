@@ -1,5 +1,6 @@
 import '/custom_code/api_client.dart';
 import '/custom_code/orders_api.dart';
+import '/custom_code/organization_api.dart' show logoUrlFor;
 
 /// What the Profile tab says about the business, read from the server.
 ///
@@ -11,6 +12,8 @@ class StoreProfile {
     required this.name,
     required this.handle,
     required this.logoPath,
+    required this.description,
+    required this.coverPath,
     required this.status,
     required this.orders,
     required this.products,
@@ -24,6 +27,12 @@ class StoreProfile {
   final String name;
   final String handle;
   final String? logoPath;
+
+  /// The line under the name, as the merchant wrote it at setup. Empty when none.
+  final String description;
+
+  /// The picture behind the header, or null for the bundled one.
+  final String? coverPath;
   final String status;
 
   /// Sales of the business's products, whoever took the payment, counted up to
@@ -45,6 +54,8 @@ class StoreProfile {
         'name': name,
         'handle': handle,
         'logoPath': logoPath,
+        'description': description,
+        'coverUrl': logoUrlFor(coverPath) ?? '',
         'status': status,
         'orders': orders >= ordersCap ? '$ordersCap+' : '$orders',
         'products': '$products',
@@ -131,6 +142,8 @@ class StoreProfileApi {
       name: '${business['name'] ?? ''}',
       handle: '${business['slug'] ?? ''}',
       logoPath: business['logoPath'] as String?,
+      description: '${business['description'] ?? ''}'.trim(),
+      coverPath: business['coverPath'] as String?,
       status: '${business['status'] ?? ''}',
       orders: orders?.length ?? 0,
       products: products.length,

@@ -2,6 +2,8 @@ import '/backend/api_requests/api_calls.dart';
 import '/components/market_biller_tile/market_biller_tile_widget.dart';
 import '/components/market_brand_card/market_brand_card_widget.dart';
 import '/components/market_category_tile/market_category_tile_widget.dart';
+import '/components/marketplace_shimmer/marketplace_shimmer_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -13,6 +15,7 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'market_place_model.dart';
@@ -25,8 +28,11 @@ class MarketPlaceWidget extends StatefulWidget {
   State<MarketPlaceWidget> createState() => _MarketPlaceWidgetState();
 }
 
-class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
+class _MarketPlaceWidgetState extends State<MarketPlaceWidget>
+    with TickerProviderStateMixin {
   late MarketPlaceModel _model;
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -87,7 +93,82 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
             .cast<dynamic>();
         safeSetState(() {});
       }
+      _model.marketplaceLoaded = true;
+      safeSetState(() {});
     });
+
+    animationsMap.addAll({
+      'marketBillerTileOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 320.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 420.0.ms,
+            begin: Offset(0.8, 0.8),
+            end: Offset(1.0, 1.0),
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 420.0.ms,
+            begin: Offset(0.0, 12.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'marketCategoryTileOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 120.0.ms,
+            duration: 320.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 120.0.ms,
+            duration: 420.0.ms,
+            begin: Offset(0.0, 14.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'marketBrandCardOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 200.0.ms,
+            duration: 320.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 200.0.ms,
+            duration: 420.0.ms,
+            begin: Offset(32.0, 0.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -287,6 +368,12 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
+                                if (_model.marketplaceLoaded == false)
+                                  wrapWithModel(
+                                    model: _model.marketplaceShimmerModel,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: MarketplaceShimmerWidget(),
+                                  ),
                                 Container(
                                   decoration: BoxDecoration(),
                                   child: Visibility(
@@ -530,7 +617,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                               .languageCode,
                                                                         );
                                                                       },
-                                                                    );
+                                                                    ).animateOnPageLoad(
+                                                                        animationsMap[
+                                                                            'marketBillerTileOnPageLoadAnimation']!);
                                                                   }),
                                                                 );
                                                               },
@@ -611,50 +700,39 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 20.0, 0.0, 20.0),
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          (FFCrossAxisAlignment.start)
-                                              .flutterValue,
-                                      textBaseline: TextBaseline.alphabetic,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  10.0, 0.0, 10.0, 0.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                (FFMainAxisAlignment
-                                                        .spaceBetween)
-                                                    .flutterValue,
-                                            children: [
-                                              Text(
-                                                'Categories',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryBackground,
-                                                          letterSpacing: 0.0,
+                                if (_model.marketplaceLoaded == true)
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 20.0, 0.0, 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            (FFCrossAxisAlignment.start)
+                                                .flutterValue,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    10.0, 0.0, 10.0, 0.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  (FFMainAxisAlignment
+                                                          .spaceBetween)
+                                                      .flutterValue,
+                                              children: [
+                                                Text(
+                                                  'Categories',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           fontStyle:
@@ -663,120 +741,138 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
-                                              ),
-                                            ],
+                                                        color: FlutterFlowTheme
+                                                                .of(context)
+                                                            .primaryBackground,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(),
-                                          child: Padding(
+                                          Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      10.0, 10.0, 10.0, 0.0),
+                                              child: Builder(
+                                                builder: (context) {
+                                                  final category = _model
+                                                      .categories
+                                                      .toList();
+
+                                                  return Wrap(
+                                                    spacing: 10.0,
+                                                    runSpacing: 10.0,
+                                                    alignment:
+                                                        WrapAlignment.start,
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .start,
+                                                    direction: Axis.horizontal,
+                                                    runAlignment:
+                                                        WrapAlignment.start,
+                                                    verticalDirection:
+                                                        VerticalDirection.down,
+                                                    clipBehavior: Clip.none,
+                                                    children: List.generate(
+                                                        category.length,
+                                                        (categoryIndex) {
+                                                      final categoryItem =
+                                                          category[
+                                                              categoryIndex];
+                                                      return MarketCategoryTileWidget(
+                                                        key: Key(
+                                                            'Keygbr_${categoryIndex}_of_${category.length}'),
+                                                        categoryKey:
+                                                            getJsonField(
+                                                          categoryItem,
+                                                          r'''$.key''',
+                                                        ).toString(),
+                                                        label: functions
+                                                            .notificationText(
+                                                                categoryItem,
+                                                                'label',
+                                                                FFAppState()
+                                                                    .languageCode),
+                                                        width: functions
+                                                            .shareOfWidth(
+                                                                MediaQuery.sizeOf(
+                                                                        context)
+                                                                    .width,
+                                                                44.0,
+                                                                2.0,
+                                                                10.0),
+                                                        onTap: () async {
+                                                          await showModalBottomSheet(
+                                                            isScrollControlled:
+                                                                true,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            enableDrag: false,
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return Padding(
+                                                                padding: MediaQuery
+                                                                    .viewInsetsOf(
+                                                                        context),
+                                                                child:
+                                                                    MarketSpaceWidget(
+                                                                  billers: _model
+                                                                      .billers,
+                                                                  brands: _model
+                                                                      .brands,
+                                                                  categories: _model
+                                                                      .categories,
+                                                                  initialCategory:
+                                                                      getJsonField(
+                                                                    categoryItem,
+                                                                    r'''$.key''',
+                                                                  ).toString(),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ).then((value) =>
+                                                              safeSetState(
+                                                                  () {}));
+                                                        },
+                                                      ).animateOnPageLoad(
+                                                          animationsMap[
+                                                              'marketCategoryTileOnPageLoadAnimation']!);
+                                                    }),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    10.0, 10.0, 10.0, 0.0),
-                                            child: Builder(
-                                              builder: (context) {
-                                                final category =
-                                                    _model.categories.toList();
-
-                                                return Wrap(
-                                                  spacing: 10.0,
-                                                  runSpacing: 10.0,
-                                                  alignment:
-                                                      WrapAlignment.start,
-                                                  crossAxisAlignment:
-                                                      WrapCrossAlignment.start,
-                                                  direction: Axis.horizontal,
-                                                  runAlignment:
-                                                      WrapAlignment.start,
-                                                  verticalDirection:
-                                                      VerticalDirection.down,
-                                                  clipBehavior: Clip.none,
-                                                  children: List.generate(
-                                                      category.length,
-                                                      (categoryIndex) {
-                                                    final categoryItem =
-                                                        category[categoryIndex];
-                                                    return MarketCategoryTileWidget(
-                                                      key: Key(
-                                                          'Keygbr_${categoryIndex}_of_${category.length}'),
-                                                      categoryKey: getJsonField(
-                                                        categoryItem,
-                                                        r'''$.key''',
-                                                      ).toString(),
-                                                      label: functions
-                                                          .notificationText(
-                                                              categoryItem,
-                                                              'label',
-                                                              FFAppState()
-                                                                  .languageCode),
-                                                      width: functions
-                                                          .shareOfWidth(
-                                                              MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width,
-                                                              44.0,
-                                                              2.0,
-                                                              10.0),
-                                                      onTap: () async {
-                                                        await showModalBottomSheet(
-                                                          isScrollControlled:
-                                                              true,
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          enableDrag: false,
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return Padding(
-                                                              padding: MediaQuery
-                                                                  .viewInsetsOf(
-                                                                      context),
-                                                              child:
-                                                                  MarketSpaceWidget(
-                                                                billers: _model
-                                                                    .billers,
-                                                                brands: _model
-                                                                    .brands,
-                                                                categories: _model
-                                                                    .categories,
-                                                                initialCategory:
-                                                                    getJsonField(
-                                                                  categoryItem,
-                                                                  r'''$.key''',
-                                                                ).toString(),
-                                                              ),
-                                                            );
-                                                          },
-                                                        ).then((value) =>
-                                                            safeSetState(
-                                                                () {}));
-                                                      },
-                                                    );
-                                                  }),
-                                                );
-                                              },
+                                                    0.0, 20.0, 0.0, 0.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: 4.0,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 20.0, 0.0, 0.0),
-                                          child: Container(
-                                            width: double.infinity,
-                                            height: 4.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
                                 if (_model.brands.isNotEmpty)
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
@@ -964,7 +1060,9 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget> {
                                                                 .languageCode,
                                                           );
                                                         },
-                                                      );
+                                                      ).animateOnPageLoad(
+                                                          animationsMap[
+                                                              'marketBrandCardOnPageLoadAnimation']!);
                                                     }).divide(
                                                         SizedBox(width: 10.0)),
                                                   ),

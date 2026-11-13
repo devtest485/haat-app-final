@@ -22,6 +22,9 @@ class SetupBisinessLocationPageModel
   /// the field until the merchant types a different one.
   String? nameError;
 
+  /// The line shown under the name on the profile. Optional.
+  String? businessDescription;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for BusinessNameField widget.
@@ -29,6 +32,11 @@ class SetupBisinessLocationPageModel
   TextEditingController? businessNameFieldTextController;
   String? Function(BuildContext, String?)?
       businessNameFieldTextControllerValidator;
+  // State field(s) for BusinessDescriptionField widget.
+  FocusNode? businessDescriptionFieldFocusNode;
+  TextEditingController? businessDescriptionFieldTextController;
+  String? Function(BuildContext, String?)?
+      businessDescriptionFieldTextControllerValidator;
   // Stores action output result for [Custom Action - haatSaveBusinessSetup] action in Container widget.
   String? saved;
   // Stores action output result for [Custom Action - haatBusinessNameWasTaken] action in Container widget.
@@ -41,5 +49,8 @@ class SetupBisinessLocationPageModel
   void dispose() {
     businessNameFieldFocusNode?.dispose();
     businessNameFieldTextController?.dispose();
+
+    businessDescriptionFieldFocusNode?.dispose();
+    businessDescriptionFieldTextController?.dispose();
   }
 }

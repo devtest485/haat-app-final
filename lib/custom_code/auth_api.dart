@@ -408,6 +408,13 @@ class AuthApi {
         parse: (_) => true,
       );
 
+  /// Turns biometric sign-in off for [deviceId]: the server forgets the public key,
+  /// so a signature from that phone is refused from now on.
+  Future<ApiResult<bool>> removeBiometric(String deviceId) => _client.delete(
+        '/auth/biometric/${Uri.encodeComponent(deviceId)}',
+        parse: (_) => true,
+      );
+
   /// Asks for a single-use challenge to sign.
   Future<ApiResult<String>> biometricChallenge() async => _client.post(
         '/auth/biometric/challenge',

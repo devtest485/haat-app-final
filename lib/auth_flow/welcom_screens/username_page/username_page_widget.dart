@@ -322,7 +322,7 @@ class _UsernamePageWidgetState extends State<UsernamePageWidget> {
                                                                 '_model.usernameTextController',
                                                                 Duration(
                                                                     milliseconds:
-                                                                        2000),
+                                                                        100),
                                                                 () async {
                                                                   _model.isValidUser =
                                                                       functions.isValidname(_model

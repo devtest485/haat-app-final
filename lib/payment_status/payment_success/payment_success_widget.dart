@@ -49,19 +49,27 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
       'clipRRectOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
         effectsBuilder: () => [
+          // Matches the Lottie disc: 0 → 112% → 96% → 100%.
           ScaleEffect(
-            curve: Curves.easeOut,
+            curve: Curves.easeOutCubic,
             delay: 0.0.ms,
-            duration: 233.0.ms,
+            duration: 200.0.ms,
             begin: Offset(0.0, 0.0),
-            end: Offset(1.08, 1.08),
+            end: Offset(1.12, 1.12),
           ),
           ScaleEffect(
-            curve: Curves.easeOut,
-            delay: 233.0.ms,
-            duration: 184.0.ms,
+            curve: Curves.easeInOut,
+            delay: 200.0.ms,
+            duration: 133.0.ms,
             begin: Offset(1.0, 1.0),
-            end: Offset(0.926, 0.926),
+            end: Offset(0.857, 0.857),
+          ),
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 333.0.ms,
+            duration: 117.0.ms,
+            begin: Offset(1.0, 1.0),
+            end: Offset(1.0417, 1.0417),
           ),
         ],
       ),
@@ -122,7 +130,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
                         children: [
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 57.0, 0.0, 0.0),
+                                0.0, 45.0, 0.0, 0.0),
                             child: Container(
                               decoration: BoxDecoration(),
                               child: Column(
@@ -137,7 +145,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
                                         children: [
                                           Container(
                                             width: 200.0,
-                                            height: 140.0,
+                                            height: 168.0,
                                             decoration: BoxDecoration(),
                                             child: Stack(
                                               alignment: AlignmentDirectional(
@@ -146,19 +154,19 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
                                                 ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          36.0),
+                                                          48.0),
                                                   child: BackdropFilter(
                                                     filter: ImageFilter.blur(
                                                       sigmaX: 4.0,
                                                       sigmaY: 4.0,
                                                     ),
                                                     child: Container(
-                                                      width: 72.0,
-                                                      height: 72.0,
+                                                      width: 96.0,
+                                                      height: 96.0,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(36.0),
+                                                                .circular(48.0),
                                                       ),
                                                     ),
                                                   ),
@@ -167,8 +175,8 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
                                                 Lottie.asset(
                                                   'assets/jsons/result-success.json',
                                                   width: 200.0,
-                                                  height: 140.0,
-                                                  fit: BoxFit.none,
+                                                  height: 168.0,
+                                                  fit: BoxFit.contain,
                                                   repeat: false,
                                                   animate: true,
                                                 ),

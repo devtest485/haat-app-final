@@ -7,6 +7,7 @@ import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'setup_bisiness_location_page_model.dart';
@@ -36,6 +37,9 @@ class _SetupBisinessLocationPageWidgetState
 
     _model.businessNameFieldTextController ??= TextEditingController();
     _model.businessNameFieldFocusNode ??= FocusNode();
+
+    _model.businessDescriptionFieldTextController ??= TextEditingController();
+    _model.businessDescriptionFieldFocusNode ??= FocusNode();
   }
 
   @override
@@ -54,7 +58,7 @@ class _SetupBisinessLocationPageWidgetState
       },
       child: Scaffold(
         key: scaffoldKey,
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Container(
           width: double.infinity,
@@ -260,6 +264,105 @@ class _SetupBisinessLocationPageWidgetState
                                             .fontStyle,
                                       ),
                                 ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 4.0, 0.0, 0.0),
+                                child: TextFormField(
+                                  controller: _model
+                                      .businessDescriptionFieldTextController,
+                                  focusNode:
+                                      _model.businessDescriptionFieldFocusNode,
+                                  onChanged: (_) => EasyDebounce.debounce(
+                                    '_model.businessDescriptionFieldTextController',
+                                    Duration(milliseconds: 0),
+                                    () async {
+                                      _model.businessDescription = _model
+                                          .businessDescriptionFieldTextController
+                                          .text;
+                                      safeSetState(() {});
+                                    },
+                                  ),
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    labelText: 'Description (optional)',
+                                    labelStyle: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                    alignLabelWithHint: true,
+                                    hintText:
+                                        'What you sell, where, and when you are open',
+                                    hintStyle: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                    ),
+                                    counterStyle: TextStyle(
+                                      color: Color(0x99EBEBEB),
+                                      fontSize: 11.0,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    filled: true,
+                                    fillColor: Color(0xFF1D1D1D),
+                                    contentPadding:
+                                        EdgeInsetsDirectional.fromSTEB(
+                                            16.0, 18.0, 16.0, 18.0),
+                                  ),
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                  maxLines: 4,
+                                  minLines: 3,
+                                  maxLength: 160,
+                                  maxLengthEnforcement:
+                                      MaxLengthEnforcement.enforced,
+                                  keyboardType: TextInputType.multiline,
+                                  cursorColor:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  validator: _model
+                                      .businessDescriptionFieldTextControllerValidator
+                                      .asValidator(context),
+                                ),
+                              ),
                             ].divide(SizedBox(height: 16.0)),
                           ),
                         ),
@@ -287,6 +390,7 @@ class _SetupBisinessLocationPageWidgetState
                                 _model.saved =
                                     await actions.haatSaveBusinessSetup(
                                   _model.businessName,
+                                  _model.businessDescription,
                                 );
                                 if (_model.saved == '') {
                                   context.pushNamed(

@@ -119,7 +119,7 @@ class _DeletProductWidgetState extends State<DeletProductWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                     child: Text(
-                      'It leaves your Cashier. Past sales stay in your records.',
+                      'It leaves your store. Past sales stay in your records.',
                       textAlign: TextAlign.start,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.montserrat(

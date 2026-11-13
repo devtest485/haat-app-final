@@ -30,6 +30,7 @@ class HaatAuthGroup {
     'Content-Type': 'application/json',
     'Accept-Language': '[language]',
   };
+  static BusinessNoticesCall businessNoticesCall = BusinessNoticesCall();
   static FindTransferRecipientCall findTransferRecipientCall =
       FindTransferRecipientCall();
   static OrganizationsCall organizationsCall = OrganizationsCall();
@@ -78,6 +79,51 @@ class HaatAuthGroup {
   static SendTransferCall sendTransferCall = SendTransferCall();
   static CountriesCall countriesCall = CountriesCall();
   static WalletCall walletCall = WalletCall();
+}
+
+class BusinessNoticesCall {
+  Future<ApiCallResponse> call({
+    String? baseURL,
+    String? authToken = '',
+    String? dataSource,
+    String? accessToken = '',
+    String? language = '',
+  }) async {
+    baseURL ??= FFDevEnvironmentValues().baseURL;
+    dataSource ??= FFDevEnvironmentValues().dataSource;
+    final baseUrl = HaatAuthGroup.getBaseUrl(
+      baseURL: baseURL,
+      authToken: authToken,
+      dataSource: dataSource,
+      accessToken: accessToken,
+      language: language,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'BusinessNotices',
+      apiUrl: '${baseUrl}/business/notices',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${accessToken}',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': '${language}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? notices(dynamic response) => getJsonField(
+        response,
+        r'''$.data.notices''',
+        true,
+      ) as List?;
 }
 
 class FindTransferRecipientCall {

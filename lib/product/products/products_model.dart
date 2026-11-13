@@ -1,3 +1,4 @@
+import '/components/product_shimmer_grid/product_shimmer_grid_widget.dart';
 import '/components/product_card/product_card_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -38,9 +39,17 @@ class ProductsModel extends FlutterFlowModel<ProductsWidget> {
   // Stores action output result for [Custom Action - haatLoadProducts] action in Container widget.
   List<dynamic>? productsAfterAdds;
 
-  @override
-  void initState(BuildContext context) {}
+  // Model for ProductShimmerGrid component.
+  late ProductShimmerGridModel productShimmerGridModel;
 
   @override
-  void dispose() {}
+  void initState(BuildContext context) {
+    productShimmerGridModel =
+        createModel(context, () => ProductShimmerGridModel());
+  }
+
+  @override
+  void dispose() {
+    productShimmerGridModel.dispose();
+  }
 }

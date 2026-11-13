@@ -1,6 +1,6 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/alert_banner/alert_banner_widget.dart';
 import '/components/home_banner/home_banner_widget.dart';
-import '/components/security_sheet_widget.dart';
 import '/components/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/components/week_story_card/week_story_card_widget.dart';
@@ -84,8 +84,6 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   ApiCallResponse? transactionsResult;
   // Stores action output result for [Custom Action - haatBusinessSummary] action in HomeScreen widget.
   dynamic? businessSummary;
-  // Stores action output result for [Backend Call - API (Organizations)] action in HomeScreen widget.
-  ApiCallResponse? organizationsResult;
   InstantTimer? bannerAutoplay;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
   ApiCallResponse? apiResult1ib;
@@ -95,6 +93,10 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   String? balanceToken;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in WalletBalance widget.
   ApiCallResponse? balanceTransactions;
+  // Stores action output result for [Backend Call - API (Organizations)] action in HomeScreen widget.
+  ApiCallResponse? organizationsResult;
+  // Model for AlertBanner component.
+  late AlertBannerModel alertBannerModel;
   // Model for TransactionShimmer component.
   late TransactionShimmerModel transactionShimmerModel1;
   // Model for TransactionShimmer component.
@@ -114,6 +116,7 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
 
   @override
   void initState(BuildContext context) {
+    alertBannerModel = createModel(context, () => AlertBannerModel());
     transactionShimmerModel1 =
         createModel(context, () => TransactionShimmerModel());
     transactionShimmerModel2 =
@@ -125,6 +128,7 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   @override
   void dispose() {
     bannerAutoplay?.cancel();
+    alertBannerModel.dispose();
     transactionShimmerModel1.dispose();
     transactionShimmerModel2.dispose();
     transactionShimmerModel3.dispose();

@@ -73,8 +73,8 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Container(
-                    width: 32.0,
-                    height: 32.0,
+                    width: 40.0,
+                    height: 40.0,
                     decoration: BoxDecoration(
                       color: Color(0xFFF1F1F1),
                       shape: BoxShape.circle,
@@ -85,28 +85,65 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                       child: Stack(
                         alignment: AlignmentDirectional(0.0, 0.0),
                         children: [
-                          if (widget!.incoming)
+                          if ((widget!.tone == 'pending') ||
+                              (widget!.tone == 'held'))
+                            Icon(
+                              Icons.schedule_rounded,
+                              color: Colors.black,
+                              size: 18.0,
+                            ),
+                          if ((widget!.tone == 'failed') ||
+                              (widget!.tone == 'declined'))
+                            Icon(
+                              Icons.close_rounded,
+                              color: Colors.black,
+                              size: 18.0,
+                            ),
+                          if (widget!.tone == 'expired')
+                            Icon(
+                              Icons.hourglass_disabled_rounded,
+                              color: Colors.black,
+                              size: 18.0,
+                            ),
+                          if (widget!.incoming &&
+                              (widget!.tone != 'pending') &&
+                              (widget!.tone != 'held') &&
+                              (widget!.tone != 'failed') &&
+                              (widget!.tone != 'declined') &&
+                              (widget!.tone != 'expired'))
                             Icon(
                               Icons.south_west,
                               color: Colors.black,
-                              size: 16.0,
+                              size: 18.0,
                             ),
-                          if (widget!.incoming == false)
+                          if ((widget!.incoming == false) &&
+                              (widget!.tone != 'pending') &&
+                              (widget!.tone != 'held') &&
+                              (widget!.tone != 'failed') &&
+                              (widget!.tone != 'declined') &&
+                              (widget!.tone != 'expired'))
                             Icon(
                               Icons.arrow_outward,
                               color: Colors.black,
-                              size: 16.0,
+                              size: 18.0,
                             ),
                           if ((widget!.paymentMethod == 'tap') ||
                               (widget!.paymentMethod == 'qr') ||
-                              (widget!.paymentMethod == 'link'))
+                              (widget!.paymentMethod == 'link') ||
+                              (widget!.paymentMethod == 'user') ||
+                              (widget!.paymentMethod == 'bank') ||
+                              (widget!.paymentMethod == 'topup'))
                             Align(
                               alignment: AlignmentDirectional(1.0, 1.0),
                               child: Container(
-                                width: 14.0,
-                                height: 14.0,
+                                width: 17.0,
+                                height: 17.0,
                                 decoration: BoxDecoration(
                                   color: Color(0xFFC1ECD8),
+                                  border: Border.all(
+                                    color: Color(0xFFF1F1F1),
+                                    width: 1.5,
+                                  ),
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(40.0),
                                     topRight: Radius.circular(40.0),
@@ -123,19 +160,42 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                         Icon(
                                           Icons.contactless_outlined,
                                           color: Color(0xFF002011),
-                                          size: 8.0,
+                                          size: 10.0,
                                         ),
                                       if (widget!.paymentMethod == 'qr')
                                         Icon(
                                           Icons.qr_code_2_rounded,
                                           color: Color(0xFF002011),
-                                          size: 8.0,
+                                          size: 10.0,
                                         ),
                                       if (widget!.paymentMethod == 'link')
                                         Icon(
                                           Icons.link_rounded,
                                           color: Color(0xFF002011),
-                                          size: 8.0,
+                                          size: 10.0,
+                                        ),
+                                      if (widget!.paymentMethod == 'user')
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(0.0),
+                                          child: Image.asset(
+                                            'assets/images/jbdvb_@.png',
+                                            width: 10.0,
+                                            height: 10.0,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      if (widget!.paymentMethod == 'bank')
+                                        Icon(
+                                          Icons.account_balance_rounded,
+                                          color: Color(0xFF002011),
+                                          size: 10.0,
+                                        ),
+                                      if (widget!.paymentMethod == 'topup')
+                                        Icon(
+                                          Icons.add_rounded,
+                                          color: Color(0xFF002011),
+                                          size: 10.0,
                                         ),
                                     ],
                                   ),
@@ -183,39 +243,91 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                             ),
                           ].divide(SizedBox(width: 8.0)),
                         ),
-                        Text(
-                          () {
-                            if (widget!.tone == 'held') {
-                              return 'On hold · HAAT is reviewing it';
-                            } else if (widget!.tone == 'declined') {
-                              return 'Not approved · money returned';
-                            } else {
-                              return widget!.subtitle!;
-                            }
-                          }(),
+                        RichText(
+                          textScaler: MediaQuery.of(context).textScaler,
                           maxLines: 1,
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.montserrat(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: () {
+                                  if ((widget!.tone == 'pending') ||
+                                      (widget!.tone == 'held')) {
+                                    return 'Pending';
+                                  } else if ((widget!.tone == 'failed') ||
+                                      (widget!.tone == 'declined')) {
+                                    return 'Failed';
+                                  } else if (widget!.tone == 'expired') {
+                                    return 'Expired';
+                                  } else {
+                                    return '';
+                                  }
+                                }(),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w600,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      color: (widget!.tone == 'pending') ||
+                                              (widget!.tone == 'held')
+                                          ? Color(0xFFE8890C)
+                                          : Color(0xFFE5383B),
+                                      fontSize: 12.0,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
+                                      lineHeight: 1.5,
                                     ),
-                                    color: Color(0xFF484848),
-                                    fontSize: 12.0,
-                                    letterSpacing: 0.0,
+                              ),
+                              TextSpan(
+                                text: () {
+                                  if (((widget!.tone == 'pending') ||
+                                          (widget!.tone == 'held') ||
+                                          (widget!.tone == 'failed') ||
+                                          (widget!.tone == 'declined') ||
+                                          (widget!.tone == 'expired')) &&
+                                      (widget!.subtitle != null &&
+                                          widget!.subtitle != '')) {
+                                    return ' · ${widget!.subtitle}';
+                                  } else {
+                                    return valueOrDefault<String>(
+                                      widget!.subtitle,
+                                      '',
+                                    );
+                                  }
+                                }(),
+                                style: TextStyle(),
+                              )
+                            ],
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.montserrat(
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontWeight,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
-                                    lineHeight: 1.5,
                                   ),
-                          overflow: TextOverflow.ellipsis,
+                                  color: Color(0xFF484848),
+                                  fontSize: 12.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .fontStyle,
+                                  lineHeight: 1.5,
+                                ),
+                          ),
                         ),
                       ].divide(SizedBox(height: 2.0)),
                     ),
@@ -241,7 +353,11 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                     .bodyMedium
                                     .fontStyle,
                               ),
-                              color: Colors.black,
+                              color: (widget!.tone == 'failed') ||
+                                      (widget!.tone == 'declined') ||
+                                      (widget!.tone == 'expired')
+                                  ? Color(0xFF9E9E9E)
+                                  : Colors.black,
                               fontSize: 12.0,
                               letterSpacing: 0.0,
                               fontWeight: FontWeight.w600,

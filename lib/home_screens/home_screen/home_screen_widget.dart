@@ -1,6 +1,6 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/alert_banner/alert_banner_widget.dart';
 import '/components/home_banner/home_banner_widget.dart';
-import '/components/security_sheet_widget.dart';
 import '/components/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/components/week_story_card/week_story_card_widget.dart';
@@ -85,6 +85,22 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           }
         }),
         Future(() async {
+          _model.organizationsResult =
+              await HaatAuthGroup.organizationsCall.call(
+            accessToken: _model.token,
+          );
+
+          if ((_model.organizationsResult?.succeeded ?? true)) {
+            _model.businessStatus =
+                functions.businessStatus(HaatAuthGroup.organizationsCall
+                    .organizations(
+                      (_model.organizationsResult?.jsonBody ?? ''),
+                    )
+                    ?.toList());
+            safeSetState(() {});
+          }
+        }),
+        Future(() async {
           _model.apiResultatl = await HaatAuthGroup.weekStoryCall.call(
             accessToken: _model.token,
             language: FFAppState().languageCode,
@@ -104,14 +120,18 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           _model.transactionsResult =
               await HaatAuthGroup.recentTransactionsCall.call(
             accessToken: _model.token,
-            limit: 3,
+            limit: 10,
           );
 
           if ((_model.transactionsResult?.succeeded ?? true)) {
-            _model.transactions = HaatAuthGroup.recentTransactionsCall
-                .transactions(
-                  (_model.transactionsResult?.jsonBody ?? ''),
-                )!
+            _model.transactions = functions
+                .latestTransactions(
+                    HaatAuthGroup.recentTransactionsCall
+                        .transactions(
+                          (_model.transactionsResult?.jsonBody ?? ''),
+                        )
+                        ?.toList(),
+                    3)
                 .toList()
                 .cast<dynamic>();
             _model.transactionsLoaded = true;
@@ -124,22 +144,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           );
           _model.business = _model.businessSummary;
           safeSetState(() {});
-        }),
-        Future(() async {
-          _model.organizationsResult =
-              await HaatAuthGroup.organizationsCall.call(
-            accessToken: _model.token,
-          );
-
-          if ((_model.organizationsResult?.succeeded ?? true)) {
-            _model.businessStatus =
-                functions.businessStatus(HaatAuthGroup.organizationsCall
-                    .organizations(
-                      (_model.organizationsResult?.jsonBody ?? ''),
-                    )
-                    ?.toList());
-            safeSetState(() {});
-          }
         }),
         Future(() async {
           _model.bannerAutoplay = InstantTimer.periodic(
@@ -160,13 +164,18 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
       ]);
       _model.apiResult1ib = await HaatAuthGroup.recentTransactionsCall.call(
         accessToken: _model.token,
+        limit: 10,
       );
 
       if ((_model.apiResult1ib?.succeeded ?? true)) {
-        _model.transactions = HaatAuthGroup.recentTransactionsCall
-            .transactions(
-              (_model.apiResult1ib?.jsonBody ?? ''),
-            )!
+        _model.transactions = functions
+            .latestTransactions(
+                HaatAuthGroup.recentTransactionsCall
+                    .transactions(
+                      (_model.apiResult1ib?.jsonBody ?? ''),
+                    )
+                    ?.toList(),
+                3)
             .toList()
             .cast<dynamic>();
         _model.transactionsLoaded = true;
@@ -690,15 +699,19 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                             accessToken:
                                                                                 _model.balanceToken,
                                                                             limit:
-                                                                                3,
+                                                                                10,
                                                                           );
 
                                                                           if ((_model.balanceTransactions?.succeeded ??
                                                                               true)) {
-                                                                            _model.transactions = HaatAuthGroup.recentTransactionsCall
-                                                                                .transactions(
-                                                                                  (_model.balanceTransactions?.jsonBody ?? ''),
-                                                                                )!
+                                                                            _model.transactions = functions
+                                                                                .latestTransactions(
+                                                                                    HaatAuthGroup.recentTransactionsCall
+                                                                                        .transactions(
+                                                                                          (_model.balanceTransactions?.jsonBody ?? ''),
+                                                                                        )
+                                                                                        ?.toList(),
+                                                                                    3)
                                                                                 .toList()
                                                                                 .cast<dynamic>();
                                                                             safeSetState(() {});
@@ -1055,325 +1068,105 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                         color: FlutterFlowTheme.of(context)
                                             .primaryText,
                                       ),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 10.0, 0.0, 0.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            if ((_model.businessStatus ==
-                                                    'pending') ||
-                                                (_model.businessStatus ==
-                                                    'suspended'))
-                                              Padding(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if ((_model.businessStatus ==
+                                                  'pending') ||
+                                              (_model.businessStatus ==
+                                                  'suspended'))
+                                            Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: Padding(
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(
-                                                        10.0, 0.0, 10.0, 16.0),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    if (_model.businessStatus ==
-                                                        'pending')
-                                                      Container(
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              Color(0xFFFFF3D6),
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                          ),
-                                                          border: Border.all(
-                                                            color: Color(
-                                                                0x808A5A00),
-                                                            width: 1.0,
-                                                          ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      14.0,
-                                                                      14.0,
-                                                                      14.0,
-                                                                      14.0),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            crossAxisAlignment:
-                                                                (FFCrossAxisAlignment
-                                                                        .start)
-                                                                    .flutterValue,
-                                                            textBaseline:
-                                                                TextBaseline
-                                                                    .alphabetic,
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .hourglass_top_rounded,
-                                                                color: Color(
-                                                                    0xFF8A5A00),
-                                                                size: 22.0,
-                                                              ),
-                                                              Expanded(
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  crossAxisAlignment:
-                                                                      (FFCrossAxisAlignment
-                                                                              .start)
-                                                                          .flutterValue,
-                                                                  textBaseline:
-                                                                      TextBaseline
-                                                                          .alphabetic,
-                                                                  children: [
-                                                                    Text(
-                                                                      FFAppState().languageCode ==
-                                                                              'ar'
-                                                                          ? 'بانتظار موافقة هات'
-                                                                          : 'Waiting for approval',
-                                                                      style: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .override(
-                                                                            font:
-                                                                                GoogleFonts.inter(
-                                                                              fontWeight: FontWeight.w600,
-                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                            ),
-                                                                            color:
-                                                                                Color(0xFF8A5A00),
-                                                                            fontSize:
-                                                                                14.0,
-                                                                            letterSpacing:
-                                                                                0.0,
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                            fontStyle:
-                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                          ),
-                                                                    ),
-                                                                    Text(
-                                                                      FFAppState().languageCode ==
-                                                                              'ar'
-                                                                          ? 'تراجع هات نشاطك التجاري. يمكنك استخدام التطبيق، وتُفتح المدفوعات والتحويلات بعد الموافقة.'
-                                                                          : 'HAAT is reviewing your business. You can use the app; payments and payouts open once it is approved.',
-                                                                      style: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .override(
-                                                                            font:
-                                                                                GoogleFonts.inter(
-                                                                              fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                            ),
-                                                                            color:
-                                                                                Color(0xFF2E2E2E),
-                                                                            fontSize:
-                                                                                12.5,
-                                                                            letterSpacing:
-                                                                                0.0,
-                                                                            fontWeight:
-                                                                                FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                            fontStyle:
-                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                            lineHeight:
-                                                                                1.35,
-                                                                          ),
-                                                                    ),
-                                                                  ].divide(SizedBox(
-                                                                      height:
-                                                                          4.0)),
-                                                                ),
-                                                              ),
-                                                            ].divide(SizedBox(
-                                                                width: 12.0)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    if (_model.businessStatus ==
-                                                        'suspended')
-                                                      Container(
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              Color(0xFFFCE8E6),
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    12.0),
-                                                          ),
-                                                          border: Border.all(
-                                                            color: Color(
-                                                                0x80B3261E),
-                                                            width: 1.0,
-                                                          ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      14.0,
-                                                                      14.0,
-                                                                      14.0,
-                                                                      14.0),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            crossAxisAlignment:
-                                                                (FFCrossAxisAlignment
-                                                                        .start)
-                                                                    .flutterValue,
-                                                            textBaseline:
-                                                                TextBaseline
-                                                                    .alphabetic,
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .block_rounded,
-                                                                color: Color(
-                                                                    0xFFB3261E),
-                                                                size: 22.0,
-                                                              ),
-                                                              Expanded(
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  crossAxisAlignment:
-                                                                      (FFCrossAxisAlignment
-                                                                              .start)
-                                                                          .flutterValue,
-                                                                  textBaseline:
-                                                                      TextBaseline
-                                                                          .alphabetic,
-                                                                  children: [
-                                                                    Text(
-                                                                      FFAppState().languageCode ==
-                                                                              'ar'
-                                                                          ? 'تم إيقاف نشاطك التجاري'
-                                                                          : 'Your business is suspended',
-                                                                      style: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .override(
-                                                                            font:
-                                                                                GoogleFonts.inter(
-                                                                              fontWeight: FontWeight.w600,
-                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                            ),
-                                                                            color:
-                                                                                Color(0xFFB3261E),
-                                                                            fontSize:
-                                                                                14.0,
-                                                                            letterSpacing:
-                                                                                0.0,
-                                                                            fontWeight:
-                                                                                FontWeight.w600,
-                                                                            fontStyle:
-                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                          ),
-                                                                    ),
-                                                                    Text(
-                                                                      FFAppState().languageCode ==
-                                                                              'ar'
-                                                                          ? 'لا يمكنك استقبال المدفوعات أو طلب التحويلات. تواصل مع دعم هات.'
-                                                                          : 'You cannot take payments or ask for payouts. Contact HAAT support.',
-                                                                      style: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .override(
-                                                                            font:
-                                                                                GoogleFonts.inter(
-                                                                              fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                            ),
-                                                                            color:
-                                                                                Color(0xFF2E2E2E),
-                                                                            fontSize:
-                                                                                12.5,
-                                                                            letterSpacing:
-                                                                                0.0,
-                                                                            fontWeight:
-                                                                                FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                            fontStyle:
-                                                                                FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                            lineHeight:
-                                                                                1.35,
-                                                                          ),
-                                                                    ),
-                                                                  ].divide(SizedBox(
-                                                                      height:
-                                                                          4.0)),
-                                                                ),
-                                                              ),
-                                                            ].divide(SizedBox(
-                                                                width: 12.0)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                  ],
+                                                        0.0, 0.0, 0.0, 6.0),
+                                                child: wrapWithModel(
+                                                  model:
+                                                      _model.alertBannerModel,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child: AlertBannerWidget(
+                                                    title: _model
+                                                                .businessStatus ==
+                                                            'suspended'
+                                                        ? 'Account suspended'
+                                                        : 'Waiting for approval',
+                                                    description: _model
+                                                                .businessStatus ==
+                                                            'suspended'
+                                                        ? 'Payments are paused. Contact HAAT support.'
+                                                        : 'We are reviewing your business. Payments open once approved.',
+                                                    actionLabel:
+                                                        _model.businessStatus ==
+                                                                'suspended'
+                                                            ? ''
+                                                            : 'Documents',
+                                                    tone:
+                                                        _model.businessStatus ==
+                                                                'suspended'
+                                                            ? 'critical'
+                                                            : 'warning',
+                                                    onAction: () async {
+                                                      context.pushNamed(
+                                                          UploadDocWidget
+                                                              .routeName);
+                                                    },
+                                                  ),
                                                 ),
                                               ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      10.0, 0.0, 10.0, 10.0),
-                                              child: Container(
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                          'Last Transactions',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .roboto(
+                                            ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    10.0, 10.0, 10.0, 10.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        'Last Transactions',
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .roboto(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryBackground,
+                                                                  fontSize:
+                                                                      18.0,
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w600,
@@ -1382,58 +1175,30 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryBackground,
-                                                                fontSize: 18.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                        ),
-                                                        InkWell(
-                                                          splashColor: Colors
-                                                              .transparent,
-                                                          focusColor: Colors
-                                                              .transparent,
-                                                          hoverColor: Colors
-                                                              .transparent,
-                                                          highlightColor: Colors
-                                                              .transparent,
-                                                          onTap: () async {
-                                                            context.pushNamed(
-                                                                TransactionsDetialsWidget
-                                                                    .routeName);
-                                                          },
-                                                          child: Text(
-                                                            'View all',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  color: Color(
-                                                                      0xFF007441),
-                                                                  fontSize:
-                                                                      12.0,
-                                                                  letterSpacing:
-                                                                      0.0,
+                                                      ),
+                                                      InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          context.pushNamed(
+                                                              TransactionsDetialsWidget
+                                                                  .routeName);
+                                                        },
+                                                        child: Text(
+                                                          'View all',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
@@ -1442,393 +1207,397 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                          ),
+                                                                color: Color(
+                                                                    0xFF007441),
+                                                                fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                    Container(
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Builder(
-                                                            builder: (context) {
-                                                              if (_model
-                                                                      .transactions
-                                                                      .length >
-                                                                  0) {
-                                                                return Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          8.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      Builder(
-                                                                    builder:
-                                                                        (context) {
-                                                                      final transactionItem = _model
-                                                                          .transactions
-                                                                          .toList();
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Container(
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Builder(
+                                                          builder: (context) {
+                                                            if (_model
+                                                                    .transactions
+                                                                    .length >
+                                                                0) {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child: Builder(
+                                                                  builder:
+                                                                      (context) {
+                                                                    final transactionItem = _model
+                                                                        .transactions
+                                                                        .toList();
 
-                                                                      return ListView
-                                                                          .builder(
-                                                                        padding:
-                                                                            EdgeInsets.zero,
-                                                                        primary:
-                                                                            false,
-                                                                        shrinkWrap:
+                                                                    return ListView
+                                                                        .builder(
+                                                                      padding:
+                                                                          EdgeInsets
+                                                                              .zero,
+                                                                      primary:
+                                                                          false,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      scrollDirection:
+                                                                          Axis.vertical,
+                                                                      itemCount:
+                                                                          transactionItem
+                                                                              .length,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              transactionItemIndex) {
+                                                                        final transactionItemItem =
+                                                                            transactionItem[transactionItemIndex];
+                                                                        return TransactionsWidget(
+                                                                          key: Key(
+                                                                              'Keyu1j_${transactionItemIndex}_of_${transactionItem.length}'),
+                                                                          title: functions.transactionTitle(
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.description''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.kind''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.transfer''',
+                                                                              )),
+                                                                          subtitle: functions.transactionRowSubtitle(
+                                                                              transactionItemItem,
+                                                                              false),
+                                                                          amount: functions.transactionAmount(
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.amountMinor''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.currency''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString()),
+                                                                          incoming:
+                                                                              functions.transactionIsIncoming(getJsonField(
+                                                                            transactionItemItem,
+                                                                            r'''$.direction''',
+                                                                          ).toString()),
+                                                                          paymentMethod:
+                                                                              functions.transactionMethod(transactionItemItem),
+                                                                          showDivider: functions.isNotLastItem(
+                                                                              transactionItemIndex,
+                                                                              _model.transactions.length),
+                                                                          tone: functions.transactionTone(
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.kind''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.direction''',
+                                                                              ).toString(),
+                                                                              getJsonField(
+                                                                                transactionItemItem,
+                                                                                r'''$.status''',
+                                                                              ).toString()),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              );
+                                                            } else if (_model
+                                                                    .transactionsLoaded ==
+                                                                false) {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel1,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            0,
+                                                                        showDivider:
                                                                             true,
-                                                                        scrollDirection:
-                                                                            Axis.vertical,
-                                                                        itemCount:
-                                                                            transactionItem.length,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                transactionItemIndex) {
-                                                                          final transactionItemItem =
-                                                                              transactionItem[transactionItemIndex];
-                                                                          return TransactionsWidget(
-                                                                            key:
-                                                                                Key('Keyu1j_${transactionItemIndex}_of_${transactionItem.length}'),
-                                                                            title: functions.transactionTitle(
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.description''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.kind''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.direction''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.transfer''',
-                                                                                )),
-                                                                            subtitle: functions.transactionSubtitle(
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.description''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.kind''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.occurredAt''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.direction''',
-                                                                                ).toString()),
-                                                                            amount: functions.transactionAmount(
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.amountMinor''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.currency''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.direction''',
-                                                                                ).toString()),
-                                                                            incoming:
-                                                                                functions.transactionIsIncoming(getJsonField(
-                                                                              transactionItemItem,
-                                                                              r'''$.direction''',
-                                                                            ).toString()),
-                                                                            paymentMethod:
-                                                                                getJsonField(
-                                                                              transactionItemItem,
-                                                                              r'''$.paymentMethod''',
-                                                                            ).toString(),
-                                                                            showDivider:
-                                                                                functions.isNotLastItem(transactionItemIndex, _model.transactions.length),
-                                                                            tone: functions.transactionTone(
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.kind''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.direction''',
-                                                                                ).toString(),
-                                                                                getJsonField(
-                                                                                  transactionItemItem,
-                                                                                  r'''$.status''',
-                                                                                ).toString()),
-                                                                          );
-                                                                        },
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                );
-                                                              } else if (_model
-                                                                      .transactionsLoaded ==
-                                                                  false) {
-                                                                return Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          8.0,
-                                                                          0.0,
-                                                                          0.0),
+                                                                      ),
+                                                                    ),
+                                                                    wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel2,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            1,
+                                                                        showDivider:
+                                                                            true,
+                                                                      ),
+                                                                    ),
+                                                                    wrapWithModel(
+                                                                      model: _model
+                                                                          .transactionShimmerModel3,
+                                                                      updateCallback:
+                                                                          () =>
+                                                                              safeSetState(() {}),
+                                                                      child:
+                                                                          TransactionShimmerWidget(
+                                                                        index:
+                                                                            2,
+                                                                        showDivider:
+                                                                            false,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            } else {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            15.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child:
+                                                                    Container(
+                                                                  width: double
+                                                                      .infinity,
+                                                                  decoration:
+                                                                      BoxDecoration(),
                                                                   child: Column(
                                                                     mainAxisSize:
                                                                         MainAxisSize
-                                                                            .min,
+                                                                            .max,
                                                                     children: [
-                                                                      wrapWithModel(
-                                                                        model: _model
-                                                                            .transactionShimmerModel1,
-                                                                        updateCallback:
-                                                                            () =>
-                                                                                safeSetState(() {}),
-                                                                        child:
-                                                                            TransactionShimmerWidget(
-                                                                          index:
-                                                                              0,
-                                                                          showDivider:
-                                                                              true,
+                                                                      ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(),
+                                                                        child: Image
+                                                                            .asset(
+                                                                          'assets/images/Coin.png',
+                                                                          width:
+                                                                              113.4,
+                                                                          height:
+                                                                              98.87,
+                                                                          fit: BoxFit
+                                                                              .cover,
                                                                         ),
                                                                       ),
-                                                                      wrapWithModel(
-                                                                        model: _model
-                                                                            .transactionShimmerModel2,
-                                                                        updateCallback:
-                                                                            () =>
-                                                                                safeSetState(() {}),
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0,
+                                                                            0.0),
                                                                         child:
-                                                                            TransactionShimmerWidget(
-                                                                          index:
-                                                                              1,
-                                                                          showDivider:
-                                                                              true,
+                                                                            Text(
+                                                                          'No Transactions',
+                                                                          style: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .override(
+                                                                                font: GoogleFonts.montserrat(
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                ),
+                                                                                color: FlutterFlowTheme.of(context).primaryBackground,
+                                                                                fontSize: 15.0,
+                                                                                letterSpacing: 0.0,
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                              ),
                                                                         ),
                                                                       ),
-                                                                      wrapWithModel(
-                                                                        model: _model
-                                                                            .transactionShimmerModel3,
-                                                                        updateCallback:
-                                                                            () =>
-                                                                                safeSetState(() {}),
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            0.0,
+                                                                            6.0,
+                                                                            0.0,
+                                                                            0.0),
                                                                         child:
-                                                                            TransactionShimmerWidget(
-                                                                          index:
-                                                                              2,
-                                                                          showDivider:
-                                                                              false,
+                                                                            Text(
+                                                                          'Payments you receive will show up here.',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .override(
+                                                                                font: GoogleFonts.montserrat(
+                                                                                  fontWeight: FontWeight.w600,
+                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                ),
+                                                                                color: Color(0xA4000000),
+                                                                                fontSize: 12.0,
+                                                                                letterSpacing: 0.0,
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                lineHeight: 1.4,
+                                                                              ),
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                );
-                                                              } else {
-                                                                return Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          15.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      Container(
-                                                                    width: double
-                                                                        .infinity,
-                                                                    decoration:
-                                                                        BoxDecoration(),
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .max,
-                                                                      children: [
-                                                                        ClipRRect(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(),
-                                                                          child:
-                                                                              Image.asset(
-                                                                            'assets/images/Coin.png',
-                                                                            width:
-                                                                                113.4,
-                                                                            height:
-                                                                                98.87,
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          ),
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              0.0,
-                                                                              8.0,
-                                                                              0.0,
-                                                                              0.0),
-                                                                          child:
-                                                                              Text(
-                                                                            'No Transactions',
-                                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  font: GoogleFonts.montserrat(
-                                                                                    fontWeight: FontWeight.w600,
-                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                  ),
-                                                                                  color: FlutterFlowTheme.of(context).primaryBackground,
-                                                                                  fontSize: 15.0,
-                                                                                  letterSpacing: 0.0,
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                ),
-                                                                          ),
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              0.0,
-                                                                              6.0,
-                                                                              0.0,
-                                                                              0.0),
-                                                                          child:
-                                                                              Text(
-                                                                            'Payments you receive will show up here.',
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  font: GoogleFonts.montserrat(
-                                                                                    fontWeight: FontWeight.w600,
-                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                  ),
-                                                                                  color: Color(0xA4000000),
-                                                                                  fontSize: 12.0,
-                                                                                  letterSpacing: 0.0,
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                  lineHeight: 1.4,
-                                                                                ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              }
-                                                            },
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            if (_model.banners.isNotEmpty)
-                                              Container(
-                                                width: double.infinity,
-                                                height: 157.2,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryBackground,
-                                                ),
-                                                child: Builder(
-                                                  builder: (context) {
-                                                    final bannerItem =
-                                                        _model.banners.toList();
-
-                                                    return Container(
-                                                      width: double.infinity,
-                                                      height: double.infinity,
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    40.0),
-                                                        child: PageView.builder(
-                                                          controller: _model
-                                                                  .pageViewController ??=
-                                                              PageController(
-                                                                  initialPage: max(
-                                                                      0,
-                                                                      min(
-                                                                          0,
-                                                                          bannerItem.length -
-                                                                              1))),
-                                                          scrollDirection:
-                                                              Axis.horizontal,
-                                                          itemCount:
-                                                              bannerItem.length,
-                                                          itemBuilder: (context,
-                                                              bannerItemIndex) {
-                                                            final bannerItemItem =
-                                                                bannerItem[
-                                                                    bannerItemIndex];
-                                                            return Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              children: [
-                                                                Expanded(
-                                                                  child:
-                                                                      HomeBannerWidget(
-                                                                    key: Key(
-                                                                        'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
-                                                                    backgroundColor:
-                                                                        functions
-                                                                            .bannerBackground(getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.backgroundColor''',
-                                                                    ).toString()),
-                                                                    title:
-                                                                        getJsonField(
-                                                                      bannerItemItem,
-                                                                      r'''$.title''',
-                                                                    ).toString(),
-                                                                    imageUrl: functions.bannerImageUrl(
-                                                                        getJsonField(
-                                                                          bannerItemItem,
-                                                                          r'''$.imagePath''',
-                                                                        ).toString(),
-                                                                        FFDevEnvironmentValues().baseURL),
-                                                                    dotCount: _model
-                                                                        .banners
-                                                                        .length,
-                                                                    activeIndex:
-                                                                        bannerItemIndex,
-                                                                    onTap:
-                                                                        () async {
-                                                                      await actions
-                                                                          .openBannerLink(
-                                                                        context,
-                                                                        getJsonField(
-                                                                          bannerItemItem,
-                                                                          r'''$.actionUrl''',
-                                                                        ).toString(),
-                                                                        getJsonField(
-                                                                          bannerItemItem,
-                                                                          r'''$.actionRoute''',
-                                                                        ).toString(),
-                                                                      );
-                                                                    },
-                                                                  ),
                                                                 ),
-                                                              ],
-                                                            );
+                                                              );
+                                                            }
                                                           },
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                          ],
-                                        ),
+                                            ),
+                                          ),
+                                          if (_model.banners.isNotEmpty)
+                                            Container(
+                                              width: double.infinity,
+                                              height: 157.2,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: Builder(
+                                                builder: (context) {
+                                                  final bannerItem =
+                                                      _model.banners.toList();
+
+                                                  return Container(
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  40.0),
+                                                      child: PageView.builder(
+                                                        controller: _model
+                                                                .pageViewController ??=
+                                                            PageController(
+                                                                initialPage: max(
+                                                                    0,
+                                                                    min(
+                                                                        0,
+                                                                        bannerItem.length -
+                                                                            1))),
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemCount:
+                                                            bannerItem.length,
+                                                        itemBuilder: (context,
+                                                            bannerItemIndex) {
+                                                          final bannerItemItem =
+                                                              bannerItem[
+                                                                  bannerItemIndex];
+                                                          return Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: [
+                                                              Expanded(
+                                                                child:
+                                                                    HomeBannerWidget(
+                                                                  key: Key(
+                                                                      'Keyh7n_${bannerItemIndex}_of_${bannerItem.length}'),
+                                                                  backgroundColor:
+                                                                      functions
+                                                                          .bannerBackground(
+                                                                              getJsonField(
+                                                                    bannerItemItem,
+                                                                    r'''$.backgroundColor''',
+                                                                  ).toString()),
+                                                                  title:
+                                                                      getJsonField(
+                                                                    bannerItemItem,
+                                                                    r'''$.title''',
+                                                                  ).toString(),
+                                                                  imageUrl: functions.bannerImageUrl(
+                                                                      getJsonField(
+                                                                        bannerItemItem,
+                                                                        r'''$.imagePath''',
+                                                                      ).toString(),
+                                                                      FFDevEnvironmentValues().baseURL),
+                                                                  dotCount: _model
+                                                                      .banners
+                                                                      .length,
+                                                                  activeIndex:
+                                                                      bannerItemIndex,
+                                                                  onTap:
+                                                                      () async {
+                                                                    await actions
+                                                                        .openBannerLink(
+                                                                      context,
+                                                                      getJsonField(
+                                                                        bannerItemItem,
+                                                                        r'''$.actionUrl''',
+                                                                      ).toString(),
+                                                                      getJsonField(
+                                                                        bannerItemItem,
+                                                                        r'''$.actionRoute''',
+                                                                      ).toString(),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -1910,76 +1679,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                           ),
                                     ),
                                   ].divide(SizedBox(width: 9.0)),
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                await showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding: MediaQuery.viewInsetsOf(context),
-                                      child: SecuritySheetWidget(),
-                                    );
-                                  },
-                                ).then((value) => safeSetState(() {}));
-                              },
-                              child: Container(
-                                width: 86.0,
-                                height: 43.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  boxShadow: [
-                                    FlutterFlowTheme.of(context)
-                                        .designToken
-                                        .shadow
-                                        .sm
-                                  ],
-                                  borderRadius:
-                                      BorderRadius.circular(16777200.0),
-                                ),
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.lock_outline_rounded,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 16.0,
-                                    ),
-                                    Text(
-                                      'Security',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight: FontWeight.w500,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 11.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w500,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(width: 5.0)),
                                 ),
                               ),
                             ),
@@ -2772,12 +2471,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                   decoration: BoxDecoration(
                                                     color: Colors.black,
                                                     borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(5.0),
-                                                      bottomLeft:
-                                                          Radius.circular(5.0),
-                                                    ),
+                                                        BorderRadius.circular(
+                                                            5.0),
                                                   ),
                                                 ),
                                                 Container(
@@ -2801,7 +2496,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                   decoration: BoxDecoration(
                                                     color: Color(0xFF60D880),
                                                     borderRadius:
-                                                        BorderRadius.only(),
+                                                        BorderRadius.circular(
+                                                            5.0),
                                                   ),
                                                 ),
                                                 Container(
@@ -2825,12 +2521,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                                                   decoration: BoxDecoration(
                                                     color: Color(0xFFBEBEBE),
                                                     borderRadius:
-                                                        BorderRadius.only(
-                                                      topRight:
-                                                          Radius.circular(5.0),
-                                                      bottomRight:
-                                                          Radius.circular(5.0),
-                                                    ),
+                                                        BorderRadius.circular(
+                                                            5.0),
                                                   ),
                                                 ),
                                               ].divide(SizedBox(width: 2.0)),

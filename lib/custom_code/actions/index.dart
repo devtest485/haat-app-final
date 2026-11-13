@@ -98,3 +98,8 @@ export '/custom_code/actions/haat_can_manage_member.dart'
 export '/custom_code/actions/haat_load_orders.dart' show haatLoadOrders;
 export '/custom_code/actions/haat_share_screenshot.dart'
     show haatShareScreenshot;
+export '/custom_code/actions/haat_disable_biometrics.dart'
+    show haatDisableBiometrics;
+export '/custom_code/actions/haat_change_password.dart' show haatChangePassword;
+export '/custom_code/actions/haat_pick_business_cover.dart'
+    show haatPickBusinessCover;

@@ -181,6 +181,7 @@ class OrganizationApi {
   /// returned.
   Future<ApiResult<bool>> updateProfile({
     String? name,
+    String? description,
     List<String>? categories,
     List<String>? salesChannels,
     String? addressLine,
@@ -192,6 +193,7 @@ class OrganizationApi {
         '/organizations',
         body: {
           if (name != null) 'name': name,
+          if (description != null) 'description': description,
           if (categories != null) 'categories': categories,
           if (salesChannels != null) 'salesChannels': salesChannels,
           if (addressLine != null) 'addressLine': addressLine,
@@ -217,6 +219,22 @@ class OrganizationApi {
         filename: filename,
         parse: (envelope) =>
             logoUrlFor(envelope.object['logoPath'] as String?) ?? '',
+      );
+
+  /// Sets the picture behind the business profile header. Returns its address.
+  ///
+  /// The same upload as the logo at a larger size: up to 2 MB of PNG, JPEG or WebP,
+  /// so the caller scales a camera photo down before it gets here.
+  Future<ApiResult<String>> uploadCover({
+    required List<int> bytes,
+    required String filename,
+  }) =>
+      _client.postFile(
+        '/organizations/cover',
+        bytes: bytes,
+        filename: filename,
+        parse: (envelope) =>
+            logoUrlFor(envelope.object['coverPath'] as String?) ?? '',
       );
 
   /// Where the merchant's own business stands with HAAT: `pending` until the back

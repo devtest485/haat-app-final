@@ -72,7 +72,7 @@ class _CongratsPageWidgetState extends State<CongratsPageWidget> {
               fontWeight: 800,
               mirrorAlternate: true,
               lowercase: true,
-              animate: false,
+              animate: true,
               showContent: true,
               onButtonTap: () async {
                 context.pushNamed(DocunmentInfoWidget.routeName);

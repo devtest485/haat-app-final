@@ -6,6 +6,7 @@ import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'business_story_model.dart';
 export 'business_story_model.dart';
@@ -136,24 +137,42 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                               (barIndex) {
                                             final barItem = bar[barIndex];
                                             return Expanded(
-                                              child: Container(
-                                                width:
-                                                    MediaQuery.sizeOf(context)
-                                                            .width *
-                                                        0.22,
-                                                height: 3.0,
-                                                decoration: BoxDecoration(
-                                                  color: barIndex <=
-                                                          _model
-                                                              .pageViewCurrentIndex
-                                                      ? FlutterFlowTheme.of(
-                                                              context)
-                                                          .primaryText
-                                                      : Color(0x4DFFFFFF),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          2.0),
-                                                ),
+                                              child: Stack(
+                                                children: [
+                                                  if (barIndex != storyIndex)
+                                                    Container(
+                                                      width: double.infinity,
+                                                      height: 3.0,
+                                                      decoration: BoxDecoration(
+                                                        color: barIndex <
+                                                                storyIndex
+                                                            ? FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primaryText
+                                                            : Color(0x4DFFFFFF),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(2.0),
+                                                      ),
+                                                    ),
+                                                  if (barIndex == storyIndex)
+                                                    LinearPercentIndicator(
+                                                      percent: 1.0,
+                                                      lineHeight: 3.0,
+                                                      animation: true,
+                                                      animateFromLastPercent:
+                                                          true,
+                                                      progressColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      backgroundColor:
+                                                          Color(0x4DFFFFFF),
+                                                      barRadius:
+                                                          Radius.circular(2.0),
+                                                      padding: EdgeInsets.zero,
+                                                    ),
+                                                ],
                                               ),
                                             );
                                           }).divide(SizedBox(width: 6.0)),
@@ -293,11 +312,12 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                     Flexible(
                                                       child: Text(
                                                         valueOrDefault<String>(
-                                                          functions.notificationText(
-                                                              storyItem,
-                                                              'value',
-                                                              FFAppState()
-                                                                  .languageCode),
+                                                          functions
+                                                              .notificationText(
+                                                                  storyItem,
+                                                                  'value',
+                                                                  FFAppState()
+                                                                      .languageCode),
                                                           '0',
                                                         ),
                                                         style: FlutterFlowTheme
@@ -309,11 +329,10 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontStyle:
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
                                                               ),
                                                               fontSize: 42.0,
                                                               letterSpacing:
@@ -523,13 +542,13 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                       child: Text(
                                         () {
                                           if (functions.isNotLastItem(
-                                                  _model.pageViewCurrentIndex,
+                                                  storyIndex,
                                                   widget!.stories!.length)! &&
                                               (FFAppState().languageCode ==
                                                   'ar')) {
                                             return 'التالي';
                                           } else if (functions.isNotLastItem(
-                                              _model.pageViewCurrentIndex,
+                                              storyIndex,
                                               valueOrDefault<int>(
                                                 widget!.stories?.length,
                                                 0,

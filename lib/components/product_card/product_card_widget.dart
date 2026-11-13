@@ -1,11 +1,15 @@
 import '/flutter_flow/ff_builtin_enums.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'product_card_model.dart';
@@ -41,8 +45,11 @@ class ProductCardWidget extends StatefulWidget {
   State<ProductCardWidget> createState() => _ProductCardWidgetState();
 }
 
-class _ProductCardWidgetState extends State<ProductCardWidget> {
+class _ProductCardWidgetState extends State<ProductCardWidget>
+    with TickerProviderStateMixin {
   late ProductCardModel _model;
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -54,6 +61,41 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProductCardModel());
+
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 160.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 200.0.ms,
+            begin: Offset(0.6, 0.6),
+            end: Offset(1.08, 1.08),
+          ),
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 200.0.ms,
+            duration: 140.0.ms,
+            begin: Offset(1.0, 1.0),
+            end: Offset(0.926, 0.926),
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -335,7 +377,8 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                       ],
                     ),
                   ),
-                ),
+                ).animateOnPageLoad(
+                    animationsMap['containerOnPageLoadAnimation']!),
               ),
           ],
         ),

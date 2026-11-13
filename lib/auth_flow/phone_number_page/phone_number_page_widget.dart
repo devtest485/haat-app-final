@@ -377,7 +377,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                                 '_model.phoneTextController',
                                                                 Duration(
                                                                     milliseconds:
-                                                                        2000),
+                                                                        100),
                                                                 () async {
                                                                   _model
                                                                       .isPhoneValid = _model
@@ -385,6 +385,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                                           .text
                                                                           .length ==
                                                                       10;
+                                                                  _model.showPhoneError =
+                                                                      false;
                                                                   safeSetState(
                                                                       () {});
                                                                 },
@@ -568,6 +570,41 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                   ],
                                                 ),
                                               ),
+                                              if (_model.showPhoneError == true)
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          4.0, 10.0, 0.0, 0.0),
+                                                  child: Text(
+                                                    'Enter your full 10-digit mobile number',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .montserrat(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color:
+                                                              Color(0xFFFF6B6B),
+                                                          fontSize: 13.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                ),
                                             ],
                                           ),
                                         ].divide(SizedBox(height: 9.0)),
@@ -589,11 +626,22 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
+                            var _shouldSetState = false;
+                            _model.isPhoneValid =
+                                _model.phoneTextController.text.length == 10;
+                            if (_model.isPhoneValid == false) {
+                              _model.showPhoneError = true;
+                              safeSetState(() {});
+                              if (_shouldSetState) safeSetState(() {});
+                              return;
+                            }
                             _model.registered = await actions.haatRegister(
                               _model.phoneTextController.text,
                             );
+                            _shouldSetState = true;
                             if (_model.registered == '') {
                               _model.devCode = await actions.haatDevOtpCode();
+                              _shouldSetState = true;
                               FFAppState().devOtpCode = _model.devCode!;
                               safeSetState(() {});
 
@@ -618,7 +666,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                               );
                             }
 
-                            safeSetState(() {});
+                            if (_shouldSetState) safeSetState(() {});
                           },
                           child: Container(
                             width: double.infinity,

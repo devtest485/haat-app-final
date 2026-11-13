@@ -32,7 +32,10 @@ import '/custom_code/auth_session.dart';
 /// Empty means it worked. Anything else is a sentence to show. When the sentence is
 /// about the name — another business already has it — [haatBusinessNameWasTaken] says
 /// so, and the screen puts it under the name field rather than in a passing snackbar.
-Future<String> haatSaveBusinessSetup(String? businessName) async {
+Future<String> haatSaveBusinessSetup(
+  String? businessName,
+  String? description,
+) async {
   final session = AuthSession.instance;
   final name = businessName?.trim() ?? '';
   _nameTaken = false;
@@ -59,6 +62,9 @@ Future<String> haatSaveBusinessSetup(String? businessName) async {
 
   final saved = await session.organizations.updateProfile(
     name: name,
+    // Optional: an empty box leaves whatever the server already holds.
+    description:
+        (description?.trim().isEmpty ?? true) ? null : description!.trim(),
     categories: List<String>.from(FFAppState().selectedCategories),
     // Every channel ticked — a counter and a website are both. Null rather than an
     // empty list leaves what the server holds alone.

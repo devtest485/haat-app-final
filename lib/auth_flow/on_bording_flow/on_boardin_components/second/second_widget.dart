@@ -1,8 +1,12 @@
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +20,11 @@ class SecondWidget extends StatefulWidget {
   State<SecondWidget> createState() => _SecondWidgetState();
 }
 
-class _SecondWidgetState extends State<SecondWidget> {
+class _SecondWidgetState extends State<SecondWidget>
+    with TickerProviderStateMixin {
   late SecondModel _model;
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -29,6 +36,72 @@ class _SecondWidgetState extends State<SecondWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SecondModel());
+
+    animationsMap.addAll({
+      'rowOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'rowOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 140.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 140.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'rowOnPageLoadAnimation3': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 280.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 280.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -128,7 +201,8 @@ class _SecondWidgetState extends State<SecondWidget> {
                           ),
                         ),
                       ].divide(SizedBox(width: 4.18)),
-                    ),
+                    ).animateOnPageLoad(
+                        animationsMap['rowOnPageLoadAnimation1']!),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,7 +228,8 @@ class _SecondWidgetState extends State<SecondWidget> {
                               ),
                         ),
                       ].divide(SizedBox(width: 6.18)),
-                    ),
+                    ).animateOnPageLoad(
+                        animationsMap['rowOnPageLoadAnimation2']!),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -180,7 +255,8 @@ class _SecondWidgetState extends State<SecondWidget> {
                               ),
                         ),
                       ],
-                    ),
+                    ).animateOnPageLoad(
+                        animationsMap['rowOnPageLoadAnimation3']!),
                   ],
                 ),
               ),

@@ -347,887 +347,958 @@ class _PassCodeLoginWidgetState extends State<PassCodeLoginWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 35.0),
                         child: Container(
                           width: double.infinity,
-                          height: 399.3,
+                          height: MediaQuery.sizeOf(context).height * 0.48,
                           decoration: BoxDecoration(),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
+                          child: Align(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width * 0.82,
+                              height: MediaQuery.sizeOf(context).height * 0.48,
+                              decoration: BoxDecoration(),
+                              child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '1', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignInaamy74vi =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignInaamy74vi ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignInaamy74vi!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '1',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '2', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignInow8ohec3 =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignInow8ohec3 ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignInow8ohec3!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '2',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '3', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignIn3ew0os73 =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignIn3ew0os73 ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignIn3ew0os73!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '3',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '4', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignIn743xths0 =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignIn743xths0 ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignIn743xths0!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '4',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '5', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignInwbfh2jjb =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignInwbfh2jjb ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignInwbfh2jjb!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '5',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '6', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignInb7p8p1a9 =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignInb7p8p1a9 ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignInb7p8p1a9!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '6',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '7', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignIn51ajygc9 =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignIn51ajygc9 ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignIn51ajygc9!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '7',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '8', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignInitbkegeb =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignInitbkegeb ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignInitbkegeb!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '8',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      if (_model.isSubmitting == false) {
-                                        _model.pinCode =
-                                            functions.appendPinDigit(
-                                                _model.pinCode, '9', 6);
-                                        safeSetState(() {});
-                                        if (functions.isPinComplete(
-                                            _model.pinCode, 6)) {
-                                          _model.isSubmitting = true;
-                                          safeSetState(() {});
-                                          _model.passcodeSignIn9vhvvnct =
-                                              await actions
-                                                  .haatSignInWithPasscode(
-                                            _model.pinCode,
-                                          );
-                                          _model.isSubmitting = false;
-                                          safeSetState(() {});
-                                          _model.pinCode = '';
-                                          safeSetState(() {});
-                                          if (_model.passcodeSignIn9vhvvnct ==
-                                              '') {
-                                            context.goNamed(
-                                                BottomBarPagesWidget.routeName);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  _model
-                                                      .passcodeSignIn9vhvvnct!,
-                                                  style: TextStyle(),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 4000),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      }
-
-                                      safeSetState(() {});
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            15.0, 0.0, 15.0, 0.0),
-                                        child: Text(
-                                          '9',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 32.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.sizeOf(context).width *
-                                        0.526,
-                                    decoration: BoxDecoration(),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            if (_model.isSubmitting == false) {
-                                              _model.pinCode =
-                                                  functions.appendPinDigit(
-                                                      _model.pinCode, '0', 6);
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '1', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
                                               safeSetState(() {});
-                                              if (functions.isPinComplete(
-                                                  _model.pinCode, 6)) {
-                                                _model.isSubmitting = true;
-                                                safeSetState(() {});
-                                                _model.passcodeSignInfhzn9ofb =
-                                                    await actions
-                                                        .haatSignInWithPasscode(
-                                                  _model.pinCode,
-                                                );
-                                                _model.isSubmitting = false;
-                                                safeSetState(() {});
-                                                _model.pinCode = '';
-                                                safeSetState(() {});
-                                                if (_model
-                                                        .passcodeSignInfhzn9ofb ==
-                                                    '') {
-                                                  context.goNamed(
-                                                      BottomBarPagesWidget
-                                                          .routeName);
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        _model
-                                                            .passcodeSignInfhzn9ofb!,
-                                                        style: TextStyle(),
-                                                      ),
-                                                      duration: Duration(
-                                                          milliseconds: 4000),
+                                              _model.passcodeSignInaamy74vi =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignInaamy74vi ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignInaamy74vi!,
+                                                      style: TextStyle(),
                                                     ),
-                                                  );
-                                                }
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
                                               }
                                             }
+                                          }
 
-                                            safeSetState(() {});
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      15.0, 0.0, 15.0, 0.0),
-                                              child: Text(
-                                                '0',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 32.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                              ),
-                                            ),
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '1',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
                                           ),
                                         ),
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
                                             _model.pinCode =
-                                                functions.removeLastPinDigit(
-                                                    _model.pinCode);
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '2', 6);
                                             safeSetState(() {});
-                                          },
-                                          child: Container(
-                                            decoration: BoxDecoration(),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      15.0, 0.0, 15.0, 0.0),
-                                              child: Icon(
-                                                Icons.backspace_outlined,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                size: 24.0,
-                                              ),
-                                            ),
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignInow8ohec3 =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignInow8ohec3 ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignInow8ohec3!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '2',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '3', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignIn3ew0os73 =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignIn3ew0os73 ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignIn3ew0os73!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '3',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '4', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignIn743xths0 =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignIn743xths0 ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignIn743xths0!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '4',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '5', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignInwbfh2jjb =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignInwbfh2jjb ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignInwbfh2jjb!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '5',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '6', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignInb7p8p1a9 =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignInb7p8p1a9 ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignInb7p8p1a9!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '6',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '7', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignIn51ajygc9 =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignIn51ajygc9 ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignIn51ajygc9!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '7',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '8', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignInitbkegeb =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignInitbkegeb ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignInitbkegeb!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '8',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '9', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignIn9vhvvnct =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignIn9vhvvnct ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignIn9vhvvnct!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '9',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.2,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.085,
+                                        decoration: BoxDecoration(),
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          if (_model.isSubmitting == false) {
+                                            _model.pinCode =
+                                                functions.appendPinDigit(
+                                                    _model.pinCode, '0', 6);
+                                            safeSetState(() {});
+                                            if (functions.isPinComplete(
+                                                _model.pinCode, 6)) {
+                                              _model.isSubmitting = true;
+                                              safeSetState(() {});
+                                              _model.passcodeSignInfhzn9ofb =
+                                                  await actions
+                                                      .haatSignInWithPasscode(
+                                                _model.pinCode,
+                                              );
+                                              _model.isSubmitting = false;
+                                              safeSetState(() {});
+                                              _model.pinCode = '';
+                                              safeSetState(() {});
+                                              if (_model
+                                                      .passcodeSignInfhzn9ofb ==
+                                                  '') {
+                                                context.goNamed(
+                                                    BottomBarPagesWidget
+                                                        .routeName);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      _model
+                                                          .passcodeSignInfhzn9ofb!,
+                                                      style: TextStyle(),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Text(
+                                            '0',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  font: GoogleFonts.montserrat(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 32.0,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          _model.pinCode =
+                                              functions.removeLastPinDigit(
+                                                  _model.pinCode);
+                                          safeSetState(() {});
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.2,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.085,
+                                          decoration: BoxDecoration(),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Icon(
+                                            Icons.backspace_outlined,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                            size: 24.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),

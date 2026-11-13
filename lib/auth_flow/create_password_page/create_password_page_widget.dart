@@ -334,6 +334,16 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                     focusNode:
                                                                         _model
                                                                             .newPasswardFocusNode,
+                                                                    onChanged: (_) =>
+                                                                        EasyDebounce
+                                                                            .debounce(
+                                                                      '_model.newPasswardTextController',
+                                                                      Duration(
+                                                                          milliseconds:
+                                                                              100),
+                                                                      () => safeSetState(
+                                                                          () {}),
+                                                                    ),
                                                                     autofocus:
                                                                         false,
                                                                     enabled:
@@ -584,7 +594,7 @@ class _CreatePasswordPageWidgetState extends State<CreatePasswordPageWidget> {
                                                                       '_model.confirmPasswardTextController',
                                                                       Duration(
                                                                           milliseconds:
-                                                                              2000),
+                                                                              100),
                                                                       () async {
                                                                         safeSetState(
                                                                             () {});

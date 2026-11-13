@@ -2,7 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/home_screen/home_screen_widget.dart';
-import '/home_screens/new_order_flow/add_amount_view/add_amount_view_widget.dart';
+import '/home_screens/my_store_view/my_store_view_widget.dart';
 import '/marketplace/market_place/market_place_widget.dart';
 import '/my_store/store_profile/store_profile_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
@@ -74,7 +74,7 @@ class _BottomBarPagesWidgetState extends State<BottomBarPagesWidget> {
                 width: double.infinity,
                 height: double.infinity,
                 homeLabel: 'Home',
-                cashierLabel: 'Cashier',
+                cashierLabel: 'My Store',
                 servicesLabel: 'Marketplace',
                 storeLabel: 'Profile',
                 labelSize: 11.0,
@@ -85,9 +85,7 @@ class _BottomBarPagesWidgetState extends State<BottomBarPagesWidget> {
                   safeSetState(() {});
                 },
                 homePage: () => HomeScreenWidget(),
-                cashierPage: () => AddAmountViewWidget(
-                  startOnCashier: true,
-                ),
+                cashierPage: () => MyStoreViewWidget(),
                 servicesPage: () => MarketPlaceWidget(),
                 storePage: () => StoreProfileWidget(),
               ),

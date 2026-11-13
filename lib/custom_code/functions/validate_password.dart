@@ -15,12 +15,7 @@ bool validatePassword(String password) {
   bool minLength = password.length >= 8;
   bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
   bool hasLowercase = password.contains(RegExp(r'[a-z]'));
-  bool hasDigit = password.contains(RegExp(r'[0-9]'));
   bool hasSpecialChar = password.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'));
 
-  return minLength &&
-      hasUppercase &&
-      hasLowercase &&
-      hasDigit &&
-      hasSpecialChar;
+  return minLength && hasUppercase && hasLowercase && hasSpecialChar;
 }

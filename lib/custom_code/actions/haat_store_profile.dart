@@ -11,7 +11,8 @@ import 'package:flutter/material.dart' hide RepeatMode;
 import '/custom_code/auth_session.dart';
 
 /// The Profile tab's figures, as JSON the page binds to: `name`, `handle`, `logoPath`,
-/// `orders`, `products`, `staff`, `productsLine`, `staffLine`, `branchesLine`, `kybLine`.
+/// `description`, `coverUrl`, `orders`, `products`, `staff`, `productsLine`, `staffLine`,
+/// `branchesLine`, `kybLine`.
 ///
 /// Null when the account has no business yet or the server could not be reached; the
 /// page then shows dashes rather than another business's numbers.

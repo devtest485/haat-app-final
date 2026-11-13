@@ -1,5 +1,7 @@
 import '/components/product_card/product_card_widget.dart';
+import '/components/product_shimmer_grid/product_shimmer_grid_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -7,6 +9,7 @@ import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'products_model.dart';
@@ -22,8 +25,11 @@ class ProductsWidget extends StatefulWidget {
   State<ProductsWidget> createState() => _ProductsWidgetState();
 }
 
-class _ProductsWidgetState extends State<ProductsWidget> {
+class _ProductsWidgetState extends State<ProductsWidget>
+    with TickerProviderStateMixin {
   late ProductsModel _model;
+
+  final animationsMap = <String, AnimationInfo>{};
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -39,6 +45,41 @@ class _ProductsWidgetState extends State<ProductsWidget> {
       _model.productsLoaded = true;
       safeSetState(() {});
     });
+
+    animationsMap.addAll({
+      'productCardOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 320.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 420.0.ms,
+            begin: Offset(0.92, 0.92),
+            end: Offset(1.0, 1.0),
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 420.0.ms,
+            begin: Offset(0.0, 18.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -190,7 +231,17 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                           Expanded(
                             child: Builder(
                               builder: (context) {
-                                if (_model.products.length > 0) {
+                                if (_model.productsLoaded == false) {
+                                  return Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 20.0, 0.0, 0.0),
+                                    child: wrapWithModel(
+                                      model: _model.productShimmerGridModel,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: ProductShimmerGridWidget(),
+                                    ),
+                                  );
+                                } else if (_model.products.length > 0) {
                                   return Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 25.0, 0.0, 0.0),
@@ -258,7 +309,8 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                                               },
                                               onIncrement: () async {},
                                               onDecrement: () async {},
-                                            );
+                                            ).animateOnPageLoad(animationsMap[
+                                                'productCardOnPageLoadAnimation']!);
                                           },
                                         );
                                       },

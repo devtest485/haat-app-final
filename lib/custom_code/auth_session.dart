@@ -538,10 +538,38 @@ class AuthSession extends ChangeNotifier {
     return enrolment;
   }
 
+  /// Turns biometric sign-in off on this phone.
+  ///
+  /// The server's half goes first, because that is the half that stops a signature
+  /// being accepted. The device key is destroyed either way: once the owner has said
+  /// no, a key left behind is only something to drift out of step.
+  ///
+  /// Null when this session cannot name its device to the server — one restored from
+  /// before device ids were stored — in which case only the local key goes.
+  Future<ApiResult<bool>?> disableBiometrics() async {
+    final deviceId = _tokens.deviceId;
+
+    final result = deviceId == null || deviceId.isEmpty
+        ? null
+        : await api.removeBiometric(deviceId);
+
+    await biometrics.remove();
+
+    return result;
+  }
+
   // ── Onboarding steps ────────────────────────────────────────────────────────
 
-  Future<ApiResult<DateTime?>> setPassword(String password) async {
-    final result = await api.setPassword(password: password);
+  /// Sets the first password, or changes it — a change needs [currentPassword],
+  /// because a stolen session must not be enough to lock the owner out.
+  Future<ApiResult<DateTime?>> setPassword(
+    String password, {
+    String? currentPassword,
+  }) async {
+    final result = await api.setPassword(
+      password: password,
+      currentPassword: currentPassword,
+    );
     if (result.isSuccess) await refreshCredentials();
 
     return result;

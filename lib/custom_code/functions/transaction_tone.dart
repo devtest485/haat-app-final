@@ -26,6 +26,21 @@ String transactionTone(
   }
   if (s == 'on_hold' || s == 'held') return 'held';
   if (s == 'hold_released' || s == 'rejected') return 'declined';
+  if (s == 'reversed' ||
+      s == 'failed' ||
+      s == 'cancelled' ||
+      s == 'canceled' ||
+      s == 'declined') {
+    return 'failed';
+  }
+  if (s == 'expired') return 'expired';
+  if (s == 'pending' ||
+      s == 'processing' ||
+      s == 'awaiting' ||
+      s == 'awaiting_payment' ||
+      s == 'open') {
+    return 'pending';
+  }
   if (k != 'transfer') return '';
 
   return (direction ?? '').trim() == 'credit' ? 'received' : 'sent';
