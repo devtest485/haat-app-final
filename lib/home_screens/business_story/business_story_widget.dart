@@ -290,21 +290,34 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                   textBaseline:
                                                       TextBaseline.alphabetic,
                                                   children: [
-                                                    Text(
-                                                      valueOrDefault<String>(
-                                                        functions.notificationText(
-                                                            storyItem,
-                                                            'value',
-                                                            FFAppState()
-                                                                .languageCode),
-                                                        '0',
-                                                      ),
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyMedium
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .montserrat(
+                                                    Flexible(
+                                                      child: Text(
+                                                        valueOrDefault<String>(
+                                                          functions.notificationText(
+                                                              storyItem,
+                                                              'value',
+                                                              FFAppState()
+                                                                  .languageCode),
+                                                          '0',
+                                                        ),
+                                                        style: FlutterFlowTheme
+                                                                .of(context)
+                                                            .bodyMedium
+                                                            .override(
+                                                              font: GoogleFonts
+                                                                  .montserrat(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontStyle:
+                                                                    FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                              ),
+                                                              fontSize: 42.0,
+                                                              letterSpacing:
+                                                                  0.0,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
@@ -314,16 +327,7 @@ class _BusinessStoryWidgetState extends State<BusinessStoryWidget> {
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                             ),
-                                                            fontSize: 42.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
+                                                      ),
                                                     ),
                                                     Padding(
                                                       padding:

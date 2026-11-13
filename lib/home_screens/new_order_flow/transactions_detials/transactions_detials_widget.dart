@@ -323,12 +323,15 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                         _model.transactionsLoaded =
                                                             false;
                                                         safeSetState(() {});
+                                                        _model.filterToken =
+                                                            await actions
+                                                                .haatAccessToken();
                                                         _model.filteredResult =
                                                             await HaatAuthGroup
                                                                 .recentTransactionsCall
                                                                 .call(
-                                                          accessToken:
-                                                              _model.token,
+                                                          accessToken: _model
+                                                              .filterToken,
                                                           limit: 100,
                                                           since: functions
                                                               .transactionSince(

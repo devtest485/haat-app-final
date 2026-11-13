@@ -376,8 +376,9 @@ class _StepAreaPainter extends CustomPainter {
       ).createShader(gradientRect);
     canvas.drawPath(visibleLine, linePaint);
 
-    // Chota sa square marker (design me pehle step ke end par hai)
-    if (hasData && n > 1 && (p >= 1 || tip.dx >= colW)) {
+    // Chota sa square marker (design me pehle step ke end par hai). Pehla step
+    // zero ho to marker labels ke neeche baseline par gir jata hai — tab nahi.
+    if (hasData && values[0] > 0 && n > 1 && (p >= 1 || tip.dx >= colW)) {
       final markerPaint = Paint()..color = _markerColor;
       canvas.drawRect(
         Rect.fromCenter(

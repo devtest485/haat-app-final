@@ -1,5 +1,4 @@
 import '/components/remove_branch/remove_branch_widget.dart';
-import '/components/role_access/role_access_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';

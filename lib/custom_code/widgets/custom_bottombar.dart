@@ -104,7 +104,8 @@ class CustomBottombar extends StatefulWidget {
   State<CustomBottombar> createState() => _CustomBottombarState();
 }
 
-class _CustomBottombarState extends State<CustomBottombar> {
+class _CustomBottombarState extends State<CustomBottombar>
+    with WidgetsBindingObserver {
   static const double _kBarHeight = 85.0;
   static const double _kTopPadding = 12.0;
   static const double _kBorderWidth = 1.0;
@@ -173,8 +174,23 @@ class _CustomBottombarState extends State<CustomBottombar> {
     super.initState();
     _currentIndex = (widget.initialIndex ?? 0).clamp(0, 3);
     _bottomTabNavigator = navigateTo;
+    WidgetsBinding.instance.addObserver(this);
     // A payment link opened before sign-in waits for here.
     openPendingPayLink(context);
+  }
+
+  /// The keyboard is up. The bar then steps aside rather than riding on top of
+  /// the keyboard — the page around it shrinks to the space above the keys.
+  ///
+  /// Read from the window and not from MediaQuery: the Scaffold this bar sits in
+  /// takes the keyboard out of the MediaQuery its body sees.
+  bool _keyboardOpen = false;
+
+  @override
+  void didChangeMetrics() {
+    if (_disposed || !mounted) return;
+    final open = View.of(context).viewInsets.bottom > 0;
+    if (open != _keyboardOpen) setState(() => _keyboardOpen = open);
   }
 
   /// The router this bar is listening to.
@@ -204,6 +220,7 @@ class _CustomBottombarState extends State<CustomBottombar> {
   @override
   void dispose() {
     _disposed = true;
+    WidgetsBinding.instance.removeObserver(this);
     _router?.routerDelegate.removeListener(_onRouteChange);
     if (_bottomTabNavigator == navigateTo) {
       _bottomTabNavigator = null;
@@ -354,8 +371,8 @@ class _CustomBottombarState extends State<CustomBottombar> {
             ],
           ),
         ),
-        // Bottom bar ab har tab par hamesha show hota hai.
-        bottomNavigationBar: _buildNavBar(context),
+        // Bottom bar har tab par show hota hai — keyboard khula ho to nahi.
+        bottomNavigationBar: _keyboardOpen ? null : _buildNavBar(context),
       ),
     );
   }

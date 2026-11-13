@@ -220,26 +220,6 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                       ].divide(SizedBox(height: 2.0)),
                     ),
                   ),
-                  if (widget!.tone == '')
-                    Text(
-                      widget!.amount!,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            font: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .fontStyle,
-                            ),
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            fontSize: 12.0,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                    ),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
