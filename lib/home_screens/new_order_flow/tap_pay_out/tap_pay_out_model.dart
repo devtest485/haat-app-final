@@ -31,6 +31,24 @@ class TapPayOutModel extends FlutterFlowModel<TapPayOutWidget> {
   void dispose() {}
 
   /// Action blocks.
+  Future showTapResult(
+    BuildContext context, {
+    dynamic? outcome,
+  }) async {
+    if (functions.outcomeText(outcome, 'paymentStatus', '') == 'Success') {
+      phase = 'paid';
+      waiting = 'Payment received';
+      updatePage(() {});
+      await Future.delayed(const Duration(milliseconds: 1500));
+    } else if (functions.outcomeText(outcome, 'paymentStatus', '') ==
+        'Error') {
+      phase = 'rejected';
+      waiting = 'The payment didn’t go through';
+      updatePage(() {});
+      await Future.delayed(const Duration(milliseconds: 1200));
+    }
+  }
+
   Future startTap(BuildContext context) async {
     dynamic? created;
     dynamic? tapped;
@@ -50,6 +68,10 @@ class TapPayOutModel extends FlutterFlowModel<TapPayOutWidget> {
       updatePage(() {});
     } else if (functions.outcomeText(created, 'paymentStatus', '') != null &&
         functions.outcomeText(created, 'paymentStatus', '') != '') {
+      await showTapResult(
+        context,
+        outcome: created,
+      );
       if (Navigator.of(context).canPop()) {
         context.pop();
       }
@@ -75,6 +97,10 @@ class TapPayOutModel extends FlutterFlowModel<TapPayOutWidget> {
       );
       if (functions.outcomeText(tapped, 'paymentStatus', '') != null &&
           functions.outcomeText(tapped, 'paymentStatus', '') != '') {
+        await showTapResult(
+          context,
+          outcome: tapped,
+        );
         if (Navigator.of(context).canPop()) {
           context.pop();
         }
@@ -102,6 +128,10 @@ class TapPayOutModel extends FlutterFlowModel<TapPayOutWidget> {
         );
         if (functions.outcomeText(waited, 'paymentStatus', '') != null &&
             functions.outcomeText(waited, 'paymentStatus', '') != '') {
+          await showTapResult(
+            context,
+            outcome: waited,
+          );
           if (Navigator.of(context).canPop()) {
             context.pop();
           }

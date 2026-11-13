@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'tap_pay_out_model.dart';
 export 'tap_pay_out_model.dart';
@@ -93,14 +94,45 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
                               safeSetState(() {});
                             }
                           },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(0.0),
-                            child: SvgPicture.asset(
-                              'assets/images/nfc.svg',
-                              width: double.infinity,
-                              height: 710.1,
-                              fit: BoxFit.contain,
-                            ),
+                          child: Builder(
+                            builder: (context) {
+                              // Paid and rejected sit in an Align so they get a
+                              // fresh Lottie that plays from frame 0, not the
+                              // waiting loop's half-played one.
+                              if (_model.phase == 'paid') {
+                                return Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Lottie.asset(
+                                    'assets/jsons/tap-to-pay-paid.json',
+                                    width: double.infinity,
+                                    height: 710.1,
+                                    fit: BoxFit.none,
+                                    repeat: false,
+                                    animate: true,
+                                  ),
+                                );
+                              } else if (_model.phase == 'rejected') {
+                                return Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: Lottie.asset(
+                                    'assets/jsons/tap-to-pay-rejected.json',
+                                    width: double.infinity,
+                                    height: 710.1,
+                                    fit: BoxFit.none,
+                                    repeat: false,
+                                    animate: true,
+                                  ),
+                                );
+                              } else {
+                                return Lottie.asset(
+                                  'assets/jsons/tap-to-pay-waiting.json',
+                                  width: double.infinity,
+                                  height: 710.1,
+                                  fit: BoxFit.none,
+                                  animate: true,
+                                );
+                              }
+                            },
                           ),
                         ),
                       ),

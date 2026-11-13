@@ -59,6 +59,7 @@ dependencies:
   json_path: 0.7.2
   latlong2: ^0.9.1
   local_auth: ^3.0.2
+  lottie: 3.1.2
   mime_type: 1.0.0
   mobile_scanner: ^7.5.0
   package_info_plus: 8.3.1
