@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -140,15 +141,15 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                 height: 17.0,
                                 decoration: BoxDecoration(
                                   color: Color(0xFFC1ECD8),
-                                  border: Border.all(
-                                    color: Color(0xFFF1F1F1),
-                                    width: 1.5,
-                                  ),
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(40.0),
                                     topRight: Radius.circular(40.0),
                                     bottomLeft: Radius.circular(40.0),
                                     bottomRight: Radius.circular(40.0),
+                                  ),
+                                  border: Border.all(
+                                    color: Color(0xFFF1F1F1),
+                                    width: 1.5,
                                   ),
                                 ),
                                 alignment: AlignmentDirectional(0.0, 0.0),
@@ -245,8 +246,6 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                         ),
                         RichText(
                           textScaler: MediaQuery.of(context).textScaler,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           text: TextSpan(
                             children: [
                               TextSpan(
@@ -286,22 +285,15 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                     ),
                               ),
                               TextSpan(
-                                text: () {
-                                  if (((widget!.tone == 'pending') ||
-                                          (widget!.tone == 'held') ||
-                                          (widget!.tone == 'failed') ||
-                                          (widget!.tone == 'declined') ||
-                                          (widget!.tone == 'expired')) &&
-                                      (widget!.subtitle != null &&
-                                          widget!.subtitle != '')) {
-                                    return ' · ${widget!.subtitle}';
-                                  } else {
-                                    return valueOrDefault<String>(
-                                      widget!.subtitle,
-                                      '',
-                                    );
-                                  }
-                                }(),
+                                text: ((widget!.tone == 'pending') ||
+                                            (widget!.tone == 'held') ||
+                                            (widget!.tone == 'failed') ||
+                                            (widget!.tone == 'declined') ||
+                                            (widget!.tone == 'expired')) &&
+                                        (widget!.subtitle != null &&
+                                            widget!.subtitle != '')
+                                    ? ' · ${widget!.subtitle}'
+                                    : widget!.subtitle!,
                                 style: TextStyle(),
                               )
                             ],
@@ -328,6 +320,7 @@ class _TransactionsWidgetState extends State<TransactionsWidget> {
                                   lineHeight: 1.5,
                                 ),
                           ),
+                          maxLines: 1,
                         ),
                       ].divide(SizedBox(height: 2.0)),
                     ),

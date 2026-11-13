@@ -3,13 +3,13 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'tap_pay_out_widget.dart' show TapPayOutWidget;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -31,24 +31,6 @@ class TapPayOutModel extends FlutterFlowModel<TapPayOutWidget> {
   void dispose() {}
 
   /// Action blocks.
-  Future showTapResult(
-    BuildContext context, {
-    dynamic? outcome,
-  }) async {
-    if (functions.outcomeText(outcome, 'paymentStatus', '') == 'Success') {
-      phase = 'paid';
-      waiting = 'Payment received';
-      updatePage(() {});
-      await Future.delayed(const Duration(milliseconds: 1500));
-    } else if (functions.outcomeText(outcome, 'paymentStatus', '') ==
-        'Error') {
-      phase = 'rejected';
-      waiting = 'The payment didn’t go through';
-      updatePage(() {});
-      await Future.delayed(const Duration(milliseconds: 1200));
-    }
-  }
-
   Future startTap(BuildContext context) async {
     dynamic? created;
     dynamic? tapped;
@@ -160,6 +142,31 @@ class TapPayOutModel extends FlutterFlowModel<TapPayOutWidget> {
         problem = functions.outcomeText(tapped, 'problem', '');
         updatePage(() {});
       }
+    }
+  }
+
+  Future showTapResult(
+    BuildContext context, {
+    dynamic outcome,
+  }) async {
+    if (functions.outcomeText(outcome, 'paymentStatus', '') == 'Success') {
+      phase = 'paid';
+      waiting = 'Payment received';
+      updatePage(() {});
+      await Future.delayed(
+        Duration(
+          milliseconds: 1500,
+        ),
+      );
+    } else if (functions.outcomeText(outcome, 'paymentStatus', '') == 'Error') {
+      phase = 'rejected';
+      waiting = 'The payment didn’t go through';
+      updatePage(() {});
+      await Future.delayed(
+        Duration(
+          milliseconds: 1200,
+        ),
+      );
     }
   }
 }

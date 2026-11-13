@@ -1,5 +1,7 @@
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,8 +9,10 @@ import 'package:provider/provider.dart';
 import 'profile_photos_sheet_model.dart';
 export 'profile_photos_sheet_model.dart';
 
-/// The Profile tab's ⋮ menu: which picture to replace. Closes with 'cover' or
-/// 'logo'; the page runs the picker and upload, so this sheet never waits on one.
+/// Bottom sheet behind the store profile's three-dot button: change the cover
+/// photo or the logo.
+///
+/// Closes with 'cover' or 'logo'; dismissing returns nothing.
 class ProfilePhotosSheetWidget extends StatefulWidget {
   const ProfilePhotosSheetWidget({super.key});
 
@@ -46,8 +50,6 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryText,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(0.0),
-          bottomRight: Radius.circular(0.0),
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
         ),
@@ -56,7 +58,8 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
         padding: EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 34.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+          textBaseline: TextBaseline.alphabetic,
           children: [
             Align(
               alignment: AlignmentDirectional(0.0, 0.0),
@@ -122,7 +125,9 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                       Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment:
+                              (FFCrossAxisAlignment.start).flutterValue,
+                          textBaseline: TextBaseline.alphabetic,
                           children: [
                             Text(
                               'Change cover photo',
@@ -137,7 +142,7 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                                     ),
                                     color: Color(0xFF111111),
                                     fontSize: 13.0,
-                                    letterSpacing: -0.325,
+                                    letterSpacing: -0.33,
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -148,7 +153,6 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                             Text(
                               'The picture behind your name',
                               maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -167,6 +171,7 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                                         .fontStyle,
                                     lineHeight: 1.5,
                                   ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -214,7 +219,9 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                       Expanded(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment:
+                              (FFCrossAxisAlignment.start).flutterValue,
+                          textBaseline: TextBaseline.alphabetic,
                           children: [
                             Text(
                               'Change logo',
@@ -229,7 +236,7 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                                     ),
                                     color: Color(0xFF111111),
                                     fontSize: 13.0,
-                                    letterSpacing: -0.325,
+                                    letterSpacing: -0.33,
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -240,7 +247,6 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                             Text(
                               'The round picture customers see',
                               maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -259,6 +265,7 @@ class _ProfilePhotosSheetWidgetState extends State<ProfilePhotosSheetWidget> {
                                         .fontStyle,
                                     lineHeight: 1.5,
                                   ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),

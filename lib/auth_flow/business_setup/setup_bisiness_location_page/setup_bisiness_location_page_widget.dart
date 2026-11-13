@@ -58,7 +58,6 @@ class _SetupBisinessLocationPageWidgetState
       },
       child: Scaffold(
         key: scaffoldKey,
-        resizeToAvoidBottomInset: true,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Container(
           width: double.infinity,

@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'my_store_view_model.dart';
 export 'my_store_view_model.dart';
@@ -57,25 +56,6 @@ class _MyStoreViewWidgetState extends State<MyStoreViewWidget>
     });
 
     animationsMap.addAll({
-      'imageOnPageLoadAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          FadeEffect(
-            curve: Curves.easeOut,
-            delay: 0.0.ms,
-            duration: 360.0.ms,
-            begin: 0.0,
-            end: 1.0,
-          ),
-          ScaleEffect(
-            curve: Curves.easeOut,
-            delay: 0.0.ms,
-            duration: 480.0.ms,
-            begin: Offset(0.9, 0.9),
-            end: Offset(1.0, 1.0),
-          ),
-        ],
-      ),
       'rowOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
         effectsBuilder: () => [
@@ -92,6 +72,25 @@ class _MyStoreViewWidgetState extends State<MyStoreViewWidget>
             duration: 280.0.ms,
             begin: Offset(0.0, 10.0),
             end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'imageOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 360.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeOut,
+            delay: 0.0.ms,
+            duration: 480.0.ms,
+            begin: Offset(0.9, 0.9),
+            end: Offset(1.0, 1.0),
           ),
         ],
       ),
@@ -312,7 +311,6 @@ class _MyStoreViewWidgetState extends State<MyStoreViewWidget>
                           ),
                         );
                       } else if (!(_model.products.isNotEmpty)) {
-                        // Centred in the space above the bottom bar.
                         return Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               10.0, 0.0, 10.0, 110.0),

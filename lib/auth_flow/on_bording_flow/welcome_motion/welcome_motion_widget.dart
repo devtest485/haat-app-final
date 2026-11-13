@@ -1,6 +1,9 @@
+import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
@@ -12,7 +15,8 @@ import 'package:provider/provider.dart';
 import 'welcome_motion_model.dart';
 export 'welcome_motion_model.dart';
 
-/// The first screen of the app: the photo, the bank's name and a pill to start.
+/// The first screen of the app: the photo, the bank's name and a pill to
+/// start.
 class WelcomeMotionWidget extends StatefulWidget {
   const WelcomeMotionWidget({super.key});
 
@@ -143,8 +147,7 @@ class _WelcomeMotionWidgetState extends State<WelcomeMotionWidget>
           ),
         ],
       ),
-      // The glass knob glides back and forth across the label, inviting a tap.
-      'containerOnPageLoadAnimation4': AnimationInfo(
+      'blurOnPageLoadAnimation': AnimationInfo(
         loop: true,
         reverse: true,
         trigger: AnimationTrigger.onPageLoad,
@@ -223,7 +226,9 @@ class _WelcomeMotionWidgetState extends State<WelcomeMotionWidget>
                         EdgeInsetsDirectional.fromSTEB(24.0, 64.0, 24.0, 35.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          (FFCrossAxisAlignment.start).flutterValue,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(0.0),
@@ -241,7 +246,7 @@ class _WelcomeMotionWidgetState extends State<WelcomeMotionWidget>
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.bold,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .fontStyle,
@@ -249,7 +254,7 @@ class _WelcomeMotionWidgetState extends State<WelcomeMotionWidget>
                                     color: Colors.white,
                                     fontSize: 30.0,
                                     letterSpacing: -0.3,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.bold,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .fontStyle,
@@ -325,19 +330,19 @@ class _WelcomeMotionWidgetState extends State<WelcomeMotionWidget>
                                       ),
                                     ),
                                   ).animateOnPageLoad(animationsMap[
-                                      'containerOnPageLoadAnimation4']!),
+                                      'blurOnPageLoadAnimation']!),
                                 ],
                               ),
                             ),
-                          ),
-                        ).animateOnPageLoad(
-                            animationsMap['containerOnPageLoadAnimation3']!),
+                          ).animateOnPageLoad(
+                              animationsMap['containerOnPageLoadAnimation3']!),
+                        ),
                       ].divide(SizedBox(height: 20.0)),
                     ),
                   ),
-                ),
-              ).animateOnPageLoad(
-                  animationsMap['containerOnPageLoadAnimation2']!),
+                ).animateOnPageLoad(
+                    animationsMap['containerOnPageLoadAnimation2']!),
+              ),
             ],
           ),
         ),

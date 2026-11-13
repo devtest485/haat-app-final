@@ -2,6 +2,8 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
@@ -101,7 +103,6 @@ class _MarketplaceShimmerWidgetState extends State<MarketplaceShimmerWidget>
                     builder: (context) {
                       final tile = functions.pageIndexes(4, 1).toList();
 
-                      // Four tiles share the row, so it fills any phone width.
                       return Row(
                         mainAxisSize: MainAxisSize.max,
                         children: List.generate(tile.length, (tileIndex) {
@@ -173,7 +174,6 @@ class _MarketplaceShimmerWidgetState extends State<MarketplaceShimmerWidget>
                     builder: (context) {
                       final category = functions.pageIndexes(2, 1).toList();
 
-                      // Two halves per row, edge to edge on every width.
                       return Row(
                         mainAxisSize: MainAxisSize.max,
                         children:

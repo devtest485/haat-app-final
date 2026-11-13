@@ -3,11 +3,11 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'payment_pending_model.dart';
 export 'payment_pending_model.dart';
@@ -100,38 +100,10 @@ class _PaymentPendingWidgetState extends State<PaymentPendingWidget> {
                                       Container(
                                         width: 200.0,
                                         height: 168.0,
-                                        decoration: BoxDecoration(),
-                                        child: Stack(
-                                          alignment:
-                                              AlignmentDirectional(0.0, 0.0),
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(48.0),
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                  sigmaX: 4.0,
-                                                  sigmaY: 4.0,
-                                                ),
-                                                child: Container(
-                                                  width: 96.0,
-                                                  height: 96.0,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            48.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Lottie.asset(
-                                              'assets/jsons/result-pending.json',
-                                              width: 200.0,
-                                              height: 168.0,
-                                              fit: BoxFit.contain,
-                                              animate: true,
-                                            ),
-                                          ],
+                                        child: custom_widgets.PaymentResultMark(
+                                          width: 200.0,
+                                          height: 168.0,
+                                          status: 'pending',
                                         ),
                                       ),
                                     ],

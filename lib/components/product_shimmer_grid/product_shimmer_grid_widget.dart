@@ -2,6 +2,8 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
@@ -12,8 +14,9 @@ import 'package:provider/provider.dart';
 import 'product_shimmer_grid_model.dart';
 export 'product_shimmer_grid_model.dart';
 
-/// Placeholder product cards, shimmering while the products load. Same grid
-/// and card shape as ProductCard so the real cards land in place.
+/// Placeholder product cards, shimmering while the products load.
+///
+/// Same grid and card shape as ProductCard so the real cards land in place.
 class ProductShimmerGridWidget extends StatefulWidget {
   const ProductShimmerGridWidget({super.key});
 
@@ -84,8 +87,8 @@ class _ProductShimmerGridWidgetState extends State<ProductShimmerGridWidget>
             childAspectRatio: 0.83,
           ),
           primary: false,
-          physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: placeholder.length,
           itemBuilder: (context, placeholderIndex) {
             final placeholderItem = placeholder[placeholderIndex];

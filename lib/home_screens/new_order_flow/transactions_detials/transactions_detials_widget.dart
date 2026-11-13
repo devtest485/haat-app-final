@@ -1,6 +1,6 @@
 import '/backend/api_requests/api_calls.dart';
-import '/components/transaction_shimmer_widget.dart';
 import '/components/transaction_filter_sheet/transaction_filter_sheet_widget.dart';
+import '/components/transaction_shimmer_widget.dart';
 import '/components/transactions/transactions_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -180,7 +180,8 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            (FFMainAxisAlignment.end)
+                                                .flutterValue,
                                         children: [
                                           Icon(
                                             Icons.search_sharp,
@@ -198,7 +199,6 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                 isScrollControlled: true,
                                                 backgroundColor:
                                                     Colors.transparent,
-                                                enableDrag: true,
                                                 context: context,
                                                 builder: (context) {
                                                   return GestureDetector(
@@ -1210,8 +1210,12 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                 MainAxisSize
                                                                     .min,
                                                             crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
+                                                                (FFCrossAxisAlignment
+                                                                        .center)
+                                                                    .flutterValue,
+                                                            textBaseline:
+                                                                TextBaseline
+                                                                    .alphabetic,
                                                             children: [
                                                               ClipRRect(
                                                                 borderRadius:

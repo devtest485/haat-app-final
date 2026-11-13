@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
@@ -29,9 +30,9 @@ class _ProductsWidgetState extends State<ProductsWidget>
     with TickerProviderStateMixin {
   late ProductsModel _model;
 
-  final animationsMap = <String, AnimationInfo>{};
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {

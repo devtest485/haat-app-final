@@ -7,7 +7,6 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'tap_pay_out_model.dart';
@@ -73,8 +72,6 @@ class _TapPayOutWidgetState extends State<TapPayOutWidget> {
             ),
             child: Stack(
               children: [
-                // The pulse fills the screen with its disc at the exact centre;
-                // the outer rings run past the edges.
                 InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,

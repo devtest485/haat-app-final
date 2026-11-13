@@ -1,10 +1,12 @@
 import '/backend/api_requests/api_calls.dart';
-import '/components/product_shimmer_grid/product_shimmer_grid_widget.dart';
 import '/components/product_card/product_card_widget.dart';
+import '/components/product_shimmer_grid/product_shimmer_grid_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/home_screens/new_order_flow/select_pay_out/select_pay_out_widget.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -12,8 +14,8 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'add_amount_view_widget.dart' show AddAmountViewWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class AddAmountViewModel extends FlutterFlowModel<AddAmountViewWidget> {
@@ -50,7 +52,6 @@ class AddAmountViewModel extends FlutterFlowModel<AddAmountViewWidget> {
   String? token;
   // Stores action output result for [Backend Call - API (Products)] action in AddAmountView widget.
   ApiCallResponse? apiResultp8j;
-
   // Model for ProductShimmerGrid component.
   late ProductShimmerGridModel productShimmerGridModel;
 

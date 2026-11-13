@@ -2,6 +2,7 @@ import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
@@ -11,9 +12,10 @@ import 'package:provider/provider.dart';
 import 'transaction_filter_sheet_model.dart';
 export 'transaction_filter_sheet_model.dart';
 
-/// All Transactions filter sheet (Figma Bottom Sheet · Filters): direction,
-/// status and method, with a live count on the button. [onApply] hands the
-/// choices back.
+/// All Transactions filter sheet (Figma Bottom Sheet - Filters): direction,
+/// status and method, with a live count on the button.
+///
+/// onApply hands the choices back.
 class TransactionFilterSheetWidget extends StatefulWidget {
   const TransactionFilterSheetWidget({
     super.key,
@@ -80,11 +82,12 @@ class _TransactionFilterSheetWidgetState
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+            textBaseline: TextBaseline.alphabetic,
             children: [
               Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: (FFMainAxisAlignment.center).flutterValue,
                 children: [
                   Container(
                     width: 36.0,
@@ -100,11 +103,13 @@ class _TransactionFilterSheetWidgetState
                 padding: EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 32.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
                     Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment:
+                          (FFMainAxisAlignment.spaceBetween).flutterValue,
                       children: [
                         Text(
                           'Filters',
@@ -141,9 +146,13 @@ class _TransactionFilterSheetWidgetState
                                 _model.directionChipsValueController?.value = [
                                   'All'
                                 ];
+                              });
+                              safeSetState(() {
                                 _model.statusChipsValueController?.value = [
                                   'All'
                                 ];
+                              });
+                              safeSetState(() {
                                 _model.methodChipsValueController?.value = [
                                   'All types'
                                 ];
@@ -175,7 +184,9 @@ class _TransactionFilterSheetWidgetState
                     ),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          (FFCrossAxisAlignment.start).flutterValue,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
                           'Direction',
@@ -189,7 +200,7 @@ class _TransactionFilterSheetWidgetState
                                     ),
                                     color: Color(0xFF111111),
                                     fontSize: 13.0,
-                                    letterSpacing: -0.325,
+                                    letterSpacing: -0.33,
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -278,7 +289,9 @@ class _TransactionFilterSheetWidgetState
                     ),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          (FFCrossAxisAlignment.start).flutterValue,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
                           'Status',
@@ -292,7 +305,7 @@ class _TransactionFilterSheetWidgetState
                                     ),
                                     color: Color(0xFF111111),
                                     fontSize: 13.0,
-                                    letterSpacing: -0.325,
+                                    letterSpacing: -0.33,
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -382,7 +395,9 @@ class _TransactionFilterSheetWidgetState
                     ),
                     Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          (FFCrossAxisAlignment.start).flutterValue,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
                           'Method',
@@ -396,7 +411,7 @@ class _TransactionFilterSheetWidgetState
                                     ),
                                     color: Color(0xFF111111),
                                     fontSize: 13.0,
-                                    letterSpacing: -0.325,
+                                    letterSpacing: -0.33,
                                     fontWeight: FontWeight.w500,
                                     fontStyle: FlutterFlowTheme.of(context)
                                         .bodyMedium

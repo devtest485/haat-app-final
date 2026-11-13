@@ -1,16 +1,13 @@
-import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'payment_error_model.dart';
 export 'payment_error_model.dart';
@@ -27,11 +24,8 @@ class PaymentErrorWidget extends StatefulWidget {
   State<PaymentErrorWidget> createState() => _PaymentErrorWidgetState();
 }
 
-class _PaymentErrorWidgetState extends State<PaymentErrorWidget>
-    with TickerProviderStateMixin {
+class _PaymentErrorWidgetState extends State<PaymentErrorWidget> {
   late PaymentErrorModel _model;
-
-  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -43,76 +37,6 @@ class _PaymentErrorWidgetState extends State<PaymentErrorWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => PaymentErrorModel());
-
-    animationsMap.addAll({
-      'clipRRectOnPageLoadAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          ScaleEffect(
-            curve: Curves.easeOut,
-            delay: 0.0.ms,
-            duration: 233.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(1.08, 1.08),
-          ),
-          ScaleEffect(
-            curve: Curves.easeOut,
-            delay: 233.0.ms,
-            duration: 184.0.ms,
-            begin: Offset(1.0, 1.0),
-            end: Offset(0.926, 0.926),
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 500.0.ms,
-            duration: 50.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(-6.0, 0.0),
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 550.0.ms,
-            duration: 50.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(12.0, 0.0),
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 600.0.ms,
-            duration: 50.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(-10.0, 0.0),
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 650.0.ms,
-            duration: 50.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(8.0, 0.0),
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 700.0.ms,
-            duration: 50.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(-6.0, 0.0),
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 750.0.ms,
-            duration: 50.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(2.0, 0.0),
-          ),
-        ],
-      ),
-    });
-    setupAnimations(
-      animationsMap.values.where((anim) =>
-          anim.trigger == AnimationTrigger.onActionTrigger ||
-          !anim.applyInitialState),
-      this,
-    );
   }
 
   @override
@@ -176,40 +100,10 @@ class _PaymentErrorWidgetState extends State<PaymentErrorWidget>
                                       Container(
                                         width: 200.0,
                                         height: 168.0,
-                                        decoration: BoxDecoration(),
-                                        child: Stack(
-                                          alignment:
-                                              AlignmentDirectional(0.0, 0.0),
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(48.0),
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                  sigmaX: 4.0,
-                                                  sigmaY: 4.0,
-                                                ),
-                                                child: Container(
-                                                  width: 96.0,
-                                                  height: 96.0,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            48.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            ).animateOnPageLoad(animationsMap[
-                                                'clipRRectOnPageLoadAnimation']!),
-                                            Lottie.asset(
-                                              'assets/jsons/result-failed.json',
-                                              width: 200.0,
-                                              height: 168.0,
-                                              fit: BoxFit.contain,
-                                              repeat: false,
-                                              animate: true,
-                                            ),
-                                          ],
+                                        child: custom_widgets.PaymentResultMark(
+                                          width: 200.0,
+                                          height: 168.0,
+                                          status: 'failed',
                                         ),
                                       ),
                                     ],

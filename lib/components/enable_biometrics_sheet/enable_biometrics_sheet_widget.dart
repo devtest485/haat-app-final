@@ -1,21 +1,22 @@
-import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'enable_biometrics_sheet_model.dart';
 export 'enable_biometrics_sheet_model.dart';
 
-/// Asks to turn on biometric sign-in, from the switch on the Profile tab.
+/// Bottom sheet that turns on biometric sign-in.
 ///
-/// Closes with true once the device key is enrolled, false on Skip; the caller
-/// re-reads the key either way, so a dismissed sheet leaves the switch honest.
+/// Closes with true once enabled, false on Skip.
 class EnableBiometricsSheetWidget extends StatefulWidget {
   const EnableBiometricsSheetWidget({super.key});
 
@@ -91,8 +92,6 @@ class _EnableBiometricsSheetWidgetState
           ).image,
         ),
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(0.0),
-          bottomRight: Radius.circular(0.0),
           topLeft: Radius.circular(12.0),
           topRight: Radius.circular(12.0),
         ),
@@ -141,14 +140,17 @@ class _EnableBiometricsSheetWidgetState
                   textAlign: TextAlign.center,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
                         color: Color(0xFFEBEBEB),
                         fontSize: 13.0,
                         letterSpacing: 0.0,
-                        fontWeight: FontWeight.normal,
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         lineHeight: 1.54,
@@ -160,10 +162,7 @@ class _EnableBiometricsSheetWidgetState
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                 child: Text(
-                  valueOrDefault<String>(
-                    _model.errorMessage,
-                    'Something went wrong.',
-                  ),
+                  _model.errorMessage!,
                   textAlign: TextAlign.center,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.montserrat(
@@ -228,22 +227,30 @@ class _EnableBiometricsSheetWidgetState
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
+                      var _shouldSetState = false;
                       if (_model.busy) {
+                        if (_shouldSetState) safeSetState(() {});
                         return;
                       }
                       _model.busy = true;
+                      safeSetState(() {});
                       _model.errorMessage = '';
                       safeSetState(() {});
                       _model.enableResult =
                           await actions.haatEnableBiometrics();
+                      _shouldSetState = true;
                       _model.busy = false;
                       safeSetState(() {});
                       if (_model.enableResult == '') {
                         Navigator.pop(context, true);
-                      } else if (_model.enableResult != 'CANCELLED') {
-                        _model.errorMessage = _model.enableResult;
-                        safeSetState(() {});
+                      } else {
+                        if (_model.enableResult != 'CANCELLED') {
+                          _model.errorMessage = _model.enableResult;
+                          safeSetState(() {});
+                        }
                       }
+
+                      if (_shouldSetState) safeSetState(() {});
                     },
                     child: Container(
                       width: double.infinity,
@@ -266,15 +273,17 @@ class _EnableBiometricsSheetWidgetState
                       child: Builder(
                         builder: (context) {
                           if (_model.busy) {
-                            return Container(
-                              width: 20.0,
-                              height: 20.0,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.0,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                ),
+                            return Align(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: CircularPercentIndicator(
+                                percent: 0.75,
+                                radius: 10.0,
+                                lineWidth: 2.0,
+                                animation: true,
+                                animateFromLastPercent: true,
+                                progressColor: FlutterFlowTheme.of(context)
+                                    .primaryBackground,
+                                backgroundColor: Colors.transparent,
                               ),
                             );
                           } else {

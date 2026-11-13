@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class MyStoreViewModel extends FlutterFlowModel<MyStoreViewWidget> {
@@ -46,7 +45,6 @@ class MyStoreViewModel extends FlutterFlowModel<MyStoreViewWidget> {
 
   // Stores action output result for [Bottom Sheet - ProductsMenuSheet] action in Container widget.
   String? menuChoice;
-
   // Model for ProductShimmerGrid component.
   late ProductShimmerGridModel productShimmerGridModel;
 

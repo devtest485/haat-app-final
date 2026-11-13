@@ -9,6 +9,7 @@ import 'setup_bisiness_location_page_widget.dart'
     show SetupBisinessLocationPageWidget;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,9 @@ class SetupBisinessLocationPageModel
   /// the field until the merchant types a different one.
   String? nameError;
 
-  /// The line shown under the name on the profile. Optional.
+  /// The line shown under the name on the profile.
+  ///
+  /// Optional.
   String? businessDescription;
 
   ///  State fields for stateful widgets in this page.

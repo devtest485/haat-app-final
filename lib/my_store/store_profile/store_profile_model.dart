@@ -1,8 +1,8 @@
-import '/components/log_out/log_out_widget.dart';
-import '/components/profile_photos_sheet/profile_photos_sheet_widget.dart';
-import '/components/privacypolicy/privacypolicy_widget.dart';
 import '/components/change_password_sheet/change_password_sheet_widget.dart';
 import '/components/enable_biometrics_sheet/enable_biometrics_sheet_widget.dart';
+import '/components/log_out/log_out_widget.dart';
+import '/components/privacypolicy/privacypolicy_widget.dart';
+import '/components/profile_photos_sheet/profile_photos_sheet_widget.dart';
 import '/components/terms_of_uses/terms_of_uses_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -17,6 +17,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class StoreProfileModel extends FlutterFlowModel<StoreProfileWidget> {
@@ -28,26 +29,30 @@ class StoreProfileModel extends FlutterFlowModel<StoreProfileWidget> {
 
   bool coverUploading = false;
 
-  /// Drives the Biometric login toggle; follows the device key after every change.
   bool biometricSwitchValue = false;
 
   ///  State fields for stateful widgets in this component.
 
   // Stores action output result for [Custom Action - haatStoreProfile] action in StoreProfile widget.
   dynamic? profileResult;
-  // Stores action output result for [Bottom Sheet - EnableBiometricsSheet] action in BiometricToggle widget.
-  bool? biometricEnabled;
-  // Stores action output result for [Custom Action - haatDisableBiometrics] action in BiometricToggle widget.
-  String? disableResult;
-  bool? passwordChanged;
-  // Stores action output result for [Bottom Sheet - ProfilePhotosSheet] action in MoreButton widget.
+  // Stores action output result for [Custom Action - haatHasBiometricKey] action in StoreProfile widget.
+  bool? biometricKeyResult;
+  // Stores action output result for [Bottom Sheet - ProfilePhotosSheet] action in Container widget.
   String? photoChoice;
-  // Stores action output result for [Custom Action - haatPickBusinessCover] action in MoreButton widget.
+  // Stores action output result for [Custom Action - haatPickBusinessCover] action in Container widget.
   String? coverResult;
-  // Stores action output result for [Custom Action - haatPickBusinessLogo] action in MoreButton widget.
-  String? logoResult;
-  // Stores action output result for [Custom Action - haatStoreProfile] action in MoreButton widget.
+  // Stores action output result for [Custom Action - haatStoreProfile] action in Container widget.
   dynamic? reloadResult;
+  // Stores action output result for [Custom Action - haatPickBusinessLogo] action in Container widget.
+  String? logoResult;
+  // Stores action output result for [Custom Action - haatDisableBiometrics] action in Container widget.
+  String? disableResult;
+  // Stores action output result for [Bottom Sheet - EnableBiometricsSheet] action in Container widget.
+  bool? biometricEnabled;
+  // Stores action output result for [Custom Action - haatHasBiometricKey] action in Container widget.
+  bool? biometricKeyRefresh;
+  // Stores action output result for [Bottom Sheet - ChangePasswordSheet] action in Container widget.
+  bool? passwordChanged;
 
   @override
   void initState(BuildContext context) {}

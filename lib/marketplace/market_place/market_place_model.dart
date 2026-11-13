@@ -4,10 +4,12 @@ import '/components/market_brand_card/market_brand_card_widget.dart';
 import '/components/market_category_tile/market_category_tile_widget.dart';
 import '/components/marketplace_shimmer/marketplace_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/marketplace/market_space/market_space_widget.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
@@ -15,6 +17,7 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'market_place_widget.dart' show MarketPlaceWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +71,8 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
 
   bool loaded = false;
 
+  bool marketplaceLoaded = false;
+
   ///  State fields for stateful widgets in this component.
 
   // Stores action output result for [Custom Action - haatAccessToken] action in MarketPlace widget.
@@ -76,6 +81,8 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
   ApiCallResponse? bannersResult;
   // Stores action output result for [Backend Call - API (Marketplace)] action in MarketPlace widget.
   ApiCallResponse? marketplaceResult;
+  // Model for MarketplaceShimmer component.
+  late MarketplaceShimmerModel marketplaceShimmerModel;
   // State field(s) for PageView widget.
   PageController? pageViewController;
 
@@ -84,11 +91,6 @@ class MarketPlaceModel extends FlutterFlowModel<MarketPlaceWidget> {
           pageViewController!.page != null
       ? pageViewController!.page!.round()
       : 0;
-
-  bool marketplaceLoaded = false;
-
-  // Model for MarketplaceShimmer component.
-  late MarketplaceShimmerModel marketplaceShimmerModel;
 
   @override
   void initState(BuildContext context) {

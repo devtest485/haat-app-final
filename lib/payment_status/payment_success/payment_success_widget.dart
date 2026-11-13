@@ -1,17 +1,14 @@
-import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'payment_success_model.dart';
 export 'payment_success_model.dart';
@@ -28,11 +25,8 @@ class PaymentSuccessWidget extends StatefulWidget {
   State<PaymentSuccessWidget> createState() => _PaymentSuccessWidgetState();
 }
 
-class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
-    with TickerProviderStateMixin {
+class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
   late PaymentSuccessModel _model;
-
-  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -44,42 +38,6 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => PaymentSuccessModel());
-
-    animationsMap.addAll({
-      'clipRRectOnPageLoadAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          // Matches the Lottie disc: 0 → 112% → 96% → 100%.
-          ScaleEffect(
-            curve: Curves.easeOutCubic,
-            delay: 0.0.ms,
-            duration: 200.0.ms,
-            begin: Offset(0.0, 0.0),
-            end: Offset(1.12, 1.12),
-          ),
-          ScaleEffect(
-            curve: Curves.easeInOut,
-            delay: 200.0.ms,
-            duration: 133.0.ms,
-            begin: Offset(1.0, 1.0),
-            end: Offset(0.857, 0.857),
-          ),
-          ScaleEffect(
-            curve: Curves.easeInOut,
-            delay: 333.0.ms,
-            duration: 117.0.ms,
-            begin: Offset(1.0, 1.0),
-            end: Offset(1.0417, 1.0417),
-          ),
-        ],
-      ),
-    });
-    setupAnimations(
-      animationsMap.values.where((anim) =>
-          anim.trigger == AnimationTrigger.onActionTrigger ||
-          !anim.applyInitialState),
-      this,
-    );
   }
 
   @override
@@ -146,41 +104,11 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget>
                                           Container(
                                             width: 200.0,
                                             height: 168.0,
-                                            decoration: BoxDecoration(),
-                                            child: Stack(
-                                              alignment: AlignmentDirectional(
-                                                  0.0, 0.0),
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          48.0),
-                                                  child: BackdropFilter(
-                                                    filter: ImageFilter.blur(
-                                                      sigmaX: 4.0,
-                                                      sigmaY: 4.0,
-                                                    ),
-                                                    child: Container(
-                                                      width: 96.0,
-                                                      height: 96.0,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(48.0),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ).animateOnPageLoad(animationsMap[
-                                                    'clipRRectOnPageLoadAnimation']!),
-                                                Lottie.asset(
-                                                  'assets/jsons/result-success.json',
-                                                  width: 200.0,
-                                                  height: 168.0,
-                                                  fit: BoxFit.contain,
-                                                  repeat: false,
-                                                  animate: true,
-                                                ),
-                                              ],
+                                            child: custom_widgets
+                                                .PaymentResultMark(
+                                              width: 200.0,
+                                              height: 168.0,
+                                              status: 'success',
                                             ),
                                           ),
                                           Padding(

@@ -78,6 +78,8 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   ApiCallResponse? apiResultid3;
   // Stores action output result for [Backend Call - API (MarketplaceBanners)] action in HomeScreen widget.
   ApiCallResponse? apiResultxlj;
+  // Stores action output result for [Backend Call - API (Organizations)] action in HomeScreen widget.
+  ApiCallResponse? organizationsResult;
   // Stores action output result for [Backend Call - API ( WeekStory)] action in HomeScreen widget.
   ApiCallResponse? apiResultatl;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in HomeScreen widget.
@@ -93,8 +95,6 @@ class HomeScreenModel extends FlutterFlowModel<HomeScreenWidget> {
   String? balanceToken;
   // Stores action output result for [Backend Call - API (RecentTransactions)] action in WalletBalance widget.
   ApiCallResponse? balanceTransactions;
-  // Stores action output result for [Backend Call - API (Organizations)] action in HomeScreen widget.
-  ApiCallResponse? organizationsResult;
   // Model for AlertBanner component.
   late AlertBannerModel alertBannerModel;
   // Model for TransactionShimmer component.

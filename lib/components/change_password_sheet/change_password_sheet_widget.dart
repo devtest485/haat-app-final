@@ -1,18 +1,21 @@
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'change_password_sheet_model.dart';
 export 'change_password_sheet_model.dart';
 
-/// Replaces the account password from the Profile tab: current password, then the
-/// new one twice. Closes with true once the server has accepted it.
+/// Bottom sheet to change the password: current, new and confirm.
+///
+/// Closes with true after the password was changed, false when dismissed.
 class ChangePasswordSheetWidget extends StatefulWidget {
   const ChangePasswordSheetWidget({super.key});
 
@@ -59,8 +62,6 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryText,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(0.0),
-          bottomRight: Radius.circular(0.0),
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
         ),
@@ -68,9 +69,11 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
       child: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 34.0),
         child: SingleChildScrollView(
+          primary: false,
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+            textBaseline: TextBaseline.alphabetic,
             children: [
               Align(
                 alignment: AlignmentDirectional(0.0, 0.0),
@@ -154,14 +157,17 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                   'Enter the password you sign in with now, then choose a new one.',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
                         color: Color(0x84000000),
                         fontSize: 12.5,
                         letterSpacing: 0.0,
-                        fontWeight: FontWeight.normal,
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         lineHeight: 1.45,
@@ -182,7 +188,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     },
                   ),
                   autofocus: false,
-                  textInputAction: TextInputAction.next,
+                  enabled: true,
                   obscureText: !_model.currentPasswordFieldVisibility,
                   decoration: InputDecoration(
                     labelText: 'Current password',
@@ -202,9 +208,27 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                                   .labelMedium
                                   .fontStyle,
                             ),
+                    hintStyle:
+                        FlutterFlowTheme.of(context).labelMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontStyle,
+                              ),
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontStyle,
+                            ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0x00000000),
+                        color: Colors.transparent,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
@@ -212,7 +236,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Color(0xFF111111),
-                        width: 1.2,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -226,7 +250,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
-                        width: 1.2,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -240,7 +264,9 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                             _model.currentPasswordFieldVisibility =
                                 !_model.currentPasswordFieldVisibility);
                       },
-                      focusNode: FocusNode(skipTraversal: true),
+                      focusNode:
+                          _model.currentPasswordFieldPasswordVisibilityFocusNode
+                            ..skipTraversal = !(false),
                       child: Icon(
                         _model.currentPasswordFieldVisibility
                             ? Icons.visibility_outlined
@@ -264,6 +290,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
                   cursorColor: Color(0xFF111111),
+                  enableInteractiveSelection: true,
                   validator: _model.currentPasswordFieldTextControllerValidator
                       .asValidator(context),
                 ),
@@ -282,7 +309,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     },
                   ),
                   autofocus: false,
-                  textInputAction: TextInputAction.next,
+                  enabled: true,
                   obscureText: !_model.newPasswordFieldVisibility,
                   decoration: InputDecoration(
                     labelText: 'New password',
@@ -302,9 +329,27 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                                   .labelMedium
                                   .fontStyle,
                             ),
+                    hintStyle:
+                        FlutterFlowTheme.of(context).labelMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontStyle,
+                              ),
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontStyle,
+                            ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0x00000000),
+                        color: Colors.transparent,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
@@ -312,7 +357,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Color(0xFF111111),
-                        width: 1.2,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -326,7 +371,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
-                        width: 1.2,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -339,7 +384,9 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                         safeSetState(() => _model.newPasswordFieldVisibility =
                             !_model.newPasswordFieldVisibility);
                       },
-                      focusNode: FocusNode(skipTraversal: true),
+                      focusNode:
+                          _model.newPasswordFieldPasswordVisibilityFocusNode
+                            ..skipTraversal = !(false),
                       child: Icon(
                         _model.newPasswordFieldVisibility
                             ? Icons.visibility_outlined
@@ -363,6 +410,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
                   cursorColor: Color(0xFF111111),
+                  enableInteractiveSelection: true,
                   validator: _model.newPasswordFieldTextControllerValidator
                       .asValidator(context),
                 ),
@@ -373,14 +421,17 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                   'At least 8 characters, with upper and lower case letters, a number and a symbol.',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
                         color: Color(0x84000000),
                         fontSize: 11.0,
                         letterSpacing: 0.0,
-                        fontWeight: FontWeight.normal,
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         lineHeight: 1.4,
@@ -401,7 +452,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     },
                   ),
                   autofocus: false,
-                  textInputAction: TextInputAction.done,
+                  enabled: true,
                   obscureText: !_model.confirmPasswordFieldVisibility,
                   decoration: InputDecoration(
                     labelText: 'Confirm new password',
@@ -421,9 +472,27 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                                   .labelMedium
                                   .fontStyle,
                             ),
+                    hintStyle:
+                        FlutterFlowTheme.of(context).labelMedium.override(
+                              font: GoogleFonts.inter(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontStyle,
+                              ),
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .fontStyle,
+                            ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0x00000000),
+                        color: Colors.transparent,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
@@ -431,7 +500,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Color(0xFF111111),
-                        width: 1.2,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -445,7 +514,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: FlutterFlowTheme.of(context).error,
-                        width: 1.2,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -459,7 +528,9 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                             _model.confirmPasswordFieldVisibility =
                                 !_model.confirmPasswordFieldVisibility);
                       },
-                      focusNode: FocusNode(skipTraversal: true),
+                      focusNode:
+                          _model.confirmPasswordFieldPasswordVisibilityFocusNode
+                            ..skipTraversal = !(false),
                       child: Icon(
                         _model.confirmPasswordFieldVisibility
                             ? Icons.visibility_outlined
@@ -483,6 +554,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
                   cursorColor: Color(0xFF111111),
+                  enableInteractiveSelection: true,
                   validator: _model.confirmPasswordFieldTextControllerValidator
                       .asValidator(context),
                 ),
@@ -491,10 +563,7 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(4.0, 12.0, 4.0, 0.0),
                   child: Text(
-                    valueOrDefault<String>(
-                      _model.errorMessage,
-                      'Something went wrong.',
-                    ),
+                    _model.errorMessage!,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w500,
@@ -520,7 +589,9 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
+                    var _shouldSetState = false;
                     if (_model.busy) {
+                      if (_shouldSetState) safeSetState(() {});
                       return;
                     }
                     if (functions.passwordChangeProblem(
@@ -533,15 +604,18 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                           _model.newPasswordFieldTextController.text,
                           _model.confirmPasswordFieldTextController.text);
                       safeSetState(() {});
+                      if (_shouldSetState) safeSetState(() {});
                       return;
                     }
                     _model.busy = true;
+                    safeSetState(() {});
                     _model.errorMessage = '';
                     safeSetState(() {});
                     _model.changeResult = await actions.haatChangePassword(
                       _model.currentPasswordFieldTextController.text,
                       _model.newPasswordFieldTextController.text,
                     );
+                    _shouldSetState = true;
                     _model.busy = false;
                     safeSetState(() {});
                     if (_model.changeResult == '') {
@@ -550,6 +624,8 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                       _model.errorMessage = _model.changeResult;
                       safeSetState(() {});
                     }
+
+                    if (_shouldSetState) safeSetState(() {});
                   },
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 180),
@@ -572,14 +648,17 @@ class _ChangePasswordSheetWidgetState extends State<ChangePasswordSheetWidget> {
                     child: Builder(
                       builder: (context) {
                         if (_model.busy) {
-                          return Container(
-                            width: 20.0,
-                            height: 20.0,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primaryText,
-                              ),
+                          return Align(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: CircularPercentIndicator(
+                              percent: 0.75,
+                              radius: 10.0,
+                              lineWidth: 2.0,
+                              animation: true,
+                              animateFromLastPercent: true,
+                              progressColor:
+                                  FlutterFlowTheme.of(context).primaryText,
+                              backgroundColor: Colors.transparent,
                             ),
                           );
                         } else {
