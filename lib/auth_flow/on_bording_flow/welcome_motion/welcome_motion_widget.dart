@@ -215,7 +215,7 @@ class _WelcomeMotionWidgetState extends State<WelcomeMotionWidget>
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       image: Image.asset(
                         'assets/images/welcome_panel.png',
                       ).image,
