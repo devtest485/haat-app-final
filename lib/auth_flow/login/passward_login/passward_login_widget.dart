@@ -399,7 +399,7 @@ class _PasswardLoginWidgetState extends State<PasswardLoginWidget> {
                                                                               fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                             ),
                                                                         keyboardType:
-                                                                            (FFKeyboardType.text).flutterValue,
+                                                                            (FFKeyboardType.number).flutterValue,
                                                                         cursorColor:
                                                                             FlutterFlowTheme.of(context).primaryText,
                                                                         enableInteractiveSelection:
