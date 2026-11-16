@@ -38,7 +38,7 @@ List<dynamic> staffSections(List<dynamic>? staff) {
 
   return [
     {"title": "MANAGERS · ${managers.length}", "members": managers},
-    {"title": "CASHIERS · ${cashiers.length}", "members": cashiers},
+    {"title": "MY STORE · ${cashiers.length}", "members": cashiers},
     {"title": "OTHER STAFF · ${others.length}", "members": others},
   ].where((s) => (s["members"] as List).isNotEmpty).toList();
 }

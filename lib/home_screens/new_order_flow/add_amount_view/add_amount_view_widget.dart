@@ -973,6 +973,17 @@ class _AddAmountViewWidgetState extends State<AddAmountViewWidget>
                                                         );
                                                         return;
                                                       }
+                                                      if (functions
+                                                              .productInCart(
+                                                                  _model.cart
+                                                                      .toList(),
+                                                                  getJsonField(
+                                                                    productItemItem,
+                                                                    r'''$.id''',
+                                                                  ).toString()) ==
+                                                          true) {
+                                                        return;
+                                                      }
                                                       _model.cart = functions
                                                           .cartToggle(
                                                               _model.cart

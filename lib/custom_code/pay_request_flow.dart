@@ -75,6 +75,7 @@ Map<String, dynamic> _statusOutcome(
   String? currency,
   String? subtitle,
   String? status,
+  String? transactionId,
 }) =>
     {
       'paymentStatus': paymentStatus,
@@ -83,6 +84,7 @@ Map<String, dynamic> _statusOutcome(
       if (currency != null) 'currency': currency,
       if (subtitle != null) 'subtitle': subtitle,
       if (status != null) 'status': status,
+      if (transactionId != null) 'transactionId': transactionId,
       'details': [
         for (final (label, value) in lines) {'label': label, 'value': value},
       ],
@@ -101,6 +103,14 @@ void openPayRequest(BuildContext context, String code) {
     queryParameters:
         {'code': serializeParam(code, ParamType.String)}.withoutNulls,
   );
+}
+
+/// The customer turns the request down on their own phone, so a tap the merchant is
+/// waiting on ends as declined there. Sent without waiting: the page is already closing,
+/// and a code that is not a tap, or is already paid, is simply left alone.
+void declinePayRequest(String code) {
+  if (code.trim().isEmpty) return;
+  unawaited(AuthSession.instance.payRequests.declineTap(code.trim()));
 }
 
 // ══ Asking to be paid ══════════════════════════════════════════════════════════════
@@ -442,32 +452,17 @@ Future<Uint8List?> payRequestCardPng(dynamic request) async {
 
   // The QR.
   final qrTop = y;
-  final qr = QrPainter(
-    data: data,
-    version: QrVersions.auto,
-    errorCorrectionLevel: QrErrorCorrectLevel.H,
-    gapless: true,
-    eyeStyle: const QrEyeStyle(eyeShape: QrEyeShape.square, color: _ink),
-    dataModuleStyle: const QrDataModuleStyle(
-      dataModuleShape: QrDataModuleShape.square,
-      color: _ink,
-    ),
-  );
+  final qr = _QrArtPainter(data);
   paint.add((c) {
     c.save();
     c.translate((width - qrSize) / 2, qrTop);
     qr.paint(c, const Size(qrSize, qrSize));
     c.restore();
-    const badge = qrSize * 0.22;
+    const badge = qrSize * _QrArtPainter.logoFraction;
     final centre = Offset(width / 2, qrTop + qrSize / 2);
-    c.drawRRect(
-      RRect.fromRectAndRadius(
-          Rect.fromCenter(center: centre, width: badge + 8, height: badge + 8),
-          const Radius.circular(12)),
-      Paint()..color = Colors.white,
-    );
+    c.drawCircle(centre, badge / 2 + 6, Paint()..color = Colors.white);
     _drawBadge(c, Rect.fromCenter(center: centre, width: badge, height: badge),
-        logo, initials, 9);
+        logo, initials, badge / 2);
   });
   y += qrSize + 20;
 
@@ -608,6 +603,7 @@ Future<Map<String, dynamic>> previewPayRequest(String code) async {
         ? ''
         : 'Valid until ${dateTimeFormat('d MMM, HH:mm', p.expiresAt)}',
     'blocker': blocker ?? '',
+    'channel': p.channel,
     'payable': blocker == null,
   };
 }
@@ -652,7 +648,8 @@ final _payReferences = <String, String>{};
 /// Asks for the passcode or a fingerprint over this very request, then pays it.
 ///
 /// Returns the PaymentStatus outcome with `paymentStatus` — Success, Pending or
-/// Error — or `{}` when the person closed the dialog. HAAT pays a request once, to the
+/// Error — `{declined}` when the person turned a tap down by closing the dialog, or `{}`
+/// when they closed it on a QR or link. HAAT pays a request once, to the
 /// business that made it, whatever the QR or link said.
 Future<Map<String, dynamic>> approvePayRequest(
   BuildContext context,
@@ -680,7 +677,16 @@ Future<Map<String, dynamic>> approvePayRequest(
       challenge: () =>
           session.payRequests.challenge(code: code, reference: reference),
     );
-    if (!context.mounted || credential == null) return {};
+    if (!context.mounted) return {};
+    if (credential == null) {
+      // The customer closed the passcode / fingerprint dialog: on a tap that is a refusal,
+      // so the merchant's phone is told. A QR or link stays open for the next payer.
+      if (_field(preview, 'channel') == 'nfc') {
+        declinePayRequest(code);
+        return {'declined': 'The customer declined the payment.'};
+      }
+      return {};
+    }
 
     final result = await session.payRequests.pay(
       code: code,
@@ -728,6 +734,11 @@ Future<Map<String, dynamic>> approvePayRequest(
   return {};
 }
 
+String _amountOnly(BigInt minor, String currency) {
+  final (whole, fraction) = splitMinor(minor, currency);
+  return '$whole$fraction';
+}
+
 Map<String, dynamic> _receiptOutcome(TransferReceipt receipt, dynamic preview) {
   final code = _field(preview, 'code');
   final invoice = _field(preview, 'invoiceReference');
@@ -746,6 +757,10 @@ Map<String, dynamic> _receiptOutcome(TransferReceipt receipt, dynamic preview) {
         ('Reference number', _shortReference(receipt.transactionId)),
         ('Date & Time', when),
       ],
+      transactionId: receipt.transactionId,
+      amount: _amountOnly(receipt.amountMinor, receipt.currency),
+      currency: receipt.currency,
+      subtitle: '${receipt.recipientName} · HAAT payment',
       share: 'HAAT payment, waiting for approval',
     );
   }
@@ -868,44 +883,97 @@ class PayRequestQrView extends StatelessWidget {
       );
     }
 
-    final badge = size * 0.22;
+    final badge = size * _QrArtPainter.logoFraction;
     return SizedBox(
       width: size,
       height: size,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          QrImageView(
-            data: data,
-            size: size,
-            padding: EdgeInsets.zero,
-            backgroundColor: Colors.white,
-            errorCorrectionLevel: QrErrorCorrectLevel.H,
-            semanticsLabel: 'Payment QR code',
-            eyeStyle:
-                const QrEyeStyle(eyeShape: QrEyeShape.square, color: _ink),
-            dataModuleStyle: const QrDataModuleStyle(
-              dataModuleShape: QrDataModuleShape.square,
-              color: _ink,
+          Semantics(
+            label: 'Payment QR code',
+            child: CustomPaint(
+              size: Size.square(size),
+              painter: _QrArtPainter(data),
             ),
           ),
           Container(
-            width: badge + 8,
-            height: badge + 8,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
+            width: badge + 12,
+            height: badge + 12,
+            padding: const EdgeInsets.all(6),
+            decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+              shape: BoxShape.circle,
             ),
             child: PayRequestLogo(
               url: _field(request, 'logoUrl'),
               initials: _field(request, 'initials'),
               size: badge,
-              radius: 7,
             ),
           ),
         ],
       ),
     );
   }
+}
+
+/// The QR drawn module by module as small rounded squares with a hairline gap, the
+/// finder corners too, and a round clear spot in the middle for the logo. Drawn at the
+/// highest error correction, so the logo never stops it from being read.
+class _QrArtPainter extends CustomPainter {
+  _QrArtPainter(this.data) {
+    try {
+      final code = QrCode.fromData(
+        data: data,
+        errorCorrectLevel: QrErrorCorrectLevel.H,
+      );
+      _image = QrImage(code);
+      _count = code.moduleCount;
+    } catch (_) {
+      _image = null;
+      _count = 0;
+    }
+  }
+
+  /// The logo's width as a part of the QR's.
+  static const logoFraction = 0.3;
+
+  /// A module's side as a part of its cell, and its corner as a part of the side.
+  static const _fill = 0.86;
+  static const _corner = 0.28;
+
+  final String data;
+  QrImage? _image;
+  int _count = 0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawRect(Offset.zero & size, Paint()..color = Colors.white);
+    final image = _image;
+    if (image == null || _count == 0) return;
+
+    final cell = size.width / _count;
+    final side = cell * _fill;
+    final mid = size.center(Offset.zero);
+    // The logo, its white ring and a little air around it.
+    final clear = size.width * logoFraction / 2 + 6 + cell * 0.8;
+    final ink = Paint()..color = _ink;
+    for (var y = 0; y < _count; y++) {
+      for (var x = 0; x < _count; x++) {
+        if (!image.isDark(y, x)) continue;
+        final centre = Offset((x + 0.5) * cell, (y + 0.5) * cell);
+        if ((centre - mid).distance < clear) continue;
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(center: centre, width: side, height: side),
+            Radius.circular(side * _corner),
+          ),
+          ink,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_QrArtPainter old) => old.data != data;
 }

@@ -8,6 +8,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -92,6 +93,8 @@ class _ProductsWidgetState extends State<ProductsWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -399,67 +402,58 @@ class _ProductsWidgetState extends State<ProductsWidget>
                                                 ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  15.0, 20.0, 15.0, 120.0),
-                                          child: InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              await actions.haatOpenAndWait(
-                                                context,
-                                                'AddProduct',
-                                                '',
-                                                <String, dynamic>{},
-                                              );
-                                              _model.productsAfterAdd =
-                                                  await actions
-                                                      .haatLoadProducts();
-                                              _model.products = _model
-                                                  .productsAfterAdd!
-                                                  .toList()
-                                                  .cast<dynamic>();
-                                              safeSetState(() {});
+                                        if (functions.canDo(
+                                            FFAppState().permissions.toList(),
+                                            'product:create'))
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    15.0, 20.0, 15.0, 120.0),
+                                            child: InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                await actions.haatOpenAndWait(
+                                                  context,
+                                                  'AddProduct',
+                                                  '',
+                                                  <String, dynamic>{},
+                                                );
+                                                _model.productsAfterAdd =
+                                                    await actions
+                                                        .haatLoadProducts();
+                                                _model.products = _model
+                                                    .productsAfterAdd!
+                                                    .toList()
+                                                    .cast<dynamic>();
+                                                safeSetState(() {});
 
-                                              safeSetState(() {});
-                                            },
-                                            child: Container(
-                                              width: 166.8,
-                                              height: 40.37,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        106.67),
-                                              ),
-                                              alignment: AlignmentDirectional(
-                                                  0.0, 0.0),
-                                              child: Text(
-                                                'Add Product',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font: GoogleFonts
-                                                              .montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 16.0,
-                                                          letterSpacing: 0.0,
+                                                safeSetState(() {});
+                                              },
+                                              child: Container(
+                                                width: 166.8,
+                                                height: 40.37,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          106.67),
+                                                ),
+                                                alignment: AlignmentDirectional(
+                                                    0.0, 0.0),
+                                                child: Text(
+                                                  'Add Product',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        font: GoogleFonts
+                                                            .montserrat(
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           fontStyle:
@@ -468,10 +462,24 @@ class _ProductsWidgetState extends State<ProductsWidget>
                                                                   .bodyMedium
                                                                   .fontStyle,
                                                         ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 16.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
                                       ].divide(SizedBox(height: 5.0)),
                                     ),
                                   );
@@ -485,7 +493,9 @@ class _ProductsWidgetState extends State<ProductsWidget>
                   ),
                 ],
               ),
-              if (_model.products.length != 0)
+              if ((_model.products.length != 0) &&
+                  functions.canDo(
+                      FFAppState().permissions.toList(), 'product:create'))
                 Padding(
                   padding:
                       EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 15.0, 35.0),

@@ -25,3 +25,6 @@ export '/custom_code/widgets/haat_branch_map.dart' show HaatBranchMap;
 export '/custom_code/widgets/security_settings.dart' show SecuritySettings;
 export '/custom_code/widgets/tap_to_pay_pulse.dart' show TapToPayPulse;
 export '/custom_code/widgets/payment_result_mark.dart' show PaymentResultMark;
+export '/custom_code/widgets/staff_creating_pulse.dart' show StaffCreatingPulse;
+export '/custom_code/widgets/welcome_video.dart' show WelcomeVideo;
+export '/custom_code/widgets/eye_toggle.dart' show EyeToggle;

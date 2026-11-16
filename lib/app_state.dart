@@ -404,6 +404,40 @@ class FFAppState extends ChangeNotifier {
     _unreadNotifications = value;
   }
 
+  /// What the signed-in role may do, as resource:action keys (payment:create,
+  /// staff:read…).
+  ///
+  /// Empty until read, and empty means nothing is hidden. Not persisted: a role
+  /// can change between visits.
+  List<String> _permissions = [];
+  List<String> get permissions => _permissions;
+  set permissions(List<String> value) {
+    _permissions = value;
+  }
+
+  void addToPermissions(String value) {
+    permissions.add(value);
+  }
+
+  void removeFromPermissions(String value) {
+    permissions.remove(value);
+  }
+
+  void removeAtIndexFromPermissions(int index) {
+    permissions.removeAt(index);
+  }
+
+  void updatePermissionsAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    permissions[index] = updateFn(_permissions[index]);
+  }
+
+  void insertAtIndexInPermissions(int index, String value) {
+    permissions.insert(index, value);
+  }
+
   /// Comma-separated keys of the pending actions the merchant marked as read.
   String _seenNotificationActions = '';
   String get seenNotificationActions => _seenNotificationActions;

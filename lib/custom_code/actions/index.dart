@@ -92,6 +92,9 @@ export '/custom_code/actions/haat_create_tap_payment.dart'
 export '/custom_code/actions/haat_confirm_its_you.dart' show haatConfirmItsYou;
 export '/custom_code/actions/haat_await_tap_approval.dart'
     show haatAwaitTapApproval;
+export '/custom_code/actions/haat_await_decision.dart' show haatAwaitDecision;
+export '/custom_code/actions/haat_decline_pay_request.dart'
+    show haatDeclinePayRequest;
 export '/custom_code/actions/haat_set_sale_cart.dart' show haatSetSaleCart;
 export '/custom_code/actions/haat_can_manage_member.dart'
     show haatCanManageMember;
@@ -103,3 +106,5 @@ export '/custom_code/actions/haat_disable_biometrics.dart'
 export '/custom_code/actions/haat_change_password.dart' show haatChangePassword;
 export '/custom_code/actions/haat_pick_business_cover.dart'
     show haatPickBusinessCover;
+export '/custom_code/actions/haat_load_permissions.dart'
+    show haatLoadPermissions;

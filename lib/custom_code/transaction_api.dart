@@ -17,9 +17,18 @@ class MerchantTransaction {
     required this.amountMinor,
     required this.currency,
     this.counterparty,
+    this.transactionId = '',
+    this.status = '',
   });
 
   final String id;
+
+  /// The movement this line belongs to: the same on each of its lines, and what a held
+  /// transfer's receipt names.
+  final String transactionId;
+
+  /// Where the movement stands: `completed`, `on_hold`, `hold_released`, `reversed`…
+  final String status;
 
   /// What the movement was — `payment`, `payout`, `release`, and so on.
   final String kind;
@@ -89,6 +98,8 @@ class MerchantTransaction {
 
     return MerchantTransaction(
       id: data['entryId'] as String? ?? '',
+      transactionId: data['transactionId'] as String? ?? '',
+      status: data['status'] as String? ?? '',
       kind: data['kind'] as String? ?? '',
       reference: data['reference'] as String? ?? '',
       description: data['description'] as String?,

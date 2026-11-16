@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import '/custom_code/access_api.dart';
 import '/custom_code/api_client.dart';
 import '/custom_code/api_envelope.dart';
 import '/custom_code/kyc_api.dart';
@@ -161,6 +162,9 @@ class AuthSession extends ChangeNotifier {
 
   /// What the business took in, for the My Business tab.
   late final BusinessSummaryApi businessSummary = BusinessSummaryApi(_client);
+
+  /// What this person's role lets them do, for hiding the controls it does not.
+  late final AccessApi access = AccessApi(_client);
 
   /// The business's orders that sold its own products.
   late final OrdersApi orders = OrdersApi(_client);

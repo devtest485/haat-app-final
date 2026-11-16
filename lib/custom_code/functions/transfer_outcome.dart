@@ -149,6 +149,9 @@ dynamic transferOutcome(
     return {
       'kind': 'held',
       'status': 'Pending',
+      'transactionId': id,
+      'approvedTitle': 'Money sent',
+      'failedTitle': 'Transfer failed',
       'keepReference': false,
       'title': 'Waiting for approval',
       'amount': money(minor, code),

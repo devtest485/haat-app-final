@@ -593,8 +593,8 @@ Map<String, dynamic> _received(
 ///
 /// Asks HAAT every second, so the merchant's screen turns as soon as the customer's
 /// does. [tapped] is what the tap said about the customer. Returns the PaymentStatus
-/// outcome once paid, `{problem}` once it expired or was cancelled, and `{}` once the
-/// page is closed.
+/// outcome once paid, `{declined}` once the customer turned it down on their phone,
+/// `{problem}` once it expired or was cancelled, and `{}` once the page is closed.
 Future<Map<String, dynamic>> awaitTapApproval(
   BuildContext context,
   dynamic request,
@@ -642,6 +642,10 @@ Future<Map<String, dynamic>> awaitTapApproval(
             '${_money(now.amountMinor, now.currency)}'
             '${name.isEmpty ? '' : ' from $name'} by tap to pay',
       );
+    }
+    if (now?.status == 'declined') {
+      HapticFeedback.heavyImpact();
+      return {'declined': 'The customer declined the payment.'};
     }
     if (now?.status == 'cancelled') {
       return {'problem': 'This tap was cancelled. Tap here to start again.'};

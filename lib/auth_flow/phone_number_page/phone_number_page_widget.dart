@@ -1,12 +1,16 @@
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'phone_number_page_model.dart';
@@ -22,10 +26,13 @@ class PhoneNumberPageWidget extends StatefulWidget {
   State<PhoneNumberPageWidget> createState() => _PhoneNumberPageWidgetState();
 }
 
-class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
+class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget>
+    with TickerProviderStateMixin {
   late PhoneNumberPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -34,6 +41,72 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
 
     _model.phoneTextController ??= TextEditingController();
     _model.phoneFocusNode ??= FocusNode();
+
+    animationsMap.addAll({
+      'textOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 120.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 120.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'textOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 240.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 240.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'columnOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 360.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 360.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -224,7 +297,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                           .bodyMedium
                                                           .fontStyle,
                                                 ),
-                                          ),
+                                          ).animateOnPageLoad(animationsMap[
+                                              'textOnPageLoadAnimation1']!),
                                           Text(
                                             'Enter your phone number. We\'ll send you a confirmation code there.',
                                             style: FlutterFlowTheme.of(context)
@@ -257,7 +331,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                           .fontStyle,
                                                   lineHeight: 1.4,
                                                 ),
-                                          ),
+                                          ).animateOnPageLoad(animationsMap[
+                                              'textOnPageLoadAnimation2']!),
                                           Column(
                                             mainAxisSize: MainAxisSize.max,
                                             crossAxisAlignment:
@@ -606,7 +681,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                                                   ),
                                                 ),
                                             ],
-                                          ),
+                                          ).animateOnPageLoad(animationsMap[
+                                              'columnOnPageLoadAnimation']!),
                                         ].divide(SizedBox(height: 9.0)),
                                       ),
                                     ),
@@ -618,8 +694,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 0.0, 15.0, 35.0),
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 35.0),
                         child: InkWell(
                           splashColor: Colors.transparent,
                           focusColor: Colors.transparent,

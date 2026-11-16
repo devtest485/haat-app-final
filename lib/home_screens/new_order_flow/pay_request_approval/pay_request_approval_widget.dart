@@ -121,6 +121,9 @@ class _PayRequestApprovalWidgetState extends State<PayRequestApprovalWidget> {
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
+                                      await actions.haatDeclinePayRequest(
+                                        widget!.code,
+                                      );
                                       context.safePop();
                                     },
                                     child: Icon(
@@ -843,6 +846,17 @@ class _PayRequestApprovalWidgetState extends State<PayRequestApprovalWidget> {
                                               ),
                                             }.withoutNulls,
                                           );
+                                        } else if (functions.outcomeText(
+                                                    _model.outcome,
+                                                    'declined',
+                                                    '') !=
+                                                null &&
+                                            functions.outcomeText(
+                                                    _model.outcome,
+                                                    'declined',
+                                                    '') !=
+                                                '') {
+                                          context.safePop();
                                         }
                                       } else if (functions.outcomeText(
                                                   _model.preview,
@@ -928,6 +942,9 @@ class _PayRequestApprovalWidgetState extends State<PayRequestApprovalWidget> {
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
+                                      await actions.haatDeclinePayRequest(
+                                        widget!.code,
+                                      );
                                       context.safePop();
                                     },
                                     child: Container(

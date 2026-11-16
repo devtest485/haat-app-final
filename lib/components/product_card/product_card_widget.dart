@@ -147,7 +147,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget>
                           child: Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).primaryText,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
@@ -172,7 +172,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget>
                                       imageUrl: widget!.imageUrl!,
                                       width: double.infinity,
                                       height: double.infinity,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.contain,
                                     ),
                                   ),
                               ],

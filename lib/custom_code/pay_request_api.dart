@@ -251,6 +251,14 @@ class PayRequestApi {
         parse: (envelope) => TransferReceipt.fromData(envelope.object),
       );
 
+  /// Turns tap request [code] down from the customer's own phone: the merchant's tap
+  /// ends as declined. A request that is not a tap, or is already being paid, is left
+  /// as it is.
+  Future<ApiResult<void>> declineTap(String code) => _client.post(
+        '/pay/${Uri.encodeComponent(code)}/wallet/decline',
+        parse: (_) {},
+      );
+
   /// A value for this phone's biometric key to sign, unlocking tapping under
   /// [reference].
   Future<ApiResult<String>> tapUnlockChallenge(String reference) =>

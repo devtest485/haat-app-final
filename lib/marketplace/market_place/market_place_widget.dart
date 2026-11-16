@@ -99,6 +99,19 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget>
     });
 
     animationsMap.addAll({
+      'containerOnPageLoadAnimation': AnimationInfo(
+        loop: true,
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          ShimmerEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 1200.0.ms,
+            color: Color(0xFF3A3A3A),
+            angle: 0,
+          ),
+        ],
+      ),
       'marketBillerTileOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
         effectsBuilder: () => [
@@ -200,7 +213,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget>
                   children: [
                     Container(
                       width: double.infinity,
-                      height: _model.banners.length == 0 ? 200.0 : 492.0,
+                      height: (_model.banners.length == 0) &&
+                              (_model.marketplaceLoaded == true)
+                          ? 200.0
+                          : 492.0,
                       decoration: BoxDecoration(),
                       child: Container(
                         width: double.infinity,
@@ -220,6 +236,15 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget>
                         ),
                       ),
                     ),
+                    if (_model.marketplaceLoaded == false)
+                      Container(
+                        width: double.infinity,
+                        height: 492.0,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF1B1B1B),
+                        ),
+                      ).animateOnPageLoad(
+                          animationsMap['containerOnPageLoadAnimation']!),
                     Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -353,7 +378,10 @@ class _MarketPlaceWidgetState extends State<MarketPlaceWidget>
                           padding: EdgeInsetsDirectional.fromSTEB(
                               12.0,
                               valueOrDefault<double>(
-                                _model.banners.length == 0 ? 40.0 : 300.0,
+                                (_model.banners.length == 0) &&
+                                        (_model.marketplaceLoaded == true)
+                                    ? 40.0
+                                    : 300.0,
                                 0.0,
                               ),
                               12.0,

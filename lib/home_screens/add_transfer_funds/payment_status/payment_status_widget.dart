@@ -4,7 +4,10 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/payment_status/payment_error/payment_error_widget.dart';
 import '/payment_status/payment_pending/payment_pending_widget.dart';
 import '/payment_status/payment_success/payment_success_widget.dart';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'payment_status_model.dart';
@@ -36,6 +39,19 @@ class _PaymentStatusWidgetState extends State<PaymentStatusWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PaymentStatusModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if ((widget!.paymentStatus == 'Pending') &&
+          (functions.outcomeText(widget!.outcome, 'transactionId', '') != '')) {
+        _model.decisionResult = await actions.haatAwaitDecision(
+          context,
+          widget!.outcome!,
+        );
+        _model.decided = _model.decisionResult;
+        safeSetState(() {});
+      }
+    });
   }
 
   @override
@@ -61,20 +77,39 @@ class _PaymentStatusWidgetState extends State<PaymentStatusWidget> {
           decoration: BoxDecoration(),
           child: Builder(
             builder: (context) {
-              if (widget!.paymentStatus == 'Success') {
+              if ((functions.outcomeText(_model.decided, 'paymentStatus', '') !=
+                          ''
+                      ? functions.outcomeText(
+                          _model.decided, 'paymentStatus', '')
+                      : widget!.paymentStatus) ==
+                  'Success') {
                 return wrapWithModel(
                   model: _model.paymentSuccessModel,
                   updateCallback: () => safeSetState(() {}),
                   child: PaymentSuccessWidget(
-                    outcome: widget!.outcome,
+                    outcome: functions.outcomeText(
+                                _model.decided, 'paymentStatus', '') !=
+                            ''
+                        ? _model.decided
+                        : widget!.outcome,
                   ),
                 );
-              } else if (widget!.paymentStatus == 'Pending') {
+              } else if ((functions.outcomeText(
+                              _model.decided, 'paymentStatus', '') !=
+                          ''
+                      ? functions.outcomeText(
+                          _model.decided, 'paymentStatus', '')
+                      : widget!.paymentStatus) ==
+                  'Pending') {
                 return wrapWithModel(
                   model: _model.paymentPendingModel,
                   updateCallback: () => safeSetState(() {}),
                   child: PaymentPendingWidget(
-                    outcome: widget!.outcome,
+                    outcome: functions.outcomeText(
+                                _model.decided, 'paymentStatus', '') !=
+                            ''
+                        ? _model.decided
+                        : widget!.outcome,
                   ),
                 );
               } else {
@@ -82,7 +117,11 @@ class _PaymentStatusWidgetState extends State<PaymentStatusWidget> {
                   model: _model.paymentErrorModel,
                   updateCallback: () => safeSetState(() {}),
                   child: PaymentErrorWidget(
-                    outcome: widget!.outcome,
+                    outcome: functions.outcomeText(
+                                _model.decided, 'paymentStatus', '') !=
+                            ''
+                        ? _model.decided
+                        : widget!.outcome,
                   ),
                 );
               }

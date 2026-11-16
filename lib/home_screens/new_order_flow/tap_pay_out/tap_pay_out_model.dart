@@ -130,6 +130,17 @@ class TapPayOutModel extends FlutterFlowModel<TapPayOutWidget> {
               ),
             }.withoutNulls,
           );
+        } else if (functions.outcomeText(waited, 'declined', '') != null &&
+            functions.outcomeText(waited, 'declined', '') != '') {
+          phase = 'rejected';
+          waiting = 'The customer declined the payment';
+          updatePage(() {});
+          await Future.delayed(
+            Duration(
+              milliseconds: 1500,
+            ),
+          );
+          context.pop();
         } else if (functions.outcomeText(waited, 'problem', '') != null &&
             functions.outcomeText(waited, 'problem', '') != '') {
           problem = functions.outcomeText(waited, 'problem', '');

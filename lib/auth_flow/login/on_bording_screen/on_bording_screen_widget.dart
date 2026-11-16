@@ -1,9 +1,14 @@
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import 'dart:ui';
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'on_bording_screen_model.dart';
@@ -19,15 +24,115 @@ class OnBordingScreenWidget extends StatefulWidget {
   State<OnBordingScreenWidget> createState() => _OnBordingScreenWidgetState();
 }
 
-class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
+class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget>
+    with TickerProviderStateMixin {
   late OnBordingScreenModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => OnBordingScreenModel());
+
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 200.0.ms,
+            duration: 600.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+        ],
+      ),
+      'textOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 250.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 250.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'textOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 390.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 390.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'containerOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 530.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 530.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'containerOnPageLoadAnimation3': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          FadeEffect(
+            curve: Curves.easeOut,
+            delay: 670.0.ms,
+            duration: 520.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeOut,
+            delay: 670.0.ms,
+            duration: 520.0.ms,
+            begin: Offset(0.0, 24.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+    });
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -56,11 +161,15 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
           child: Stack(
             alignment: AlignmentDirectional(0.0, 1.0),
             children: [
-              Image.asset(
-                'assets/images/LoginScreen.png',
+              Container(
                 width: double.infinity,
                 height: double.infinity,
-                fit: BoxFit.cover,
+                child: custom_widgets.WelcomeVideo(
+                  width: double.infinity,
+                  height: double.infinity,
+                  video: 'assets/videos/welcome_phone.mp4',
+                  poster: 'assets/images/login_screen_clean.jpg',
+                ),
               ),
               Container(
                 width: double.infinity,
@@ -78,7 +187,8 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                     end: AlignmentDirectional(0, 1.0),
                   ),
                 ),
-              ),
+              ).animateOnPageLoad(
+                  animationsMap['containerOnPageLoadAnimation1']!),
               Container(
                 width: double.infinity,
                 child: Padding(
@@ -111,7 +221,8 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                               lineHeight: 1.2,
                             ),
                         overflow: TextOverflow.ellipsis,
-                      ),
+                      ).animateOnPageLoad(
+                          animationsMap['textOnPageLoadAnimation1']!),
                       Text(
                         'Create your account or login if you already have',
                         maxLines: 2,
@@ -132,67 +243,10 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                               lineHeight: 1.29,
                             ),
                         overflow: TextOverflow.ellipsis,
-                      ),
+                      ).animateOnPageLoad(
+                          animationsMap['textOnPageLoadAnimation2']!),
                       Container(
                         height: 11.0,
-                      ),
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          context.pushNamed(PhoneNumberPageWidget.routeName);
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: 52.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 18.4,
-                                color: Color(0x0F000000),
-                                offset: Offset(
-                                  0.0,
-                                  7.0,
-                                ),
-                                spreadRadius: 0.0,
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(106.67),
-                            border: Border.all(
-                              color: Color(0x45FFFFFF),
-                              width: 1.0,
-                            ),
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            'Create an account',
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            style: FlutterFlowTheme.of(context)
-                                .titleMedium
-                                .override(
-                                  font: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .fontStyle,
-                                  ),
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  fontSize: 18.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleMedium
-                                      .fontStyle,
-                                  lineHeight: 1.44,
-                                ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
                       ),
                       InkWell(
                         splashColor: Colors.transparent,
@@ -206,7 +260,7 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                           width: double.infinity,
                           height: 52.0,
                           decoration: BoxDecoration(
-                            color: Color(0x63000000),
+                            color: FlutterFlowTheme.of(context).primaryText,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 18.4,
@@ -238,6 +292,65 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                                         .titleMedium
                                         .fontStyle,
                                   ),
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  fontSize: 18.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .fontStyle,
+                                  lineHeight: 1.44,
+                                ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ).animateOnPageLoad(
+                          animationsMap['containerOnPageLoadAnimation2']!),
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          context.pushNamed(PhoneNumberPageWidget.routeName);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 52.0,
+                          decoration: BoxDecoration(
+                            color: Color(0x63000000),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 18.4,
+                                color: Color(0x0F000000),
+                                offset: Offset(
+                                  0.0,
+                                  7.0,
+                                ),
+                                spreadRadius: 0.0,
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(106.67),
+                            border: Border.all(
+                              color: Color(0x45FFFFFF),
+                              width: 1.0,
+                            ),
+                          ),
+                          alignment: AlignmentDirectional(0.0, 0.0),
+                          child: Text(
+                            'Create new account',
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            style: FlutterFlowTheme.of(context)
+                                .titleMedium
+                                .override(
+                                  font: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .fontStyle,
+                                  ),
                                   color: Colors.white,
                                   fontSize: 18.0,
                                   letterSpacing: 0.0,
@@ -250,7 +363,8 @@ class _OnBordingScreenWidgetState extends State<OnBordingScreenWidget> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ),
+                      ).animateOnPageLoad(
+                          animationsMap['containerOnPageLoadAnimation3']!),
                     ].divide(SizedBox(height: 12.0)),
                   ),
                 ),
