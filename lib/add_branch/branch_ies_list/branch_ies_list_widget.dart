@@ -1,3 +1,4 @@
+import '/components/branch_shimmer/branch_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -187,7 +188,20 @@ class _BranchIesListWidgetState extends State<BranchIesListWidget> {
                                     children: [
                                       Builder(
                                         builder: (context) {
-                                          if (_model.branches.length > 0) {
+                                          if (_model.branchesLoaded == false) {
+                                            return Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 8.0, 0.0, 0.0),
+                                              child: wrapWithModel(
+                                                model:
+                                                    _model.branchShimmerModel,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: BranchShimmerWidget(),
+                                              ),
+                                            );
+                                          } else if (_model.branches.length >
+                                              0) {
                                             return Container(
                                               decoration: BoxDecoration(
                                                 color:

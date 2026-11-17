@@ -120,58 +120,58 @@ class _ProductsMenuSheetWidgetState extends State<ProductsMenuSheetWidget>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryText,
+        color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(24.0),
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
         ),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 40.0),
+        padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 85.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: (FFMainAxisAlignment.center).flutterValue,
-                children: [
-                  Container(
-                    width: 36.0,
-                    height: 4.0,
-                    decoration: BoxDecoration(
-                      color: Color(0x26000000),
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: (FFMainAxisAlignment.center).flutterValue,
+              children: [
+                Container(
+                  width: 36.0,
+                  height: 4.0,
+                  decoration: BoxDecoration(
+                    color: Color(0x40000000),
+                    borderRadius: BorderRadius.circular(2.0),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(4.0, 16.0, 0.0, 20.0),
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 12.0, 12.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment:
                     (FFMainAxisAlignment.spaceBetween).flutterValue,
+                crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+                textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
                     'Products',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             fontStyle: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .fontStyle,
                           ),
-                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          color: Color(0xFF111111),
                           fontSize: 18.0,
-                          letterSpacing: -0.2,
-                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.w500,
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                          lineHeight: 1.4444444444444444,
                         ),
                   ),
                   InkWell(
@@ -183,223 +183,246 @@ class _ProductsMenuSheetWidgetState extends State<ProductsMenuSheetWidget>
                       Navigator.pop(context);
                     },
                     child: Container(
-                      width: 28.0,
-                      height: 28.0,
+                      width: 24.0,
+                      height: 24.0,
                       decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        color: Color(0xFFF0F0F0),
                         shape: BoxShape.circle,
                       ),
                       alignment: AlignmentDirectional(0.0, 0.0),
                       child: Icon(
-                        Icons.close_rounded,
-                        color: FlutterFlowTheme.of(context).primaryBackground,
-                        size: 16.0,
+                        Icons.close,
+                        color: Colors.black,
+                        size: 14.0,
                       ),
                     ),
                   ),
                 ],
               ).animateOnPageLoad(animationsMap['rowOnPageLoadAnimation']!),
             ),
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                Navigator.pop(context, 'add');
-              },
-              child: Container(
-                width: double.infinity,
-                height: 64.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(14.0, 0.0, 14.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: 36.0,
-                        height: 36.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          shape: BoxShape.circle,
-                        ),
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Icon(
-                          Icons.add_rounded,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          size: 20.0,
-                        ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(10.0, 8.0, 10.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      Navigator.pop(context, 'add');
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 66.0,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFAFAFA),
+                        borderRadius: BorderRadius.circular(999.0),
                       ),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 16.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment:
-                              (FFCrossAxisAlignment.start).flutterValue,
+                              (FFCrossAxisAlignment.center).flutterValue,
                           textBaseline: TextBaseline.alphabetic,
                           children: [
-                            Text(
-                              'Add product',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    fontSize: 14.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
+                            Container(
+                              width: 40.0,
+                              height: 40.0,
+                              decoration: BoxDecoration(
+                                color: Color(0x1700DA76),
+                                shape: BoxShape.circle,
+                              ),
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                                size: 20.0,
+                              ),
                             ),
-                            Text(
-                              'Add a new item to sell',
-                              maxLines: 1,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: Color(0xFF8E8E93),
-                                    fontSize: 11.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FlutterFlowTheme.of(context)
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment:
+                                    (FFCrossAxisAlignment.start).flutterValue,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Text(
+                                    'Add product',
+                                    style: FlutterFlowTheme.of(context)
                                         .bodyMedium
-                                        .fontStyle,
+                                        .override(
+                                          font: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          color: Color(0xFF111111),
+                                          fontSize: 15.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.4666666666666666,
+                                        ),
                                   ),
-                              overflow: TextOverflow.ellipsis,
+                                  Text(
+                                    'Add a new item to sell',
+                                    maxLines: 1,
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.normal,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          color: Color(0x73000000),
+                                          fontSize: 12.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.normal,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.5,
+                                        ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ].divide(SizedBox(height: 2.0)),
+                              ),
                             ),
-                          ].divide(SizedBox(height: 3.0)),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Colors.black,
+                              size: 20.0,
+                            ),
+                          ].divide(SizedBox(width: 12.0)),
                         ),
                       ),
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        color: FlutterFlowTheme.of(context).primaryBackground,
-                        size: 22.0,
-                      ),
-                    ].divide(SizedBox(width: 14.0)),
-                  ),
-                ),
-              ),
-            ).animateOnPageLoad(
-                animationsMap['containerOnPageLoadAnimation1']!),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-              child: InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () async {
-                  Navigator.pop(context, 'manage');
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 64.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(14.0, 0.0, 14.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          width: 36.0,
-                          height: 36.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).alternate,
-                            shape: BoxShape.circle,
-                          ),
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Icon(
-                            Icons.edit_rounded,
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                            size: 17.0,
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment:
-                                (FFCrossAxisAlignment.start).flutterValue,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                'Manage products',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      fontSize: 14.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                              Text(
-                                'Edit, restock or delete',
-                                maxLines: 1,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      color: Color(0xFF8E8E93),
-                                      fontSize: 11.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ].divide(SizedBox(height: 3.0)),
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          size: 22.0,
-                        ),
-                      ].divide(SizedBox(width: 14.0)),
                     ),
-                  ),
-                ),
-              ).animateOnPageLoad(
-                  animationsMap['containerOnPageLoadAnimation2']!),
+                  ).animateOnPageLoad(
+                      animationsMap['containerOnPageLoadAnimation1']!),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      Navigator.pop(context, 'manage');
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 66.0,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFAFAFA),
+                        borderRadius: BorderRadius.circular(999.0),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 16.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment:
+                              (FFCrossAxisAlignment.center).flutterValue,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Container(
+                              width: 40.0,
+                              height: 40.0,
+                              decoration: BoxDecoration(
+                                color: Color(0x1700DA76),
+                                shape: BoxShape.circle,
+                              ),
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.black,
+                                size: 20.0,
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment:
+                                    (FFCrossAxisAlignment.start).flutterValue,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Text(
+                                    'Manage products',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          color: Color(0xFF111111),
+                                          fontSize: 15.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.4666666666666666,
+                                        ),
+                                  ),
+                                  Text(
+                                    'Edit, restock or delete',
+                                    maxLines: 1,
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.normal,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          color: Color(0x73000000),
+                                          fontSize: 12.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.normal,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.5,
+                                        ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ].divide(SizedBox(height: 2.0)),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Colors.black,
+                              size: 20.0,
+                            ),
+                          ].divide(SizedBox(width: 12.0)),
+                        ),
+                      ),
+                    ),
+                  ).animateOnPageLoad(
+                      animationsMap['containerOnPageLoadAnimation2']!),
+                ].divide(SizedBox(height: 4.0)),
+              ),
             ),
           ],
         ),

@@ -1,3 +1,4 @@
+import '/components/staff_shimmer/staff_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -179,7 +180,18 @@ class _StaffWidgetState extends State<StaffWidget> {
                               Container(
                                 child: Builder(
                                   builder: (context) {
-                                    if (_model.staff.length > 0) {
+                                    if (_model.staffLoaded == false) {
+                                      return Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 8.0, 0.0, 0.0),
+                                        child: wrapWithModel(
+                                          model: _model.staffShimmerModel,
+                                          updateCallback: () =>
+                                              safeSetState(() {}),
+                                          child: StaffShimmerWidget(),
+                                        ),
+                                      );
+                                    } else if (_model.staff.length > 0) {
                                       return Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 24.0, 0.0, 24.0),

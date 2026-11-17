@@ -44,6 +44,7 @@ export '/custom_code/actions/haat_save_business_setup.dart'
 export '/custom_code/actions/haat_startup_route.dart' show haatStartupRoute;
 export '/custom_code/actions/open_marketplace_item.dart'
     show openMarketplaceItem;
+export '/custom_code/actions/open_brand_store.dart' show openBrandStore;
 export '/custom_code/actions/haat_pick_product_photo.dart'
     show haatPickProductPhoto;
 export '/custom_code/actions/haat_open_and_wait.dart' show haatOpenAndWait;

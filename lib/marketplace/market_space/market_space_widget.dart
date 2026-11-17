@@ -498,9 +498,7 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                       return MarketBrandCardWidget(
                                         key: Key(
                                             'Keyr62_${brandItemIndex}_of_${brandItem.length}'),
-                                        name: functions.notificationText(
-                                            brandItemItem,
-                                            'name',
+                                        name: functions.brandName(brandItemItem,
                                             FFAppState().languageCode),
                                         description: functions.notificationText(
                                             brandItemItem,
@@ -519,7 +517,7 @@ class _MarketSpaceWidgetState extends State<MarketSpaceWidget> {
                                             ).toString(),
                                             FFDevEnvironmentValues().baseURL),
                                         onTap: () async {
-                                          await actions.openMarketplaceItem(
+                                          await actions.openBrandStore(
                                             context,
                                             brandItemItem,
                                             FFAppState().languageCode,

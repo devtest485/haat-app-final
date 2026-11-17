@@ -526,6 +526,28 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: StaffWidget.routeName,
           path: StaffWidget.routePath,
           builder: (context, params) => StaffWidget(),
+        ),
+        FFRoute(
+          name: BrandStoreWidget.routeName,
+          path: BrandStoreWidget.routePath,
+          builder: (context, params) => BrandStoreWidget(
+            brandName: params.getParam(
+              'brandName',
+              ParamType.String,
+            ),
+            description: params.getParam(
+              'description',
+              ParamType.String,
+            ),
+            logoUrl: params.getParam(
+              'logoUrl',
+              ParamType.String,
+            ),
+            brandColor: params.getParam(
+              'brandColor',
+              ParamType.String,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

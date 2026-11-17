@@ -28,3 +28,5 @@ export '/custom_code/widgets/tap_to_pay_pulse.dart' show TapToPayPulse;
 export '/custom_code/widgets/eye_toggle.dart' show EyeToggle;
 export '/custom_code/widgets/staff_creating_pulse.dart' show StaffCreatingPulse;
 export '/custom_code/widgets/welcome_video.dart' show WelcomeVideo;
+export '/custom_code/widgets/brand_header_backdrop.dart'
+    show BrandHeaderBackdrop;

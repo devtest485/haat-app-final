@@ -885,8 +885,10 @@ class _AddAmountViewWidgetState extends State<AddAmountViewWidget>
                                                   0.0, 20.0, 0.0, 40.0),
                                           child: Builder(
                                             builder: (context) {
-                                              final productItem =
-                                                  _model.products.toList();
+                                              final productItem = functions
+                                                  .sellableProducts(
+                                                      _model.products.toList())
+                                                  .toList();
 
                                               return GridView.builder(
                                                 padding: EdgeInsets.zero,
@@ -971,17 +973,6 @@ class _AddAmountViewWidgetState extends State<AddAmountViewWidget>
                                                                     .secondary,
                                                           ),
                                                         );
-                                                        return;
-                                                      }
-                                                      if (functions
-                                                              .productInCart(
-                                                                  _model.cart
-                                                                      .toList(),
-                                                                  getJsonField(
-                                                                    productItemItem,
-                                                                    r'''$.id''',
-                                                                  ).toString()) ==
-                                                          true) {
                                                         return;
                                                       }
                                                       _model.cart = functions

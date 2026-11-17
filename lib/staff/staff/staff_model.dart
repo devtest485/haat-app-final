@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/staff_shimmer/staff_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -28,11 +29,20 @@ class StaffModel extends FlutterFlowModel<StaffWidget> {
 
   String? loadError;
 
-  @override
-  void initState(BuildContext context) {}
+  ///  State fields for stateful widgets in this page.
+
+  // Model for StaffShimmer component.
+  late StaffShimmerModel staffShimmerModel;
 
   @override
-  void dispose() {}
+  void initState(BuildContext context) {
+    staffShimmerModel = createModel(context, () => StaffShimmerModel());
+  }
+
+  @override
+  void dispose() {
+    staffShimmerModel.dispose();
+  }
 
   /// Action blocks.
   Future loadStaff(BuildContext context) async {

@@ -11,6 +11,7 @@ import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -1105,65 +1106,86 @@ class _TransactionsDetialsWidgetState extends State<TransactionsDetialsWidget> {
                                                                                 itemCount: txItem.length,
                                                                                 itemBuilder: (context, txItemIndex) {
                                                                                   final txItemItem = txItem[txItemIndex];
-                                                                                  return Container(
-                                                                                    decoration: BoxDecoration(
-                                                                                      color: FlutterFlowTheme.of(context).primaryText,
-                                                                                      borderRadius: BorderRadius.circular(16.0),
-                                                                                    ),
-                                                                                    child: Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 0.0),
-                                                                                      child: TransactionsWidget(
-                                                                                        key: Key('Keya3q_${txItemIndex}_of_${txItem.length}'),
-                                                                                        title: functions.transactionTitle(
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.description''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.kind''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.direction''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.transfer''',
-                                                                                            )),
-                                                                                        subtitle: functions.transactionRowSubtitle(txItemItem, true),
-                                                                                        amount: functions.transactionAmount(
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.amountMinor''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.currency''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.direction''',
-                                                                                            ).toString()),
-                                                                                        incoming: functions.transactionIsIncoming(getJsonField(
-                                                                                          txItemItem,
-                                                                                          r'''$.direction''',
-                                                                                        ).toString()),
-                                                                                        paymentMethod: functions.transactionMethod(txItemItem),
-                                                                                        showDivider: functions.groupPairDivider(dayGroupItem, txItemIndex),
-                                                                                        tone: functions.transactionTone(
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.kind''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.direction''',
-                                                                                            ).toString(),
-                                                                                            getJsonField(
-                                                                                              txItemItem,
-                                                                                              r'''$.status''',
-                                                                                            ).toString()),
+                                                                                  return InkWell(
+                                                                                    splashColor: Colors.transparent,
+                                                                                    focusColor: Colors.transparent,
+                                                                                    hoverColor: Colors.transparent,
+                                                                                    highlightColor: Colors.transparent,
+                                                                                    onTap: () async {
+                                                                                      context.pushNamed(
+                                                                                        PaymentStatusWidget.routeName,
+                                                                                        queryParameters: {
+                                                                                          'paymentStatus': serializeParam(
+                                                                                            functions.transactionStatus(txItemItem),
+                                                                                            ParamType.String,
+                                                                                          ),
+                                                                                          'outcome': serializeParam(
+                                                                                            functions.transactionOutcome(txItemItem),
+                                                                                            ParamType.JSON,
+                                                                                          ),
+                                                                                        }.withoutNulls,
+                                                                                      );
+                                                                                    },
+                                                                                    child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: FlutterFlowTheme.of(context).primaryText,
+                                                                                        borderRadius: BorderRadius.circular(16.0),
+                                                                                      ),
+                                                                                      child: Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 0.0),
+                                                                                        child: TransactionsWidget(
+                                                                                          key: Key('Keya3q_${txItemIndex}_of_${txItem.length}'),
+                                                                                          title: functions.transactionTitle(
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.description''',
+                                                                                              ).toString(),
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.kind''',
+                                                                                              ).toString(),
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.direction''',
+                                                                                              ).toString(),
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.transfer''',
+                                                                                              )),
+                                                                                          subtitle: functions.transactionRowSubtitle(txItemItem, true),
+                                                                                          amount: functions.transactionAmount(
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.amountMinor''',
+                                                                                              ).toString(),
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.currency''',
+                                                                                              ).toString(),
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.direction''',
+                                                                                              ).toString()),
+                                                                                          incoming: functions.transactionIsIncoming(getJsonField(
+                                                                                            txItemItem,
+                                                                                            r'''$.direction''',
+                                                                                          ).toString()),
+                                                                                          paymentMethod: functions.transactionMethod(txItemItem),
+                                                                                          showDivider: functions.groupPairDivider(dayGroupItem, txItemIndex),
+                                                                                          tone: functions.transactionTone(
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.kind''',
+                                                                                              ).toString(),
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.direction''',
+                                                                                              ).toString(),
+                                                                                              getJsonField(
+                                                                                                txItemItem,
+                                                                                                r'''$.status''',
+                                                                                              ).toString()),
+                                                                                        ),
                                                                                       ),
                                                                                     ),
                                                                                   );

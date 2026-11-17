@@ -465,7 +465,9 @@ class _MyStoreViewWidgetState extends State<MyStoreViewWidget>
                               0.0, 20.0, 0.0, 0.0),
                           child: Builder(
                             builder: (context) {
-                              final productItem = _model.products.toList();
+                              final productItem = functions
+                                  .sellableProducts(_model.products.toList())
+                                  .toList();
 
                               return GridView.builder(
                                 padding: EdgeInsets.fromLTRB(
@@ -544,15 +546,6 @@ class _MyStoreViewWidgetState extends State<MyStoreViewWidget>
                                                     .secondary,
                                           ),
                                         );
-                                        return;
-                                      }
-                                      if (functions.productInCart(
-                                              _model.cart.toList(),
-                                              getJsonField(
-                                                productItemItem,
-                                                r'''$.id''',
-                                              ).toString()) ==
-                                          true) {
                                         return;
                                       }
                                       _model.cart = functions

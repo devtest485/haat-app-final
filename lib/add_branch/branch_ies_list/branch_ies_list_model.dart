@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/branch_shimmer/branch_shimmer_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -29,11 +30,20 @@ class BranchIesListModel extends FlutterFlowModel<BranchIesListWidget> {
 
   String? loadError;
 
-  @override
-  void initState(BuildContext context) {}
+  ///  State fields for stateful widgets in this page.
+
+  // Model for BranchShimmer component.
+  late BranchShimmerModel branchShimmerModel;
 
   @override
-  void dispose() {}
+  void initState(BuildContext context) {
+    branchShimmerModel = createModel(context, () => BranchShimmerModel());
+  }
+
+  @override
+  void dispose() {
+    branchShimmerModel.dispose();
+  }
 
   /// Action blocks.
   Future loadBranches(BuildContext context) async {

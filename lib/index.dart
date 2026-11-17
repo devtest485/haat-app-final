@@ -116,3 +116,4 @@ export '/auth_flow/phone_number_page/phone_number_page_widget.dart'
     show PhoneNumberPageWidget;
 export '/product/products/products_widget.dart' show ProductsWidget;
 export '/staff/staff/staff_widget.dart' show StaffWidget;
+export '/marketplace/brand_store/brand_store_widget.dart' show BrandStoreWidget;
