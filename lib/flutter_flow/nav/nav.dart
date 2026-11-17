@@ -374,6 +374,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SAIBConfirmdetailsWidget(),
         ),
         FFRoute(
+          name: SAIBNotFoundWidget.routeName,
+          path: SAIBNotFoundWidget.routePath,
+          builder: (context, params) => SAIBNotFoundWidget(),
+        ),
+        FFRoute(
           name: CreatePasswordPageWidget.routeName,
           path: CreatePasswordPageWidget.routePath,
           builder: (context, params) => CreatePasswordPageWidget(),

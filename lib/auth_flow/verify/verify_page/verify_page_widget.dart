@@ -300,7 +300,7 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                context.pushNamed(BusinessInfoWidget.routeName);
+                                context.pushNamed(SAIBLinkWidget.routeName);
                               },
                               child: Container(
                                 width: double.infinity,

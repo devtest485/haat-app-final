@@ -282,7 +282,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Full Name',
+                                                  'Full name',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -674,7 +674,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: Text(
-                              'Confirm',
+                              'Continue',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(

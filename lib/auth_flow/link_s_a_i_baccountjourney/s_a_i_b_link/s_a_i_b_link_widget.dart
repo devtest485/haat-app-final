@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/index.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -348,6 +349,17 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                                   .phoneTextController1,
                                                               focusNode: _model
                                                                   .phoneFocusNode1,
+                                                              onChanged: (_) =>
+                                                                  EasyDebounce
+                                                                      .debounce(
+                                                                '_model.phoneTextController1',
+                                                                Duration(
+                                                                    milliseconds:
+                                                                        100),
+                                                                () =>
+                                                                    safeSetState(
+                                                                        () {}),
+                                                              ),
                                                               autofocus: false,
                                                               enabled: true,
                                                               obscureText:
@@ -715,6 +727,16 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                                     focusNode:
                                                                         _model
                                                                             .phoneFocusNode2,
+                                                                    onChanged: (_) =>
+                                                                        EasyDebounce
+                                                                            .debounce(
+                                                                      '_model.phoneTextController2',
+                                                                      Duration(
+                                                                          milliseconds:
+                                                                              100),
+                                                                      () => safeSetState(
+                                                                          () {}),
+                                                                    ),
                                                                     autofocus:
                                                                         false,
                                                                     enabled:
@@ -897,21 +919,35 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            context.pushNamed(
-                              SaibotpWidget.routeName,
-                              queryParameters: {
-                                'phoneNumber': serializeParam(
-                                  _model.phoneTextController2?.text ?? '',
-                                  ParamType.String,
-                                ),
-                              }.withoutNulls,
-                            );
+                            if ((_model.phoneTextController1.text != null &&
+                                    _model.phoneTextController1.text != '') &&
+                                (_model.phoneTextController2.text != null &&
+                                    _model.phoneTextController2.text != '')) {
+                              context.pushNamed(
+                                SaibotpWidget.routeName,
+                                queryParameters: {
+                                  'phoneNumber': serializeParam(
+                                    _model.phoneTextController2.text,
+                                    ParamType.String,
+                                  ),
+                                }.withoutNulls,
+                              );
+                            }
                           },
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).primaryText,
+                              color: (_model.phoneTextController1.text !=
+                                              null &&
+                                          _model.phoneTextController1.text !=
+                                              '') &&
+                                      (_model.phoneTextController2.text !=
+                                              null &&
+                                          _model.phoneTextController2.text !=
+                                              '')
+                                  ? Colors.white
+                                  : Color(0xFF262626),
                               borderRadius: BorderRadius.circular(106.67),
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
@@ -926,8 +962,18 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
+                                    color: (_model.phoneTextController1.text !=
+                                                    null &&
+                                                _model.phoneTextController1
+                                                        .text !=
+                                                    '') &&
+                                            (_model.phoneTextController2.text !=
+                                                    null &&
+                                                _model.phoneTextController2
+                                                        .text !=
+                                                    '')
+                                        ? Colors.black
+                                        : Color(0xFF6F6F6F),
                                     fontSize: 18.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,

@@ -80,6 +80,8 @@ export '/auth_flow/link_s_a_i_baccountjourney/saibotp/saibotp_widget.dart'
     show SaibotpWidget;
 export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_confirmdetails/s_a_i_b_confirmdetails_widget.dart'
     show SAIBConfirmdetailsWidget;
+export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_not_found/s_a_i_b_not_found_widget.dart'
+    show SAIBNotFoundWidget;
 export '/auth_flow/create_password_page/create_password_page_widget.dart'
     show CreatePasswordPageWidget;
 export '/auth_flow/login/passward_login/passward_login_widget.dart'
