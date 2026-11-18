@@ -43,6 +43,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import android.security.keystore.KeyInfo
+import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.PrivateKey
@@ -165,13 +167,34 @@ class BiometricKeyBridge(private val activity: FragmentActivity) :
         }
     }
 
-    /** Null when a strong biometric is usable, otherwise the reason it is not. */
-    private fun availability(): String? =
-        when (
+    private fun strongVerdict(): Int =
+        BiometricManager.from(activity)
+            .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+
+    /** Whether a fingerprint or face the platform rates strong is enrolled. */
+    private fun strongAvailable(): Boolean = strongVerdict() == BiometricManager.BIOMETRIC_SUCCESS
+
+    /**
+     * Null when a biometric is usable, otherwise the reason it is not.
+     *
+     * A strong one (fingerprint, or a 3D face unlock) is preferred. A phone whose only
+     * enrolled biometric is a weak face unlock is accepted as well: the key then is not
+     * bound to the sensor (see [enrol]) and the prompt itself is the gate.
+     */
+    private fun availability(): String? {
+        val strong = strongVerdict()
+
+        if (strong == BiometricManager.BIOMETRIC_SUCCESS) return null
+
+        if (
             BiometricManager.from(activity)
-                .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                .canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) ==
+            BiometricManager.BIOMETRIC_SUCCESS
         ) {
-            BiometricManager.BIOMETRIC_SUCCESS -> null
+            return null
+        }
+
+        return when (strong) {
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> ERROR_NOT_ENROLLED
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE,
@@ -180,11 +203,20 @@ class BiometricKeyBridge(private val activity: FragmentActivity) :
             // than "never", and neither is something the owner can act on from here.
             else -> ERROR_PLATFORM
         }
+    }
+
+    /** Whether the Keystore refuses to sign without a fresh strong biometric. */
+    private fun isSensorBound(key: PrivateKey): Boolean = try {
+        KeyFactory.getInstance(key.algorithm, KEYSTORE)
+            .getKeySpec(key, KeyInfo::class.java)
+            .isUserAuthenticationRequired
+    } catch (_: Throwable) {
+        true
+    }
 
     private fun enrol(result: MethodChannel.Result) {
-        // Checked against BIOMETRIC_STRONG specifically, not "has any biometric". A
-        // weak-only face unlock passes the general check and then cannot gate a Keystore
-        // key, so the general question would turn into a confusing failure later.
+        // A weak-only face unlock cannot gate a Keystore key, so on such a phone the key is
+        // created without that binding and signing is gated by the prompt alone.
         availability()?.let {
             return result.error(it, "Biometrics are not available", null)
         }
@@ -195,15 +227,20 @@ class BiometricKeyBridge(private val activity: FragmentActivity) :
             // with no way for anyone to see why.
             deleteKey()
 
+            val bound = strongAvailable()
+
             val specification = KeyGenParameterSpec.Builder(
                 KEY_ALIAS,
                 KeyProperties.PURPOSE_SIGN,
             )
                 .setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
                 .setDigests(KeyProperties.DIGEST_SHA256)
-                .setUserAuthenticationRequired(true)
-                .setInvalidatedByBiometricEnrollment(true)
+                .setUserAuthenticationRequired(bound)
                 .apply {
+                    if (!bound) return@apply
+
+                    setInvalidatedByBiometricEnrollment(true)
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         // Zero seconds means every use needs a fresh prompt, and naming
                         // BIOMETRIC_STRONG keeps a device PIN from standing in for one.
@@ -250,8 +287,14 @@ class BiometricKeyBridge(private val activity: FragmentActivity) :
                 null,
             )
 
+        val bound = isSensorBound(privateKey)
+
         val signature = try {
-            Signature.getInstance("SHA256withECDSA").apply { initSign(privateKey) }
+            if (bound) {
+                Signature.getInstance("SHA256withECDSA").apply { initSign(privateKey) }
+            } else {
+                null
+            }
         } catch (invalidated: KeyPermanentlyInvalidatedException) {
             // The biometrics on this phone are not the ones the key was bound to. The key
             // is already useless, so it is cleared here rather than left to fail again.
@@ -280,14 +323,19 @@ class BiometricKeyBridge(private val activity: FragmentActivity) :
                 ) {
                     if (!answered.compareAndSet(false, true)) return
 
-                    val signer = authentication.cryptoObject?.signature
-                        ?: return result.error(
-                            ERROR_PLATFORM,
-                            "The prompt returned no signer",
-                            null,
-                        )
-
                     try {
+                        val signer = authentication.cryptoObject?.signature
+                            ?: if (bound) {
+                                return result.error(
+                                    ERROR_PLATFORM,
+                                    "The prompt returned no signer",
+                                    null,
+                                )
+                            } else {
+                                Signature.getInstance("SHA256withECDSA")
+                                    .apply { initSign(privateKey) }
+                            }
+
                         // Signed as the bytes of the string the server sent. The server
                         // verifies the same way, so neither side may decode the hex into
                         // bytes first.
@@ -317,13 +365,23 @@ class BiometricKeyBridge(private val activity: FragmentActivity) :
             .setTitle(title)
             .setSubtitle(reason)
             .setNegativeButtonText(negative)
-            .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+            .setAllowedAuthenticators(
+                if (bound) {
+                    BiometricManager.Authenticators.BIOMETRIC_STRONG
+                } else {
+                    BiometricManager.Authenticators.BIOMETRIC_WEAK
+                },
+            )
             // No second tap to confirm. The signature is the confirmation, and the screen
             // behind the prompt already says what is about to happen.
             .setConfirmationRequired(false)
             .build()
 
-        prompt.authenticate(info, BiometricPrompt.CryptoObject(signature))
+        if (signature != null) {
+            prompt.authenticate(info, BiometricPrompt.CryptoObject(signature))
+        } else {
+            prompt.authenticate(info)
+        }
     }
 
     private fun errorCodeFor(code: Int): String = when (code) {

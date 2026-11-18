@@ -2192,7 +2192,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget>
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'Total Balance',
+                                                          'Total Sales',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium

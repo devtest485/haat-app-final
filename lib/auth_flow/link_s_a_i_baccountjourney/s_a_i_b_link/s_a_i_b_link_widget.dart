@@ -495,8 +495,9 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                                           .bodyMedium
                                                                           .fontStyle,
                                                                     ),
-                                                                    color: Color(
-                                                                        0xFF8D8D8D),
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primaryText,
                                                                     letterSpacing:
                                                                         0.0,
                                                                     fontWeight: FlutterFlowTheme.of(
@@ -523,7 +524,7 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                               cursorColor:
                                                                   FlutterFlowTheme.of(
                                                                           context)
-                                                                      .primaryBackground,
+                                                                      .primaryText,
                                                               enableInteractiveSelection:
                                                                   true,
                                                               validator: _model
@@ -854,7 +855,7 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                                                 FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                           ),
                                                                           color:
-                                                                              FlutterFlowTheme.of(context).primaryBackground,
+                                                                              FlutterFlowTheme.of(context).primaryText,
                                                                           letterSpacing:
                                                                               0.0,
                                                                           fontWeight:
@@ -878,7 +879,7 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                                             .number,
                                                                     cursorColor:
                                                                         FlutterFlowTheme.of(context)
-                                                                            .primaryBackground,
+                                                                            .primaryText,
                                                                     enableInteractiveSelection:
                                                                         true,
                                                                     validator: _model

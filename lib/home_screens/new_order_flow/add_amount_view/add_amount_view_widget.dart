@@ -731,8 +731,10 @@ class _AddAmountViewWidgetState extends State<AddAmountViewWidget>
                                             child: ProductShimmerGridWidget(),
                                           ),
                                         );
-                                      } else if (!(_model
-                                          .products.isNotEmpty)) {
+                                      } else if (!(functions
+                                          .sellableProducts(
+                                              _model.products.toList())
+                                          .isNotEmpty)) {
                                         return Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(

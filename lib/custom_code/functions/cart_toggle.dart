@@ -22,7 +22,11 @@ List<dynamic>? cartToggle(
 
   final at = lines.indexWhere((line) => line is Map && '${line['id']}' == id);
   if (at != -1) {
-    lines.removeAt(at);
+    // A second tap on a selected card adds one more; the minus button takes it out.
+    final line = Map<String, dynamic>.from(lines[at] as Map);
+    final qty = (int.tryParse('${line['qty']}') ?? 1) + 1;
+    line['qty'] = qty > 999 ? 999 : qty;
+    lines[at] = line;
     return lines;
   }
 

@@ -310,7 +310,9 @@ class _MyStoreViewWidgetState extends State<MyStoreViewWidget>
                             child: ProductShimmerGridWidget(),
                           ),
                         );
-                      } else if (!(_model.products.isNotEmpty)) {
+                      } else if (!(functions
+                          .sellableProducts(_model.products.toList())
+                          .isNotEmpty)) {
                         return Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               10.0, 0.0, 10.0, 110.0),

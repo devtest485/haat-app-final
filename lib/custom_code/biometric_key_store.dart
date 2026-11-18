@@ -3,8 +3,7 @@ import 'package:flutter/services.dart';
 
 /// Why enabling or using biometrics did not happen.
 enum BiometricUnavailable {
-  /// The handset has no fingerprint reader or face sensor the platform rates strong
-  /// enough to gate a key with.
+  /// The handset has no fingerprint reader or face sensor at all.
   noHardware,
 
   /// It has the hardware, but the owner has not enrolled a fingerprint or face.
@@ -106,11 +105,11 @@ class BiometricKeyStore {
 
   final MethodChannel _channel;
 
-  /// Whether a strong biometric is usable on this handset, or the reason it is not.
+  /// Whether a fingerprint or face is usable on this handset, or the reason it is not.
   ///
-  /// "Strong" is the platform's own rating, and it is the one that matters: a weak face
-  /// unlock passes a general "has biometrics" check and then cannot gate a hardware key,
-  /// so asking the general question only moves the failure somewhere less explicable.
+  /// A fingerprint (or a strong face unlock) binds the Keystore key to the sensor. A phone
+  /// with only a weak face unlock is accepted too: its key is not bound to the sensor, and
+  /// the system prompt is what stands between the user and a signature.
   Future<BiometricUnavailable?> availability() async {
     try {
       return _reason(await _channel.invokeMethod<String>('availability'));
