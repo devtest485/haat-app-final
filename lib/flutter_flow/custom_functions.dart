@@ -135,3 +135,4 @@ export '/custom_code/functions/signup_country_field.dart';
 export '/custom_code/functions/signup_phone_complete.dart';
 export '/custom_code/functions/phone_max_digits.dart';
 export '/custom_code/functions/phone_digits_ok.dart';
+export '/custom_code/functions/bban_text.dart';

@@ -356,12 +356,6 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                       isDense:
                                                                           true,
                                                                       hintText: 'Enter BBAN number',
-                                                                      prefixText: 'SD ',
-                                                                      prefixStyle: TextStyle(
-                                                                        color: FlutterFlowTheme.of(context).primaryBackground,
-                                                                        fontWeight: FontWeight.w500,
-                                                                        fontSize: 14.0,
-                                                                      ),
                                                                       labelStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -476,7 +470,23 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                               .fontStyle,
                                                                         ),
                                                                     maxLength:
-                                                                        18,
+                                                                        19,
+                                                                    inputFormatters: [
+                                                                      TextInputFormatter
+                                                                          .withFunction(
+                                                                              (oldValue,
+                                                                                  newValue) {
+                                                                        final text = functions
+                                                                            .bbanText(
+                                                                                newValue.text);
+
+                                                                        return TextEditingValue(
+                                                                          text: text,
+                                                                          selection:
+                                                                              TextSelection.collapsed(offset: text.length),
+                                                                        );
+                                                                      }),
+                                                                    ],
                                                                     maxLengthEnforcement:
                                                                         MaxLengthEnforcement
                                                                             .enforced,

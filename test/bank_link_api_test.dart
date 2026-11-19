@@ -256,6 +256,33 @@ void main() {
     });
   });
 
+  group('the BBAN field', () {
+    test('shows the hint until there is a digit', () {
+      expect(functions.bbanText(''), '');
+      expect(functions.bbanText('SD '), '');
+      expect(functions.bbanText(null), '');
+    });
+
+    test('writes the country in front by itself, and groups the digits', () {
+      expect(functions.bbanText('0'), 'SD 0');
+      expect(functions.bbanText('090'), 'SD 090');
+      expect(functions.bbanText('0901'), 'SD 090 1');
+      expect(functions.bbanText('090414321955'), 'SD 090 414321955');
+      expect(functions.bbanText('09041432195501'), 'SD 090 414321955 01');
+    });
+
+    test('takes what is typed or pasted in any shape, and no more than fourteen digits', () {
+      expect(functions.bbanText('SD 090 414321955 01'), 'SD 090 414321955 01');
+      expect(functions.bbanText('sd090-414321955-01'), 'SD 090 414321955 01');
+      expect(functions.bbanText('0904143219550199999'), 'SD 090 414321955 01');
+    });
+
+    test('lets the number be deleted back to nothing', () {
+      expect(functions.bbanText('SD 0'), 'SD 0');
+      expect(functions.bbanText('SD '), '');
+    });
+  });
+
   group('sending to a BBAN', () {
     test('the page mode names how the person is looked up', () {
       expect(functions.transferBy('BBAN'), 'bban');
