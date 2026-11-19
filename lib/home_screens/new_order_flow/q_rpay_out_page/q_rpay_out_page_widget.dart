@@ -340,7 +340,7 @@ class _QRpayOutPageWidgetState extends State<QRpayOutPageWidget> {
                                         child: custom_widgets.PayRequestQr(
                                           width: 173.0,
                                           height: 173.0,
-                                          request: _model.request!,
+                                          request: _model.request,
                                         ),
                                       ),
                                     ),
