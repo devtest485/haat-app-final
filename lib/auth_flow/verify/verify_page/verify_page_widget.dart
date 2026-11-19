@@ -315,7 +315,7 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Link my SAIB account',
+                                      'Link my SIB account',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(

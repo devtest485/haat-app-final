@@ -19,6 +19,9 @@ String transferValue(
   // What the server looks the person up by: a lower-case handle without its @, or the
   // number in E.164 under the chosen country, a leading trunk zero dropped.
   final text = (typed ?? '').trim();
+  // A BBAN is its digits: typed with spaces, dashes or a country letter, it is sent as the
+  // fourteen numbers the wallet is named by.
+  if (transferBy(mode) == 'bban') return text.replaceAll(RegExp(r'\D'), '');
   if (transferBy(mode) == 'username') {
     return text.replaceFirst(RegExp(r'^@+'), '').toLowerCase();
   }

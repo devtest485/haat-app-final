@@ -214,10 +214,14 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                await actions.haatOpenPayout(
-                                  context,
-                                  widget!.fundsAmount,
-                                );
+                                if (FFAppState().sibAccount == '') {
+                                  context.pushNamed(SAIBLinkWidget.routeName);
+                                } else {
+                                  await actions.haatOpenPayout(
+                                    context,
+                                    widget!.fundsAmount,
+                                  );
+                                }
                               },
                               child: Container(
                                 width: double.infinity,
@@ -296,7 +300,9 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'HAAT sends it from your wallet',
+                                                FFAppState().sibAccount != ''
+                                                    ? '${FFAppState().sibBank} · ${FFAppState().sibAccount}'
+                                                    : 'Not linked · Link your SIB account',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
@@ -401,7 +407,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'From Haat Banks',
+                                                'To Local Bank',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -431,7 +437,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'Add money from HAAT network banks',
+                                                'Send money to BBAN number',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium

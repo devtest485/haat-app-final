@@ -22,7 +22,12 @@ String transferLookupError(
     return 'Couldn’t reach HAAT. Check your connection and try again.';
   }
   if ((errorCode ?? '').trim() == 'NOT_FOUND') {
-    return transferBy(mode) == 'username'
+    final by = transferBy(mode);
+    if (by == 'bban') {
+      return 'We couldn’t find an account with this BBAN. Check the number and try again.';
+    }
+
+    return by == 'username'
         ? 'This username doesn’t exist.'
         : 'No HAAT account uses this number.';
   }

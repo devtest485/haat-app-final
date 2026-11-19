@@ -9,6 +9,7 @@ import 'package:flutter/material.dart' hide RepeatMode;
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import '/custom_code/auth_session.dart';
+import '/custom_code/bank_link_flow.dart';
 
 /// Ends the session and clears the keystore.
 ///
@@ -17,4 +18,5 @@ import '/custom_code/auth_session.dart';
 /// `haatLoadProfile` overwrites it — with an empty value if that account has none.
 Future<void> haatSignOut() async {
   await AuthSession.instance.signOut();
+  BankLinkFlow.forget();
 }

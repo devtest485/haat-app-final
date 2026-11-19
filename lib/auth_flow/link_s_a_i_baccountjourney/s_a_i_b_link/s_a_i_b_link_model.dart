@@ -12,6 +12,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class SAIBLinkModel extends FlutterFlowModel<SAIBLinkWidget> {
+  ///  Local state fields for this page.
+
+  /// Why the last try failed, in words — shown under the field. Empty otherwise.
+  String linkError = '';
+
+  /// True while the bank is being asked, so Continue cannot be pressed twice.
+  bool linking = false;
+
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
@@ -33,6 +41,9 @@ class SAIBLinkModel extends FlutterFlowModel<SAIBLinkWidget> {
     }
     return null;
   }
+
+  // Stores action output result for [Custom Action - haatSaibRequest] action in Container widget.
+  String? requested;
 
   @override
   void initState(BuildContext context) {

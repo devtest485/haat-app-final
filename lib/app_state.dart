@@ -357,6 +357,55 @@ class FFAppState extends ChangeNotifier {
     _bban = value;
   }
 
+  /// The linked bank account's number, spaced as the bank prints it — empty while no
+  /// account is linked. Written where the wallet is read; the line under the wallet
+  /// number and the Transfer sheet listen to it.
+  String _sibAccount = '';
+  String get sibAccount => _sibAccount;
+  set sibAccount(String value) {
+    _sibAccount = value;
+  }
+
+  /// The bank's short name for the linked account, SIB, as the home screen labels it.
+  String _sibBank = '';
+  String get sibBank => _sibBank;
+  set sibBank(String value) {
+    _sibBank = value;
+  }
+
+  /// What the Link your SIB account screens carry from one to the next: the account or
+  /// customer number as typed, the phone in international form, where the code went, the
+  /// code itself while no SMS provider sends it, and what the bank holds to confirm.
+  String _saibNumber = '';
+  String get saibNumber => _saibNumber;
+  set saibNumber(String value) {
+    _saibNumber = value;
+  }
+
+  String _saibMobile = '';
+  String get saibMobile => _saibMobile;
+  set saibMobile(String value) {
+    _saibMobile = value;
+  }
+
+  String _saibMobileMasked = '';
+  String get saibMobileMasked => _saibMobileMasked;
+  set saibMobileMasked(String value) {
+    _saibMobileMasked = value;
+  }
+
+  String _saibDevCode = '';
+  String get saibDevCode => _saibDevCode;
+  set saibDevCode(String value) {
+    _saibDevCode = value;
+  }
+
+  dynamic _saibDetails;
+  dynamic get saibDetails => _saibDetails;
+  set saibDetails(dynamic value) {
+    _saibDetails = value;
+  }
+
   /// True once the statement has come back with at least one line.
   ///
   /// Written by the haatHasTransactions action, read by the empty screen of the

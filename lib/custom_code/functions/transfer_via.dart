@@ -23,6 +23,13 @@ String transferVia(
 
   final username = text(data['username']);
   final masked = text(data['mobileMasked']);
+  if (transferBy(mode) == 'bban') {
+    // The number as it is printed: 090 123456789 01.
+    final digits = text(value).replaceAll(RegExp(r'\D'), '');
+    return digits.length == 14
+        ? '${digits.substring(0, 3)} ${digits.substring(3, 12)} ${digits.substring(12)}'
+        : text(value);
+  }
   if (transferBy(mode) == 'username') {
     return '@${username.isNotEmpty ? username : text(value)}';
   }

@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
+import '/custom_code/bank_link_api.dart';
 import '/custom_code/payout_api.dart';
 import '/custom_code/wallet_api.dart';
 
@@ -54,6 +55,10 @@ class _PayoutScreenState extends State<PayoutScreen> {
   WalletLine? _from;
   List<Payout>? _payouts;
 
+  /// The bank account the business has linked, when it has. Money goes there and the
+  /// account is not typed; without one the screen asks for the account as it always did.
+  LinkedBank? _linked;
+
   bool _sending = false;
   String? _error;
   Payout? _asked;
@@ -81,6 +86,7 @@ class _PayoutScreenState extends State<PayoutScreen> {
     final session = AuthSession.instance;
     final wallet = await session.wallet.get();
     final payouts = await session.payouts.list();
+    final linked = await session.bankLinks.linked();
     if (!mounted) return;
 
     setState(() {
@@ -94,6 +100,12 @@ class _PayoutScreenState extends State<PayoutScreen> {
         _from = keep ?? (_lines!.isEmpty ? null : _lines!.first);
       }
       if (payouts is ApiSuccess<List<Payout>>) _payouts = payouts.value;
+      if (linked != null && linked.isNotEmpty) {
+        _linked = linked.first;
+        _bank.text = _linked!.label;
+        _name.text = _linked!.holderName;
+        _number.text = _linked!.accountNumber;
+      }
     });
   }
 
@@ -215,14 +227,19 @@ class _PayoutScreenState extends State<PayoutScreen> {
             ]),
             const SizedBox(height: 12),
             _card(children: [
-              _label('Your bank'),
-              _field(_bank, hint: 'Bank of Khartoum'),
-              const SizedBox(height: 14),
-              _label('Name on the account'),
-              _field(_name, hint: 'As the bank has it'),
-              const SizedBox(height: 14),
-              _label('Account number or IBAN'),
-              _field(_number, hint: 'SD00 0000 0000 0000'),
+              if (_linked != null) ...[
+                _label('To your linked account'),
+                _linkedAccount(_linked!),
+              ] else ...[
+                _label('Your bank'),
+                _field(_bank, hint: 'Bank of Khartoum'),
+                const SizedBox(height: 14),
+                _label('Name on the account'),
+                _field(_name, hint: 'As the bank has it'),
+                const SizedBox(height: 14),
+                _label('Account number or IBAN'),
+                _field(_number, hint: 'SD00 0000 0000 0000'),
+              ],
               const SizedBox(height: 14),
               _label('Note (optional)'),
               _field(_note, hint: 'September takings'),
@@ -246,6 +263,43 @@ class _PayoutScreenState extends State<PayoutScreen> {
       ),
     );
   }
+
+  /// The linked account, as the bank prints it: not something to type, only to see.
+  Widget _linkedAccount(LinkedBank account) => Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F7),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xFF0E6B3E),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(account.label,
+                  style: _text(11, weight: FontWeight.w700, color: Colors.white)),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(account.holderName,
+                      style: _text(14, weight: FontWeight.w600)),
+                  const SizedBox(height: 2),
+                  Text(account.displayNumber,
+                      style: _text(13, color: const Color(0x99000000))),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 
   Widget _fromPicker() {
     final lines = _lines;

@@ -14,6 +14,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class SaibotpModel extends FlutterFlowModel<SaibotpWidget> {
+  ///  Local state fields for this page.
+
+  /// What has been typed into the code boxes so far.
+  String otpCode = '';
+
+  bool otpCompleted = false;
+
+  /// Why the last try failed, in words. Empty otherwise.
+  String otpError = '';
+
+  /// True while the code is being checked, so Continue cannot be pressed twice.
+  bool verifying = false;
+
+  /// True once the thirty seconds have run out and a new code may be asked for.
+  bool resendReady = false;
+
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for Timer widget.
@@ -26,6 +42,11 @@ class SaibotpModel extends FlutterFlowModel<SaibotpWidget> {
   );
   FlutterFlowTimerController timerController =
       FlutterFlowTimerController(StopWatchTimer(mode: StopWatchMode.countDown));
+
+  // Stores action output result for [Custom Action - haatSaibVerify] action in Container widget.
+  String? verified;
+  // Stores action output result for [Custom Action - haatSaibResend] action in Text widget.
+  String? resent;
 
   @override
   void initState(BuildContext context) {}

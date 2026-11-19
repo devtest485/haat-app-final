@@ -19,6 +19,10 @@ bool transferValueComplete(
   // Worth asking the server about: a handle of the shape usernames take, or a number
   // with a length a real one could have (E.164 allows fifteen digits in all, and no
   // country's numbers are shorter than six).
+  // A BBAN is fourteen digits; asking about fewer would only be told nobody has it.
+  if (transferBy(mode) == 'bban') {
+    return transferValue(mode, typed, dialCode).length == 14;
+  }
   if (transferBy(mode) == 'username') {
     return RegExp(r'^[a-z0-9._]{3,30}$')
         .hasMatch(transferValue(mode, typed, dialCode));

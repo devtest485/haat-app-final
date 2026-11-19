@@ -12,7 +12,10 @@ import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
 String transferBy(String? mode) {
-  // The page is opened with 'UserName' or 'PhoneNumber'; the API names them by and mobile.
+  // The page is opened with 'UserName', 'PhoneNumber' or 'BBAN'; the API names them
+  // username, mobile and bban.
   final m = (mode ?? '').toLowerCase();
+  if (m.contains('bban')) return 'bban';
+
   return m.contains('phone') || m.contains('mobile') ? 'mobile' : 'username';
 }

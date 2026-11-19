@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -205,7 +206,7 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Link your SAIB account',
+                                            'Link your SIB account',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -231,7 +232,7 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'Enter the details registered with SAIB.',
+                                            'Enter the details registered with SIB.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -509,7 +510,7 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                              maxLength: 10,
+                                                              maxLength: 12,
                                                               maxLengthEnforcement:
                                                                   MaxLengthEnforcement
                                                                       .enforced,
@@ -538,6 +539,24 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                                                     ].divide(
                                                         SizedBox(height: 3.0)),
                                                   ),
+                                                  if (_model.linkError != '')
+                                                    Text(
+                                                      _model.linkError,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .montserrat(),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .error,
+                                                                fontSize: 12.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                              ),
+                                                    ),
                                                   Column(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -920,19 +939,36 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
+                            if (_model.linking) {
+                              return;
+                            }
                             if ((_model.phoneTextController1.text != null &&
                                     _model.phoneTextController1.text != '') &&
                                 (_model.phoneTextController2.text != null &&
                                     _model.phoneTextController2.text != '')) {
-                              context.pushNamed(
-                                SaibotpWidget.routeName,
-                                queryParameters: {
-                                  'phoneNumber': serializeParam(
-                                    _model.phoneTextController2.text,
-                                    ParamType.String,
-                                  ),
-                                }.withoutNulls,
+                              _model.linking = true;
+                              _model.linkError = '';
+                              safeSetState(() {});
+                              _model.requested = await actions.haatSaibRequest(
+                                _model.phoneTextController1.text,
+                                _model.phoneTextController2.text,
                               );
+                              _model.linking = false;
+                              if (_model.requested == '') {
+                                context.pushNamed(
+                                  SaibotpWidget.routeName,
+                                  queryParameters: {
+                                    'phoneNumber': serializeParam(
+                                      _model.phoneTextController2.text,
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
+                                );
+                              } else {
+                                _model.linkError = _model.requested!;
+                              }
+
+                              safeSetState(() {});
                             }
                           },
                           child: Container(
@@ -953,7 +989,7 @@ class _SAIBLinkWidgetState extends State<SAIBLinkWidget> {
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: Text(
-                              'Continue',
+                              _model.linking ? 'Checking…' : 'Continue',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(

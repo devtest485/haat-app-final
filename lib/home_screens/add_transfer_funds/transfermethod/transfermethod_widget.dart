@@ -186,7 +186,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                       ),
                                                 ),
                                                 Text(
-                                                  'Please enter your BBAN number',
+                                                  'Please enter the BBAN number of who you are sending to',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -328,13 +328,19 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                       '_model.bbanTextController',
                                                                       Duration(
                                                                           milliseconds:
-                                                                              2000),
+                                                                              550),
                                                                       () async {
-                                                                        _model.isValidBBAN = functions.checkLength(_model
+                                                                        _model.typed = _model
                                                                             .bbanTextController
-                                                                            .text);
+                                                                            .text;
+                                                                        _model.foundFor =
+                                                                            '';
+                                                                        _model.lookupError =
+                                                                            '';
                                                                         safeSetState(
                                                                             () {});
+                                                                        await _model
+                                                                            .lookupRecipient(context);
                                                                         safeSetState(
                                                                             () {});
                                                                       },
@@ -349,6 +355,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                         InputDecoration(
                                                                       isDense:
                                                                           true,
+                                                                      hintText: '090 123456789 01',
                                                                       labelStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -365,8 +372,6 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                             fontStyle:
                                                                                 FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                                                           ),
-                                                                      hintText:
-                                                                          'XXX-XXX-XXXXX',
                                                                       hintStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -464,9 +469,16 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                               .bodyMedium
                                                                               .fontStyle,
                                                                         ),
-                                                                    keyboardType:
-                                                                        TextInputType
-                                                                            .number,
+                                                                    maxLength:
+                                                                        24,
+                                                                    maxLengthEnforcement:
+                                                                        MaxLengthEnforcement
+                                                                            .enforced,
+                                                                    buildCounter: (context,
+                                                                            {required currentLength,
+                                                                            required isFocused,
+                                                                            maxLength}) =>
+                                                                        null,
                                                                     cursorColor:
                                                                         FlutterFlowTheme.of(context)
                                                                             .primaryBackground,
@@ -480,6 +492,116 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                 ),
                                                               ),
                                                             ),
+                                                            if (_model.lookupError !=
+                                                                    null &&
+                                                                _model.lookupError !=
+                                                                    '')
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            4.0,
+                                                                            8.0,
+                                                                            4.0,
+                                                                            0.0),
+                                                                child: Text(
+                                                                  _model
+                                                                      .lookupError,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .montserrat(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        color: Color(
+                                                                            0xFFD93025),
+                                                                        fontSize:
+                                                                            12.5,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                        lineHeight:
+                                                                            1.4,
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            if ((_model.foundFor !=
+                                                                        null &&
+                                                                    _model.foundFor !=
+                                                                        '') &&
+                                                                (_model.foundFor ==
+                                                                    functions.transferValue(
+                                                                        widget!
+                                                                            .transferMode,
+                                                                        _model
+                                                                            .typed,
+                                                                        functions.countryField(
+                                                                            FFAppState().transferCountry,
+                                                                            'dialCode'))))
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            4.0,
+                                                                            8.0,
+                                                                            4.0,
+                                                                            0.0),
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  crossAxisAlignment:
+                                                                      (FFCrossAxisAlignment
+                                                                              .center)
+                                                                          .flutterValue,
+                                                                  textBaseline:
+                                                                      TextBaseline
+                                                                          .alphabetic,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .check_rounded,
+                                                                      color: Color(
+                                                                          0xFF00794A),
+                                                                      size:
+                                                                          16.0,
+                                                                    ),
+                                                                    Expanded(
+                                                                      child:
+                                                                          Text(
+                                                                        '${functions.outcomeText(_model.recipient, 'name', 'HAAT account')} · ${functions.transferVia(widget!.transferMode, _model.recipient, functions.transferValue(widget!.transferMode, _model.typed, functions.countryField(FFAppState().transferCountry, 'dialCode')))}',
+                                                                        style: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .override(
+                                                                              font: GoogleFonts.montserrat(
+                                                                                fontWeight: FontWeight.w500,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                              ),
+                                                                              color: Color(0xFF00794A),
+                                                                              fontSize: 12.5,
+                                                                              letterSpacing: 0.0,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ].divide(SizedBox(
+                                                                      width:
+                                                                          6.0)),
+                                                                ),
+                                                              ),
                                                           ].divide(SizedBox(
                                                               height: 3.0)),
                                                         ),
@@ -507,7 +629,16 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  if (_model.isValidBBAN == true) {
+                                  if ((_model.foundFor != null &&
+                                          _model.foundFor != '') &&
+                                      (_model.foundFor ==
+                                          functions.transferValue(
+                                              widget!.transferMode,
+                                              _model.typed,
+                                              functions.countryField(
+                                                  FFAppState().transferCountry,
+                                                  'dialCode')))) {
+                                    FFAppState().transferConfirmed = false;
                                     await showModalBottomSheet(
                                       isScrollControlled: true,
                                       backgroundColor: Colors.transparent,
@@ -523,23 +654,186 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
-                                            child: Container(
-                                              height: MediaQuery.sizeOf(context)
-                                                      .height *
-                                                  0.45,
-                                              child: UserInfoWidget(),
+                                            child: UserInfoWidget(
+                                              name: functions.outcomeText(
+                                                  _model.recipient,
+                                                  'name',
+                                                  'HAAT account'),
+                                              subtitle:
+                                                  'HAAT account · ${functions.transferVia(widget!.transferMode, _model.recipient, functions.transferValue(widget!.transferMode, _model.typed, functions.countryField(FFAppState().transferCountry, 'dialCode')))}',
                                             ),
                                           ),
                                         );
                                       },
                                     ).then((value) => safeSetState(() {}));
+
+                                    if (FFAppState().transferConfirmed ==
+                                        true) {
+                                      context.pushNamed(
+                                        PaymentReviewWidget.routeName,
+                                        queryParameters: {
+                                          'by': serializeParam(
+                                            functions.transferBy(
+                                                widget!.transferMode),
+                                            ParamType.String,
+                                          ),
+                                          'value': serializeParam(
+                                            functions.transferValue(
+                                                widget!.transferMode,
+                                                _model.typed,
+                                                functions.countryField(
+                                                    FFAppState()
+                                                        .transferCountry,
+                                                    'dialCode')),
+                                            ParamType.String,
+                                          ),
+                                          'via': serializeParam(
+                                            functions.transferVia(
+                                                widget!.transferMode,
+                                                _model.recipient,
+                                                functions.transferValue(
+                                                    widget!.transferMode,
+                                                    _model.typed,
+                                                    functions.countryField(
+                                                        FFAppState()
+                                                            .transferCountry,
+                                                        'dialCode'))),
+                                            ParamType.String,
+                                          ),
+                                          'name': serializeParam(
+                                            functions.outcomeText(
+                                                _model.recipient,
+                                                'name',
+                                                'HAAT account'),
+                                            ParamType.String,
+                                          ),
+                                          'amount': serializeParam(
+                                            widget!.amount,
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    }
+                                  } else if (functions.transferValueComplete(
+                                          widget!.transferMode,
+                                          _model.typed,
+                                          functions.countryField(
+                                              FFAppState().transferCountry,
+                                              'dialCode')) ==
+                                      true) {
+                                    await _model.lookupRecipient(context);
+                                    safeSetState(() {});
+                                    if ((_model.foundFor != null &&
+                                            _model.foundFor != '') &&
+                                        (_model.foundFor ==
+                                            functions.transferValue(
+                                                widget!.transferMode,
+                                                _model.typed,
+                                                functions.countryField(
+                                                    FFAppState()
+                                                        .transferCountry,
+                                                    'dialCode')))) {
+                                      FFAppState().transferConfirmed = false;
+                                      await showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        enableDrag: false,
+                                        context: context,
+                                        builder: (context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              FocusScope.of(context).unfocus();
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
+                                            child: Padding(
+                                              padding: MediaQuery.viewInsetsOf(
+                                                  context),
+                                              child: UserInfoWidget(
+                                                name: functions.outcomeText(
+                                                    _model.recipient,
+                                                    'name',
+                                                    'HAAT account'),
+                                                subtitle:
+                                                    'HAAT account · ${functions.transferVia(widget!.transferMode, _model.recipient, functions.transferValue(widget!.transferMode, _model.typed, functions.countryField(FFAppState().transferCountry, 'dialCode')))}',
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ).then((value) => safeSetState(() {}));
+
+                                      if (FFAppState().transferConfirmed ==
+                                          true) {
+                                        context.pushNamed(
+                                          PaymentReviewWidget.routeName,
+                                          queryParameters: {
+                                            'by': serializeParam(
+                                              functions.transferBy(
+                                                  widget!.transferMode),
+                                              ParamType.String,
+                                            ),
+                                            'value': serializeParam(
+                                              functions.transferValue(
+                                                  widget!.transferMode,
+                                                  _model.typed,
+                                                  functions.countryField(
+                                                      FFAppState()
+                                                          .transferCountry,
+                                                      'dialCode')),
+                                              ParamType.String,
+                                            ),
+                                            'via': serializeParam(
+                                              functions.transferVia(
+                                                  widget!.transferMode,
+                                                  _model.recipient,
+                                                  functions.transferValue(
+                                                      widget!.transferMode,
+                                                      _model.typed,
+                                                      functions.countryField(
+                                                          FFAppState()
+                                                              .transferCountry,
+                                                          'dialCode'))),
+                                              ParamType.String,
+                                            ),
+                                            'name': serializeParam(
+                                              functions.outcomeText(
+                                                  _model.recipient,
+                                                  'name',
+                                                  'HAAT account'),
+                                              ParamType.String,
+                                            ),
+                                            'amount': serializeParam(
+                                              widget!.amount,
+                                              ParamType.String,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      }
+                                    }
                                   }
                                 },
                                 child: Container(
                                   width: double.infinity,
                                   height: 50.0,
                                   decoration: BoxDecoration(
-                                    color: _model.isValidBBAN == true
+                                    color: ((_model.foundFor != null &&
+                                                    _model.foundFor != '') &&
+                                                (_model.foundFor ==
+                                                    functions.transferValue(
+                                                        widget!.transferMode,
+                                                        _model.typed,
+                                                        functions.countryField(
+                                                            FFAppState()
+                                                                .transferCountry,
+                                                            'dialCode')))) ||
+                                            (functions.transferValueComplete(
+                                                    widget!.transferMode,
+                                                    _model.typed,
+                                                    functions.countryField(
+                                                        FFAppState()
+                                                            .transferCountry,
+                                                        'dialCode')) ==
+                                                true)
                                         ? FlutterFlowTheme.of(context)
                                             .primaryBackground
                                         : Color(0x28000000),

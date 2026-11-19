@@ -3,6 +3,7 @@ import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
+import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
@@ -283,9 +284,8 @@ class _SaibotpWidgetState extends State<SaibotpWidget> {
                                                         ),
                                                   ),
                                                   TextSpan(
-                                                    text: functions
-                                                        .maskPhoneNumber(widget!
-                                                            .phoneNumber!),
+                                                    text: FFAppState()
+                                                        .saibMobileMasked,
                                                     style: TextStyle(),
                                                   )
                                                 ],
@@ -332,13 +332,25 @@ class _SaibotpWidgetState extends State<SaibotpWidget> {
                                                 width: double.infinity,
                                                 height: 62.0,
                                                 autoFocus: true,
-                                                onChanged: (otpValue) async {},
+                                                onChanged: (otpValue) async {
+                                                  _model.otpCode = otpValue;
+                                                  _model.otpCompleted =
+                                                      functions.isPinComplete(
+                                                          otpValue, 6);
+                                                  _model.otpError = '';
+                                                  safeSetState(() {});
+                                                },
                                                 onCompleted:
                                                     (isComplete) async {},
                                               ),
                                             ),
                                             Text(
-                                              '',
+                                              _model.otpError != ''
+                                                  ? _model.otpError
+                                                  : (FFAppState().saibDevCode !=
+                                                          ''
+                                                      ? 'Development code: ${FFAppState().saibDevCode}'
+                                                      : ''),
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .bodyMedium
@@ -356,9 +368,13 @@ class _SaibotpWidgetState extends State<SaibotpWidget> {
                                                               .bodyMedium
                                                               .fontStyle,
                                                     ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
+                                                    color: _model.otpError != ''
+                                                        ? FlutterFlowTheme.of(
+                                                                context)
+                                                            .error
+                                                        : FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText,
                                                     fontSize: 13.0,
                                                     letterSpacing: 0.0,
                                                     fontWeight:
@@ -449,6 +465,11 @@ class _SaibotpWidgetState extends State<SaibotpWidget> {
                                                         if (shouldUpdate)
                                                           safeSetState(() {});
                                                       },
+                                                      onEnded: () async {
+                                                        _model.resendReady =
+                                                            true;
+                                                        safeSetState(() {});
+                                                      },
                                                       textAlign:
                                                           TextAlign.start,
                                                       style: FlutterFlowTheme
@@ -479,38 +500,73 @@ class _SaibotpWidgetState extends State<SaibotpWidget> {
                                                   ].divide(
                                                       SizedBox(width: 5.0)),
                                                 ),
-                                                Text(
-                                                  'Resend code',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts
-                                                            .montserrat(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        fontSize: 13.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
+                                                Opacity(
+                                                  opacity: _model.resendReady
+                                                      ? 1.0
+                                                      : 0.4,
+                                                  child: InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
+                                                    onTap: () async {
+                                                      if (!_model.resendReady) {
+                                                        return;
+                                                      }
+                                                      _model.resent =
+                                                          await actions
+                                                              .haatSaibResend();
+                                                      if (_model.resent == '') {
+                                                        _model.resendReady =
+                                                            false;
+                                                        _model.otpError = '';
+                                                        _model.timerController
+                                                            .onResetTimer();
+                                                        _model.timerController
+                                                            .onStartTimer();
+                                                      } else {
+                                                        _model.otpError =
+                                                            _model.resent!;
+                                                      }
+
+                                                      safeSetState(() {});
+                                                    },
+                                                    child: Text(
+                                                      'Resend code',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .montserrat(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                fontSize: 13.0,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -534,19 +590,36 @@ class _SaibotpWidgetState extends State<SaibotpWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            context
-                                .pushNamed(SAIBConfirmdetailsWidget.routeName);
+                            if (_model.verifying || !_model.otpCompleted) {
+                              return;
+                            }
+                            _model.verifying = true;
+                            _model.otpError = '';
+                            safeSetState(() {});
+                            _model.verified =
+                                await actions.haatSaibVerify(_model.otpCode);
+                            _model.verifying = false;
+                            if (_model.verified == '') {
+                              context.pushNamed(
+                                  SAIBConfirmdetailsWidget.routeName);
+                            } else {
+                              _model.otpError = _model.verified!;
+                            }
+
+                            safeSetState(() {});
                           },
                           child: Container(
                             width: double.infinity,
                             height: 50.0,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).primaryText,
+                              color: _model.otpCompleted
+                                  ? FlutterFlowTheme.of(context).primaryText
+                                  : Color(0xFF262626),
                               borderRadius: BorderRadius.circular(106.67),
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: Text(
-                              'Continue',
+                              _model.verifying ? 'Checking…' : 'Continue',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(

@@ -654,7 +654,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget>
                                                       0.0, 35.0, 0.0, 0.0),
                                               child: Container(
                                                 width: double.infinity,
-                                                height: 176.0,
+                                                height:
+                                                    FFAppState().sibAccount != ''
+                                                        ? 192.0
+                                                        : 176.0,
                                                 decoration: BoxDecoration(),
                                                 child: Column(
                                                   mainAxisSize:
@@ -911,6 +914,23 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget>
                                                                   ),
                                                                 ],
                                                               ),
+                                                              if (FFAppState().sibAccount != '')
+                                                                Text(
+                                                                  '${FFAppState().sibBank} : ${FFAppState().sibAccount}',
+                                                                  style: FlutterFlowTheme.of(context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts.inter(
+                                                                          fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                        ),
+                                                                        color: Color(0xCCFFFFFF),
+                                                                        fontSize: 11.0,
+                                                                        letterSpacing: 0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                      ),
+                                                                ),
                                                             ].divide(SizedBox(
                                                                 height: 9.0)),
                                                           ),

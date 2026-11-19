@@ -7,6 +7,7 @@ import '/custom_code/api_envelope.dart';
 import '/custom_code/kyc_api.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_api.dart';
+import '/custom_code/bank_link_api.dart';
 import '/custom_code/banner_api.dart';
 import '/custom_code/biometric_key_store.dart';
 import '/custom_code/device_identity.dart';
@@ -168,6 +169,9 @@ class AuthSession extends ChangeNotifier {
 
   /// The business's orders that sold its own products.
   late final OrdersApi orders = OrdersApi(_client);
+
+  /// The business's accounts at partner banks, and linking one.
+  late final BankLinkApi bankLinks = BankLinkApi(_client);
 
   /// What the business holds, bank by bank.
   late final WalletApi wallet = WalletApi(_client);
