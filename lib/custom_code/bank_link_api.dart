@@ -31,9 +31,42 @@ class BankLinkChallenge {
   }
 }
 
+/// How an account's kind reads on a screen: Current account, Savings account...
+String accountTypeLabel(String type) => switch (type) {
+      'savings' => 'Savings account',
+      'business' => 'Business account',
+      _ => 'Current account',
+    };
+
+/// One account the person may link, under the customer number they gave.
+class BankLinkChoice {
+  const BankLinkChoice({
+    required this.id,
+    required this.accountType,
+    required this.accountMasked,
+  });
+
+  final String id;
+
+  /// `current`, `savings` or `business`.
+  final String accountType;
+
+  /// The account number with all but the last four digits hidden.
+  final String accountMasked;
+
+  String get label => accountTypeLabel(accountType);
+
+  static BankLinkChoice fromData(Map<String, dynamic> data) => BankLinkChoice(
+        id: '${data['id'] ?? ''}'.trim(),
+        accountType: '${data['accountType'] ?? 'current'}'.trim(),
+        accountMasked: '${data['accountMasked'] ?? ''}'.trim(),
+      );
+}
+
 /// What the bank holds for the person, shown back to be confirmed.
 class BankLinkDetails {
   const BankLinkDetails({
+    this.accounts = const [],
     required this.institutionName,
     required this.holderName,
     required this.idMasked,
@@ -42,6 +75,8 @@ class BankLinkDetails {
     required this.businessName,
   });
 
+  /// The accounts still free to link; the person picks one when there are several.
+  final List<BankLinkChoice> accounts;
   final String institutionName;
   final String holderName;
   final String idMasked;
@@ -56,6 +91,10 @@ class BankLinkDetails {
     }
 
     return BankLinkDetails(
+      accounts: (data['accounts'] is List ? data['accounts'] as List : const [])
+          .whereType<Map<String, dynamic>>()
+          .map(BankLinkChoice.fromData)
+          .toList(),
       institutionName: text(data['institutionName']),
       holderName: text(data['holderName']),
       idMasked: text(data['idMasked']),
@@ -84,12 +123,16 @@ class LinkedBank {
     required this.accountNumber,
     required this.holderName,
     required this.currency,
+    this.accountType = 'current',
   });
 
   final String id;
   final String institutionCode;
   final String institutionName;
   final String accountNumber;
+
+  /// `current`, `savings` or `business`.
+  final String accountType;
   final String holderName;
   final String currency;
 
@@ -111,6 +154,8 @@ class LinkedBank {
       institutionCode: text(data['institutionCode']),
       institutionName: text(data['institutionName']),
       accountNumber: text(data['accountNumber']),
+      accountType:
+          text(data['accountType']).isEmpty ? 'current' : text(data['accountType']),
       holderName: text(data['holderName']),
       currency: text(data['currency']).isEmpty ? 'SDG' : text(data['currency']),
     );
@@ -145,10 +190,18 @@ class BankLinkApi {
         parse: (envelope) => BankLinkDetails.fromData(envelope.object),
       );
 
-  Future<ApiResult<LinkedBank>> confirm(String number, String mobile) =>
+  Future<ApiResult<LinkedBank>> confirm(
+    String number,
+    String mobile, {
+    String? accountId,
+  }) =>
       _client.post<LinkedBank>(
         '/bank-links/confirm',
-        body: {'number': number, 'mobile': mobile},
+        body: {
+          'number': number,
+          'mobile': mobile,
+          if (accountId != null && accountId.isNotEmpty) 'accountId': accountId,
+        },
         parse: (envelope) => LinkedBank.fromData(envelope.object),
       );
 

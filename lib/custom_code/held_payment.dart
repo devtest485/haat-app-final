@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
+import '/custom_code/payout_flow.dart';
 import '/custom_code/transaction_api.dart';
 import '/custom_code/widgets/wallet_balance.dart';
 
@@ -23,6 +24,11 @@ Future<Map<String, dynamic>> awaitHeldDecision(
   BuildContext context,
   dynamic outcome,
 ) async {
+  // A payout to the linked bank account waits on its own list, not on the statement.
+  if (_text(outcome, 'payoutId').isNotEmpty && outcome is Map) {
+    return await PayoutFlow.waitFor(context, outcome) ?? {};
+  }
+
   final id = _text(outcome, 'transactionId');
   if (id.isEmpty) return {};
   final session = AuthSession.instance;

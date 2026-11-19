@@ -116,11 +116,15 @@ class BankLinkFlow {
     final first = linked.isEmpty ? null : linked.first;
     final number = first?.displayNumber ?? '';
     final bank = first?.label ?? '';
+    final holder = first?.holderName ?? '';
 
-    if (FFAppState().sibAccount != number || FFAppState().sibBank != bank) {
+    if (FFAppState().sibAccount != number ||
+        FFAppState().sibBank != bank ||
+        FFAppState().sibHolder != holder) {
       FFAppState().update(() {
         FFAppState().sibAccount = number;
         FFAppState().sibBank = bank;
+        FFAppState().sibHolder = holder;
       });
     }
   }
@@ -131,6 +135,7 @@ class BankLinkFlow {
     FFAppState().update(() {
       FFAppState().sibAccount = '';
       FFAppState().sibBank = '';
+      FFAppState().sibHolder = '';
     });
     clear();
   }

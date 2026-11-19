@@ -215,12 +215,41 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                               highlightColor: Colors.transparent,
                               onTap: () async {
                                 if (FFAppState().sibAccount == '') {
+                                  // Not linked yet: the link screens, drawn white from here.
+                                  FFAppState().saibLight = true;
                                   context.pushNamed(SAIBLinkWidget.routeName);
                                 } else {
-                                  await actions.haatOpenPayout(
-                                    context,
-                                    widget!.fundsAmount,
+                                  // Linked: straight to Review Details with the amount
+                                  // already chosen, like any other send.
+                                  context.pushNamed(
+                                    PaymentReviewWidget.routeName,
+                                    queryParameters: {
+                                      'by': serializeParam(
+                                        'bank',
+                                        ParamType.String,
+                                      ),
+                                      'value': serializeParam(
+                                        FFAppState()
+                                            .sibAccount
+                                            .replaceAll(' ', ''),
+                                        ParamType.String,
+                                      ),
+                                      'via': serializeParam(
+                                        '${FFAppState().sibBank} ${FFAppState().sibAccount}',
+                                        ParamType.String,
+                                      ),
+                                      'name': serializeParam(
+                                        FFAppState().sibHolder,
+                                        ParamType.String,
+                                      ),
+                                      'amount': serializeParam(
+                                        widget!.fundsAmount,
+                                        ParamType.String,
+                                      ),
+                                    }.withoutNulls,
                                   );
+
+                                  Navigator.pop(context);
                                 }
                               },
                               child: Container(
@@ -354,6 +383,10 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                   queryParameters: {
                                     'transferMode': serializeParam(
                                       'BBAN',
+                                      ParamType.String,
+                                    ),
+                                    'amount': serializeParam(
+                                      widget!.fundsAmount,
                                       ParamType.String,
                                     ),
                                   }.withoutNulls,

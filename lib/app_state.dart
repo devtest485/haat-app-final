@@ -43,6 +43,10 @@ class FFAppState extends ChangeNotifier {
       _languageCode = prefs.getString('ff_languageCode') ?? _languageCode;
     });
     _safeInit(() {
+      final raw = prefs.getString('ff_signupCountry');
+      if (raw != null) _signupCountry = jsonDecode(raw);
+    });
+    _safeInit(() {
       _pendingMobile = prefs.getString('ff_pendingMobile') ?? _pendingMobile;
     });
     _safeInit(() {
@@ -366,6 +370,13 @@ class FFAppState extends ChangeNotifier {
     _sibAccount = value;
   }
 
+  /// Who the linked account is held by, as the bank has it.
+  String _sibHolder = '';
+  String get sibHolder => _sibHolder;
+  set sibHolder(String value) {
+    _sibHolder = value;
+  }
+
   /// The bank's short name for the linked account, SIB, as the home screen labels it.
   String _sibBank = '';
   String get sibBank => _sibBank;
@@ -433,6 +444,33 @@ class FFAppState extends ChangeNotifier {
   dynamic get transferCountry => _transferCountry;
   set transferCountry(dynamic value) {
     _transferCountry = value;
+  }
+
+  /// The country the sign-up phone number belongs to, as the picker returned it.
+  ///
+  /// Kept on the phone, so signing in with the same number later is read under the same
+  /// country code. Empty means Pakistan, as the sign-up screen has always said.
+  dynamic _signupCountry;
+  dynamic get signupCountry => _signupCountry;
+  set signupCountry(dynamic value) {
+    _signupCountry = value;
+    prefs.setString('ff_signupCountry', jsonEncode(value));
+  }
+
+  /// The country the phone on the Link your SIB account screen belongs to. Empty means
+  /// Sudan, whose +249 that screen has always shown.
+  dynamic _saibCountry;
+  dynamic get saibCountry => _saibCountry;
+  set saibCountry(dynamic value) {
+    _saibCountry = value;
+  }
+
+  /// True when the Link your SIB account screens were opened from the Transfer sheet,
+  /// which draws them white; opened from the verification step they are black.
+  bool _saibLight = false;
+  bool get saibLight => _saibLight;
+  set saibLight(bool value) {
+    _saibLight = value;
   }
 
   /// Set by the recipient sheet when the merchant confirms the person; the send

@@ -63,7 +63,9 @@ class _TransferAuthWidgetState extends State<TransferAuthWidget> {
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.available = await actions.haatFingerprintAvailable();
-      _model.fingerprint = _model.available!;
+      // A fingerprint approves one transfer to one person, which the server binds it to;
+      // a payout to the linked bank account is confirmed with the passcode.
+      _model.fingerprint = _model.available! && widget.by != 'bank';
       safeSetState(() {});
     });
 

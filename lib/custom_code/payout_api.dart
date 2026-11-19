@@ -146,6 +146,10 @@ class PayoutApi {
     required String accountNumber,
     String? note,
     required String reference,
+
+    /// The six-digit passcode the Review Details screen asked for; checked by the server
+    /// before any money is set aside.
+    String? passcode,
   }) =>
       _client.post(
         '/payouts',
@@ -161,6 +165,7 @@ class PayoutApi {
           },
           if (note != null && note.trim().isNotEmpty) 'note': note.trim(),
           'reference': reference,
+          if (passcode != null && passcode.isNotEmpty) 'passcode': passcode,
         },
         parse: (envelope) => Payout.fromData(envelope.object),
       );

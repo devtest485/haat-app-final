@@ -13,7 +13,20 @@ import 'country_picker_model.dart';
 export 'country_picker_model.dart';
 
 class CountryPickerWidget extends StatefulWidget {
-  const CountryPickerWidget({super.key});
+  const CountryPickerWidget({
+    super.key,
+    bool? dark,
+    String? target,
+  })  : this.dark = dark ?? false,
+        this.target = target ?? 'transfer';
+
+  /// Black, for the screens that are black: the sign-up phone page and the first Link
+  /// your SIB account screens.
+  final bool dark;
+
+  /// Whose country this chooses: `transfer` (the Transfer to a phone number page),
+  /// `signup` (the sign-up phone page) or `saib` (Link your SIB account).
+  final String target;
 
   @override
   State<CountryPickerWidget> createState() => _CountryPickerWidgetState();
@@ -54,11 +67,20 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
+    final dark = widget.dark;
+    final ink = dark ? Colors.white : FlutterFlowTheme.of(context).primaryBackground;
+    final soft = dark ? Color(0xFF262626) : FlutterFlowTheme.of(context).secondaryBackground;
+    final chosen = widget.target == 'signup'
+        ? FFAppState().signupCountry
+        : widget.target == 'saib'
+            ? FFAppState().saibCountry
+            : FFAppState().transferCountry;
+
     return Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryText,
+        color: dark ? Colors.black : FlutterFlowTheme.of(context).primaryText,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
@@ -106,7 +128,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                                 .bodyMedium
                                 .fontStyle,
                           ),
-                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          color: ink,
                           fontSize: 18.0,
                           letterSpacing: -0.2,
                           fontWeight: FontWeight.bold,
@@ -127,13 +149,13 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                     width: 36.0,
                     height: 36.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      color: soft,
                       shape: BoxShape.circle,
                     ),
                     alignment: AlignmentDirectional(0.0, 0.0),
                     child: Icon(
                       Icons.close_rounded,
-                      color: Color(0xFF111111),
+                      color: ink,
                       size: 20.0,
                     ),
                   ),
@@ -222,7 +244,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   filled: true,
-                  fillColor: Color(0xFFF6F6F7),
+                  fillColor: dark ? Color(0xFF1C1C1E) : Color(0xFFF6F6F7),
                   contentPadding:
                       EdgeInsetsDirectional.fromSTEB(16.0, 14.0, 16.0, 14.0),
                   prefixIcon: Icon(
@@ -238,7 +260,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                         fontStyle:
                             FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                       ),
-                      color: FlutterFlowTheme.of(context).primaryBackground,
+                      color: ink,
                       fontSize: 15.0,
                       letterSpacing: 0.0,
                       fontWeight:
@@ -246,7 +268,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                       fontStyle:
                           FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                     ),
-                cursorColor: FlutterFlowTheme.of(context).primaryBackground,
+                cursorColor: ink,
                 enableInteractiveSelection: true,
                 validator: _model.textControllerValidator.asValidator(context),
               ),
@@ -330,7 +352,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                           bottomRight: Radius.circular(22.0),
                         ),
                         border: Border.all(
-                          color: Colors.black,
+                          color: ink,
                           width: 1.0,
                         ),
                       ),
@@ -348,8 +370,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
+                                    color: ink,
                                     fontSize: 15.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
@@ -422,7 +443,13 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              FFAppState().transferCountry = countryItem;
+                              if (widget.target == 'signup') {
+                                FFAppState().signupCountry = countryItem;
+                              } else if (widget.target == 'saib') {
+                                FFAppState().saibCountry = countryItem;
+                              } else {
+                                FFAppState().transferCountry = countryItem;
+                              }
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -482,8 +509,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
+                                            color: ink,
                                             fontSize: 15.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w500,
@@ -529,8 +555,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                                         countryItem,
                                         r'''$.iso''',
                                       ) ==
-                                      functions.countryField(
-                                          FFAppState().transferCountry, 'iso'))
+                                      functions.countryField(chosen, 'iso'))
                                     Icon(
                                       Icons.check_rounded,
                                       color: Color(0xFF00A86B),

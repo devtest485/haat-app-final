@@ -1,15 +1,16 @@
+import '/app_state.dart';
+import '/flutter_flow/custom_functions.dart';
+
 /// The phone number format the sign-up screen collects.
 ///
-/// The design hard-codes a single country — the flag and dial code are painted into
-/// the screen rather than chosen — so the app has one dial code, in one place. The
-/// backend accepts any international number, so widening this later is a UI change and
-/// not a contract change.
+/// The country is the one chosen on the sign-up screen — Pakistan's `🇵🇰 + 92` until
+/// somebody chooses another, which is what the screen has always shown — and it is kept on
+/// the phone, so signing in with the same number later is read under the same code. The
+/// backend accepts any international number.
 abstract final class PhoneFormat {
-  /// Matches the `🇵🇰 + 92` shown on the phone number screen.
-  static const String dialCode = '+92';
-
-  /// How many digits the screen expects after the dial code.
-  static const int nationalDigits = 10;
+  /// The dial code of the country chosen, with its plus.
+  static String get dialCode =>
+      '+${signupCountryField(FFAppState().signupCountry, 'dialCode')}';
 
   /// Turns what the user typed into the E.164 form the backend wants.
   ///
@@ -35,7 +36,7 @@ abstract final class PhoneFormat {
     return '$dialCode$digits';
   }
 
-  /// Whether [typed] has the number of digits the screen asks for.
+  /// Whether [typed] is a whole number under the country chosen.
   static bool isComplete(String typed) =>
-      typed.replaceAll(RegExp(r'\D'), '').length == nationalDigits;
+      signupPhoneComplete(typed, FFAppState().signupCountry);
 }

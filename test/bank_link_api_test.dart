@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:haat/custom_code/api_client.dart';
 import 'package:haat/custom_code/bank_link_api.dart';
+import 'package:haat/custom_code/phone_format.dart';
 import 'package:haat/custom_code/token_store.dart';
 import 'package:haat/flutter_flow/custom_functions.dart' as functions;
 import 'package:http/http.dart' as http;
@@ -112,6 +113,54 @@ void main() {
       expect(details.toJson()['idMasked'], '···· 4471');
     });
 
+    test('several accounts under one customer number are offered to choose from', () async {
+      final api = apiAnswering(200, {
+        'institutionName': 'SIB',
+        'holderName': 'Mohammed Alamin',
+        'idMasked': null,
+        'mobileMasked': '*********0910',
+        'accountMasked': '···· 7812',
+        'businessName': 'Lipper Pizza',
+        'accounts': [
+          {'id': 'a1', 'accountType': 'current', 'accountMasked': '···· 7812'},
+          {'id': 'a2', 'accountType': 'savings', 'accountMasked': '···· 4410'},
+          {'id': 'a3', 'accountType': 'business', 'accountMasked': '···· 0935'},
+        ],
+      });
+
+      final details =
+          (await api.verify('84537779', '+249912090910', '482601')).valueOrNull!;
+
+      expect(details.accounts.map((a) => a.label),
+          ['Current account', 'Savings account', 'Business account']);
+      expect(details.accounts[1].id, 'a2');
+      expect(details.accounts[2].accountMasked, '···· 0935');
+    });
+
+    test('confirming names the account chosen', () async {
+      http.Request? sent;
+      final api = apiAnswering(
+        200,
+        {
+          'id': 'a2',
+          'institutionCode': 'SIB',
+          'institutionName': 'Sudanese Islamic Bank',
+          'accountNumber': '197083536098',
+          'accountType': 'savings',
+          'holderName': 'Mohammed Alamin',
+          'currency': 'SDG',
+        },
+        seen: (request) => sent = request,
+      );
+
+      final linked =
+          (await api.confirm('84537779', '+249912090910', accountId: 'a2')).valueOrNull!;
+
+      expect(jsonDecode(sent!.body)['accountId'], 'a2');
+      expect(linked.accountType, 'savings');
+      expect(accountTypeLabel(linked.accountType), 'Savings account');
+    });
+
     test('an account without an identity number shows a dash, not nothing', () {
       final details = BankLinkDetails.fromData({
         'holderName': 'A',
@@ -146,6 +195,30 @@ void main() {
 
     test('nothing linked is an empty list, not a failure', () async {
       expect(await apiAnswering(200, []).linked(), isEmpty);
+    });
+  });
+
+  group('the sign-up phone number', () {
+    test('is Pakistan\'s until another country is chosen', () {
+      expect(functions.signupCountryField(null, 'dialCode'), '92');
+      expect(functions.signupCountryField(null, 'flag'), '🇵🇰');
+      expect(PhoneFormat.dialCode, '+92');
+      expect(PhoneFormat.toE164('0300 1234567'), '+923001234567');
+    });
+
+    test('takes the country that was chosen', () {
+      const sudan = {'iso': 'SD', 'dialCode': '249', 'flag': '🇸🇩'};
+
+      expect(functions.signupCountryField(sudan, 'dialCode'), '249');
+      expect(functions.signupPhoneComplete('912090910', sudan), isTrue);
+      expect(functions.signupPhoneComplete('0912090910', sudan), isTrue);
+      expect(functions.signupPhoneComplete('91209', sudan), isFalse);
+    });
+
+    test('is ten digits for Pakistan, as it always was', () {
+      expect(functions.signupPhoneComplete('3001234567', null), isTrue);
+      expect(functions.signupPhoneComplete('300123456', null), isFalse);
+      expect(functions.signupPhoneComplete('30012345678', null), isFalse);
     });
   });
 

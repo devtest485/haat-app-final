@@ -300,6 +300,7 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
+                                FFAppState().saibLight = false;
                                 context.pushNamed(SAIBLinkWidget.routeName);
                               },
                               child: Container(

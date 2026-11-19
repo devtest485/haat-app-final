@@ -20,6 +20,7 @@ class OtpVerify extends StatefulWidget {
     this.otpLength,
     this.autoFocus,
     this.useLightStyle, // NEW PARAMETER
+    this.hasError,
     this.onChanged,
     this.onCompleted,
   });
@@ -36,6 +37,10 @@ class OtpVerify extends StatefulWidget {
   /// true = Figma wala light style
   /// false = existing/current style
   final bool? useLightStyle;
+
+  /// true = the code was wrong: the boxes are drawn with a red border until the
+  /// person types again.
+  final bool? hasError;
 
   /// Har digit type/delete hone par current OTP string wapas bhejta hai
   final Future Function(String otpValue)? onChanged;
@@ -205,6 +210,8 @@ class _OtpVerifyState extends State<OtpVerify> {
               textColor = Colors.white;
             }
 
+            final bool wrong = widget.hasError ?? false;
+
             return Container(
               width: _boxSize,
               height: _boxSize,
@@ -212,8 +219,8 @@ class _OtpVerifyState extends State<OtpVerify> {
                 color: boxBackground,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: boxBorder,
-                  width: isFilled ? 0.5 : 1,
+                  color: wrong ? const Color(0xFFE5484D) : boxBorder,
+                  width: wrong ? 1 : (isFilled ? 0.5 : 1),
                 ),
               ),
               child: Center(
