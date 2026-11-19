@@ -355,7 +355,13 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                         InputDecoration(
                                                                       isDense:
                                                                           true,
-                                                                      hintText: '090 123456789 01',
+                                                                      hintText: 'Enter BBAN number',
+                                                                      prefixText: 'SD ',
+                                                                      prefixStyle: TextStyle(
+                                                                        color: FlutterFlowTheme.of(context).primaryBackground,
+                                                                        fontWeight: FontWeight.w500,
+                                                                        fontSize: 14.0,
+                                                                      ),
                                                                       labelStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .labelMedium
@@ -470,7 +476,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                               .fontStyle,
                                                                         ),
                                                                     maxLength:
-                                                                        24,
+                                                                        18,
                                                                     maxLengthEnforcement:
                                                                         MaxLengthEnforcement
                                                                             .enforced,
@@ -2118,8 +2124,7 @@ class _TransfermethodWidgetState extends State<TransfermethodWidget> {
                                                                                 fontWeight: FontWeight.w600,
                                                                                 fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                               ),
-                                                                          maxLength:
-                                                                              15,
+                                                                          maxLength: functions.phoneMaxDigits(functions.countryField(FFAppState().transferCountry, 'dialCode')),
                                                                           maxLengthEnforcement:
                                                                               MaxLengthEnforcement.enforced,
                                                                           buildCounter: (context, {required currentLength, required isFocused, maxLength}) =>

@@ -668,7 +668,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget>
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                              maxLength: 12,
+                                                              maxLength: functions.phoneMaxDigits(functions.signupCountryField(FFAppState().signupCountry, 'dialCode')),
                                                               maxLengthEnforcement:
                                                                   MaxLengthEnforcement
                                                                       .enforced,

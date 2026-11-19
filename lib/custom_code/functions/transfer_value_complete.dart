@@ -34,6 +34,5 @@ bool transferValueComplete(
   if (text.startsWith('+'))
     return national.length >= 8 && national.length <= 15;
 
-  final dial = (dialCode ?? '').replaceAll(RegExp(r'\D'), '');
-  return national.length >= 6 && national.length + dial.length <= 15;
+  return phoneDigitsOk(typed, dialCode);
 }

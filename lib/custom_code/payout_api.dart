@@ -150,6 +150,9 @@ class PayoutApi {
     /// The six-digit passcode the Review Details screen asked for; checked by the server
     /// before any money is set aside.
     String? passcode,
+
+    /// Or a fingerprint signature over the [challenge] for this same payout.
+    String? biometricSignature,
   }) =>
       _client.post(
         '/payouts',
@@ -165,9 +168,31 @@ class PayoutApi {
           },
           if (note != null && note.trim().isNotEmpty) 'note': note.trim(),
           'reference': reference,
-          if (passcode != null && passcode.isNotEmpty) 'passcode': passcode,
+          if (biometricSignature != null && biometricSignature.isNotEmpty)
+            'biometricSignature': biometricSignature
+          else if (passcode != null && passcode.isNotEmpty)
+            'passcode': passcode,
         },
         parse: (envelope) => Payout.fromData(envelope.object),
+      );
+
+  /// A value for this phone's biometric key to sign, approving exactly this payout: the
+  /// server binds it to the account, amount, currency and [reference].
+  Future<ApiResult<String>> challenge({
+    required String accountNumber,
+    required BigInt amountMinor,
+    required String currency,
+    required String reference,
+  }) =>
+      _client.post(
+        '/payouts/challenge',
+        body: {
+          'accountNumber': accountNumber.trim(),
+          'amountMinor': amountMinor.toString(),
+          'currency': currency,
+          'reference': reference,
+        },
+        parse: (envelope) => envelope.object['challenge'] as String? ?? '',
       );
 
   /// Withdraws a payout HAAT has not decided yet. The money comes back.

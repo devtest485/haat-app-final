@@ -67,13 +67,25 @@ Future<dynamic> haatTransferFingerprint(
   }
 
   while (true) {
-    final challenge = await session.transfers.challenge(
-      by: by == 'mobile' ? TransferBy.mobile : TransferBy.username,
-      value: value ?? '',
-      amountMinor: minor,
-      currency: currency ?? 'SDG',
-      reference: transferReference ?? '',
-    );
+    // A send to the linked bank account is a payout, which has a challenge of its own.
+    final challenge = by == 'bank'
+        ? await session.payouts.challenge(
+            accountNumber: value ?? '',
+            amountMinor: minor,
+            currency: currency ?? 'SDG',
+            reference: transferReference ?? '',
+          )
+        : await session.transfers.challenge(
+            by: switch (by) {
+              'mobile' => TransferBy.mobile,
+              'bban' => TransferBy.bban,
+              _ => TransferBy.username,
+            },
+            value: value ?? '',
+            amountMinor: minor,
+            currency: currency ?? 'SDG',
+            reference: transferReference ?? '',
+          );
     if (challenge is ApiFailure<String> &&
         challenge.data['field'] == 'biometric' &&
         !enrolled) {

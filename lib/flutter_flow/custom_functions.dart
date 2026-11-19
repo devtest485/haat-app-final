@@ -133,3 +133,5 @@ export '/custom_code/functions/transaction_outcome.dart';
 export '/custom_code/functions/transaction_status.dart';
 export '/custom_code/functions/signup_country_field.dart';
 export '/custom_code/functions/signup_phone_complete.dart';
+export '/custom_code/functions/phone_max_digits.dart';
+export '/custom_code/functions/phone_digits_ok.dart';

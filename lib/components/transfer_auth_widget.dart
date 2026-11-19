@@ -24,6 +24,7 @@ class TransferAuthWidget extends StatefulWidget {
     String? amountText,
     String? name,
     String? via,
+    bool? modal,
   })  : this.by = by ?? '',
         this.value = value ?? '',
         this.amountMinor = amountMinor ?? '',
@@ -31,7 +32,8 @@ class TransferAuthWidget extends StatefulWidget {
         this.transferReference = transferReference ?? '',
         this.amountText = amountText ?? '',
         this.name = name ?? '',
-        this.via = via ?? '';
+        this.via = via ?? '',
+        this.modal = modal ?? false;
 
   final String by;
   final String value;
@@ -41,6 +43,10 @@ class TransferAuthWidget extends StatefulWidget {
   final String amountText;
   final String name;
   final String via;
+
+  /// True when the sheet is shown as a dialog in the middle of the screen: there is no
+  /// edge to pull it down by, so no handle.
+  final bool modal;
 
   @override
   State<TransferAuthWidget> createState() => _TransferAuthWidgetState();
@@ -63,9 +69,7 @@ class _TransferAuthWidgetState extends State<TransferAuthWidget> {
     // On component load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.available = await actions.haatFingerprintAvailable();
-      // A fingerprint approves one transfer to one person, which the server binds it to;
-      // a payout to the linked bank account is confirmed with the passcode.
-      _model.fingerprint = _model.available! && widget.by != 'bank';
+      _model.fingerprint = _model.available!;
       safeSetState(() {});
     });
 
@@ -89,7 +93,8 @@ class _TransferAuthWidgetState extends State<TransferAuthWidget> {
         borderRadius: BorderRadius.circular(24.0),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 32.0),
+        padding: EdgeInsetsDirectional.fromSTEB(
+            24.0, 0.0, 24.0, widget.modal ? 28.0 : 32.0),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -97,28 +102,30 @@ class _TransferAuthWidgetState extends State<TransferAuthWidget> {
             crossAxisAlignment: (FFCrossAxisAlignment.center).flutterValue,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Align(
-                alignment: AlignmentDirectional(0.0, 0.0),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                  child: Container(
-                    decoration: BoxDecoration(),
+              if (!widget.modal)
+                Align(
+                  alignment: AlignmentDirectional(0.0, 0.0),
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                     child: Container(
-                      width: 40.0,
-                      height: 4.0,
-                      decoration: BoxDecoration(
-                        color: Color(0x1F000000),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(2.0),
-                          topRight: Radius.circular(2.0),
-                          bottomLeft: Radius.circular(2.0),
-                          bottomRight: Radius.circular(2.0),
+                      decoration: BoxDecoration(),
+                      child: Container(
+                        width: 40.0,
+                        height: 4.0,
+                        decoration: BoxDecoration(
+                          color: Color(0x1F000000),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(2.0),
+                            topRight: Radius.circular(2.0),
+                            bottomLeft: Radius.circular(2.0),
+                            bottomRight: Radius.circular(2.0),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
               Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: (FFCrossAxisAlignment.start).flutterValue,

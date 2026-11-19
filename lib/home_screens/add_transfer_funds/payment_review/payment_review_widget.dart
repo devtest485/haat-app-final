@@ -726,35 +726,41 @@ class _PaymentReviewWidgetState extends State<PaymentReviewWidget> {
                                         _model.available) ==
                                     false)) {
                               FFAppState().lastTransfer = null;
-                              await showModalBottomSheet(
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                enableDrag: false,
+                              await showDialog(
                                 context: context,
+                                barrierDismissible: true,
                                 builder: (context) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context).unfocus();
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                    },
-                                    child: Padding(
-                                      padding: MediaQuery.viewInsetsOf(context),
-                                      child: TransferAuthWidget(
-                                        by: widget!.by,
-                                        value: widget!.value,
-                                        amountMinor: functions.toMinorUnits(
-                                            widget!.amount, _model.currency),
-                                        currency: _model.currency,
-                                        transferReference:
-                                            _model.transferReference,
-                                        amountText: functions.formatMinor(
-                                            functions.toMinorUnits(
-                                                widget!.amount,
-                                                _model.currency),
-                                            _model.currency),
-                                        name: widget!.name,
-                                        via: widget!.via,
+                                  return Dialog(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                    insetPadding: EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 24.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        FocusScope.of(context).unfocus();
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
+                                      child: ConstrainedBox(
+                                        constraints:
+                                            BoxConstraints(maxWidth: 420.0),
+                                        child: TransferAuthWidget(
+                                          by: widget!.by,
+                                          value: widget!.value,
+                                          amountMinor: functions.toMinorUnits(
+                                              widget!.amount, _model.currency),
+                                          currency: _model.currency,
+                                          transferReference:
+                                              _model.transferReference,
+                                          amountText: functions.formatMinor(
+                                              functions.toMinorUnits(
+                                                  widget!.amount,
+                                                  _model.currency),
+                                              _model.currency),
+                                          name: widget!.name,
+                                          via: widget!.via,
+                                          modal: true,
+                                        ),
                                       ),
                                     ),
                                   );

@@ -137,7 +137,7 @@ class _SaibLinkFlowState extends State<SaibLinkFlow> {
 
   bool get _canAsk =>
       _number.text.replaceAll(RegExp(r'\D'), '').length >= 6 &&
-      _phone.text.replaceAll(RegExp(r'\D'), '').length >= 6;
+      phoneDigitsOk(_phone.text, _dial);
 
   Future<void> _ask({bool again = false}) async {
     if (_busy) return;
@@ -448,7 +448,11 @@ class _SaibLinkFlowState extends State<SaibLinkFlow> {
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: _input(_phone, hint: 'Enter your phone', maxLength: 12),
+              child: _input(
+                _phone,
+                hint: 'Enter your phone',
+                maxLength: phoneMaxDigits(_dial),
+              ),
             ),
           ],
         ),
@@ -722,89 +726,110 @@ class _SaibLinkFlowState extends State<SaibLinkFlow> {
   Widget _linkedScreen() => Positioned.fill(
         child: Container(
           color: Colors.black,
-          child: Column(
+          child: Stack(
             children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 128,
-                      height: 128,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            width: 128,
-                            height: 128,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xFF0E6B3E),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: Image.asset(
-                              'assets/images/AminBank.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            right: -2,
-                            bottom: 4,
-                            child: Container(
-                              width: 34,
-                              height: 34,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.black, width: 3),
-                              ),
-                              child: const Icon(Icons.check_rounded,
-                                  size: 20, color: Colors.black),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 28),
-                    Text(
-                      'Link your SIB account',
-                      textAlign: TextAlign.center,
-                      style: _text(22,
-                          weight: FontWeight.w600, color: Colors.white),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(48, 12, 48, 0),
-                      child: Text(
-                        'You can now transfer money from HAAT to your SIB account.',
-                        textAlign: TextAlign.center,
-                        style: _text(14,
-                            color: const Color(0xFFBDBDBD), height: 1.5),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 0, 15, 35),
-                child: InkWell(
-                  onTap: () => widget.onDone?.call(),
-                  borderRadius: BorderRadius.circular(106),
-                  child: Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(106),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Continue',
-                      style: _text(18,
-                          weight: FontWeight.w600, color: Colors.black),
+              // The pattern, fading into the black the way the design has it.
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                height: 420,
+                child: ShaderMask(
+                  blendMode: BlendMode.dstIn,
+                  shaderCallback: (rect) => const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.white, Colors.transparent],
+                  ).createShader(rect),
+                  child: Opacity(
+                    opacity: 0.7,
+                    child: Image.asset(
+                      'assets/images/GreenPageBg.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
+              ),
+              Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // The logo is a green circle on a transparent square, with its
+                        // shadow underneath; the badge sits on the circle's lower right.
+                        SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Image.asset(
+                                'assets/images/AminBank.png',
+                                width: 200,
+                                height: 200,
+                                fit: BoxFit.contain,
+                              ),
+                              Positioned(
+                                left: 132,
+                                top: 116,
+                                child: Container(
+                                  width: 34,
+                                  height: 34,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Colors.black, width: 3),
+                                  ),
+                                  child: const Icon(Icons.check_rounded,
+                                      size: 20, color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Link your SIB account',
+                          textAlign: TextAlign.center,
+                          style: _text(22,
+                              weight: FontWeight.w600, color: Colors.white),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(48, 12, 48, 0),
+                          child: Text(
+                            'You can now transfer money from HAAT to your SIB account.',
+                            textAlign: TextAlign.center,
+                            style: _text(14,
+                                color: const Color(0xFFBDBDBD), height: 1.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 35),
+                    child: InkWell(
+                      onTap: () => widget.onDone?.call(),
+                      borderRadius: BorderRadius.circular(106),
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(106),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Continue',
+                          style: _text(18,
+                              weight: FontWeight.w600, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

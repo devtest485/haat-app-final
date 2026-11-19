@@ -13,5 +13,5 @@ import '/flutter_flow/ff_builtin_enums.dart';
 
 /// The home screen's account-number line, from the number.
 String? bbanLine(String? bban) {
-  return (bban ?? '').isEmpty ? '' : 'BBAN : ${bban}';
+  return (bban ?? '').isEmpty ? '' : 'BBAN : SD ${bban}';
 }

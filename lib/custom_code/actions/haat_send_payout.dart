@@ -18,6 +18,7 @@ import '/custom_code/payout_flow.dart';
 /// the Pending screen into Success.
 Future<dynamic> haatSendPayout(
   String? passcode,
+  String? signature,
   String? amountMinor,
   String? currency,
   String? reference,
@@ -26,6 +27,7 @@ Future<dynamic> haatSendPayout(
 ) =>
     PayoutFlow.send(
       passcode: passcode,
+      signature: signature,
       amountMinor: amountMinor,
       currency: currency,
       reference: reference,

@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,8 +69,8 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
     context.watch<FFAppState>();
 
     final dark = widget.dark;
-    final ink = dark ? Colors.white : FlutterFlowTheme.of(context).primaryBackground;
-    final soft = dark ? Color(0xFF262626) : FlutterFlowTheme.of(context).secondaryBackground;
+    final ink =
+        dark ? Colors.white : FlutterFlowTheme.of(context).primaryBackground;
     final chosen = widget.target == 'signup'
         ? FFAppState().signupCountry
         : widget.target == 'saib'
@@ -82,9 +83,13 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
       decoration: BoxDecoration(
         color: dark ? Colors.black : FlutterFlowTheme.of(context).primaryText,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(24.0),
+          topLeft: Radius.circular(28.0),
+          topRight: Radius.circular(28.0),
         ),
+        // Black on a black page has no edge: a hairline gives the rounded top one.
+        border: dark
+            ? Border(top: BorderSide(color: Color(0x40FFFFFF), width: 1.0))
+            : null,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -99,7 +104,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                   width: 40.0,
                   height: 4.0,
                   decoration: BoxDecoration(
-                    color: Color(0x1F000000),
+                    color: dark ? Color(0x66FFFFFF) : Color(0x33000000),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(2.0),
                       topRight: Radius.circular(2.0),
@@ -112,7 +117,7 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
             ),
           ),
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(20.0, 14.0, 16.0, 12.0),
+            padding: EdgeInsetsDirectional.fromSTEB(20.0, 14.0, 20.0, 12.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: (FFCrossAxisAlignment.center).flutterValue,
@@ -135,29 +140,6 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
                           fontStyle:
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
-                  ),
-                ),
-                InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 36.0,
-                    height: 36.0,
-                    decoration: BoxDecoration(
-                      color: soft,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Icon(
-                      Icons.close_rounded,
-                      color: ink,
-                      size: 20.0,
-                    ),
                   ),
                 ),
               ],
@@ -275,27 +257,53 @@ class _CountryPickerWidgetState extends State<CountryPickerWidget> {
             ),
           ),
           if (_model.loaded == false)
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(24.0, 32.0, 24.0, 0.0),
-              child: Text(
-                'Loading countries…',
-                textAlign: TextAlign.center,
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.montserrat(
-                        fontWeight:
-                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: 9,
+                itemBuilder: (context, index) {
+                  final base = dark ? Color(0xFF1C1C1E) : Color(0xFFE6E6E6);
+                  final glow = dark ? Color(0xFF3A3A3C) : Color(0xFFF7F7F7);
+                  Widget bar(double width, double height) => Container(
+                        width: width,
+                        height: height,
+                        decoration: BoxDecoration(
+                          color: base,
+                          borderRadius: BorderRadius.circular(height / 2),
+                        ),
+                      );
+
+                  return Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
+                    child: SizedBox(
+                      height: 56.0,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 28.0,
+                            height: 20.0,
+                            decoration: BoxDecoration(
+                              color: base,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                          ),
+                          SizedBox(width: 14.0),
+                          bar(110.0 + (index % 4) * 24.0, 13.0),
+                          Spacer(),
+                          bar(34.0, 11.0),
+                        ],
                       ),
-                      color: Color(0xFF6C6C6C),
-                      fontSize: 14.0,
-                      letterSpacing: 0.0,
-                      fontWeight:
-                          FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                      lineHeight: 1.5,
-                    ),
+                    )
+                        .animate(onPlay: (controller) => controller.repeat())
+                        .shimmer(
+                          duration: 1200.ms,
+                          delay: (index * 90).ms,
+                          color: glow,
+                        ),
+                  );
+                },
               ),
             ),
           if ((_model.loaded == true) && (_model.failed == true))

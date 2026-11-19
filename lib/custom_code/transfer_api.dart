@@ -1,10 +1,12 @@
 import '/custom_code/api_client.dart';
 import '/custom_code/api_result.dart';
 
-/// How the person receiving is named: their `@handle`, or their phone number.
+/// How the person receiving is named: their `@handle`, their phone number, or the BBAN of
+/// their wallet.
 enum TransferBy {
   username,
-  mobile;
+  mobile,
+  bban;
 }
 
 /// Who a transfer would reach, as the server found them.

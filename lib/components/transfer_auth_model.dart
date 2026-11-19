@@ -64,6 +64,7 @@ class TransferAuthModel extends FlutterFlowModel<TransferAuthWidget> {
     if (widget!.by == 'bank') {
       outcome = await actions.haatSendPayout(
         passcode,
+        signature,
         widget!.amountMinor,
         widget!.currency,
         widget!.transferReference,

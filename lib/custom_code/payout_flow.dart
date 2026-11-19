@@ -72,6 +72,7 @@ class PayoutFlow {
   /// nothing was asked for, and the same reference may be tried again.
   static Future<Map<String, dynamic>> send({
     required String? passcode,
+    String? signature,
     required String? amountMinor,
     required String? currency,
     required String? reference,
@@ -113,6 +114,7 @@ class PayoutFlow {
       accountNumber: account.accountNumber,
       reference: ref,
       passcode: passcode,
+      biometricSignature: signature,
     );
 
     if (result is ApiUnreachable<Payout>) {
@@ -133,7 +135,7 @@ class PayoutFlow {
       final field = result is ApiFailure<Payout> ? '${result.data['field'] ?? ''}' : '';
       final message = result.messageIn(session.languageCode);
 
-      if (field == 'passcode') {
+      if (field == 'passcode' || field == 'biometric') {
         return {
           'kind': 'credential',
           'status': '',

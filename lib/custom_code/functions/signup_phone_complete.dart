@@ -15,13 +15,7 @@ bool signupPhoneComplete(
   String? typed,
   dynamic country,
 ) {
-  // Whether the number typed is whole under the country chosen: ten digits for Pakistan,
-  // which has always been the rule, and any number a country could have for the others
-  // (E.164 allows fifteen digits in all, counting the country code).
-  final dial = signupCountryField(country, 'dialCode').replaceAll(RegExp(r'\D'), '');
-  final national = (typed ?? '')
-      .replaceAll(RegExp(r'\D'), '')
-      .replaceFirst(RegExp(r'^0+'), '');
-  if (dial == '92') return national.length == 10;
-  return national.length >= 6 && national.length + dial.length <= 15;
+  // Whether the number typed is whole under the country chosen — the length numbers have
+  // there; Pakistan's ten digits, as it always was.
+  return phoneDigitsOk(typed, signupCountryField(country, 'dialCode'));
 }

@@ -222,6 +222,40 @@ void main() {
     });
   });
 
+  group('a phone number under its country code', () {
+    test('has the length numbers have there', () {
+      expect(functions.phoneDigitsOk('912090910', '249'), isTrue); // Sudan, 9
+      expect(functions.phoneDigitsOk('0912090910', '249'), isTrue); // the trunk zero
+      expect(functions.phoneDigitsOk('91209091', '249'), isFalse);
+      expect(functions.phoneDigitsOk('9120909100', '249'), isFalse);
+      expect(functions.phoneDigitsOk('3001234567', '92'), isTrue); // Pakistan, 10
+      expect(functions.phoneDigitsOk('300123456', '92'), isFalse);
+      expect(functions.phoneDigitsOk('50123456', '974'), isTrue); // Qatar, 8
+      expect(functions.phoneDigitsOk('1234567890', '49'), isTrue); // Germany, 10-11
+      expect(functions.phoneDigitsOk('12345678901', '49'), isTrue);
+    });
+
+    test('a country the table does not know takes any length E.164 allows', () {
+      // 15 digits in all, the country code counted: +1268 leaves eleven.
+      expect(functions.phoneDigitsOk('12345678901', '1268'), isTrue);
+      expect(functions.phoneDigitsOk('123456789012', '1268'), isFalse);
+      expect(functions.phoneDigitsOk('12345', '1268'), isFalse);
+    });
+
+    test('limits what the field takes to one digit more than the longest, for the zero', () {
+      expect(functions.phoneMaxDigits('249'), 10);
+      expect(functions.phoneMaxDigits('92'), 11);
+      expect(functions.phoneMaxDigits('49'), 12);
+    });
+  });
+
+  group('the BBAN on the home screen', () {
+    test('is written with the country in front of it', () {
+      expect(functions.bbanLine('090 414321955 01'), 'BBAN : SD 090 414321955 01');
+      expect(functions.bbanLine(''), '');
+    });
+  });
+
   group('sending to a BBAN', () {
     test('the page mode names how the person is looked up', () {
       expect(functions.transferBy('BBAN'), 'bban');
