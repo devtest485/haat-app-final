@@ -47,7 +47,7 @@ dependencies:
   flutter_map: 8.1.1
   flutter_secure_storage: 9.2.4
   flutter_svg: 2.1.0
-  font_awesome_flutter: 11.0.0
+  font_awesome_flutter: 11.0.0  
   from_css_color: 2.0.0
   gal: ^2.3.3
   geolocator: 14.0.2
