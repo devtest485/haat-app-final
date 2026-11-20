@@ -105,7 +105,9 @@ class BankLinkFlow {
   /// server again after a minute unless [force] says the answer has just changed.
   static Future<void> refresh({bool force = false}) async {
     final last = _readAt;
-    if (!force && last != null && DateTime.now().difference(last).inSeconds < 60) {
+    if (!force &&
+        last != null &&
+        DateTime.now().difference(last).inSeconds < 60) {
       return;
     }
     _readAt = DateTime.now();

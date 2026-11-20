@@ -15,6 +15,7 @@ String brandRequestReference() {
   // The reference shown on the "Request sent" screen: SW-<yymm>-<4 digits>.
   final now = DateTime.now();
   final yymm = DateFormat('yyMM').format(now);
-  final digits = (now.millisecondsSinceEpoch % 10000).toString().padLeft(4, '0');
+  final digits =
+      (now.millisecondsSinceEpoch % 10000).toString().padLeft(4, '0');
   return 'SW-$yymm-$digits';
 }

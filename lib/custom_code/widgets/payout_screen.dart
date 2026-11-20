@@ -282,7 +282,8 @@ class _PayoutScreenState extends State<PayoutScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(account.label,
-                  style: _text(11, weight: FontWeight.w700, color: Colors.white)),
+                  style:
+                      _text(11, weight: FontWeight.w700, color: Colors.white)),
             ),
             const SizedBox(width: 12),
             Expanded(

@@ -113,6 +113,14 @@ class Wallet {
   BigInt get available => lines
       .where((line) => line.currency == currency)
       .fold(BigInt.zero, (sum, line) => sum + line.availableMinor);
+
+  BigInt get held => lines
+      .where((line) => line.currency == currency)
+      .fold(BigInt.zero, (sum, line) => sum + line.heldMinor);
+
+  BigInt get pending => lines
+      .where((line) => line.currency == currency)
+      .fold(BigInt.zero, (sum, line) => sum + line.pendingMinor);
 }
 
 /// The business's own wallet.

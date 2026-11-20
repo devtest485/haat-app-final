@@ -637,44 +637,46 @@ class _StoreProfileWidgetState extends State<StoreProfileWidget> {
                               ].divide(SizedBox(width: 16.0)),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 16.0, 0.0, 0.0),
-                            child: Container(
-                              width: 287.0,
-                              height: 36.0,
-                              child: Text(
-                                valueOrDefault<String>(
+                          if (getJsonField(
+                                _model.profile,
+                                r'''$.description''',
+                              ) !=
+                              null)
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 16.0, 0.0, 0.0),
+                              child: Container(
+                                width: 287.0,
+                                child: Text(
                                   getJsonField(
                                     _model.profile,
                                     r'''$.description''',
-                                  )?.toString(),
-                                  '',
-                                ),
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.montserrat(
+                                  ).toString(),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w300,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                        color: Color(0x8CEBEBEB),
+                                        fontSize: 13.0,
+                                        letterSpacing: 0.0,
                                         fontWeight: FontWeight.w300,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .fontStyle,
+                                        lineHeight: 1.38,
                                       ),
-                                      color: Color(0x8CEBEBEB),
-                                      fontSize: 13.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w300,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                      lineHeight: 1.38,
-                                    ),
-                                overflow: TextOverflow.ellipsis,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ),

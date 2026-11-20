@@ -14,9 +14,10 @@ import '/flutter_flow/ff_builtin_enums.dart';
 /// How the money on a statement line moved, for the badge on its icon and the
 /// Method filter.
 ///
-/// tap | qr | link — how a customer paid; user — a transfer to or from another
-/// merchant, found by username or mobile; bank — a payout to a bank account
-/// (and the hold set aside for it); topup — funds added. Empty when none fits.
+/// tap | qr | link — how a customer paid; user — a transfer to or from
+/// another merchant, found by username or mobile; bank — a payout to a bank
+/// account (and the hold set aside for it); topup — funds added. Empty when
+/// none fits.
 String transactionMethod(dynamic row) {
   if (row is! Map) return '';
   final kind = (row['kind'] ?? '').toString().trim();
@@ -26,10 +27,15 @@ String transactionMethod(dynamic row) {
   final method = (row['paymentMethod'] ?? '').toString().trim();
   if (method == 'tap' || method == 'qr' || method == 'link') return method;
 
-  if (row['transfer'] is Map || kind == 'transfer') return 'user';
+  final desc = (row['description'] ?? '').toString().toLowerCase();
+
+  if (row['transfer'] is Map ||
+      kind == 'transfer' ||
+      (kind == 'hold' && desc.contains('transfer'))) {
+    return 'user';
+  }
   if (kind == 'payout') return 'bank';
-  if (kind == 'hold' &&
-      (row['description'] ?? '').toString().toLowerCase().contains('payout')) {
+  if (kind == 'hold' && desc.contains('payout')) {
     return 'bank';
   }
   if (kind == 'topup') return 'topup';

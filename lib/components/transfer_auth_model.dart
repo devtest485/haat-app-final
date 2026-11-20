@@ -59,33 +59,6 @@ class TransferAuthModel extends FlutterFlowModel<TransferAuthWidget> {
     String? token;
     ApiCallResponse? response;
 
-    // Sending to the linked bank account is a payout, which the back office sends: the
-    // same sheet, the same passcode, a different request.
-    if (widget!.by == 'bank') {
-      outcome = await actions.haatSendPayout(
-        passcode,
-        signature,
-        widget!.amountMinor,
-        widget!.currency,
-        widget!.transferReference,
-        widget!.name,
-        widget!.via,
-      );
-      updatePage(() {});
-      if (functions.outcomeText(outcome, 'kind', '') == 'credential') {
-        error = functions.outcomeText(
-            outcome, 'message', 'That passcode isn’t right.');
-        busy = false;
-        signature = '';
-        passcode = '';
-        updatePage(() {});
-      } else {
-        FFAppState().lastTransfer = outcome!;
-        Navigator.pop(context);
-      }
-      return;
-    }
-
     token = await actions.haatAccessToken();
     response = await HaatAuthGroup.sendTransferCall.call(
       accessToken: token,

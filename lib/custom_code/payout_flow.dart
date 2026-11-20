@@ -81,13 +81,16 @@ class PayoutFlow {
   }) async {
     final session = AuthSession.instance;
     final minor = (amountMinor ?? '').trim();
-    final code = (currency ?? '').trim().isEmpty ? 'SDG' : currency!.trim().toUpperCase();
+    final code = (currency ?? '').trim().isEmpty
+        ? 'SDG'
+        : currency!.trim().toUpperCase();
     final ref = (reference ?? '').trim();
     final amount = BigInt.tryParse(minor);
 
     final linked = await session.bankLinks.linked();
-    final account = (linked ?? const []).where((a) => a.currency == code).firstOrNull ??
-        (linked ?? const []).firstOrNull;
+    final account =
+        (linked ?? const []).where((a) => a.currency == code).firstOrNull ??
+            (linked ?? const []).firstOrNull;
     final wallet = await session.wallet.get();
     final line = wallet is ApiSuccess<Wallet>
         ? wallet.value.lines.where((l) => l.currency == code).firstOrNull
@@ -132,7 +135,8 @@ class PayoutFlow {
 
     final payout = result.valueOrNull;
     if (payout == null) {
-      final field = result is ApiFailure<Payout> ? '${result.data['field'] ?? ''}' : '';
+      final field =
+          result is ApiFailure<Payout> ? '${result.data['field'] ?? ''}' : '';
       final message = result.messageIn(session.languageCode);
 
       if (field == 'passcode' || field == 'biometric') {
@@ -149,7 +153,8 @@ class PayoutFlow {
 
     WalletBalance.refreshNow();
 
-    final label = name == null || name.trim().isEmpty ? account.holderName : name.trim();
+    final label =
+        name == null || name.trim().isEmpty ? account.holderName : name.trim();
     final target = (via ?? '').trim().isEmpty
         ? '${account.label} ${account.displayNumber}'
         : via!.trim();
@@ -225,16 +230,20 @@ class PayoutFlow {
           'kind': 'success',
           'title': '${given['approvedTitle'] ?? 'Money sent'}',
           'details': lines,
-          'shareText': '${given['shareText'] ?? ''}'.replaceFirst('waiting for approval', 'sent'),
+          'shareText': '${given['shareText'] ?? ''}'
+              .replaceFirst('waiting for approval', 'sent'),
         };
       }
 
       final reason = payout.status == PayoutStatus.cancelled
           ? 'The transfer was cancelled'
-          : ((payout.reason ?? '').trim().isEmpty ? 'Not approved' : payout.reason!.trim());
+          : ((payout.reason ?? '').trim().isEmpty
+              ? 'Not approved'
+              : payout.reason!.trim());
       final lines = [
         for (final line in (given['details'] as List? ?? const []))
-          if (line is Map && line['label'] != 'Reason') Map<String, dynamic>.from(line),
+          if (line is Map && line['label'] != 'Reason')
+            Map<String, dynamic>.from(line),
         {'label': 'Reason', 'value': reason},
       ];
 

@@ -4,9 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:math';
 import 'dart:ui';
-import '/components/country_picker_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
-import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -351,83 +349,47 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget>
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    InkWell(
-                                                      splashColor:
-                                                          Colors.transparent,
-                                                      focusColor:
-                                                          Colors.transparent,
-                                                      hoverColor:
-                                                          Colors.transparent,
-                                                      highlightColor:
-                                                          Colors.transparent,
-                                                      onTap: () async {
-                                                        await showModalBottomSheet(
-                                                          isScrollControlled:
-                                                              true,
-                                                          backgroundColor:
-                                                              Colors
-                                                                  .transparent,
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return Padding(
-                                                              padding: MediaQuery
-                                                                  .viewInsetsOf(
-                                                                      context),
-                                                              child: Container(
-                                                                height: MediaQuery.sizeOf(
+                                                    Container(
+                                                      width: MediaQuery.sizeOf(
+                                                                  context)
+                                                              .width *
+                                                          0.2,
+                                                      height: 52.0,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondary,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12.0),
+                                                      ),
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0.0, 0.0),
+                                                      child: Text(
+                                                        '🇵🇰 + 92',
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .montserrat(
+                                                                    fontWeight: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .height *
-                                                                    0.82,
-                                                                child:
-                                                                    CountryPickerWidget(
-                                                                  dark: true,
-                                                                  target:
-                                                                      'signup',
-                                                                ),
-                                                              ),
-                                                            );
-                                                          },
-                                                        ).then((value) =>
-                                                            safeSetState(
-                                                                () {}));
-
-                                                        _model.isPhoneValid = functions
-                                                            .signupPhoneComplete(
-                                                                _model
-                                                                    .phoneTextController
-                                                                    .text,
-                                                                FFAppState()
-                                                                    .signupCountry);
-                                                        safeSetState(() {});
-                                                      },
-                                                      child: Container(
-                                                        width:
-                                                            MediaQuery.sizeOf(
-                                                                        context)
-                                                                    .width *
-                                                                0.2,
-                                                        height: 52.0,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondary,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      12.0),
-                                                        ),
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                0.0, 0.0),
-                                                        child: Text(
-                                                          '${functions.signupCountryField(FFAppState().signupCountry, 'flag')} +${functions.signupCountryField(FFAppState().signupCountry, 'dialCode')}',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .montserrat(
+                                                                        .bodyMedium
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -437,21 +399,6 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget>
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                        ),
                                                       ),
                                                     ),
                                                     Form(
@@ -507,12 +454,12 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget>
                                                                     milliseconds:
                                                                         100),
                                                                 () async {
-                                                                  _model.isPhoneValid = functions.signupPhoneComplete(
-                                                                      _model
+                                                                  _model
+                                                                      .isPhoneValid = _model
                                                                           .phoneTextController
-                                                                          .text,
-                                                                      FFAppState()
-                                                                          .signupCountry);
+                                                                          .text
+                                                                          .length ==
+                                                                      10;
                                                                   _model.showPhoneError =
                                                                       false;
                                                                   safeSetState(
@@ -668,7 +615,7 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget>
                                                                         .bodyMedium
                                                                         .fontStyle,
                                                                   ),
-                                                              maxLength: functions.phoneMaxDigits(functions.signupCountryField(FFAppState().signupCountry, 'dialCode')),
+                                                              maxLength: 10,
                                                               maxLengthEnforcement:
                                                                   MaxLengthEnforcement
                                                                       .enforced,
@@ -756,9 +703,8 @@ class _PhoneNumberPageWidgetState extends State<PhoneNumberPageWidget>
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             var _shouldSetState = false;
-                            _model.isPhoneValid = functions.signupPhoneComplete(
-                                _model.phoneTextController.text,
-                                FFAppState().signupCountry);
+                            _model.isPhoneValid =
+                                _model.phoneTextController.text.length == 10;
                             if (_model.isPhoneValid == false) {
                               _model.showPhoneError = true;
                               safeSetState(() {});

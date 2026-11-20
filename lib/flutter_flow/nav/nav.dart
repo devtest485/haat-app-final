@@ -40,12 +40,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
-      errorBuilder: (context, state) => WelcomeMotionWidget(),
+      errorBuilder: (context, state) => OnBoardingPageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => WelcomeMotionWidget(),
+          builder: (context, _) => OnBoardingPageWidget(),
         ),
         FFRoute(
           name: IdCardScanPageWidget.routeName,
@@ -76,11 +76,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: TestWidget.routeName,
           path: TestWidget.routePath,
           builder: (context, params) => TestWidget(),
-        ),
-        FFRoute(
-          name: BranchIesListWidget.routeName,
-          path: BranchIesListWidget.routePath,
-          builder: (context, params) => BranchIesListWidget(),
         ),
         FFRoute(
           name: AddAmountPageWidget.routeName,
@@ -354,11 +349,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => OrdersWidget(),
         ),
         FFRoute(
-          name: SAIBLinkWidget.routeName,
-          path: SAIBLinkWidget.routePath,
-          builder: (context, params) => SAIBLinkWidget(),
-        ),
-        FFRoute(
           name: SaibotpWidget.routeName,
           path: SaibotpWidget.routePath,
           builder: (context, params) => SaibotpWidget(
@@ -367,16 +357,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ParamType.String,
             ),
           ),
-        ),
-        FFRoute(
-          name: SAIBConfirmdetailsWidget.routeName,
-          path: SAIBConfirmdetailsWidget.routePath,
-          builder: (context, params) => SAIBConfirmdetailsWidget(),
-        ),
-        FFRoute(
-          name: SAIBNotFoundWidget.routeName,
-          path: SAIBNotFoundWidget.routePath,
-          builder: (context, params) => SAIBNotFoundWidget(),
         ),
         FFRoute(
           name: CreatePasswordPageWidget.routeName,
@@ -423,16 +403,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: VerifyPageWidget.routeName,
-          path: VerifyPageWidget.routePath,
-          builder: (context, params) => VerifyPageWidget(),
-        ),
-        FFRoute(
-          name: WelcomeMotionWidget.routeName,
-          path: WelcomeMotionWidget.routePath,
-          builder: (context, params) => WelcomeMotionWidget(),
-        ),
-        FFRoute(
           name: SetupBisinessLocationPageWidget.routeName,
           path: SetupBisinessLocationPageWidget.routePath,
           builder: (context, params) => SetupBisinessLocationPageWidget(),
@@ -446,11 +416,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: PassCodeLoginWidget.routeName,
           path: PassCodeLoginWidget.routePath,
           builder: (context, params) => PassCodeLoginWidget(),
-        ),
-        FFRoute(
-          name: TransactionsDetialsWidget.routeName,
-          path: TransactionsDetialsWidget.routePath,
-          builder: (context, params) => TransactionsDetialsWidget(),
         ),
         FFRoute(
           name: CreatingProfileWidget.routeName,
@@ -528,6 +493,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => ProductsWidget(),
         ),
         FFRoute(
+          name: TransactionsDetialsWidget.routeName,
+          path: TransactionsDetialsWidget.routePath,
+          builder: (context, params) => TransactionsDetialsWidget(),
+        ),
+        FFRoute(
+          name: BranchIesListWidget.routeName,
+          path: BranchIesListWidget.routePath,
+          builder: (context, params) => BranchIesListWidget(),
+        ),
+        FFRoute(
           name: StaffWidget.routeName,
           path: StaffWidget.routePath,
           builder: (context, params) => StaffWidget(),
@@ -553,6 +528,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ParamType.String,
             ),
           ),
+        ),
+        FFRoute(
+          name: VerifyPageWidget.routeName,
+          path: VerifyPageWidget.routePath,
+          builder: (context, params) => VerifyPageWidget(),
+        ),
+        FFRoute(
+          name: SAIBNotFoundWidget.routeName,
+          path: SAIBNotFoundWidget.routePath,
+          builder: (context, params) => SAIBNotFoundWidget(),
+        ),
+        FFRoute(
+          name: SAIBConfirmdetailsWidget.routeName,
+          path: SAIBConfirmdetailsWidget.routePath,
+          builder: (context, params) => SAIBConfirmdetailsWidget(),
+        ),
+        FFRoute(
+          name: SAIBLinkWidget.routeName,
+          path: SAIBLinkWidget.routePath,
+          builder: (context, params) => SAIBLinkWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

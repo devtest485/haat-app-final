@@ -10,8 +10,6 @@ export '/home_screens/add_user/add_employees/add_employees_widget.dart'
 export '/auth_flow/on_bording_flow/on_boarding_page/on_boarding_page_widget.dart'
     show OnBoardingPageWidget;
 export '/test/test_widget.dart' show TestWidget;
-export '/add_branch/branch_ies_list/branch_ies_list_widget.dart'
-    show BranchIesListWidget;
 export '/home_screens/new_order_flow/add_amount_page/add_amount_page_widget.dart'
     show AddAmountPageWidget;
 export '/auth_flow/welcom_screens/upload_doc/upload_doc_widget.dart'
@@ -74,14 +72,8 @@ export '/staff/staff_members/staff_members_widget.dart' show StaffMembersWidget;
 export '/add_branch/branch_detail/branch_detail_widget.dart'
     show BranchDetailWidget;
 export '/my_store/orders/orders_widget.dart' show OrdersWidget;
-export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_link/s_a_i_b_link_widget.dart'
-    show SAIBLinkWidget;
 export '/auth_flow/link_s_a_i_baccountjourney/saibotp/saibotp_widget.dart'
     show SaibotpWidget;
-export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_confirmdetails/s_a_i_b_confirmdetails_widget.dart'
-    show SAIBConfirmdetailsWidget;
-export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_not_found/s_a_i_b_not_found_widget.dart'
-    show SAIBNotFoundWidget;
 export '/auth_flow/create_password_page/create_password_page_widget.dart'
     show CreatePasswordPageWidget;
 export '/auth_flow/login/passward_login/passward_login_widget.dart'
@@ -92,18 +84,12 @@ export '/auth_flow/welcom_screens/username_page/username_page_widget.dart'
 export '/home_screens/bottom_bar_pages/bottom_bar_pages_widget.dart'
     show BottomBarPagesWidget;
 export '/edit_product/edit_product_widget.dart' show EditProductWidget;
-export '/auth_flow/verify/verify_page/verify_page_widget.dart'
-    show VerifyPageWidget;
-export '/auth_flow/on_bording_flow/welcome_motion/welcome_motion_widget.dart'
-    show WelcomeMotionWidget;
 export '/auth_flow/business_setup/setup_bisiness_location_page/setup_bisiness_location_page_widget.dart'
     show SetupBisinessLocationPageWidget;
 export '/auth_flow/pass_code_page/pass_code_page_widget.dart'
     show PassCodePageWidget;
 export '/auth_flow/login/pass_code_login/pass_code_login_widget.dart'
     show PassCodeLoginWidget;
-export '/home_screens/new_order_flow/transactions_detials/transactions_detials_widget.dart'
-    show TransactionsDetialsWidget;
 export '/home_screens/add_user/creating_profile/creating_profile_widget.dart'
     show CreatingProfileWidget;
 export '/auth_flow/login/on_bording_screen/on_bording_screen_widget.dart'
@@ -117,5 +103,17 @@ export '/home_screens/add_transfer_funds/payment_status/payment_status_widget.da
 export '/auth_flow/phone_number_page/phone_number_page_widget.dart'
     show PhoneNumberPageWidget;
 export '/product/products/products_widget.dart' show ProductsWidget;
+export '/home_screens/new_order_flow/transactions_detials/transactions_detials_widget.dart'
+    show TransactionsDetialsWidget;
+export '/add_branch/branch_ies_list/branch_ies_list_widget.dart'
+    show BranchIesListWidget;
 export '/staff/staff/staff_widget.dart' show StaffWidget;
 export '/marketplace/brand_store/brand_store_widget.dart' show BrandStoreWidget;
+export '/auth_flow/verify/verify_page/verify_page_widget.dart'
+    show VerifyPageWidget;
+export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_not_found/s_a_i_b_not_found_widget.dart'
+    show SAIBNotFoundWidget;
+export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_confirmdetails/s_a_i_b_confirmdetails_widget.dart'
+    show SAIBConfirmdetailsWidget;
+export '/auth_flow/link_s_a_i_baccountjourney/s_a_i_b_link/s_a_i_b_link_widget.dart'
+    show SAIBLinkWidget;

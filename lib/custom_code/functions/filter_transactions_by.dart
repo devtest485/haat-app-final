@@ -13,13 +13,12 @@ import '/flutter_flow/ff_builtin_enums.dart';
 
 /// Narrows the statement to the All Transactions filter sheet's choices.
 ///
-/// direction: All | Incoming | Outgoing.
-/// status: All | Successful | Pending | Failed — read through
-/// [transactionTone], so the filter and the row icons always agree; held money
-/// counts as Pending, declined, reversed and expired as Failed.
-/// method: All types | Tap to Pay | QR Code | Payment link | Transfer |
-/// Add funds — read through [transactionMethod]; Transfer covers both a
-/// merchant and a bank account.
+/// direction: All | Incoming | Outgoing. status: All | Successful | Pending |
+/// Failed — read through [transactionTone], so the filter and the row icons
+/// always agree; held money counts as Pending, declined, reversed and expired
+/// as Failed. method: All types | Tap to Pay | QR Code | Payment link |
+/// Transfer | Add funds — read through [transactionMethod]; Transfer covers
+/// both a merchant and a bank account.
 List<dynamic> filterTransactionsBy(
   List<dynamic>? rows,
   String? direction,

@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
-import '/custom_code/features.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -244,7 +243,6 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                               ),
                             ),
                           ),
-                          if (kSibEnabled) ...[
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -302,7 +300,6 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                FFAppState().saibLight = false;
                                 context.pushNamed(SAIBLinkWidget.routeName);
                               },
                               child: Container(
@@ -318,7 +315,7 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Link my SIB account',
+                                      'Link my SAIB account',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -354,7 +351,6 @@ class _VerifyPageWidgetState extends State<VerifyPageWidget> {
                               ),
                             ),
                           ),
-                          ],
                         ].divide(SizedBox(height: 10.0)),
                       ),
                     ),

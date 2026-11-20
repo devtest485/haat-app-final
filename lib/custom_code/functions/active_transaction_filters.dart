@@ -11,8 +11,8 @@ import '/flutter_flow/place.dart';
 import '/flutter_flow/uploaded_file.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 
-/// How many of the filter sheet's groups are narrowed: the badge on the filter
-/// button, and whether Clear shows.
+/// How many of the filter sheet's groups are narrowed: the badge on the
+/// filter button, and whether Clear shows.
 int activeTransactionFilters(
   String? direction,
   String? status,

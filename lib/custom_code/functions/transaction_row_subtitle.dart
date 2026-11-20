@@ -13,9 +13,9 @@ import '/flutter_flow/ff_builtin_enums.dart';
 
 /// Row subtitle after the status word: "Tap to Pay · 09:41 AM".
 ///
-/// Pending, held, failed, declined and expired lines get only the time, as the
-/// row puts its own coloured "Pending" / "Failed" / "Expired" in front of it.
-/// [grouped] is true where the rows already sit under a date heading (All
+/// Pending, held, failed, declined and expired lines get only the time, as
+/// the row puts its own coloured "Pending" / "Failed" / "Expired" in front of
+/// it. [grouped] is true where the rows already sit under a date heading (All
 /// Transactions), so only the time is shown; elsewhere (home) the day is.
 String transactionRowSubtitle(
   dynamic row,

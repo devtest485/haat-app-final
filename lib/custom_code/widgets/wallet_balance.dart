@@ -133,9 +133,10 @@ class _WalletBalanceState extends State<WalletBalance>
     super.dispose();
   }
 
-  void _startPolling() {
+  void _startPolling({int? overrideSeconds}) {
     _poll?.cancel();
-    final seconds = (widget.refreshSeconds ?? 15).clamp(5, 600);
+    final defaultSec = (widget.refreshSeconds ?? 15).clamp(5, 600);
+    final seconds = overrideSeconds ?? defaultSec;
     _poll = Timer.periodic(Duration(seconds: seconds), (_) => _load());
   }
 
@@ -159,34 +160,48 @@ class _WalletBalanceState extends State<WalletBalance>
       // The linked bank account's number goes under it, read at the same moments.
       if (kSibEnabled) BankLinkFlow.refresh();
 
+      final heldActive = next.held > BigInt.zero;
+      final wasHeldActive = (previous?.held ?? BigInt.zero) > BigInt.zero;
+      if (heldActive != wasHeldActive) {
+        _startPolling(overrideSeconds: heldActive ? 4 : null);
+      }
+
       if (previous == null) {
         setState(() => _wallet = next);
         return;
       }
 
-      if (previous.available == next.available &&
-          previous.currency == next.currency) {
+      final availableChanged = previous.available != next.available;
+      final heldChanged = previous.held != next.held;
+      final pendingChanged = previous.pending != next.pending;
+      final currencyChanged = previous.currency != next.currency;
+
+      if (!availableChanged && !heldChanged && !pendingChanged && !currencyChanged) {
         _wallet = next;
         return;
       }
 
-      final change = next.available - previous.available;
-      final sameCurrency = previous.currency == next.currency;
+      if (availableChanged) {
+        final change = next.available - previous.available;
+        final sameCurrency = previous.currency == next.currency;
 
-      // Pehle note ki direction set karo taake count ke dauran rang sahi ho.
-      if (sameCurrency && change != BigInt.zero) {
-        _noteIncoming = change > BigInt.zero;
-        _noteAmount = change.abs();
-      }
+        // Pehle note ki direction set karo taake count ke dauran rang sahi ho.
+        if (sameCurrency && change != BigInt.zero) {
+          _noteIncoming = change > BigInt.zero;
+          _noteAmount = change.abs();
+        }
 
-      setState(() {
-        _from = _shown(previous);
-        _wallet = next;
-      });
-      _count.forward(from: 0);
+        setState(() {
+          _from = _shown(previous);
+          _wallet = next;
+        });
+        _count.forward(from: 0);
 
-      if (sameCurrency && change != BigInt.zero) {
-        _announce(change.abs(), incoming: change > BigInt.zero);
+        if (sameCurrency && change != BigInt.zero) {
+          _announce(change.abs(), incoming: change > BigInt.zero);
+        }
+      } else {
+        setState(() => _wallet = next);
       }
 
       await widget.onBalanceChanged?.call();

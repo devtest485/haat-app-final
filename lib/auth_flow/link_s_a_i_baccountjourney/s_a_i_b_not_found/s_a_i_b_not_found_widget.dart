@@ -121,7 +121,7 @@ class _SAIBNotFoundWidgetState extends State<SAIBNotFoundWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 9.0, 0.0, 0.0),
                           child: Text(
-                            'We couldn\'t find a SIB account with these details.\nYou can verify your identity with your documents instead.',
+                            'We couldn\'t find a SAIB account with these details.\nYou can verify your identity with your documents instead.',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium

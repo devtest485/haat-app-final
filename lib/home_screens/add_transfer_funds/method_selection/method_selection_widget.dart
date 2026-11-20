@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
-import '/custom_code/features.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -209,50 +208,16 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            if (kSibEnabled)
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                if (FFAppState().sibAccount == '') {
-                                  // Not linked yet: the link screens, drawn white from here.
-                                  FFAppState().saibLight = true;
-                                  context.pushNamed(SAIBLinkWidget.routeName);
-                                } else {
-                                  // Linked: straight to Review Details with the amount
-                                  // already chosen, like any other send.
-                                  context.pushNamed(
-                                    PaymentReviewWidget.routeName,
-                                    queryParameters: {
-                                      'by': serializeParam(
-                                        'bank',
-                                        ParamType.String,
-                                      ),
-                                      'value': serializeParam(
-                                        FFAppState()
-                                            .sibAccount
-                                            .replaceAll(' ', ''),
-                                        ParamType.String,
-                                      ),
-                                      'via': serializeParam(
-                                        '${FFAppState().sibBank} ${FFAppState().sibAccount}',
-                                        ParamType.String,
-                                      ),
-                                      'name': serializeParam(
-                                        FFAppState().sibHolder,
-                                        ParamType.String,
-                                      ),
-                                      'amount': serializeParam(
-                                        widget!.fundsAmount,
-                                        ParamType.String,
-                                      ),
-                                    }.withoutNulls,
-                                  );
-
-                                  Navigator.pop(context);
-                                }
+                                await actions.haatOpenPayout(
+                                  context,
+                                  widget!.fundsAmount,
+                                );
                               },
                               child: Container(
                                 width: double.infinity,
@@ -331,9 +296,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                FFAppState().sibAccount != ''
-                                                    ? '${FFAppState().sibBank} · ${FFAppState().sibAccount}'
-                                                    : 'Not linked · Link your SIB account',
+                                                'HAAT sends it from your wallet',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
@@ -387,10 +350,6 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                       'BBAN',
                                       ParamType.String,
                                     ),
-                                    'amount': serializeParam(
-                                      widget!.fundsAmount,
-                                      ParamType.String,
-                                    ),
                                   }.withoutNulls,
                                 );
 
@@ -442,7 +401,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'To Local Bank',
+                                                'From Haat Banks',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -472,7 +431,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                'Send money to BBAN number',
+                                                'Add money from HAAT network banks',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium

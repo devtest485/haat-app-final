@@ -141,7 +141,8 @@ class LinkedBank {
       RegExp(r'(\d{4})(?=\d)'), (match) => '${match[1]} ');
 
   /// What the bank is called on a screen: its short name, SIB, rather than its legal one.
-  String get label => institutionCode.isEmpty ? institutionName : institutionCode;
+  String get label =>
+      institutionCode.isEmpty ? institutionName : institutionCode;
 
   static LinkedBank fromData(Map<String, dynamic> data) {
     String text(Object? value) {
@@ -154,8 +155,9 @@ class LinkedBank {
       institutionCode: text(data['institutionCode']),
       institutionName: text(data['institutionName']),
       accountNumber: text(data['accountNumber']),
-      accountType:
-          text(data['accountType']).isEmpty ? 'current' : text(data['accountType']),
+      accountType: text(data['accountType']).isEmpty
+          ? 'current'
+          : text(data['accountType']),
       holderName: text(data['holderName']),
       currency: text(data['currency']).isEmpty ? 'SDG' : text(data['currency']),
     );

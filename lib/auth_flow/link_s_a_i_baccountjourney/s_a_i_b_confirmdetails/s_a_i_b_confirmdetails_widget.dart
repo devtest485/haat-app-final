@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/custom_code/actions/index.dart' as actions;
 import 'dart:ui';
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -224,7 +223,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                                                 ),
                                           ),
                                           Text(
-                                            'This is what SIB has on file for you.',
+                                            'This is what SAIB has on file for you.',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -318,14 +317,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    valueOrDefault<String>(
-                                                      getJsonField(
-                                                        FFAppState()
-                                                            .saibDetails,
-                                                        r'''$.holderName''',
-                                                      )?.toString(),
-                                                      '—',
-                                                    ),
+                                                    'Mohammed Alamin',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -421,14 +413,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    valueOrDefault<String>(
-                                                      getJsonField(
-                                                        FFAppState()
-                                                            .saibDetails,
-                                                        r'''$.idMasked''',
-                                                      )?.toString(),
-                                                      '—',
-                                                    ),
+                                                    '··· ··· 4471',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -524,8 +509,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    FFAppState()
-                                                        .saibMobileMasked,
+                                                    '+249 ··· ··· 0910',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -621,14 +605,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                                                       .fromSTEB(
                                                           0.0, 8.0, 0.0, 0.0),
                                                   child: Text(
-                                                    valueOrDefault<String>(
-                                                      getJsonField(
-                                                        FFAppState()
-                                                            .saibDetails,
-                                                        r'''$.businessName''',
-                                                      )?.toString(),
-                                                      '—',
-                                                    ),
+                                                    'Lipper Pizza',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -677,23 +654,6 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                           ],
                         ),
                       ),
-                      if (_model.confirmError != '')
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              15.0, 0.0, 15.0, 12.0),
-                          child: Text(
-                            _model.confirmError,
-                            textAlign: TextAlign.center,
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  font: GoogleFonts.montserrat(),
-                                  color: FlutterFlowTheme.of(context).error,
-                                  fontSize: 13.0,
-                                  letterSpacing: 0.0,
-                                ),
-                          ),
-                        ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
                             15.0, 0.0, 15.0, 35.0),
@@ -703,21 +663,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            if (_model.confirming) {
-                              return;
-                            }
-                            _model.confirming = true;
-                            _model.confirmError = '';
-                            safeSetState(() {});
-                            _model.confirmed = await actions.haatSaibConfirm();
-                            _model.confirming = false;
-                            if (_model.confirmed == '') {
-                              _model.linked = true;
-                            } else {
-                              _model.confirmError = _model.confirmed!;
-                            }
-
-                            safeSetState(() {});
+                            context.pushNamed(BusinessInfoWidget.routeName);
                           },
                           child: Container(
                             width: double.infinity,
@@ -728,7 +674,7 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: Text(
-                              _model.confirming ? 'Linking…' : 'Continue',
+                              'Continue',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -755,111 +701,6 @@ class _SAIBConfirmdetailsWidgetState extends State<SAIBConfirmdetailsWidget> {
                   ),
                 ),
               ),
-              if (_model.linked)
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.black,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 96.0,
-                              height: 96.0,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF0E6B3E),
-                                shape: BoxShape.circle,
-                              ),
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Icon(
-                                Icons.check_rounded,
-                                color: Colors.white,
-                                size: 52.0,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 28.0, 24.0, 0.0),
-                              child: Text(
-                                'Link your SIB account',
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      color: Colors.white,
-                                      fontSize: 24.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  40.0, 12.0, 40.0, 0.0),
-                              child: Text(
-                                'You can now transfer money from HAAT to your SIB account.',
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.montserrat(),
-                                      color: Color(0xFFBDBDBD),
-                                      fontSize: 14.0,
-                                      letterSpacing: 0.0,
-                                      lineHeight: 1.5,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 0.0, 15.0, 35.0),
-                        child: InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            context.goNamed(BottomBarPagesWidget.routeName);
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(106.67),
-                            ),
-                            alignment: AlignmentDirectional(0.0, 0.0),
-                            child: Text(
-                              'Continue',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    color: Colors.black,
-                                    fontSize: 18.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
             ],
           ),
         ),
