@@ -17,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '/custom_code/api_result.dart';
 import '/custom_code/auth_session.dart';
 import '/custom_code/bank_link_flow.dart';
+import '/custom_code/features.dart';
 import '/custom_code/wallet_api.dart';
 
 /// The home screen's balance, from the books, kept current while the screen
@@ -156,7 +157,7 @@ class _WalletBalanceState extends State<WalletBalance>
       }
 
       // The linked bank account's number goes under it, read at the same moments.
-      BankLinkFlow.refresh();
+      if (kSibEnabled) BankLinkFlow.refresh();
 
       if (previous == null) {
         setState(() => _wallet = next);

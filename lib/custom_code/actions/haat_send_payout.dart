@@ -21,7 +21,7 @@ Future<dynamic> haatSendPayout(
   String? signature,
   String? amountMinor,
   String? currency,
-  String? reference,
+  String? transferReference,
   String? name,
   String? via,
 ) =>
@@ -30,7 +30,7 @@ Future<dynamic> haatSendPayout(
       signature: signature,
       amountMinor: amountMinor,
       currency: currency,
-      reference: reference,
+      reference: transferReference,
       name: name,
       via: via,
     );

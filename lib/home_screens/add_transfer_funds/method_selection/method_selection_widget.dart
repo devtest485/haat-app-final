@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
+import '/custom_code/features.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -208,6 +209,7 @@ class _MethodSelectionWidgetState extends State<MethodSelectionWidget> {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
+                            if (kSibEnabled)
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
